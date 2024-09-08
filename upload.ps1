@@ -229,7 +229,6 @@ function Publish-DotnetProject {
     if ($nupkgFile) {
         # Prepare NuGet push command based on the publish type
         $nugetSource = 'https://api.nuget.org/v3/index.json'
-#         $nugetApiKey = 'oy2jcaidwrfsiom4l3ia3ng6x5yohh6ubjvdhjddmqk6dy'
         $nugetApiKey = 'test'
 
         # Adjust command for Prerelease
