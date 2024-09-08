@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace />
+    <OutputType>Library</OutputType>
+    <PackageId>Bonyan.AspNetCore.Persistence.EntityFrameworkCore</PackageId>
+  </PropertyGroup>
+
+  <Import Project="..\..\package.props" />
+  
+  <ItemGroup>
+    <ProjectReference Include="..\Bonyan.AspNetCore.Persistence\Bonyan.AspNetCore.Persistence.csproj" />
+    <ProjectReference Include="..\Bonyan.EntityFrameworkCore\Bonyan.EntityFrameworkCore.csproj" />
+  </ItemGroup>
+</Project>
