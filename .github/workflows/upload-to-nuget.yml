@@ -20,7 +20,7 @@ jobs:
 
       - name: Restore dependencies
         run: dotnet restore
-
+      
       - name: Run upload script
         run: ./upload.ps1
         shell: pwsh
