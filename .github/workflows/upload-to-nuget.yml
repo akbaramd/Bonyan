@@ -3,9 +3,7 @@ name: Upload to NuGet
 on:
   push:
     branches:
-      - main
-  release:
-    types: [published]
+      - master
 
 jobs:
   build:
