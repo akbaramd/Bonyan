@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
-namespace Bonyan.DDD.Domain.Enumerations;
+namespace Bonyan.DomainDrivenDesign.Domain.Enumerations;
 
 /// <summary>
 /// Base class for implementing strongly-typed enums with additional utility methods.

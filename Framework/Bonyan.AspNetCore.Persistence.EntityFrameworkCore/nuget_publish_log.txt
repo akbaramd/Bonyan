@@ -24,3 +24,9 @@ Successfully uploaded Bonyan.AspNetCore.Persistence.EntityFrameworkCore.1.0.2-pr
 Executing NuGet push command for D:\Projects\Bonyan\Framework\Bonyan.AspNetCore.Persistence.EntityFrameworkCore\bin\Release\Bonyan.AspNetCore.Persistence.EntityFrameworkCore.1.0.2-pre1.nupkg at 09/08/2024 17:29:53
 dotnet nuget push "D:\Projects\Bonyan\Framework\Bonyan.AspNetCore.Persistence.EntityFrameworkCore\bin\Release\Bonyan.AspNetCore.Persistence.EntityFrameworkCore.1.0.2-pre1.nupkg" -s https://api.nuget.org/v3/index.json -k oy2jcaidwrfsiom4l3ia3ng6x5yohh6ubjvdhjddmqk6dy 
 Successfully uploaded Bonyan.AspNetCore.Persistence.EntityFrameworkCore.1.0.2-pre1.nupkg to NuGet at 09/08/2024 17:29:54.
+Executing NuGet push command for D:\Projects\Bonyan\Framework\Bonyan.AspNetCore.Persistence.EntityFrameworkCore\bin\Release\Bonyan.AspNetCore.Persistence.EntityFrameworkCore.1.0.3.nupkg at 09/09/2024 14:49:10
+dotnet nuget push "D:\Projects\Bonyan\Framework\Bonyan.AspNetCore.Persistence.EntityFrameworkCore\bin\Release\Bonyan.AspNetCore.Persistence.EntityFrameworkCore.1.0.3.nupkg" -s https://api.nuget.org/v3/index.json -k oy2jcaidwrfsiom4l3ia3ng6x5yohh6ubjvdhjddmqk6dy 
+Successfully uploaded Bonyan.AspNetCore.Persistence.EntityFrameworkCore.1.0.3.nupkg to NuGet at 09/09/2024 14:49:12.
+Executing NuGet push command for D:\Projects\Bonyan\Framework\Bonyan.AspNetCore.Persistence.EntityFrameworkCore\bin\Release\Bonyan.AspNetCore.Persistence.EntityFrameworkCore.1.0.4.nupkg at 09/09/2024 14:57:24
+dotnet nuget push "D:\Projects\Bonyan\Framework\Bonyan.AspNetCore.Persistence.EntityFrameworkCore\bin\Release\Bonyan.AspNetCore.Persistence.EntityFrameworkCore.1.0.4.nupkg" -s https://api.nuget.org/v3/index.json -k oy2jcaidwrfsiom4l3ia3ng6x5yohh6ubjvdhjddmqk6dy 
+Successfully uploaded Bonyan.AspNetCore.Persistence.EntityFrameworkCore.1.0.4.nupkg to NuGet at 09/09/2024 14:57:25.

@@ -1,5 +1,4 @@
 ﻿using Bonyan.AspNetCore.Jobs;
-using Bonyan.DDD.Domain.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections;

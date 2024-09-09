@@ -1,5 +1,5 @@
 ﻿using Bonyan.AspNetCore.Jobs;
-using Bonyan.DDD.Domain.Abstractions;
+using Bonyan.DomainDrivenDesign.Domain.Abstractions;
 using BonyanTemplate.Domain.Entities;
 using BonyanTemplate.Domain.Repositories;
 

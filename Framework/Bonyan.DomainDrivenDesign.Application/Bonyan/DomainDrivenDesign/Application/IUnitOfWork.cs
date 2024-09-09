@@ -1,7 +1,7 @@
-﻿using Bonyan.DDD.Domain.Abstractions;
-using Bonyan.DDD.Domain.Entities;
+﻿using Bonyan.DomainDrivenDesign.Domain.Abstractions;
+using Bonyan.DomainDrivenDesign.Domain.Entities;
 
-namespace Bonyan.DDD.Application;
+namespace Bonyan.DomainDrivenDesign.Application;
 
 public interface IUnitOfWork : IDisposable
 {

@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using Bonyan.DDD.Domain.Abstractions;
-using Bonyan.DDD.Domain.Entities;
-using Bonyan.DDD.Domain.Specifications;
+using Bonyan.DomainDrivenDesign.Domain.Abstractions;
+using Bonyan.DomainDrivenDesign.Domain.Entities;
+using Bonyan.DomainDrivenDesign.Domain.Specifications;
 
 namespace Bonyan.AspNetCore.Persistence
 {

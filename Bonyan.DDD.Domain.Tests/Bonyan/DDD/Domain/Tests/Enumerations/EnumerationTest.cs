@@ -1,5 +1,5 @@
 ﻿
-using Bonyan.DDD.Domain.Enumerations;
+using Bonyan.DomainDrivenDesign.Domain.Enumerations;
 
 namespace Bonyan.DDD.Domain.Tests.Enumerations;
 

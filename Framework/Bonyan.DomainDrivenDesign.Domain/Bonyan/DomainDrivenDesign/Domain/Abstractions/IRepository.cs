@@ -1,8 +1,8 @@
 ﻿using System.Linq.Expressions;
-using Bonyan.DDD.Domain.Entities;
-using Bonyan.DDD.Domain.Specifications;
+using Bonyan.DomainDrivenDesign.Domain.Entities;
+using Bonyan.DomainDrivenDesign.Domain.Specifications;
 
-namespace Bonyan.DDD.Domain.Abstractions;
+namespace Bonyan.DomainDrivenDesign.Domain.Abstractions;
 
 public interface IRepository<TEntity, in TKey> : IRepository<TEntity> where TEntity : class, IEntity
 {

@@ -1,4 +1,4 @@
-﻿using Bonyan.DDD.Domain.Aggregates;
+﻿using Bonyan.DomainDrivenDesign.Domain.Aggregates;
 using BonyanTemplate.Domain.Enums;
 
 namespace BonyanTemplate.Domain.Entities;

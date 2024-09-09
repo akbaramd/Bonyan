@@ -1,4 +1,4 @@
-﻿namespace Bonyan.DDD.Domain.Entities;
+﻿namespace Bonyan.DomainDrivenDesign.Domain.Entities;
 
 public interface IEntity
 {

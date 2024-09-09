@@ -1,6 +1,6 @@
-﻿using Bonyan.DDD.Domain.Entities;
+﻿using Bonyan.DomainDrivenDesign.Domain.Entities;
 
-namespace Bonyan.DDD.Domain.Aggregates;
+namespace Bonyan.DomainDrivenDesign.Domain.Aggregates;
 
 public interface IAggregateRoot : IEntity
 {

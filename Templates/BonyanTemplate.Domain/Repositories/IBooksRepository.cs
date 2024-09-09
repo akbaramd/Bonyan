@@ -1,4 +1,4 @@
-﻿using Bonyan.DDD.Domain.Abstractions;
+﻿using Bonyan.DomainDrivenDesign.Domain.Abstractions;
 using BonyanTemplate.Domain.Entities;
 
 namespace BonyanTemplate.Domain.Repositories;

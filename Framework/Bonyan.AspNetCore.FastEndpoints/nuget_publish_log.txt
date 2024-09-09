@@ -33,3 +33,9 @@ Successfully uploaded Bonyan.AspNetCore.FastEndpoints.1.0.2-pre2.nupkg to NuGet 
 Executing NuGet push command for D:\Projects\Bonyan\Framework\Bonyan.AspNetCore.FastEndpoints\bin\Release\Bonyan.AspNetCore.FastEndpoints.1.0.2-pre1.nupkg at 09/08/2024 17:29:46
 dotnet nuget push "D:\Projects\Bonyan\Framework\Bonyan.AspNetCore.FastEndpoints\bin\Release\Bonyan.AspNetCore.FastEndpoints.1.0.2-pre1.nupkg" -s https://api.nuget.org/v3/index.json -k oy2jcaidwrfsiom4l3ia3ng6x5yohh6ubjvdhjddmqk6dy 
 Successfully uploaded Bonyan.AspNetCore.FastEndpoints.1.0.2-pre1.nupkg to NuGet at 09/08/2024 17:29:47.
+Executing NuGet push command for D:\Projects\Bonyan\Framework\Bonyan.AspNetCore.FastEndpoints\bin\Release\Bonyan.AspNetCore.FastEndpoints.1.0.3.nupkg at 09/09/2024 14:49:01
+dotnet nuget push "D:\Projects\Bonyan\Framework\Bonyan.AspNetCore.FastEndpoints\bin\Release\Bonyan.AspNetCore.FastEndpoints.1.0.3.nupkg" -s https://api.nuget.org/v3/index.json -k oy2jcaidwrfsiom4l3ia3ng6x5yohh6ubjvdhjddmqk6dy 
+Successfully uploaded Bonyan.AspNetCore.FastEndpoints.1.0.3.nupkg to NuGet at 09/09/2024 14:49:02.
+Executing NuGet push command for D:\Projects\Bonyan\Framework\Bonyan.AspNetCore.FastEndpoints\bin\Release\Bonyan.AspNetCore.FastEndpoints.1.0.4.nupkg at 09/09/2024 14:57:16
+dotnet nuget push "D:\Projects\Bonyan\Framework\Bonyan.AspNetCore.FastEndpoints\bin\Release\Bonyan.AspNetCore.FastEndpoints.1.0.4.nupkg" -s https://api.nuget.org/v3/index.json -k oy2jcaidwrfsiom4l3ia3ng6x5yohh6ubjvdhjddmqk6dy 
+Successfully uploaded Bonyan.AspNetCore.FastEndpoints.1.0.4.nupkg to NuGet at 09/09/2024 14:57:18.

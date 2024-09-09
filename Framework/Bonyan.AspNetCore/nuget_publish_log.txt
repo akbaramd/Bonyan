@@ -33,3 +33,9 @@ Successfully uploaded Bonyan.AspNetCore.1.0.2-pre2.nupkg to NuGet at 09/08/2024 
 Executing NuGet push command for D:\Projects\Bonyan\Framework\Bonyan.AspNetCore\bin\Release\Bonyan.AspNetCore.1.0.2-pre1.nupkg at 09/08/2024 17:29:41
 dotnet nuget push "D:\Projects\Bonyan\Framework\Bonyan.AspNetCore\bin\Release\Bonyan.AspNetCore.1.0.2-pre1.nupkg" -s https://api.nuget.org/v3/index.json -k oy2jcaidwrfsiom4l3ia3ng6x5yohh6ubjvdhjddmqk6dy 
 Successfully uploaded Bonyan.AspNetCore.1.0.2-pre1.nupkg to NuGet at 09/08/2024 17:29:43.
+Executing NuGet push command for D:\Projects\Bonyan\Framework\Bonyan.AspNetCore\bin\Release\Bonyan.AspNetCore.1.0.3.nupkg at 09/09/2024 14:48:58
+dotnet nuget push "D:\Projects\Bonyan\Framework\Bonyan.AspNetCore\bin\Release\Bonyan.AspNetCore.1.0.3.nupkg" -s https://api.nuget.org/v3/index.json -k oy2jcaidwrfsiom4l3ia3ng6x5yohh6ubjvdhjddmqk6dy 
+Successfully uploaded Bonyan.AspNetCore.1.0.3.nupkg to NuGet at 09/09/2024 14:48:59.
+Executing NuGet push command for D:\Projects\Bonyan\Framework\Bonyan.AspNetCore\bin\Release\Bonyan.AspNetCore.1.0.4.nupkg at 09/09/2024 14:57:13
+dotnet nuget push "D:\Projects\Bonyan\Framework\Bonyan.AspNetCore\bin\Release\Bonyan.AspNetCore.1.0.4.nupkg" -s https://api.nuget.org/v3/index.json -k oy2jcaidwrfsiom4l3ia3ng6x5yohh6ubjvdhjddmqk6dy 
+Successfully uploaded Bonyan.AspNetCore.1.0.4.nupkg to NuGet at 09/09/2024 14:57:15.

@@ -1,6 +1,6 @@
-﻿using Bonyan.DDD.Domain.Abstractions;
+﻿using Bonyan.DomainDrivenDesign.Domain.Abstractions;
 
-namespace Bonyan.DDD.Domain.Aggregates;
+namespace Bonyan.DomainDrivenDesign.Domain.Aggregates;
 
 public abstract class FullAuditableAggregateRoot : UpdateAuditableAggregateRoot, IFullAuditable
 {

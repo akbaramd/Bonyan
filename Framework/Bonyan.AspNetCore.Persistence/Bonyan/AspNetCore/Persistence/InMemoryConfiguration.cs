@@ -1,5 +1,5 @@
-﻿using Bonyan.DDD.Domain.Abstractions;
-using Bonyan.DDD.Domain.Entities;
+﻿using Bonyan.DomainDrivenDesign.Domain.Abstractions;
+using Bonyan.DomainDrivenDesign.Domain.Entities;
 using Castle.DynamicProxy;
 
 namespace Bonyan.AspNetCore.Persistence;

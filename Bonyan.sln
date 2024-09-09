@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bonyan", "Framework\Bonyan\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bonyan.DomainDrivenDesign.Domain", "Framework\Bonyan.DomainDrivenDesign.Domain\Bonyan.DomainDrivenDesign.Domain.csproj", "{5BD35C5F-F6C4-4AB7-AF24-893821832A06}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bonyan.DomainDerivenDesign.Application", "Framework\Bonyan.DomainDerivenDesign.Application\Bonyan.DomainDerivenDesign.Application.csproj", "{7D189F02-6CF1-4E44-975A-11E882669C13}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bonyan.DomainDrivenDesign.Application", "Framework\Bonyan.DomainDrivenDesign.Application\Bonyan.DomainDrivenDesign.Application.csproj", "{7D189F02-6CF1-4E44-975A-11E882669C13}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bonyan.Persistence.EntityFrameworkCore", "Framework\Bonyan.Persistence.EntityFrameworkCore\Bonyan.Persistence.EntityFrameworkCore.csproj", "{EE8BB16D-0A17-4419-8E05-B8519A6D8447}"
 EndProject

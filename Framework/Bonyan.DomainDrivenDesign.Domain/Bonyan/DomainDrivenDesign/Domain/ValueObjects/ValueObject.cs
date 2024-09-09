@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.ChangeTracking;
 
-namespace Bonyan.DDD.Domain.ValueObjects;
+namespace Bonyan.DomainDrivenDesign.Domain.ValueObjects;
 
 /// <summary>
 /// Represents a base class for value objects in a domain-driven design context.

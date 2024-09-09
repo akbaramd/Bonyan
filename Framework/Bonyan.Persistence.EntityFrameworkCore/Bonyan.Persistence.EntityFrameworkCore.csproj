@@ -10,9 +10,10 @@
   <Import Project="..\..\package.props" />
   
   <ItemGroup>
-    <ProjectReference Include="..\Bonyan.DomainDerivenDesign.Application\Bonyan.DomainDerivenDesign.Application.csproj" />
+    <ProjectReference Include="..\Bonyan.DomainDrivenDesign.Application\Bonyan.DomainDrivenDesign.Application.csproj" />
     <ProjectReference Include="..\Bonyan.DomainDrivenDesign.Domain\Bonyan.DomainDrivenDesign.Domain.csproj" />
   </ItemGroup>
+  
   <ItemGroup>
     <PackageReference Include="Castle.Core" Version="5.1.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.8" />

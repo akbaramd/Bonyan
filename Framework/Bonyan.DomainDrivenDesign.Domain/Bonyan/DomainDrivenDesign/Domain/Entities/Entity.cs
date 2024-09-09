@@ -1,4 +1,4 @@
-﻿namespace Bonyan.DDD.Domain.Entities;
+﻿namespace Bonyan.DomainDrivenDesign.Domain.Entities;
 
 /// <summary>
 /// Base class for all entities in the domain, providing a method to retrieve the entity's keys.

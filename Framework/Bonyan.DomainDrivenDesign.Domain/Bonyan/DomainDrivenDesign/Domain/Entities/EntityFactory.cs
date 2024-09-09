@@ -1,4 +1,4 @@
-﻿namespace Bonyan.DDD.Domain.Entities;
+﻿namespace Bonyan.DomainDrivenDesign.Domain.Entities;
 
 /// <summary>
 /// Abstract factory class for creating and configuring instances of entities.

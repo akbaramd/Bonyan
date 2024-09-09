@@ -1,6 +1,7 @@
 ﻿using Bonyan.DDD.Domain;
-using Bonyan.DDD.Domain.Abstractions;
-using Bonyan.DDD.Domain.Entities;
+using Bonyan.DomainDrivenDesign.Application;
+using Bonyan.DomainDrivenDesign.Domain.Abstractions;
+using Bonyan.DomainDrivenDesign.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 

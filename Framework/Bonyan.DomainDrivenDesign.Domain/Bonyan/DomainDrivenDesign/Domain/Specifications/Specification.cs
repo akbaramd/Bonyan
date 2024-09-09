@@ -1,8 +1,8 @@
 ﻿using System.Linq.Expressions;
-using Bonyan.DDD.Domain.Entities;
+using Bonyan.DomainDrivenDesign.Domain.Entities;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Bonyan.DDD.Domain.Specifications;
+namespace Bonyan.DomainDrivenDesign.Domain.Specifications;
 
 /// <summary>
 /// Base class for implementing specifications in a DDD context.

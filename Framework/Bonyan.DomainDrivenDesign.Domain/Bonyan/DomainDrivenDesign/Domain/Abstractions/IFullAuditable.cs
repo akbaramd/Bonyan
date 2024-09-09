@@ -1,4 +1,4 @@
-﻿namespace Bonyan.DDD.Domain.Abstractions;
+﻿namespace Bonyan.DomainDrivenDesign.Domain.Abstractions;
 
 public interface IFullAuditable : ICreationAuditable, IUpdateAuditable, ISoftDeletable
 {

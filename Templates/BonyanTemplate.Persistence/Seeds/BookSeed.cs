@@ -1,5 +1,5 @@
 ﻿using System.Linq.Expressions;
-using Bonyan.DDD.Domain.Abstractions;
+using Bonyan.DomainDrivenDesign.Domain.Abstractions;
 using Bonyan.Persistence.EntityFrameworkCore;
 using BonyanTemplate.Domain.Entities;
 using BonyanTemplate.Domain.Enums;
