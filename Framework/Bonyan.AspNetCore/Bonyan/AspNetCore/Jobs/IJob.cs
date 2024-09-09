@@ -2,7 +2,7 @@
 
 public  interface IJob
 {
-  Task ExecuteAsync();
+  Task ExecuteAsync(CancellationToken cancellationToken = default!);
 }
 
 

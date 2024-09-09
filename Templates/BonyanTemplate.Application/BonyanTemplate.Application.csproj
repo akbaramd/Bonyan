@@ -6,4 +6,9 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\..\Framework\Bonyan.AspNetCore\Bonyan.AspNetCore.csproj" />
+      <ProjectReference Include="..\BonyanTemplate.Domain\BonyanTemplate.Domain.csproj" />
+    </ItemGroup>
+
 </Project>

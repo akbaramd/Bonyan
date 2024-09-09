@@ -1,0 +1,29 @@
+Executing NuGet push command for D:\Projects\Bonyan\Framework\Bonyan.AspNetCore.Persistence\bin\Release\Bonyan.AspNetCore.Persistence.1.0.0.nupkg at 09/08/2024 15:58:41:
+dotnet nuget push "D:\Projects\Bonyan\Framework\Bonyan.AspNetCore.Persistence\bin\Release\Bonyan.AspNetCore.Persistence.1.0.0.nupkg" -Source https://api.nuget.org/v3/index.json -ApiKey oy2jcaidwrfsiom4l3ia3ng6x5yohh6ubjvdhjddmqk6dy
+Successfully uploaded Bonyan.AspNetCore.Persistence.1.0.0.nupkg to NuGet at 09/08/2024 15:58:41.
+Executing NuGet push command for D:\Projects\Bonyan\Framework\Bonyan.AspNetCore.Persistence\bin\Release\Bonyan.AspNetCore.Persistence.1.0.0.nupkg at 09/08/2024 16:00:39:
+dotnet nuget push "D:\Projects\Bonyan\Framework\Bonyan.AspNetCore.Persistence\bin\Release\Bonyan.AspNetCore.Persistence.1.0.0.nupkg" -s https://api.nuget.org/v3/index.json -k oy2jcaidwrfsiom4l3ia3ng6x5yohh6ubjvdhjddmqk6dy
+Successfully uploaded Bonyan.AspNetCore.Persistence.1.0.0.nupkg to NuGet at 09/08/2024 16:00:41.
+Executing NuGet push command for D:\Projects\Bonyan\Framework\Bonyan.AspNetCore.Persistence\bin\Release\Bonyan.AspNetCore.Persistence.1.0.0.nupkg at 09/08/2024 16:01:38:
+dotnet nuget push "D:\Projects\Bonyan\Framework\Bonyan.AspNetCore.Persistence\bin\Release\Bonyan.AspNetCore.Persistence.1.0.0.nupkg" -s https://api.nuget.org/v3/index.json -k oy2jcaidwrfsiom4l3ia3ng6x5yohh6ubjvdhjddmqk6dy
+Successfully uploaded Bonyan.AspNetCore.Persistence.1.0.0.nupkg to NuGet at 09/08/2024 16:01:40.
+Executing NuGet push command for D:\Projects\Bonyan\Framework\Bonyan.AspNetCore.Persistence\bin\Release\Bonyan.AspNetCore.Persistence.1.0.0.nupkg at 09/08/2024 16:03:11:
+dotnet nuget push "D:\Projects\Bonyan\Framework\Bonyan.AspNetCore.Persistence\bin\Release\Bonyan.AspNetCore.Persistence.1.0.0.nupkg" -s https://api.nuget.org/v3/index.json -k oy2jcaidwrfsiom4l3ia3ng6x5yohh6ubjvdhjddmqk6dy
+Executing NuGet push command for D:\Projects\Bonyan\Framework\Bonyan.AspNetCore.Persistence\bin\Release\Bonyan.AspNetCore.Persistence.1.0.1.nupkg at 09/08/2024 16:09:55:
+dotnet nuget push "D:\Projects\Bonyan\Framework\Bonyan.AspNetCore.Persistence\bin\Release\Bonyan.AspNetCore.Persistence.1.0.1.nupkg" -s https://api.nuget.org/v3/index.json -k oy2jcaidwrfsiom4l3ia3ng6x5yohh6ubjvdhjddmqk6dy
+Successfully uploaded Bonyan.AspNetCore.Persistence.1.0.1.nupkg to NuGet at 09/08/2024 16:09:56.
+Executing NuGet push command for D:\Projects\Bonyan\Framework\Bonyan.AspNetCore.Persistence\bin\Release\Bonyan.AspNetCore.Persistence.1.0.2.nupkg at 09/08/2024 16:10:23:
+dotnet nuget push "D:\Projects\Bonyan\Framework\Bonyan.AspNetCore.Persistence\bin\Release\Bonyan.AspNetCore.Persistence.1.0.2.nupkg" -s https://api.nuget.org/v3/index.json -k oy2jcaidwrfsiom4l3ia3ng6x5yohh6ubjvdhjddmqk6dy
+Successfully uploaded Bonyan.AspNetCore.Persistence.1.0.2.nupkg to NuGet at 09/08/2024 16:10:24.
+Executing NuGet push command for D:\Projects\Bonyan\Framework\Bonyan.AspNetCore.Persistence\bin\Release\Bonyan.AspNetCore.Persistence.1.0.0-pre1.nupkg at 09/08/2024 17:13:42
+dotnet nuget push "D:\Projects\Bonyan\Framework\Bonyan.AspNetCore.Persistence\bin\Release\Bonyan.AspNetCore.Persistence.1.0.0-pre1.nupkg" -s https://api.nuget.org/v3/index.json -k oy2jcaidwrfsiom4l3ia3ng6x5yohh6ubjvdhjddmqk6dy --skip-duplicate --symbol-package
+Successfully uploaded Bonyan.AspNetCore.Persistence.1.0.0-pre1.nupkg to NuGet at 09/08/2024 17:13:42.
+Executing NuGet push command for D:\Projects\Bonyan\Framework\Bonyan.AspNetCore.Persistence\bin\Release\Bonyan.AspNetCore.Persistence.1.0.0-pre1.nupkg at 09/08/2024 17:16:39
+dotnet nuget push "D:\Projects\Bonyan\Framework\Bonyan.AspNetCore.Persistence\bin\Release\Bonyan.AspNetCore.Persistence.1.0.0-pre1.nupkg" -s https://api.nuget.org/v3/index.json -k oy2jcaidwrfsiom4l3ia3ng6x5yohh6ubjvdhjddmqk6dy --skip-duplicate --symbol-package
+Successfully uploaded Bonyan.AspNetCore.Persistence.1.0.0-pre1.nupkg to NuGet at 09/08/2024 17:16:40.
+Executing NuGet push command for D:\Projects\Bonyan\Framework\Bonyan.AspNetCore.Persistence\bin\Release\Bonyan.AspNetCore.Persistence.1.0.2-pre2.nupkg at 09/08/2024 17:24:23
+dotnet nuget push "D:\Projects\Bonyan\Framework\Bonyan.AspNetCore.Persistence\bin\Release\Bonyan.AspNetCore.Persistence.1.0.2-pre2.nupkg" -s https://api.nuget.org/v3/index.json -k oy2jcaidwrfsiom4l3ia3ng6x5yohh6ubjvdhjddmqk6dy --skip-duplicate --symbol-package
+Successfully uploaded Bonyan.AspNetCore.Persistence.1.0.2-pre2.nupkg to NuGet at 09/08/2024 17:24:23.
+Executing NuGet push command for D:\Projects\Bonyan\Framework\Bonyan.AspNetCore.Persistence\bin\Release\Bonyan.AspNetCore.Persistence.1.0.2-pre1.nupkg at 09/08/2024 17:29:49
+dotnet nuget push "D:\Projects\Bonyan\Framework\Bonyan.AspNetCore.Persistence\bin\Release\Bonyan.AspNetCore.Persistence.1.0.2-pre1.nupkg" -s https://api.nuget.org/v3/index.json -k oy2jcaidwrfsiom4l3ia3ng6x5yohh6ubjvdhjddmqk6dy 
+Successfully uploaded Bonyan.AspNetCore.Persistence.1.0.2-pre1.nupkg to NuGet at 09/08/2024 17:29:51.

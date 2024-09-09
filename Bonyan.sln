@@ -13,11 +13,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{32FA45AB
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bonyan", "Framework\Bonyan\Bonyan.csproj", "{FBCEBF87-F083-442E-B60E-2B7FFBECF54B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bonyan.DDD.Domain", "Framework\Bonyan.DDD.Domain\Bonyan.DDD.Domain.csproj", "{5BD35C5F-F6C4-4AB7-AF24-893821832A06}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bonyan.DomainDrivenDesign.Domain", "Framework\Bonyan.DomainDrivenDesign.Domain\Bonyan.DomainDrivenDesign.Domain.csproj", "{5BD35C5F-F6C4-4AB7-AF24-893821832A06}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bonyan.DDD.Application", "Framework\Bonyan.DDD.Application\Bonyan.DDD.Application.csproj", "{7D189F02-6CF1-4E44-975A-11E882669C13}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bonyan.DomainDerivenDesign.Application", "Framework\Bonyan.DomainDerivenDesign.Application\Bonyan.DomainDerivenDesign.Application.csproj", "{7D189F02-6CF1-4E44-975A-11E882669C13}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bonyan.EntityFrameworkCore", "Framework\Bonyan.EntityFrameworkCore\Bonyan.EntityFrameworkCore.csproj", "{EE8BB16D-0A17-4419-8E05-B8519A6D8447}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bonyan.Persistence.EntityFrameworkCore", "Framework\Bonyan.Persistence.EntityFrameworkCore\Bonyan.Persistence.EntityFrameworkCore.csproj", "{EE8BB16D-0A17-4419-8E05-B8519A6D8447}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.Tests", "Bonyan.Tests\Bonyan.Tests.csproj", "{AFA9CF2F-B53E-47B6-B4A5-92B05CC16013}"
 EndProject
@@ -40,6 +40,12 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BonyanTemplate.Infrastructure", "Templates\BonyanTemplate.Infrastructure\BonyanTemplate.Infrastructure.csproj", "{9361F796-6B25-4DB4-98CF-C536716BA27B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BonyanTemplate.Persistence", "Templates\BonyanTemplate.Persistence\BonyanTemplate.Persistence.csproj", "{61CCFEC3-98A5-4A73-A681-0BD73099F5EF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BonyanTemplate.Api", "Templates\BonyanTemplate.Api\BonyanTemplate.Api.csproj", "{43CD6FC4-8EB5-44DA-8CAA-9E38699FDD75}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.Persistence.EntityFrameworkCore.SqlServer", "Framework\Bonyan.Persistence.EntityFrameworkCore.SqlServer\Bonyan.Persistence.EntityFrameworkCore.SqlServer.csproj", "{6780A88C-D61F-4C20-8899-C294298196E6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.Persistence.EntityFrameworkCore.Sqlite", "Framework\Bonyan.Persistence.EntityFrameworkCore.Sqlite\Bonyan.Persistence.EntityFrameworkCore.Sqlite.csproj", "{22DAE8E6-9934-4E49-A83B-98E51CC8F46F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -103,6 +109,18 @@ Global
 		{61CCFEC3-98A5-4A73-A681-0BD73099F5EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{61CCFEC3-98A5-4A73-A681-0BD73099F5EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{61CCFEC3-98A5-4A73-A681-0BD73099F5EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{43CD6FC4-8EB5-44DA-8CAA-9E38699FDD75}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{43CD6FC4-8EB5-44DA-8CAA-9E38699FDD75}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{43CD6FC4-8EB5-44DA-8CAA-9E38699FDD75}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{43CD6FC4-8EB5-44DA-8CAA-9E38699FDD75}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6780A88C-D61F-4C20-8899-C294298196E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6780A88C-D61F-4C20-8899-C294298196E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6780A88C-D61F-4C20-8899-C294298196E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6780A88C-D61F-4C20-8899-C294298196E6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{22DAE8E6-9934-4E49-A83B-98E51CC8F46F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{22DAE8E6-9934-4E49-A83B-98E51CC8F46F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{22DAE8E6-9934-4E49-A83B-98E51CC8F46F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{22DAE8E6-9934-4E49-A83B-98E51CC8F46F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -122,6 +140,9 @@ Global
 		{2325B157-CC0D-4B04-BD5A-5E995B4D380A} = {034A5C05-CB06-41AC-AE54-EE94F66019FC}
 		{9361F796-6B25-4DB4-98CF-C536716BA27B} = {034A5C05-CB06-41AC-AE54-EE94F66019FC}
 		{61CCFEC3-98A5-4A73-A681-0BD73099F5EF} = {034A5C05-CB06-41AC-AE54-EE94F66019FC}
+		{43CD6FC4-8EB5-44DA-8CAA-9E38699FDD75} = {034A5C05-CB06-41AC-AE54-EE94F66019FC}
+		{6780A88C-D61F-4C20-8899-C294298196E6} = {F865B8FC-9BE7-4251-B8D7-519F85EF20B2}
+		{22DAE8E6-9934-4E49-A83B-98E51CC8F46F} = {F865B8FC-9BE7-4251-B8D7-519F85EF20B2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CACE9943-7714-471F-BCCD-CC6CA1DA43C5}

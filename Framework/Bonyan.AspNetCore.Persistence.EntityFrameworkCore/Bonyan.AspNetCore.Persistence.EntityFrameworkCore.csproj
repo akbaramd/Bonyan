@@ -12,6 +12,6 @@
   
   <ItemGroup>
     <ProjectReference Include="..\Bonyan.AspNetCore.Persistence\Bonyan.AspNetCore.Persistence.csproj" />
-    <ProjectReference Include="..\Bonyan.EntityFrameworkCore\Bonyan.EntityFrameworkCore.csproj" />
+    <ProjectReference Include="..\Bonyan.Persistence.EntityFrameworkCore\Bonyan.Persistence.EntityFrameworkCore.csproj" />
   </ItemGroup>
 </Project>

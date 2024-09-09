@@ -2,7 +2,7 @@
 using BonyanTemplate.Domain.Entities;
 using BonyanTemplate.Domain.Repositories;
 
-namespace BonyanTemplate.Persistence;
+namespace BonyanTemplate.Persistence.Repositories;
 
 public class  BooksRepository : EfCoreRepository<Books,Guid,AppDbContext>, IBooksRepository
 {

@@ -1,0 +1,35 @@
+Executing NuGet push command for D:\Projects\Bonyan\Framework\Bonyan.AspNetCore\bin\Release\Bonyan.AspNetCore.1.0.0.nupkg at 09/08/2024 15:58:37:
+dotnet nuget push "D:\Projects\Bonyan\Framework\Bonyan.AspNetCore\bin\Release\Bonyan.AspNetCore.1.0.0.nupkg" -Source https://api.nuget.org/v3/index.json -ApiKey oy2jcaidwrfsiom4l3ia3ng6x5yohh6ubjvdhjddmqk6dy
+Successfully uploaded Bonyan.AspNetCore.1.0.0.nupkg to NuGet at 09/08/2024 15:58:37.
+Executing NuGet push command for D:\Projects\Bonyan\Framework\Bonyan.AspNetCore\bin\Release\Bonyan.AspNetCore.1.0.0.nupkg at 09/08/2024 16:00:32:
+dotnet nuget push "D:\Projects\Bonyan\Framework\Bonyan.AspNetCore\bin\Release\Bonyan.AspNetCore.1.0.0.nupkg" -s https://api.nuget.org/v3/index.json -k oy2jcaidwrfsiom4l3ia3ng6x5yohh6ubjvdhjddmqk6dy
+Successfully uploaded Bonyan.AspNetCore.1.0.0.nupkg to NuGet at 09/08/2024 16:00:34.
+Executing NuGet push command for D:\Projects\Bonyan\Framework\Bonyan.AspNetCore\bin\Release\Bonyan.AspNetCore.1.0.0.nupkg at 09/08/2024 16:01:33:
+dotnet nuget push "D:\Projects\Bonyan\Framework\Bonyan.AspNetCore\bin\Release\Bonyan.AspNetCore.1.0.0.nupkg" -s https://api.nuget.org/v3/index.json -k oy2jcaidwrfsiom4l3ia3ng6x5yohh6ubjvdhjddmqk6dy
+Successfully uploaded Bonyan.AspNetCore.1.0.0.nupkg to NuGet at 09/08/2024 16:01:34.
+Executing NuGet push command for D:\Projects\Bonyan\Framework\Bonyan.AspNetCore\bin\Release\Bonyan.AspNetCore.1.0.0.nupkg at 09/08/2024 16:03:06:
+dotnet nuget push "D:\Projects\Bonyan\Framework\Bonyan.AspNetCore\bin\Release\Bonyan.AspNetCore.1.0.0.nupkg" -s https://api.nuget.org/v3/index.json -k oy2jcaidwrfsiom4l3ia3ng6x5yohh6ubjvdhjddmqk6dy
+Executing NuGet push command for D:\Projects\Bonyan\Framework\Bonyan.AspNetCore\bin\Release\Bonyan.AspNetCore.1.0.1.nupkg at 09/08/2024 16:09:50:
+dotnet nuget push "D:\Projects\Bonyan\Framework\Bonyan.AspNetCore\bin\Release\Bonyan.AspNetCore.1.0.1.nupkg" -s https://api.nuget.org/v3/index.json -k oy2jcaidwrfsiom4l3ia3ng6x5yohh6ubjvdhjddmqk6dy
+Successfully uploaded Bonyan.AspNetCore.1.0.1.nupkg to NuGet at 09/08/2024 16:09:51.
+Executing NuGet push command for D:\Projects\Bonyan\Framework\Bonyan.AspNetCore\bin\Release\Bonyan.AspNetCore.1.0.2.nupkg at 09/08/2024 16:10:17:
+dotnet nuget push "D:\Projects\Bonyan\Framework\Bonyan.AspNetCore\bin\Release\Bonyan.AspNetCore.1.0.2.nupkg" -s https://api.nuget.org/v3/index.json -k oy2jcaidwrfsiom4l3ia3ng6x5yohh6ubjvdhjddmqk6dy
+Successfully uploaded Bonyan.AspNetCore.1.0.2.nupkg to NuGet at 09/08/2024 16:10:18.
+Executing NuGet push command for D:\Projects\Bonyan\Framework\Bonyan.AspNetCore\bin\Release\Bonyan.AspNetCore.1.0.0-pre1.nupkg at 09/08/2024 17:13:35
+dotnet nuget push "D:\Projects\Bonyan\Framework\Bonyan.AspNetCore\bin\Release\Bonyan.AspNetCore.1.0.0-pre1.nupkg" -s https://api.nuget.org/v3/index.json -k oy2jcaidwrfsiom4l3ia3ng6x5yohh6ubjvdhjddmqk6dy --skip-duplicate --symbol-package
+Successfully uploaded Bonyan.AspNetCore.1.0.0-pre1.nupkg to NuGet at 09/08/2024 17:13:36.
+Executing NuGet push command for D:\Projects\Bonyan\Framework\Bonyan.AspNetCore\bin\Release\Bonyan.AspNetCore.1.0.0-pre1.nupkg at 09/08/2024 17:16:34
+dotnet nuget push "D:\Projects\Bonyan\Framework\Bonyan.AspNetCore\bin\Release\Bonyan.AspNetCore.1.0.0-pre1.nupkg" -s https://api.nuget.org/v3/index.json -k oy2jcaidwrfsiom4l3ia3ng6x5yohh6ubjvdhjddmqk6dy --skip-duplicate --symbol-package
+Successfully uploaded Bonyan.AspNetCore.1.0.0-pre1.nupkg to NuGet at 09/08/2024 17:16:34.
+Executing NuGet push command for D:\Projects\Bonyan\Framework\Bonyan.AspNetCore\bin\Release\Bonyan.AspNetCore.1.0.0-pre1.nupkg at 09/08/2024 17:17:04
+dotnet nuget push "D:\Projects\Bonyan\Framework\Bonyan.AspNetCore\bin\Release\Bonyan.AspNetCore.1.0.0-pre1.nupkg" -s https://api.nuget.org/v3/index.json -k oy2jcaidwrfsiom4l3ia3ng6x5yohh6ubjvdhjddmqk6dy --skip-duplicate --symbol-package
+Successfully uploaded Bonyan.AspNetCore.1.0.0-pre1.nupkg to NuGet at 09/08/2024 17:17:04.
+Executing NuGet push command for D:\Projects\Bonyan\Framework\Bonyan.AspNetCore\bin\Release\Bonyan.AspNetCore.1.0.0-pre1.nupkg at 09/08/2024 17:20:05
+dotnet nuget push "D:\Projects\Bonyan\Framework\Bonyan.AspNetCore\bin\Release\Bonyan.AspNetCore.1.0.0-pre1.nupkg" -s https://api.nuget.org/v3/index.json -k oy2jcaidwrfsiom4l3ia3ng6x5yohh6ubjvdhjddmqk6dy --skip-duplicate --symbol-package
+Successfully uploaded Bonyan.AspNetCore.1.0.0-pre1.nupkg to NuGet at 09/08/2024 17:20:05.
+Executing NuGet push command for D:\Projects\Bonyan\Framework\Bonyan.AspNetCore\bin\Release\Bonyan.AspNetCore.1.0.2-pre2.nupkg at 09/08/2024 17:24:18
+dotnet nuget push "D:\Projects\Bonyan\Framework\Bonyan.AspNetCore\bin\Release\Bonyan.AspNetCore.1.0.2-pre2.nupkg" -s https://api.nuget.org/v3/index.json -k oy2jcaidwrfsiom4l3ia3ng6x5yohh6ubjvdhjddmqk6dy --skip-duplicate --symbol-package
+Successfully uploaded Bonyan.AspNetCore.1.0.2-pre2.nupkg to NuGet at 09/08/2024 17:24:18.
+Executing NuGet push command for D:\Projects\Bonyan\Framework\Bonyan.AspNetCore\bin\Release\Bonyan.AspNetCore.1.0.2-pre1.nupkg at 09/08/2024 17:29:41
+dotnet nuget push "D:\Projects\Bonyan\Framework\Bonyan.AspNetCore\bin\Release\Bonyan.AspNetCore.1.0.2-pre1.nupkg" -s https://api.nuget.org/v3/index.json -k oy2jcaidwrfsiom4l3ia3ng6x5yohh6ubjvdhjddmqk6dy 
+Successfully uploaded Bonyan.AspNetCore.1.0.2-pre1.nupkg to NuGet at 09/08/2024 17:29:43.

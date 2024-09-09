@@ -11,13 +11,16 @@
   <Import Project="..\..\package.props" />
   <ItemGroup>
     <ProjectReference Include="..\Bonyan.AspNetCore\Bonyan.AspNetCore.csproj" />
-    <ProjectReference Include="..\Bonyan.DDD.Domain\Bonyan.DDD.Domain.csproj" />
-    <ProjectReference Include="..\Bonyan.EntityFrameworkCore\Bonyan.EntityFrameworkCore.csproj" />
+    <ProjectReference Include="..\Bonyan.DomainDrivenDesign.Domain\Bonyan.DomainDrivenDesign.Domain.csproj" />
+    <ProjectReference Include="..\Bonyan.Persistence.EntityFrameworkCore\Bonyan.Persistence.EntityFrameworkCore.csproj" />
   </ItemGroup>
   <ItemGroup>
     <_ContentIncludedByDefault Remove="publish_output\publish_output\web.config" />
     <_ContentIncludedByDefault Remove="publish_output\web.config" />
     <_ContentIncludedByDefault Remove="publish_output\Bonyan.AspNetCore.Persistence.deps.json" />
     <_ContentIncludedByDefault Remove="publish_output\publish_output\Bonyan.AspNetCore.deps.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Castle.Core" Version="5.1.1" />
   </ItemGroup>
 </Project>

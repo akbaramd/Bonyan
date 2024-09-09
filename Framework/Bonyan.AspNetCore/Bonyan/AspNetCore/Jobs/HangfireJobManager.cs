@@ -19,7 +19,7 @@ public class HangfireJobManager : IOptimumJobsManager
     var jobInstance = scope.ServiceProvider.GetRequiredService<TJob>();
     _recurringJobManager.AddOrUpdate(
       typeof(TJob).Name,
-      () => jobInstance.ExecuteAsync(),
+      () => jobInstance.ExecuteAsync(CancellationToken.None),
       cronExpression
     );
     Console.WriteLine($"Registered cron job: {typeof(TJob).Name} with cron expression: {cronExpression}");
@@ -29,7 +29,7 @@ public class HangfireJobManager : IOptimumJobsManager
   public void AddBackgroundJob<TJob>(IServiceScope scope) where TJob : IJob
   {
     var jobInstance = scope.ServiceProvider.GetRequiredService<TJob>();
-    _backgroundJobClient.Enqueue(() => jobInstance.ExecuteAsync());
+    _backgroundJobClient.Enqueue(() => jobInstance.ExecuteAsync(CancellationToken.None));
     Console.WriteLine($"Registered background job: {typeof(TJob).Name}");
   }
 

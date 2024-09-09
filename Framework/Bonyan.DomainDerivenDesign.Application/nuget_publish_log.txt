@@ -1,0 +1,23 @@
+Executing NuGet push command for D:\Projects\Bonyan\Framework\Bonyan.DDD.Application\bin\Release\Bonyan.DDD.Application.1.0.0.nupkg at 09/08/2024 15:58:45:
+dotnet nuget push "D:\Projects\Bonyan\Framework\Bonyan.DDD.Application\bin\Release\Bonyan.DDD.Application.1.0.0.nupkg" -Source https://api.nuget.org/v3/index.json -ApiKey oy2jcaidwrfsiom4l3ia3ng6x5yohh6ubjvdhjddmqk6dy
+Successfully uploaded Bonyan.DDD.Application.1.0.0.nupkg to NuGet at 09/08/2024 15:58:45.
+Executing NuGet push command for D:\Projects\Bonyan\Framework\Bonyan.DDD.Application\bin\Release\Bonyan.DDD.Application.1.0.0.nupkg at 09/08/2024 16:00:47:
+dotnet nuget push "D:\Projects\Bonyan\Framework\Bonyan.DDD.Application\bin\Release\Bonyan.DDD.Application.1.0.0.nupkg" -s https://api.nuget.org/v3/index.json -k oy2jcaidwrfsiom4l3ia3ng6x5yohh6ubjvdhjddmqk6dy
+Successfully uploaded Bonyan.DDD.Application.1.0.0.nupkg to NuGet at 09/08/2024 16:00:49.
+Executing NuGet push command for D:\Projects\Bonyan\Framework\Bonyan.DDD.Application\bin\Release\Bonyan.DDD.Application.1.0.0.nupkg at 09/08/2024 16:01:44:
+dotnet nuget push "D:\Projects\Bonyan\Framework\Bonyan.DDD.Application\bin\Release\Bonyan.DDD.Application.1.0.0.nupkg" -s https://api.nuget.org/v3/index.json -k oy2jcaidwrfsiom4l3ia3ng6x5yohh6ubjvdhjddmqk6dy
+Successfully uploaded Bonyan.DDD.Application.1.0.0.nupkg to NuGet at 09/08/2024 16:01:45.
+Executing NuGet push command for D:\Projects\Bonyan\Framework\Bonyan.DDD.Application\bin\Release\Bonyan.DDD.Application.1.0.0.nupkg at 09/08/2024 16:03:16:
+dotnet nuget push "D:\Projects\Bonyan\Framework\Bonyan.DDD.Application\bin\Release\Bonyan.DDD.Application.1.0.0.nupkg" -s https://api.nuget.org/v3/index.json -k oy2jcaidwrfsiom4l3ia3ng6x5yohh6ubjvdhjddmqk6dy
+Executing NuGet push command for D:\Projects\Bonyan\Framework\Bonyan.DDD.Application\bin\Release\Bonyan.DDD.Application.1.0.1.nupkg at 09/08/2024 16:10:00:
+dotnet nuget push "D:\Projects\Bonyan\Framework\Bonyan.DDD.Application\bin\Release\Bonyan.DDD.Application.1.0.1.nupkg" -s https://api.nuget.org/v3/index.json -k oy2jcaidwrfsiom4l3ia3ng6x5yohh6ubjvdhjddmqk6dy
+Successfully uploaded Bonyan.DDD.Application.1.0.1.nupkg to NuGet at 09/08/2024 16:10:02.
+Executing NuGet push command for D:\Projects\Bonyan\Framework\Bonyan.DDD.Application\bin\Release\Bonyan.DDD.Application.1.0.2.nupkg at 09/08/2024 16:10:28:
+dotnet nuget push "D:\Projects\Bonyan\Framework\Bonyan.DDD.Application\bin\Release\Bonyan.DDD.Application.1.0.2.nupkg" -s https://api.nuget.org/v3/index.json -k oy2jcaidwrfsiom4l3ia3ng6x5yohh6ubjvdhjddmqk6dy
+Successfully uploaded Bonyan.DDD.Application.1.0.2.nupkg to NuGet at 09/08/2024 16:10:29.
+Executing NuGet push command for D:\Projects\Bonyan\Framework\Bonyan.DDD.Application\bin\Release\Bonyan.DDD.Application.1.0.2-pre2.nupkg at 09/08/2024 17:24:28
+dotnet nuget push "D:\Projects\Bonyan\Framework\Bonyan.DDD.Application\bin\Release\Bonyan.DDD.Application.1.0.2-pre2.nupkg" -s https://api.nuget.org/v3/index.json -k oy2jcaidwrfsiom4l3ia3ng6x5yohh6ubjvdhjddmqk6dy --skip-duplicate --symbol-package
+Successfully uploaded Bonyan.DDD.Application.1.0.2-pre2.nupkg to NuGet at 09/08/2024 17:24:28.
+Executing NuGet push command for D:\Projects\Bonyan\Framework\Bonyan.DDD.Application\bin\Release\Bonyan.DDD.Application.1.0.2-pre1.nupkg at 09/08/2024 17:29:56
+dotnet nuget push "D:\Projects\Bonyan\Framework\Bonyan.DDD.Application\bin\Release\Bonyan.DDD.Application.1.0.2-pre1.nupkg" -s https://api.nuget.org/v3/index.json -k oy2jcaidwrfsiom4l3ia3ng6x5yohh6ubjvdhjddmqk6dy 
+Successfully uploaded Bonyan.DDD.Application.1.0.2-pre1.nupkg to NuGet at 09/08/2024 17:29:57.
