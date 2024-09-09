@@ -27,3 +27,6 @@ Successfully uploaded Bonyan.DomainDrivenDesign.Domain.1.0.3.nupkg to NuGet at 0
 Executing NuGet push command for D:\Projects\Bonyan\Framework\Bonyan.DomainDrivenDesign.Domain\bin\Release\Bonyan.DomainDrivenDesign.Domain.1.0.4.nupkg at 09/09/2024 14:57:30
 dotnet nuget push "D:\Projects\Bonyan\Framework\Bonyan.DomainDrivenDesign.Domain\bin\Release\Bonyan.DomainDrivenDesign.Domain.1.0.4.nupkg" -s https://api.nuget.org/v3/index.json -k oy2jcaidwrfsiom4l3ia3ng6x5yohh6ubjvdhjddmqk6dy 
 Successfully uploaded Bonyan.DomainDrivenDesign.Domain.1.0.4.nupkg to NuGet at 09/09/2024 14:57:31.
+Executing NuGet push command for D:\Projects\Bonyan\Framework\Bonyan.DomainDrivenDesign.Domain\bin\Release\Bonyan.DomainDrivenDesign.Domain.1.0.5-pre1.nupkg at 09/09/2024 15:44:06
+dotnet nuget push "D:\Projects\Bonyan\Framework\Bonyan.DomainDrivenDesign.Domain\bin\Release\Bonyan.DomainDrivenDesign.Domain.1.0.5-pre1.nupkg" -s https://api.nuget.org/v3/index.json -k oy2jcaidwrfsiom4l3ia3ng6x5yohh6ubjvdhjddmqk6dy 
+Successfully uploaded Bonyan.DomainDrivenDesign.Domain.1.0.5-pre1.nupkg to NuGet at 09/09/2024 15:44:07.

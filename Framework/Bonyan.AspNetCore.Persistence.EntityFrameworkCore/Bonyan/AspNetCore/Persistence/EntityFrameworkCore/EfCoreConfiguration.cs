@@ -1,12 +1,9 @@
-﻿using Bonyan.DomainDrivenDesign.Domain.Abstractions;
+﻿using Bonyan.AspNetCore.Persistence.EntityFrameworkCore.HostedServices;
+using Bonyan.DomainDrivenDesign.Domain.Abstractions;
 using Bonyan.DomainDrivenDesign.Domain.Entities;
-using Bonyan.Persistence.EntityFrameworkCore.HostedServices;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 
-namespace Bonyan.Persistence.EntityFrameworkCore
+namespace Bonyan.AspNetCore.Persistence.EntityFrameworkCore
 {
   public class EfCoreConfiguration<TDbContext> where TDbContext : DbContext
   {

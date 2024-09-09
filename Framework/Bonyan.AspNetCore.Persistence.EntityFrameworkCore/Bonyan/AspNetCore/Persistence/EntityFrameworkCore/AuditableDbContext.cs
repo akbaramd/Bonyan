@@ -1,7 +1,7 @@
 ﻿using Bonyan.DomainDrivenDesign.Domain.Abstractions;
 using Microsoft.EntityFrameworkCore;
 
-namespace Bonyan.Persistence.EntityFrameworkCore;
+namespace Bonyan.AspNetCore.Persistence.EntityFrameworkCore;
 
 public abstract class AuditableDbContext : DbContext
 {

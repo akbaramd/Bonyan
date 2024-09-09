@@ -2,7 +2,7 @@
 
 
 using Bonyan.AspNetCore.Persistence;
-using Bonyan.Persistence.EntityFrameworkCore;
+using Bonyan.AspNetCore.Persistence.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Microsoft.AspNetCore.Builder;

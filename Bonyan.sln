@@ -17,8 +17,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bonyan.DomainDrivenDesign.D
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bonyan.DomainDrivenDesign.Application", "Framework\Bonyan.DomainDrivenDesign.Application\Bonyan.DomainDrivenDesign.Application.csproj", "{7D189F02-6CF1-4E44-975A-11E882669C13}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bonyan.Persistence.EntityFrameworkCore", "Framework\Bonyan.Persistence.EntityFrameworkCore\Bonyan.Persistence.EntityFrameworkCore.csproj", "{EE8BB16D-0A17-4419-8E05-B8519A6D8447}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.Tests", "Bonyan.Tests\Bonyan.Tests.csproj", "{AFA9CF2F-B53E-47B6-B4A5-92B05CC16013}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.DDD.Domain.Tests", "Bonyan.DDD.Domain.Tests\Bonyan.DDD.Domain.Tests.csproj", "{F220CCEC-45EB-4DD4-AC2F-37B912A0B708}"
@@ -43,9 +41,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BonyanTemplate.Persistence"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BonyanTemplate.Api", "Templates\BonyanTemplate.Api\BonyanTemplate.Api.csproj", "{43CD6FC4-8EB5-44DA-8CAA-9E38699FDD75}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.Persistence.EntityFrameworkCore.SqlServer", "Framework\Bonyan.Persistence.EntityFrameworkCore.SqlServer\Bonyan.Persistence.EntityFrameworkCore.SqlServer.csproj", "{6780A88C-D61F-4C20-8899-C294298196E6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.AspNetCore.Persistence.EntityFrameworkCore.SqlServer", "Framework\Bonyan.AspNetCore.Persistence.EntityFrameworkCore.SqlServer\Bonyan.AspNetCore.Persistence.EntityFrameworkCore.SqlServer.csproj", "{6780A88C-D61F-4C20-8899-C294298196E6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.Persistence.EntityFrameworkCore.Sqlite", "Framework\Bonyan.Persistence.EntityFrameworkCore.Sqlite\Bonyan.Persistence.EntityFrameworkCore.Sqlite.csproj", "{22DAE8E6-9934-4E49-A83B-98E51CC8F46F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.AspNetCore.Persistence.EntityFrameworkCore.Sqlite", "Framework\Bonyan.AspNetCore.Persistence.EntityFrameworkCore.Sqlite\Bonyan.AspNetCore.Persistence.EntityFrameworkCore.Sqlite.csproj", "{22DAE8E6-9934-4E49-A83B-98E51CC8F46F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -65,10 +63,6 @@ Global
 		{7D189F02-6CF1-4E44-975A-11E882669C13}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7D189F02-6CF1-4E44-975A-11E882669C13}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7D189F02-6CF1-4E44-975A-11E882669C13}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EE8BB16D-0A17-4419-8E05-B8519A6D8447}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EE8BB16D-0A17-4419-8E05-B8519A6D8447}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EE8BB16D-0A17-4419-8E05-B8519A6D8447}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EE8BB16D-0A17-4419-8E05-B8519A6D8447}.Release|Any CPU.Build.0 = Release|Any CPU
 		{AFA9CF2F-B53E-47B6-B4A5-92B05CC16013}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{AFA9CF2F-B53E-47B6-B4A5-92B05CC16013}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AFA9CF2F-B53E-47B6-B4A5-92B05CC16013}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -129,7 +123,6 @@ Global
 		{FBCEBF87-F083-442E-B60E-2B7FFBECF54B} = {F865B8FC-9BE7-4251-B8D7-519F85EF20B2}
 		{5BD35C5F-F6C4-4AB7-AF24-893821832A06} = {F865B8FC-9BE7-4251-B8D7-519F85EF20B2}
 		{7D189F02-6CF1-4E44-975A-11E882669C13} = {F865B8FC-9BE7-4251-B8D7-519F85EF20B2}
-		{EE8BB16D-0A17-4419-8E05-B8519A6D8447} = {F865B8FC-9BE7-4251-B8D7-519F85EF20B2}
 		{AFA9CF2F-B53E-47B6-B4A5-92B05CC16013} = {32FA45AB-A310-483C-8D23-9E2D1CE9F218}
 		{F220CCEC-45EB-4DD4-AC2F-37B912A0B708} = {32FA45AB-A310-483C-8D23-9E2D1CE9F218}
 		{62791559-5D8D-4EE2-8AFE-10F32263A700} = {F865B8FC-9BE7-4251-B8D7-519F85EF20B2}

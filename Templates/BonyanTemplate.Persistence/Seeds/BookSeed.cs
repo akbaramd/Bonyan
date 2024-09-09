@@ -1,12 +1,12 @@
-﻿using System.Linq.Expressions;
+﻿using Bonyan.AspNetCore.Persistence;
+using Bonyan.AspNetCore.Persistence.EntityFrameworkCore;
 using Bonyan.DomainDrivenDesign.Domain.Abstractions;
-using Bonyan.Persistence.EntityFrameworkCore;
 using BonyanTemplate.Domain.Entities;
 using BonyanTemplate.Domain.Enums;
 
 namespace BonyanTemplate.Persistence.Seeds;
 
-public class BookSeed : ISeeder
+public class BookSeed :  ISeeder
 {
   private IRepository<Books, Guid> _repository;
 

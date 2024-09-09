@@ -1,6 +1,6 @@
 using Castle.DynamicProxy;
 
-namespace Bonyan.Persistence.EntityFrameworkCore;
+namespace Bonyan.AspNetCore.Persistence.EntityFrameworkCore;
 
 public class RepositoryInterceptor : IInterceptor
 {

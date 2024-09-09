@@ -11,7 +11,6 @@ function Get-LastBaseVersion {
     return $lastBase[0]
 }
 
-# Function to get the next version by incrementing the patch, pre-release, or dev-release
 function Get-NextVersion {
     param (
         [string]$currentVersion,
@@ -35,17 +34,23 @@ function Get-NextVersion {
     if ($publishType -eq 'Prerelease') {
         # Check if there is already a pre-release associated with this base version
         $preReleaseVersion = $existingVersions | Where-Object { $_ -match "$lastBaseVersion-pre(\d+)" } | Select-Object -Last 1 
-      
+
+        # Only increment patch version if the currentVersion is Production, not another Prerelease or Development version
+        if ($currentVersion -notmatch '-pre' -and $currentVersion -notmatch '-dev') {
+            $lastVersionParts[2] = [int]$lastVersionParts[2] + 1
+        }
+        
+        $next = "$($lastVersionParts[0]).$($lastVersionParts[1]).$($lastVersionParts[2])"
+
         if ($preReleaseVersion) {
             # Increment the pre-release version
             $preVersionNumber = [regex]::Match($preReleaseVersion, '-pre(\d+)').Groups[1].Value
             $nextPreVersion = [int]$preVersionNumber + 1
              
-            return "$lastBaseVersion-pre$nextPreVersion"
+            return "$next-pre$nextPreVersion"
         } else {
-     
             # Start from pre1 if no pre-release exists for this base version
-            return "$lastBaseVersion-pre1"
+            return "$next-pre1"
         }
     }
 
@@ -54,17 +59,26 @@ function Get-NextVersion {
         # Check if there is already a dev-release associated with this base version
         $devVersion = $existingVersions | Where-Object { $_ -match "$lastBaseVersion-dev(\d+)" } | Sort-Object | Select-Object -Last 1
 
+        # Only increment patch version if the currentVersion is Production, not another Development or Prerelease version
+        if ($currentVersion -notmatch '-pre' -and $currentVersion -notmatch '-dev') {
+            $lastVersionParts[2] = [int]$lastVersionParts[2] + 1
+        }
+        
+        $next = "$($lastVersionParts[0]).$($lastVersionParts[1]).$($lastVersionParts[2])"
+
         if ($devVersion) {
             # Increment the dev-release version
             $devVersionNumber = [regex]::Match($devVersion, '-dev(\d+)').Groups[1].Value
             $nextDevVersion = [int]$devVersionNumber + 1
-            return "$lastBaseVersion-dev$nextDevVersion"
+            
+            return "$next-dev$nextDevVersion"
         } else {
             # Start from dev1 if no dev-release exists for this base version
-            return "$lastBaseVersion-dev1"
+            return "$next-dev1"
         }
     }
 }
+
 
 # Function to extract all versions from the version file
 function Get-ExistingVersionsFromFile {

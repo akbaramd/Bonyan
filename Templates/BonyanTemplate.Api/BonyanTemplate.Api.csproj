@@ -22,7 +22,7 @@
       <ProjectReference Include="..\..\Framework\Bonyan.AspNetCore.Persistence.EntityFrameworkCore\Bonyan.AspNetCore.Persistence.EntityFrameworkCore.csproj" />
       <ProjectReference Include="..\..\Framework\Bonyan.AspNetCore.Persistence\Bonyan.AspNetCore.Persistence.csproj" />
       <ProjectReference Include="..\..\Framework\Bonyan.AspNetCore\Bonyan.AspNetCore.csproj" />
-      <ProjectReference Include="..\..\Framework\Bonyan.Persistence.EntityFrameworkCore.SqlServer\Bonyan.Persistence.EntityFrameworkCore.SqlServer.csproj" />
+      <ProjectReference Include="..\..\Framework\Bonyan.AspNetCore.Persistence.EntityFrameworkCore.SqlServer\Bonyan.AspNetCore.Persistence.EntityFrameworkCore.SqlServer.csproj" />
       <ProjectReference Include="..\BonyanTemplate.Application\BonyanTemplate.Application.csproj" />
       <ProjectReference Include="..\BonyanTemplate.Infrastructure\BonyanTemplate.Infrastructure.csproj" />
       <ProjectReference Include="..\BonyanTemplate.Persistence\BonyanTemplate.Persistence.csproj" />

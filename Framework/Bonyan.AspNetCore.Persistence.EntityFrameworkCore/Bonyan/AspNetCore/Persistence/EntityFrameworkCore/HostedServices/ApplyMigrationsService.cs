@@ -1,17 +1,15 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 
-namespace Bonyan.Persistence.EntityFrameworkCore.HostedServices;
+namespace Bonyan.AspNetCore.Persistence.EntityFrameworkCore.HostedServices;
 
-public class EnsureDatabaseCreatedService<TContext>(IServiceProvider serviceProvider) : IHostedService
+public class ApplyMigrationsService<TContext>(IServiceProvider serviceProvider) : IHostedService
   where TContext : DbContext
 {
   public async Task StartAsync(CancellationToken cancellationToken)
   {
     using var scope = serviceProvider.CreateScope();
     var context = scope.ServiceProvider.GetRequiredService<TContext>();
-    await context.Database.EnsureCreatedAsync(cancellationToken);
+    await context.Database.MigrateAsync(cancellationToken);
   }
 
   public Task StopAsync(CancellationToken cancellationToken)

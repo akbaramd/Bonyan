@@ -1,0 +1,9 @@
+Executing NuGet push command for D:\Projects\Bonyan\Framework\Bonyan.Persistence.EntityFrameworkCore.Sqlite\bin\Release\Bonyan.Persistence.EntityFrameworkCore.Sqlite.1.0.3.nupkg at 09/09/2024 14:49:23
+dotnet nuget push "D:\Projects\Bonyan\Framework\Bonyan.Persistence.EntityFrameworkCore.Sqlite\bin\Release\Bonyan.Persistence.EntityFrameworkCore.Sqlite.1.0.3.nupkg" -s https://api.nuget.org/v3/index.json -k oy2jcaidwrfsiom4l3ia3ng6x5yohh6ubjvdhjddmqk6dy 
+Successfully uploaded Bonyan.Persistence.EntityFrameworkCore.Sqlite.1.0.3.nupkg to NuGet at 09/09/2024 14:49:25.
+Executing NuGet push command for D:\Projects\Bonyan\Framework\Bonyan.Persistence.EntityFrameworkCore.Sqlite\bin\Release\Bonyan.Persistence.EntityFrameworkCore.Sqlite.1.0.4.nupkg at 09/09/2024 14:57:35
+dotnet nuget push "D:\Projects\Bonyan\Framework\Bonyan.Persistence.EntityFrameworkCore.Sqlite\bin\Release\Bonyan.Persistence.EntityFrameworkCore.Sqlite.1.0.4.nupkg" -s https://api.nuget.org/v3/index.json -k oy2jcaidwrfsiom4l3ia3ng6x5yohh6ubjvdhjddmqk6dy 
+Successfully uploaded Bonyan.Persistence.EntityFrameworkCore.Sqlite.1.0.4.nupkg to NuGet at 09/09/2024 14:57:37.
+Executing NuGet push command for D:\Projects\Bonyan\Framework\Bonyan.AspNetCore.Persistence.EntityFrameworkCore.Sqlite\bin\Release\Bonyan.AspNetCore.Persistence.EntityFrameworkCore.Sqlite.1.0.5-pre1.nupkg at 09/09/2024 15:43:55
+dotnet nuget push "D:\Projects\Bonyan\Framework\Bonyan.AspNetCore.Persistence.EntityFrameworkCore.Sqlite\bin\Release\Bonyan.AspNetCore.Persistence.EntityFrameworkCore.Sqlite.1.0.5-pre1.nupkg" -s https://api.nuget.org/v3/index.json -k oy2jcaidwrfsiom4l3ia3ng6x5yohh6ubjvdhjddmqk6dy 
+Successfully uploaded Bonyan.AspNetCore.Persistence.EntityFrameworkCore.Sqlite.1.0.5-pre1.nupkg to NuGet at 09/09/2024 15:43:58.

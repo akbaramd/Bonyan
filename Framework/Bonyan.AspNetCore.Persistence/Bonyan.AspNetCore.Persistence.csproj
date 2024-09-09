@@ -12,7 +12,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Bonyan.AspNetCore\Bonyan.AspNetCore.csproj" />
     <ProjectReference Include="..\Bonyan.DomainDrivenDesign.Domain\Bonyan.DomainDrivenDesign.Domain.csproj" />
-    <ProjectReference Include="..\Bonyan.Persistence.EntityFrameworkCore\Bonyan.Persistence.EntityFrameworkCore.csproj" />
   </ItemGroup>
   <ItemGroup>
     <_ContentIncludedByDefault Remove="publish_output\publish_output\web.config" />

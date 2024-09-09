@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Bonyan.AspNetCore.Persistence.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 namespace Bonyan.Persistence.EntityFrameworkCore.Sqlite;
 
