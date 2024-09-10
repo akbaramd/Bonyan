@@ -8,7 +8,7 @@ on:
 jobs:
   build:
     runs-on: windows-latest
-
+    environment: Nuget
     steps:
 
           # PowerShell debugging step to check if the NugetKey exists
@@ -21,7 +21,7 @@ jobs:
           }
         shell: pwsh
         env:
-          NugetKey: ${{ secrets.Key }}  # P
+          NugetKey: ${{ secrets.KEY }}  # P
           
       - name: Checkout code
         uses: actions/checkout@v3
