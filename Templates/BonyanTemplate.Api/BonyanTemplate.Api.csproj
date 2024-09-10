@@ -18,6 +18,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\Framework\Bonyan.AspNetCore.FastEndpoints.Authentication\Bonyan.AspNetCore.FastEndpoints.Authentication.csproj" />
       <ProjectReference Include="..\..\Framework\Bonyan.AspNetCore.FastEndpoints\Bonyan.AspNetCore.FastEndpoints.csproj" />
       <ProjectReference Include="..\..\Framework\Bonyan.AspNetCore.Persistence.EntityFrameworkCore\Bonyan.AspNetCore.Persistence.EntityFrameworkCore.csproj" />
       <ProjectReference Include="..\..\Framework\Bonyan.AspNetCore.Persistence\Bonyan.AspNetCore.Persistence.csproj" />

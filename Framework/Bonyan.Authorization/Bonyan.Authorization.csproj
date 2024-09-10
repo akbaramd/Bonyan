@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <OutputType>Library</OutputType>
+        <RootNamespace />
+        <PackageId>Bonyan.Authorazation</PackageId>
+    </PropertyGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\Bonyan\Bonyan.csproj" />
+    </ItemGroup>
+    <ItemGroup>
+      <Folder Include="Bonyan\Authorization\" />
+    </ItemGroup>
+    <ItemGroup>
+      <Reference Include="Microsoft.AspNetCore.Authorization">
+        <HintPath>C:\Program Files\dotnet\shared\Microsoft.AspNetCore.App\8.0.7\Microsoft.AspNetCore.Authorization.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
+    <Import Project="..\..\package.props" />
+
+
+</Project>
