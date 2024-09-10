@@ -1,4 +1,4 @@
-name: Upload to NuGet
+name: Upload to NuGet and Update Changelog
 
 on:
   push:
@@ -26,3 +26,25 @@ jobs:
         shell: pwsh
         env:
           NugetKey: ${{ secrets.KEY }}  # Pass the NuGet API key secret to the script
+
+      - name: Get the latest commit message
+        id: commit
+        run: echo "COMMIT_MESSAGE=$(git log -1 --pretty=%B)" >> $GITHUB_ENV
+        shell: bash  # git commands are compatible with bash
+
+      - name: Append commit message to changelog
+        run: |
+          $date = Get-Date -Format "yyyy-MM-dd"
+          $commitMessage = $env:COMMIT_MESSAGE
+          $newEntry = "`n### Version 1.0.0 - $date`r`n- $commitMessage`r`n"
+          (Get-Content README.md) -replace '(## 📝 \*\*Changelog\*\*)', "`$1`r`n$newEntry" | Set-Content README.md
+        shell: pwsh
+
+      - name: Commit the updated README.md
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add README.md
+          git commit -m "Updated changelog with the latest commit"
+          git push
+        shell: bash
