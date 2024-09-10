@@ -10,6 +10,19 @@ jobs:
     runs-on: windows-latest
 
     steps:
+
+          # PowerShell debugging step to check if the NugetKey exists
+      - name: Check if NugetKey exists
+        run: |
+          if ($env:NugetKey) {
+            Write-Host "NugetKey is set"
+          } else {
+            Write-Host "NugetKey is not set"
+          }
+        shell: pwsh
+        env:
+          NugetKey: ${{ secrets.Key }}  # P
+          
       - name: Checkout code
         uses: actions/checkout@v3
 
