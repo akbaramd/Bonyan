@@ -9,7 +9,7 @@ function Publish-DotnetProject {
     $nugetApiKey = $env:NugetKey
 
     if (-not $nugetApiKey) {
-        Write-Host "NuGet API Key not found. Please set the NugetKey environment variable." -ForegroundColor Red
+        Write-Host "NuGet API Key not found. Please set the NugetKey environment variable. {$nugetApiKey}" -ForegroundColor Red
         return
     }
 
