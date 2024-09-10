@@ -25,4 +25,4 @@ jobs:
         run: ./upload.ps1
         shell: pwsh
         env:
-          NugetKey: ${{ secrets.Key }}  # Pass the NuGet API key secret to the script
+          NugetKey: ${{ secrets.KEY }}  # Pass the NuGet API key secret to the script
