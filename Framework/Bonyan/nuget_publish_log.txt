@@ -44,3 +44,5 @@ Successfully uploaded Bonyan.1.0.4.nupkg to NuGet at 09/09/2024 14:57:12.
 Executing NuGet push command for D:\Projects\Bonyan\Framework\Bonyan\bin\Release\Bonyan.1.0.5-pre1.nupkg at 09/09/2024 15:43:33
 dotnet nuget push "D:\Projects\Bonyan\Framework\Bonyan\bin\Release\Bonyan.1.0.5-pre1.nupkg" -s https://api.nuget.org/v3/index.json -k oy2jcaidwrfsiom4l3ia3ng6x5yohh6ubjvdhjddmqk6dy 
 Successfully uploaded Bonyan.1.0.5-pre1.nupkg to NuGet at 09/09/2024 15:43:35.
+Executing NuGet push command for D:\Projects\Bonyan\Framework\Bonyan\bin\Release\Bonyan.1.0.5-pre2.nupkg at 09/10/2024 08:18:50
+dotnet nuget push "D:\Projects\Bonyan\Framework\Bonyan\bin\Release\Bonyan.1.0.5-pre2.nupkg" -s https://api.nuget.org/v3/index.json -k oy2jcaidwrfsiom4l3ia3ng6x5yohh6ubjvdhjddmqk6dy 

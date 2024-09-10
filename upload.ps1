@@ -5,6 +5,14 @@ function Publish-DotnetProject {
         [string]$publishType
     )
 
+    # Retrieve NuGet API key from the environment variable
+    $nugetApiKey = $env:NugetKey
+
+    if (-not $nugetApiKey) {
+        Write-Host "NuGet API Key not found. Please set the NugetKey environment variable." -ForegroundColor Red
+        return
+    }
+
     # Save the current directory
     $initialDirectory = Get-Location
 
@@ -25,14 +33,9 @@ function Publish-DotnetProject {
     $nupkgFile = Get-ChildItem -Filter *.nupkg
 
     if ($nupkgFile) {
-        # Prepare NuGet push command based on the publish type
+        # Prepare NuGet push command using the secret stored in the environment
         $nugetSource = 'https://api.nuget.org/v3/index.json'
-        $nugetApiKey = 'oy2jcaidwrfsiom4l3ia3ng6x5yohh6ubjvdhjddmqk6dy'
-
-        # Adjust command for Prerelease
-       
-            $nugetPushCommand = "dotnet nuget push `"$($nupkgFile.FullName)`" -s $nugetSource -k $nugetApiKey "
-    
+        $nugetPushCommand = "dotnet nuget push `"$($nupkgFile.FullName)`" -s $nugetSource -k $nugetApiKey"
 
         # Log and execute the push command
         $logFile = Join-Path -Path $projectPath -ChildPath 'nuget_publish_log.txt'
@@ -60,7 +63,6 @@ function Publish-DotnetProject {
 function Main {
     # Save the initial directory
     $startingDirectory = Get-Location
-
 
     # Run tests
     dotnet test
