@@ -6,7 +6,7 @@ function Publish-DotnetProject {
     )
 
     # Retrieve NuGet API key from the environment variable
-    $nugetApiKey = $env:NugetKey
+    $nugetApiKey = $env:NugetKey 
 
     if (-not $nugetApiKey) {
         Write-Host "NuGet API Key not found. Please set the NugetKey environment variable. {$nugetApiKey}" -ForegroundColor Red
