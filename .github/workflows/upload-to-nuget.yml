@@ -13,21 +13,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up .NETname: Upload to NuGet
-
-on:
-  push:
-    branches:
-      - master
-
-jobs:
-  build:
-    runs-on: windows-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
       - name: Set up .NET
         uses: actions/setup-dotnet@v3
         with:
@@ -41,14 +26,3 @@ jobs:
         shell: pwsh
         env:
           NugetKey: ${{ secrets.Key }}  # Pass the NuGet API key secret to the script
-
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: '8.x' # Adjust according to your target .NET version
-
-      - name: Restore dependencies
-        run: dotnet restore
-      
-      - name: Run upload script
-        run: ./upload.ps1
-        shell: pwsh
