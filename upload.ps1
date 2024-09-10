@@ -61,8 +61,6 @@ function Main {
     # Save the initial directory
     $startingDirectory = Get-Location
 
-    # Show menu for publish type selection
-    $publishType = Show-PublishMenu
 
     # Run tests
     dotnet test
