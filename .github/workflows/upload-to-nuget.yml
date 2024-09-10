@@ -10,23 +10,6 @@ jobs:
     runs-on: windows-latest
     environment: Nuget
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Set up .NET
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: '8.x' # Adjust according to your target .NET version
-
-      - name: Restore dependencies
-        run: dotnet restore
-
-      - name: Run upload script
-        run: ./upload.ps1
-        shell: pwsh
-        env:
-          NugetKey: ${{ secrets.KEY }}  # Pass the NuGet API key secret to the script
-
       - name: Get the latest commit message
         id: commit
         run: echo "COMMIT_MESSAGE=$(git log -1 --pretty=%B)" >> $GITHUB_ENV
@@ -48,3 +31,22 @@ jobs:
           git commit -m "Updated changelog with the latest commit"
           git push
         shell: bash
+        
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.x' # Adjust according to your target .NET version
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Run upload script
+        run: ./upload.ps1
+        shell: pwsh
+        env:
+          NugetKey: ${{ secrets.KEY }}  # Pass the NuGet API key secret to the script
+
+      
