@@ -8,7 +8,7 @@ namespace BonyanTemplate.Infrastructure.Data.Repositories;
 
 public class MemoryBookRepository : InMemoryRepository<Books,Guid>, IBooksRepository
 {
-  public MemoryBookRepository(ITenantAccessor accessor) : base(accessor)
+  public MemoryBookRepository(IServiceProvider serviceProvider) : base(serviceProvider)
   {
   }
 }

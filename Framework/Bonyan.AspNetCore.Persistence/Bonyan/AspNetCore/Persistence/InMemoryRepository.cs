@@ -10,12 +10,12 @@ public class InMemoryRepository<TEntity> : IRepository<TEntity> where TEntity : 
 {
   protected readonly ConcurrentDictionary<object, TEntity> _store = new();
 
-  public InMemoryRepository(ITenantAccessor tenantAccessor)
+  public InMemoryRepository(IServiceProvider serviceProvider)
   {
-    TenantAccessor = tenantAccessor;
+    TenantAccessor = serviceProvider.GetService<ITenantAccessor>();
   }
 
-  public ITenantAccessor TenantAccessor { get; set; }
+  public ITenantAccessor? TenantAccessor { get; set; }
 
   public Task<IEnumerable<TEntity>> GetAllAsync()
   {
@@ -143,7 +143,7 @@ public class InMemoryRepository<TEntity, TKey> : InMemoryRepository<TEntity>, IR
   where TEntity : class, IEntity<TKey>
   where TKey : notnull
 {
-  public InMemoryRepository(ITenantAccessor accessor) : base(accessor)
+  public InMemoryRepository(IServiceProvider serviceProvider) : base(serviceProvider)
   {
   }
 

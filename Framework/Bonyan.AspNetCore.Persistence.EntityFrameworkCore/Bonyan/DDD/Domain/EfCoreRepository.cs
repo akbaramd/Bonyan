@@ -14,13 +14,13 @@ namespace Bonyan.DDD.Domain
     {
         protected readonly TDbContext _dbContext;
         protected readonly DbSet<TEntity> _dbSet;
-        protected readonly ITenantAccessor _tenantAccessor;
+        protected readonly ITenantAccessor? _tenantAccessor;
 
-        public EfCoreRepository(TDbContext dbContext, ITenantAccessor tenantAccessor)
+        public EfCoreRepository(TDbContext dbContext, IServiceProvider serviceProvider)
         {
             _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
             _dbSet = _dbContext.Set<TEntity>();
-            _tenantAccessor = tenantAccessor ;
+            _tenantAccessor = serviceProvider.GetService<ITenantAccessor>() ;
         }
 
         public IQueryable<TEntity> ApplyTenantFilter(IQueryable<TEntity> query)
@@ -131,7 +131,7 @@ namespace Bonyan.DDD.Domain
     public class EfCoreRepository<TEntity, TKey, TDbContext> : EfCoreRepository<TEntity, TDbContext>, IRepository<TEntity, TKey>
         where TEntity : class, IEntity where TDbContext : DbContext
     {
-        public EfCoreRepository(TDbContext dbContext, ITenantAccessor tenantAccessor) : base(dbContext, tenantAccessor)
+        public EfCoreRepository(TDbContext dbContext, IServiceProvider serviceProvider) : base(dbContext, serviceProvider)
         {
         }
 

@@ -7,7 +7,7 @@ namespace BonyanTemplate.Persistence.Repositories;
 
 public class  BooksRepository : EfCoreRepository<Books,Guid,AppDbContext>, IBooksRepository
 {
-  public BooksRepository(AppDbContext dbContext, ITenantAccessor tenantAccessor) : base(dbContext, tenantAccessor)
+  public BooksRepository(AppDbContext dbContext, IServiceProvider serviceProvider) : base(dbContext, serviceProvider)
   {
   }
 }

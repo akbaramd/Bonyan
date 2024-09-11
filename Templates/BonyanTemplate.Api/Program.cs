@@ -18,7 +18,6 @@ builder.AddFastEndpoints(fe =>
 
 builder.AddPersistence(persistence =>
 {
-  persistence.EnableTenant();
   persistence.AddEntityFrameworkCore<BonyanTemplateDbContext>(ef =>
   {
     ef.AddRepository<IBooksRepository, EfBookRepository>();
