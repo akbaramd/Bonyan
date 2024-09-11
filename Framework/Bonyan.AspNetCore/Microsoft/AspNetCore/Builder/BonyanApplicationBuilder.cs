@@ -74,7 +74,7 @@ namespace Microsoft.AspNetCore.Builder
             return this;
         }
 
-        public BonyanApplication Build()
+        public BonyanApplication Build(Action<BonyanApplication>? builder = null)
         {
             Services.AddHangfire(config => config.UseInMemoryStorage());
             Services.AddHangfireServer();
@@ -120,7 +120,7 @@ namespace Microsoft.AspNetCore.Builder
                       "BackgroundJob"));
                 }
             }
-
+            builder?.Invoke(bonyanApplication);
             return bonyanApplication;
         }
     }

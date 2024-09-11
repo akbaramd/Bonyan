@@ -18,7 +18,7 @@ public class PersistenceConfiguration
   
   public PersistenceConfiguration AddSeed<TSeed>() where TSeed : class, ISeeder
   {
-    Builder.Services.AddScoped<ISeeder, TSeed>();
+    Builder.GetServicesCollection().AddScoped<ISeeder, TSeed>();
     
     return this;
   }

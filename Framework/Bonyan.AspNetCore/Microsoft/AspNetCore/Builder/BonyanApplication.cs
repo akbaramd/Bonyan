@@ -12,19 +12,21 @@ public class BonyanApplication(WebApplication application, BonyanServiceInfo ser
     // List to store information about registered extensions
     public List<ConsoleMessage> ConsoleMessages { get; set; } = new();
 
-    public static IBonyanApplicationBuilder CreateBuilder(string title, string id, string version, string[] args,
-      Action<WebApplicationBuilder>? configure = null)
+    public static IBonyanApplicationBuilder CreateApplicationBuilder(
+      string[] args)
     {
       var applicationBuilder = WebApplication.CreateBuilder(args);
     
-      // Configure services if necessary
-      configure?.Invoke(applicationBuilder);
+
 
       // Register the IOptimumJobsManager with the DI container
       applicationBuilder.Services.AddSingleton<IOptimumJobsManager, HangfireJobManager>();
 
 
-      return new BonyanApplicationBuilder(new BonyanServiceInfo(id, title, version), applicationBuilder);
+      var  builder = new BonyanApplicationBuilder(new BonyanServiceInfo("", "", ""), applicationBuilder);
+      
+
+      return builder;
     }
 
 

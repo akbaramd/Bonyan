@@ -22,4 +22,7 @@
     <_ContentIncludedByDefault Remove="publish_output\Bonyan.AspNetCore.deps.json" />
     <_ContentIncludedByDefault Remove="publish_output\publish_output\Bonyan.AspNetCore.deps.json" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Microsoft\AspNetCore\Builder\DependencyInjection\" />
+  </ItemGroup>
 </Project>

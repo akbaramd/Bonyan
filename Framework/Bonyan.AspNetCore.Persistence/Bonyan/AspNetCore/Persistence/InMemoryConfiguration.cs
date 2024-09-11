@@ -43,13 +43,13 @@ public class InMemoryConfiguration
       repositoryType = typeof(InMemoryRepository<,>).MakeGenericType(entityType, keyType);
 
       // Register the repository with IRepository<TEntity, TKey>
-      Builder.Services.AddScoped(typeof(IRepository<,>).MakeGenericType(entityType, keyType), repositoryType);
+      Builder.GetServicesCollection().AddScoped(typeof(IRepository<,>).MakeGenericType(entityType, keyType), repositoryType);
 
       // Entity does not have a key, register the repository with InMemoryRepository<TEntity>
       repositoryType = typeof(InMemoryRepository<>).MakeGenericType(entityType);
 
       // Register the repository with IRepository<TEntity>
-      Builder.Services.AddScoped(typeof(IRepository<>).MakeGenericType(entityType), repositoryType);
+      Builder.GetServicesCollection().AddScoped(typeof(IRepository<>).MakeGenericType(entityType), repositoryType);
     }
     else
     {
@@ -57,14 +57,14 @@ public class InMemoryConfiguration
       repositoryType = typeof(InMemoryRepository<>).MakeGenericType(entityType);
 
       // Register the repository with IRepository<TEntity>
-      Builder.Services.AddScoped(typeof(IRepository<>).MakeGenericType(entityType), repositoryType);
+      Builder.GetServicesCollection().AddScoped(typeof(IRepository<>).MakeGenericType(entityType), repositoryType);
     }
 
     // Create the proxy for the repository
     var proxyType = CreateProxy(repositoryType, typeof(TRepository));
 
     // Register the proxy repository type as the implementation of TRepository
-    Builder.Services.AddScoped(typeof(TRepository), proxyType);
+    Builder.GetServicesCollection().AddScoped(typeof(TRepository), proxyType);
 
     return this;
   }
@@ -88,8 +88,8 @@ public class InMemoryConfiguration
   {
     AddRepository<TRepository>();
 
-    Builder.Services.AddScoped<TRepository, TImplement>();
-    Builder.Services.AddScoped<TImplement>();
+    Builder.GetServicesCollection().AddScoped<TRepository, TImplement>();
+    Builder.GetServicesCollection().AddScoped<TImplement>();
 
     return this;
   }

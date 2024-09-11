@@ -4,31 +4,41 @@ using BonyanTemplate.Infrastructure.Data;
 using BonyanTemplate.Infrastructure.Data.Repositories;
 using BonyanTemplate.Persistence.Seeds;
 
-BonyanApplication
-  .CreateBuilder("BonyanTemplate", "BonyanTemplate", "1.0.0", args)
-  .AddFastEndpoints(c =>
-  {
-    c.AddAuthentication(c =>
-    {
-      c.SigningKey = "";
-    });
-  })
-  .AddPersistence(presisence =>
-  {
-    presisence.AddEntityFrameworkCore<BonyanTemplateDbContext>(ef =>
-    {
-      ef.AddRepository<IBooksRepository, EfBookRepository>();
-    });
+// create bonyan application builder
+var builder = BonyanApplication.CreateApplicationBuilder(args);
 
-    presisence.AddInMemory(im =>
-    {
-      im.AddRepository<IBooksRepository>();
-      im.AddRepository<IBooksRepository, MemoryBookRepository>();
-    });
+// configure builder
+builder.AddFastEndpoints(fe =>
+{
+  fe.AddAuthentication(auth =>
+  {
+    auth.SigningKey = "";
+  });
+});
 
-    presisence.AddSeed<BookSeed>();
-  })
-  .AddCronJob<TestJob>("0 */6 * * *")
-  .Build()
-  .UseFastEndpoints()
-  .Run();
+builder.AddPersistence(persistence =>
+{
+  persistence.AddEntityFrameworkCore<BonyanTemplateDbContext>(ef =>
+  {
+    ef.AddRepository<IBooksRepository, EfBookRepository>();
+  });
+
+  persistence.AddInMemory(im =>
+  {
+    im.AddRepository<IBooksRepository>();
+    im.AddRepository<IBooksRepository, MemoryBookRepository>();
+  });
+
+  persistence.AddSeed<BookSeed>();
+});
+
+builder.AddCronJob<TestJob>("0 */6 * * *");
+
+// build application
+var app = builder.Build();
+
+// configure application
+app.UseFastEndpoints();
+
+// run application
+app.Run();

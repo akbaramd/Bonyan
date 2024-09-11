@@ -13,10 +13,10 @@ public  static class EntityFrameworkCoreBonyanApplicationBuilderExtensions
   {
     
     
-    var configuration = new EfCoreConfiguration<TDbContext>(conf.Builder.Services);
+    var configuration = new EfCoreConfiguration<TDbContext>(conf.Builder.GetServicesCollection());
     configure(configuration);
     
-    conf.Builder.Services.AddDbContext<TDbContext>(configuration.DbContextOptionsAction);
+    conf.Builder.GetServicesCollection().AddDbContext<TDbContext>(configuration.DbContextOptionsAction);
     // Optionally run seeds after the app starts
     return conf;
   }

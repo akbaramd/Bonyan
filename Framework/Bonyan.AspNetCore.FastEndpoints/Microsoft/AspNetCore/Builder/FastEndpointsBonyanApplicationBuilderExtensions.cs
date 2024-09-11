@@ -8,10 +8,10 @@ public  static class FastEndpointsBonyanApplicationBuilderExtensions
 {
   public static IBonyanApplicationBuilder AddFastEndpoints(this IBonyanApplicationBuilder applicationBuilder,Action<FastEndpointConfiguration>? action = null)
   {
-    applicationBuilder.Services.AddFastEndpoints();
-    applicationBuilder.Services.SwaggerDocument();
+    applicationBuilder.GetServicesCollection().AddFastEndpoints();
+    applicationBuilder.GetServicesCollection().SwaggerDocument();
     
-    action?.Invoke(new FastEndpointConfiguration(applicationBuilder.Services,applicationBuilder.Configuration));
+    action?.Invoke(new FastEndpointConfiguration(applicationBuilder.GetServicesCollection(),applicationBuilder.GetConfiguration()));
 
     applicationBuilder.AddInitializer(c =>
     {
