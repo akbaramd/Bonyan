@@ -13,7 +13,9 @@ public interface IBonyanApplicationBuilder
  public IConfiguration GetConfiguration() => Configuration;
  
   // Synchronous methods
+  IBonyanApplicationBuilder AddBeforeInitializer(Action<BonyanApplication> action);
   IBonyanApplicationBuilder AddInitializer(Action<BonyanApplication> action);
+  IBonyanApplicationBuilder AddBeforeInitializer<TInitializer>() where TInitializer : class, IBonyanApplicationInitializer;
   IBonyanApplicationBuilder AddInitializer<TInitializer>() where TInitializer : class, IBonyanApplicationInitializer;
   IBonyanApplicationBuilder AddConsoleMessage(string message, string category = "Info");
   IBonyanApplicationBuilder AddCronJob<TJob>(string cronExpression) where TJob : class, IJob;

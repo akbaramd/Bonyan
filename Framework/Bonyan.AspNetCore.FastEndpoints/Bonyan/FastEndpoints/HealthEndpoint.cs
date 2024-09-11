@@ -7,7 +7,7 @@ namespace Bonyan.FastEndpoints
   {
     public override void Configure()
     {
-      Get("/health");  // Set the route for the health endpoint
+      Get("/bonyan/health");  // Set the route for the health endpoint
       AllowAnonymous(); // Allow anonymous access for health checks
     }
 

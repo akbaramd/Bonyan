@@ -11,15 +11,9 @@ public  static class FastEndpointsBonyanApplicationBuilderExtensions
     applicationBuilder.GetServicesCollection().AddFastEndpoints();
     applicationBuilder.GetServicesCollection().SwaggerDocument();
     
-    action?.Invoke(new FastEndpointConfiguration(applicationBuilder.GetServicesCollection(),applicationBuilder.GetConfiguration()));
+    action?.Invoke(new FastEndpointConfiguration(applicationBuilder));
 
-    applicationBuilder.AddInitializer(c =>
-    {
-      c.Application.UseAuthentication() //add this
-        .UseAuthorization() //add this
-        .UseFastEndpoints();
-    });
-    
+
     applicationBuilder.AddConsoleMessage("FastEndpoints and Swagger registered","Extensions");
     return applicationBuilder;
   }

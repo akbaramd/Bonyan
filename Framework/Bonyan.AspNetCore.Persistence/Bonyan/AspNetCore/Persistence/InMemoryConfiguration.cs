@@ -15,10 +15,26 @@ public class InMemoryConfiguration
     _proxyGenerator = new ProxyGenerator();
   }
   
-  
-  public InMemoryConfiguration AddRepository<TRepository>() where TRepository : class, IRepository
+
+
+  // Method to create a dynamic proxy class for the repository
+  private Type CreateProxy(Type baseRepositoryType, Type repositoryInterface)
   {
-    // Find the entity type from the TRepository
+    var proxyOptions = new ProxyGenerationOptions();
+
+    // Here, you can add custom interceptors to handle logging, transactions, etc.
+    var proxy = _proxyGenerator.CreateClassProxy(baseRepositoryType, new[] { repositoryInterface }, proxyOptions,
+      new RepositoryInterceptor());
+
+    return proxy.GetType();
+  }
+
+  // Add repository with interface and implementation type
+  public InMemoryConfiguration AddRepository<TRepository, TImplement>()
+    where TRepository : class, IRepository
+    where TImplement : class, TRepository
+  {
+      // Find the entity type from the TRepository
     var repositoryInterface = typeof(TRepository).GetInterfaces()
       .FirstOrDefault(i => i.IsGenericType && (i.GetGenericTypeDefinition() == typeof(IRepository<>)
                                                || i.GetGenericTypeDefinition() == typeof(IRepository<,>)));
@@ -59,34 +75,6 @@ public class InMemoryConfiguration
       // Register the repository with IRepository<TEntity>
       Builder.GetServicesCollection().AddScoped(typeof(IRepository<>).MakeGenericType(entityType), repositoryType);
     }
-
-    // Create the proxy for the repository
-    var proxyType = CreateProxy(repositoryType, typeof(TRepository));
-
-    // Register the proxy repository type as the implementation of TRepository
-    Builder.GetServicesCollection().AddScoped(typeof(TRepository), proxyType);
-
-    return this;
-  }
-
-  // Method to create a dynamic proxy class for the repository
-  private Type CreateProxy(Type baseRepositoryType, Type repositoryInterface)
-  {
-    var proxyOptions = new ProxyGenerationOptions();
-
-    // Here, you can add custom interceptors to handle logging, transactions, etc.
-    var proxy = _proxyGenerator.CreateClassProxy(baseRepositoryType, new[] { repositoryInterface }, proxyOptions,
-      new RepositoryInterceptor());
-
-    return proxy.GetType();
-  }
-
-  // Add repository with interface and implementation type
-  public InMemoryConfiguration AddRepository<TRepository, TImplement>()
-    where TRepository : class, IRepository
-    where TImplement : class, TRepository
-  {
-    AddRepository<TRepository>();
 
     Builder.GetServicesCollection().AddScoped<TRepository, TImplement>();
     Builder.GetServicesCollection().AddScoped<TImplement>();

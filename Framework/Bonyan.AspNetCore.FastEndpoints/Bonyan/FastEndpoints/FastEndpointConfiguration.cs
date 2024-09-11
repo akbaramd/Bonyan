@@ -2,14 +2,16 @@ namespace Bonyan.FastEndpoints;
 
 public class FastEndpointConfiguration
 {
-  public FastEndpointConfiguration(IServiceCollection services, IConfiguration configuration)
-  {
-    Services = services;
-    Configuration = configuration;
+  public IBonyanApplicationBuilder Builder {
+    get;
+    set;
   }
 
-  public IServiceCollection  Services { get;  }
-  public IConfiguration  Configuration { get;  }
+  public FastEndpointConfiguration(IBonyanApplicationBuilder builder)
+  {
+    Builder = builder;
+  }
+
   
   
 }

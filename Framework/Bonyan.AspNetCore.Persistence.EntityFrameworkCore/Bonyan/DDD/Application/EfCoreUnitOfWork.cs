@@ -10,11 +10,13 @@ namespace Bonyan.DDD.Application;
 public class EfCoreUnitOfWork<TContext> : IUnitOfWork where TContext : DbContext
 {
     private readonly TContext _dbContext;
+    private readonly ITenantAccessor _tenantAccessor;
     private IDbContextTransaction? _transaction;
 
-    public EfCoreUnitOfWork(TContext dbContext)
+    public EfCoreUnitOfWork(TContext dbContext, ITenantAccessor tenantAccessor)
     {
-        _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
+      _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
+      _tenantAccessor = tenantAccessor;
     }
 
     public void BeginTransaction()
@@ -102,11 +104,11 @@ public class EfCoreUnitOfWork<TContext> : IUnitOfWork where TContext : DbContext
 
     public IRepository<TEntity> GetRepository<TEntity>() where TEntity : class, IEntity
     {
-        return new EfCoreRepository<TEntity, TContext>(_dbContext);
+        return new EfCoreRepository<TEntity, TContext>(_dbContext,_tenantAccessor);
     }
 
      public IRepository<TEntity,TKey> GetRepository<TEntity,TKey>() where TEntity : class, IEntity
     {
-        return new EfCoreRepository<TEntity,TKey, TContext>(_dbContext);
+        return new EfCoreRepository<TEntity,TKey, TContext>(_dbContext,_tenantAccessor);
     }
 }

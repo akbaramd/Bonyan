@@ -10,6 +10,8 @@ public  static class FastEndpointsBonyanApplicationExtensions
     application.Application.UseFastEndpoints();
     application.Application.UseSwaggerGen();
   
+    
+    
     return application;
   }
 }

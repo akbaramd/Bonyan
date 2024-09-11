@@ -10,11 +10,18 @@ public static class FastEndpointsBonyanApplicationBuilderExtensions
   public static FastEndpointConfiguration AddAuthentication(this FastEndpointConfiguration configuration,
     Action<JwtSigningOptions> jwtSigningOptions)
   {
-    configuration.Services
+    configuration.Builder.GetServicesCollection()
       .AddAuthenticationJwtBearer(jwtSigningOptions);
 
-    configuration.Services.AddAuthentication();
-    configuration.Services.AddAuthorization();
+    configuration.Builder.GetServicesCollection().AddAuthentication();
+    configuration.Builder.GetServicesCollection().AddAuthorization();
+
+    configuration.Builder.AddBeforeInitializer(app =>
+    {
+      app.Application.UseAuthentication() //add this
+        .UseAuthorization();
+    });
+    
     return configuration;
   }
 }

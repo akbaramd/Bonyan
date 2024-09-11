@@ -12,12 +12,13 @@ builder.AddFastEndpoints(fe =>
 {
   fe.AddAuthentication(auth =>
   {
-    auth.SigningKey = "";
+    auth.SigningKey = "ewelkdnaskjdbalkjdhn;aksdf;akjsdsdasdasd";
   });
 });
 
 builder.AddPersistence(persistence =>
 {
+  persistence.EnableTenant();
   persistence.AddEntityFrameworkCore<BonyanTemplateDbContext>(ef =>
   {
     ef.AddRepository<IBooksRepository, EfBookRepository>();
@@ -25,7 +26,6 @@ builder.AddPersistence(persistence =>
 
   persistence.AddInMemory(im =>
   {
-    im.AddRepository<IBooksRepository>();
     im.AddRepository<IBooksRepository, MemoryBookRepository>();
   });
 

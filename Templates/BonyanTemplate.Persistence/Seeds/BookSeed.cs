@@ -21,7 +21,8 @@ public class BookSeed :  ISeeder
     {
       Id = Guid.Parse("9f44544d-1d04-401f-a365-ce699240503c"),
       Title = "test",
-      Status = BookStatus.Available
+      Status = BookStatus.Available,
+      Tenant = "urmia"
     };
 
     // Check if a book with the same Id already exists in the repository

@@ -1,4 +1,6 @@
-﻿using Castle.DynamicProxy;
+﻿using Bonyan.DomainDrivenDesign.Domain.Abstractions;
+using Bonyan.DomainDrivenDesign.Domain.Core;
+using Castle.DynamicProxy;
 
 namespace Bonyan.AspNetCore.Persistence;
 
@@ -30,10 +32,40 @@ public class PersistenceConfiguration
     
     return this;
   }
+  
+  // EnableTenant method: registers ITenantAccessor when called
+  public PersistenceConfiguration EnableTenant()
+  {
+    Builder.GetServicesCollection().AddScoped<ITenantAccessor, TenantAccessor>();
+    
+    Builder.AddBeforeInitializer(app =>
+    {
+      app.Application.Use(async (context, next) =>
+      {
+        // Global tenant header key
+        const string tenantHeaderKey = "X-Tenant";
+
+        // Check if the tenant is in the request headers
+        if (context.Request.Headers.TryGetValue(tenantHeaderKey, out var tenantValue))
+        {
+          // Access the ITenantAccessor service from the request scope
+          var tenantAccessor = context.RequestServices.GetRequiredService<ITenantAccessor>();
+
+          // Set the tenant in the ITenantAccessor (assuming SetTenant is a method on your TenantAccessor)
+          tenantAccessor.CurrentTenant = tenantValue.ToString().Split(',').ToList();
+        }
+
+        // Call the next middleware in the pipeline
+        await next.Invoke();
+      });
+      
+    });
+        
+    return this;
+  }
  
 }
 
-// Example of a simple Castle DynamicProxy interceptor (this can be customized)
 public class RepositoryInterceptor : IInterceptor
 {
   public void Intercept(IInvocation invocation)

@@ -12,6 +12,7 @@ namespace Microsoft.AspNetCore.Builder
         private readonly List<(Type, string)> _cronJobTypes = new(); // Store cron jobs with their expressions
         private readonly List<Type> _backgroundJobTypes = new(); // Store background jobs
         private readonly List<Action<BonyanApplication>> _syncActions = new();
+        private readonly List<Action<BonyanApplication>> _syncBeforeActions = new();
         private readonly WebApplicationBuilder _builder;
 
         public BonyanServiceInfo ServiceInfo { get; }
@@ -28,10 +29,34 @@ namespace Microsoft.AspNetCore.Builder
             _builder = builder;
         }
 
+        public IBonyanApplicationBuilder AddBeforeInitializer(Action<BonyanApplication> action)
+        {
+          _syncBeforeActions.Add(action);
+          return this;
+        }
+
         public IBonyanApplicationBuilder AddInitializer(Action<BonyanApplication> action)
         {
             _syncActions.Add(action);
             return this;
+        }
+
+        public IBonyanApplicationBuilder AddBeforeInitializer<TInitializer>() where TInitializer : class, IBonyanApplicationInitializer
+        {
+          Services.AddSingleton<TInitializer>();
+          _syncBeforeActions.Add(app =>
+          {
+            try
+            {
+              var initializer = app.Application.Services.GetRequiredService<TInitializer>();
+              initializer.InitializeAsync(app).GetAwaiter().GetResult();
+            }
+            catch (Exception ex)
+            {
+              Console.WriteLine($"Failed to initialize {typeof(TInitializer).Name}: {ex.Message}");
+            }
+          });
+          return this;
         }
 
         public IBonyanApplicationBuilder AddInitializer<TInitializer>() where TInitializer : class, IBonyanApplicationInitializer
@@ -81,7 +106,10 @@ namespace Microsoft.AspNetCore.Builder
 
             var application = _builder.Build();
             var bonyanApplication = new BonyanApplication(application, ServiceInfo) { ConsoleMessages = _consoleMessages };
-
+            foreach (var action in _syncBeforeActions)
+            {
+              action.Invoke(bonyanApplication);
+            }
             foreach (var action in _syncActions)
             {
                 action.Invoke(bonyanApplication);
