@@ -3,6 +3,9 @@ using Bonyan.AspNetCore.Jobs;
 using Hangfire;
 using System.Collections.Generic;
 using System;
+using Bonyan.AspNetCore.Application;
+using Bonyan.AspNetCore.Domain;
+using Bonyan.AspNetCore.Infrastructure;
 
 namespace Microsoft.AspNetCore.Builder
 {
@@ -19,6 +22,28 @@ namespace Microsoft.AspNetCore.Builder
         public IServiceCollection Services { get; }
         public ConfigureHostBuilder Host { get; }
         public IConfiguration Configuration { get; }
+        
+        
+        public IBonyanApplicationBuilder ConfigureDomain(Action<IDomainConfiguration> configure)
+        {
+          var  configuration = new DomainConfiguration(Configuration);
+          configure.Invoke(configuration);
+          return this;
+        }
+
+        public IBonyanApplicationBuilder ConfigureApplication(Action<IApplicationConfiguration> configure)
+        {
+          var  configuration = new ApplicationConfiguration();
+          configure.Invoke(configuration);
+          return this;
+        }
+
+        public IBonyanApplicationBuilder ConfigureInfrastructure(Action<IInfrastructureConfiguration> configure)
+        {
+          var  configuration = new InfrastructureConfiguration();
+          configure.Invoke(configuration);
+          return this;
+        }
 
         public BonyanApplicationBuilder(BonyanServiceInfo serviceInfo, WebApplicationBuilder builder)
         {

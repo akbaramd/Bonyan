@@ -1,4 +1,7 @@
-﻿using Bonyan.AspNetCore.Jobs;
+﻿using Bonyan.AspNetCore.Application;
+using Bonyan.AspNetCore.Domain;
+using Bonyan.AspNetCore.Infrastructure;
+using Bonyan.AspNetCore.Jobs;
 
 namespace Microsoft.AspNetCore.Builder;
 
@@ -9,6 +12,11 @@ public interface IBonyanApplicationBuilder
  protected internal IConfiguration Configuration { get; }
 
 
+ IBonyanApplicationBuilder ConfigureDomain(Action<IDomainConfiguration> configure);
+ IBonyanApplicationBuilder ConfigureApplication(Action<IApplicationConfiguration> configure);
+ IBonyanApplicationBuilder ConfigureInfrastructure(Action<IInfrastructureConfiguration> configure);
+ 
+ 
  public IServiceCollection GetServicesCollection() => Services;
  public IConfiguration GetConfiguration() => Configuration;
  
