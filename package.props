@@ -3,7 +3,7 @@
   <PropertyGroup>
     <OutputType>Library</OutputType>
     <IsPackable>true</IsPackable>
-    <Version>1.0.6-dev1</Version>
+    <Version>1.0.7</Version>
     <Authors>Akbar Ahmadi Saray</Authors>
     <Company>akbar-ahmadi.ir</Company>
     <PackageProjectUrl>https://akbaramd.github.io/Novin</PackageProjectUrl>
