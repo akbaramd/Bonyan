@@ -10,11 +10,11 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <RepositoryUrl>https://github.com/akbaramd/Novin</RepositoryUrl>
     <PackageIcon>logo.jpg</PackageIcon> <!-- Path to the NuGet icon -->
-    <PackageReadmeFile>README.md</PackageReadmeFile> <!-- Path to the README file -->
+    <PackageReadmeFile>introduction.md</PackageReadmeFile> <!-- Path to the README file -->
   </PropertyGroup>
   <ItemGroup>
     <None Include="../../logo.jpg" Pack="true" PackagePath="." /> <!-- Include the NuGet icon in the package -->
-    <None Include="../../README.md" Pack="true" PackagePath="." /> <!-- Include the README file in the package -->
+    <None Include="../../docs/introduction.md" Pack="true" PackagePath="." /> <!-- Include the README file in the package -->
   </ItemGroup>
 </Project>
  

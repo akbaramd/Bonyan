@@ -1,19 +1,16 @@
 using Bonyan.FastEndpoints;
+using BonyanTemplate.Api;
 using BonyanTemplate.Application.Jobs;
 using BonyanTemplate.Domain.Repositories;
 using BonyanTemplate.Infrastructure.Data;
 using BonyanTemplate.Infrastructure.Data.Repositories;
 using BonyanTemplate.Persistence.Seeds;
+using FastEndpoints;
+using Hangfire;
 
 // create bonyan application builder
-var builder = BonyanApplication.CreateApplicationBuilder(args);
-
-builder.
-
-builder.AddCronJob<TestJob>("0 */6 * * *");
-
-// build application
+var builder = BonyanApplication.CreateApplicationBuilder<BonyanTemplateModule>(args);
 var app = builder.Build();
 
-// run application
+
 app.Run();

@@ -17,8 +17,10 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\Framework\Bonyan.AspNetCore.FastEndpoints.Authentication\Bonyan.AspNetCore.FastEndpoints.Authentication.csproj" />
+      <ProjectReference Include="..\..\Framework\Bonyan.AspNetCore.FastEndpoints.Security\Bonyan.AspNetCore.FastEndpoints.Security.csproj" />
+      <ProjectReference Include="..\..\Framework\Bonyan.AspNetCore.FastEndpoints.Swagger\Bonyan.AspNetCore.FastEndpoints.Swagger.csproj" />
       <ProjectReference Include="..\..\Framework\Bonyan.AspNetCore.FastEndpoints\Bonyan.AspNetCore.FastEndpoints.csproj" />
+      <ProjectReference Include="..\..\Framework\Bonyan.AspNetCore.Job.Hangfire\Bonyan.AspNetCore.Job.Hangfire.csproj" />
       <ProjectReference Include="..\..\Framework\Bonyan.AspNetCore.Persistence.EntityFrameworkCore\Bonyan.AspNetCore.Persistence.EntityFrameworkCore.csproj" />
       <ProjectReference Include="..\..\Framework\Bonyan.AspNetCore.Persistence\Bonyan.AspNetCore.Persistence.csproj" />
       <ProjectReference Include="..\..\Framework\Bonyan.AspNetCore\Bonyan.AspNetCore.csproj" />

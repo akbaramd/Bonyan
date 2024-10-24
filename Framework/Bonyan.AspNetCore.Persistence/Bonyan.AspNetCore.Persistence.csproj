@@ -10,6 +10,7 @@
 
   <Import Project="..\..\package.props" />
   <ItemGroup>
+    <ProjectReference Include="..\Bonyan.AspNetCore.Job\Bonyan.AspNetCore.Job.csproj" />
     <ProjectReference Include="..\Bonyan.AspNetCore\Bonyan.AspNetCore.csproj" />
     <ProjectReference Include="..\Bonyan.DomainDrivenDesign.Domain\Bonyan.DomainDrivenDesign.Domain.csproj" />
   </ItemGroup>

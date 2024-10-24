@@ -1,4 +1,5 @@
-﻿using Bonyan.DomainDrivenDesign.Domain.Abstractions;
+﻿using Bonyan.AspNetCore.Infrastructure;
+using Bonyan.DomainDrivenDesign.Domain.Abstractions;
 using Bonyan.DomainDrivenDesign.Domain.Core;
 using Castle.DynamicProxy;
 
@@ -6,63 +7,67 @@ namespace Bonyan.AspNetCore.Persistence;
 
 public class PersistenceConfiguration
 {
-  private readonly ProxyGenerator _proxyGenerator;
 
-  public PersistenceConfiguration(IBonyanApplicationBuilder builder)
+  private readonly List<ISeeder> _seeders = new List<ISeeder>();
+  public PersistenceConfiguration()
   {
-    Builder = builder;
-    _proxyGenerator = new ProxyGenerator();
   }
 
-  public IBonyanApplicationBuilder Builder { get; }
 
   // Add repository dynamically based on whether the entity has a key (IEntity<TKey>) or not
   
   public PersistenceConfiguration AddSeed<TSeed>() where TSeed : class, ISeeder
   {
-    Builder.GetServicesCollection().AddScoped<ISeeder, TSeed>();
-    
     return this;
   }
   
-  public PersistenceConfiguration AddInMemory( Action<InMemoryConfiguration> configure)
+  public void ApplySeed ()
   {
-    var configuration = new InMemoryConfiguration(Builder);
-    configure(configuration);
-    
-    return this;
-  }
-  
-  // EnableTenant method: registers ITenantAccessor when called
-  public PersistenceConfiguration EnableTenant()
-  {
-    Builder.GetServicesCollection().AddScoped<ITenantAccessor, TenantAccessor>();
-    
-    Builder.AddBeforeInitializer(app =>
+    foreach (var item in _seeders)
     {
-      app.Application.Use(async (context, next) =>
-      {
-        // Global tenant header key
-        const string tenantHeaderKey = "X-Tenant";
-
-        // Check if the tenant is in the request headers
-        if (context.Request.Headers.TryGetValue(tenantHeaderKey, out var tenantValue))
-        {
-          // Access the ITenantAccessor service from the request scope
-          var tenantAccessor = context.RequestServices.GetRequiredService<ITenantAccessor>();
-
-          // Set the tenant in the ITenantAccessor (assuming SetTenant is a method on your TenantAccessor)
-          tenantAccessor.CurrentTenant = tenantValue.ToString().Split(',').ToList();
-        }
-
-        // Call the next middleware in the pipeline
-        await next.Invoke();
-      });
-      
-    });
-        
-    return this;
+      var ct = new CancellationToken();
+      item.SeedAsync(ct);
+    }
   }
+  
+  // public PersistenceConfiguration AddInMemory( Action<InMemoryConfiguration> configure)
+  // {
+  //   var configuration = new InMemoryConfiguration(Configuration.Context);
+  //   configure(configuration);
+  //   
+  //   return this;
+  // }
+  //
+  // // EnableTenant method: registers ITenantAccessor when called
+  // public PersistenceConfiguration EnableTenant()
+  // {
+  //   Configuration.Context.AddScoped<ITenantAccessor, TenantAccessor>();
+  //   
+  //   Configuration.Context.AddBeforeInitializer(app =>
+  //   {
+  //     app.Application.Use(async (context, next) =>
+  //     {
+  //       // Global tenant header key
+  //       const string tenantHeaderKey = "X-Tenant";
+  //
+  //       // Check if the tenant is in the request headers
+  //       if (context.Request.Headers.TryGetValue(tenantHeaderKey, out var tenantValue))
+  //       {
+  //         // Access the ITenantAccessor service from the request scope
+  //         var tenantAccessor = context.RequestServices.GetRequiredService<ITenantAccessor>();
+  //
+  //         // Set the tenant in the ITenantAccessor (assuming SetTenant is a method on your TenantAccessor)
+  //         tenantAccessor.CurrentTenant = tenantValue.ToString().Split(',').ToList();
+  //       }
+  //
+  //       // Call the next middleware in the pipeline
+  //       await next.Invoke();
+  //     });
+  //     
+  //   });
+  //       
+  //   return this;
+  // }
  
 }
 

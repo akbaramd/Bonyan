@@ -1,4 +1,4 @@
-﻿using Bonyan.AspNetCore.Jobs;
+﻿using Bonyan.AspNetCore.Job;
 
 namespace Bonyan.AspNetCore.Persistence
 {

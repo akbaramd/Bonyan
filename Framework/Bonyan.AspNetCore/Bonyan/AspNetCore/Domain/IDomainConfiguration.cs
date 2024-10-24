@@ -1,6 +1,8 @@
+using Bonyan.AspNetCore.Context;
+
 namespace Bonyan.AspNetCore.Domain;
 
 public interface IDomainConfiguration
 {
-  public IConfiguration Configuration { get; set; }
+  public IBonyanContext Context { get; set; }
 }

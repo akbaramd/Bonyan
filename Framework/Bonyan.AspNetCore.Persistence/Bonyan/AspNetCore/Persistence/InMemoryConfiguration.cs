@@ -1,4 +1,5 @@
-﻿using Bonyan.DomainDrivenDesign.Domain.Abstractions;
+﻿using Bonyan.AspNetCore.Context;
+using Bonyan.DomainDrivenDesign.Domain.Abstractions;
 using Bonyan.DomainDrivenDesign.Domain.Entities;
 using Castle.DynamicProxy;
 
@@ -6,12 +7,12 @@ namespace Bonyan.AspNetCore.Persistence;
 
 public class InMemoryConfiguration
 {
-  private readonly IBonyanApplicationBuilder Builder;
+  private readonly IBonyanContext Builder;
   private ProxyGenerator _proxyGenerator;
 
-  public InMemoryConfiguration(IBonyanApplicationBuilder builderServices)
+  public InMemoryConfiguration(IBonyanContext bonyanContext)
   {
-    Builder = builderServices;
+    Builder = bonyanContext;
     _proxyGenerator = new ProxyGenerator();
   }
   
@@ -59,13 +60,13 @@ public class InMemoryConfiguration
       repositoryType = typeof(InMemoryRepository<,>).MakeGenericType(entityType, keyType);
 
       // Register the repository with IRepository<TEntity, TKey>
-      Builder.GetServicesCollection().AddScoped(typeof(IRepository<,>).MakeGenericType(entityType, keyType), repositoryType);
+      Builder.AddScoped(typeof(IRepository<,>).MakeGenericType(entityType, keyType), repositoryType);
 
       // Entity does not have a key, register the repository with InMemoryRepository<TEntity>
       repositoryType = typeof(InMemoryRepository<>).MakeGenericType(entityType);
 
       // Register the repository with IRepository<TEntity>
-      Builder.GetServicesCollection().AddScoped(typeof(IRepository<>).MakeGenericType(entityType), repositoryType);
+      Builder.AddScoped(typeof(IRepository<>).MakeGenericType(entityType), repositoryType);
     }
     else
     {
@@ -73,11 +74,11 @@ public class InMemoryConfiguration
       repositoryType = typeof(InMemoryRepository<>).MakeGenericType(entityType);
 
       // Register the repository with IRepository<TEntity>
-      Builder.GetServicesCollection().AddScoped(typeof(IRepository<>).MakeGenericType(entityType), repositoryType);
+      Builder.AddScoped(typeof(IRepository<>).MakeGenericType(entityType), repositoryType);
     }
 
-    Builder.GetServicesCollection().AddScoped<TRepository, TImplement>();
-    Builder.GetServicesCollection().AddScoped<TImplement>();
+    Builder.AddScoped<TRepository, TImplement>();
+    Builder.AddScoped<TImplement>();
 
     return this;
   }

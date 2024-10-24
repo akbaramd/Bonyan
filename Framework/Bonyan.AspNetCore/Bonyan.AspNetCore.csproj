@@ -12,9 +12,7 @@
   
   <ItemGroup>
     <PackageReference Include="Figgle" Version="0.5.1" />
-    <PackageReference Include="Hangfire" Version="1.8.14" />
-    <PackageReference Include="Hangfire.AspNetCore" Version="1.8.14" />
-    <PackageReference Include="Hangfire.InMemory" Version="0.10.3" />
+
   </ItemGroup>
   <ItemGroup>
     <_ContentIncludedByDefault Remove="publish_output\publish_output\web.config" />
@@ -23,6 +21,6 @@
     <_ContentIncludedByDefault Remove="publish_output\publish_output\Bonyan.AspNetCore.deps.json" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Microsoft\AspNetCore\Builder\DependencyInjection\" />
+    <ProjectReference Include="..\Bonyan\Bonyan.csproj" />
   </ItemGroup>
 </Project>
