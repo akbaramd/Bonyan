@@ -19,7 +19,7 @@ public class BonyanApplication(WebApplication application, BonyanServiceInfo ser
     var applicationBuilder = WebApplication.CreateBuilder(args);
 
     var modularApp = new WebModularityApplication<TModule>(applicationBuilder.Services);
-    modularApp.ConfigureServiceAsync();
+    modularApp.ConfigureServiceAsync().GetAwaiter().GetResult();
     applicationBuilder.Services.AddSingleton<IModularityApplication>(modularApp);
     applicationBuilder.Services.AddSingleton<IWebModularityApplication>(modularApp);
     var builder = new BonyanApplicationBuilder(new BonyanServiceInfo("", "", ""), applicationBuilder);

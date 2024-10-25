@@ -8,27 +8,18 @@ namespace Bonyan.AspNetCore.Persistence;
 public class PersistenceConfiguration
 {
 
-  private readonly List<ISeeder> _seeders = new List<ISeeder>();
+  public List<Type> Seeders { get; set; }= new List<Type>();
   public PersistenceConfiguration()
   {
   }
 
-
   // Add repository dynamically based on whether the entity has a key (IEntity<TKey>) or not
-  
   public PersistenceConfiguration AddSeed<TSeed>() where TSeed : class, ISeeder
   {
+    Seeders.Add(typeof(TSeed));
     return this;
   }
   
-  public void ApplySeed ()
-  {
-    foreach (var item in _seeders)
-    {
-      var ct = new CancellationToken();
-      item.SeedAsync(ct);
-    }
-  }
   
   // public PersistenceConfiguration AddInMemory( Action<InMemoryConfiguration> configure)
   // {

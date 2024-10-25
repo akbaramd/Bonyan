@@ -1,3 +1,4 @@
+using Bonyan.Exceptions;
 using Bonyan.Extensions;
 using Bonyan.Modularity;
 using Bonyan.Modularity.Abstractions;
@@ -18,17 +19,7 @@ namespace Bonyan.FastEndpoints.Swagger
     public override Task OnConfigureAsync(ModularityContext context)
     {
       
-      DocumentOptions documentOptions;
-
-      var options = context.RequireService<IOptions<DocumentOptions>>();
-      documentOptions = options.Value;
-
-      if (documentOptions == null)
-      {
-        throw new InvalidOperationException(
-          $"SigningKey in JwtSigningOptions is not configured. Please configure it using context.Services.Configure<DocumentOptions>() in your main module. {nameof(IModule.OnPreConfigureAsync)}");
-      }
-      
+      var documentOptions = context.GetRequiredOption<DocumentOptions>();
       
       context.Services.SwaggerDocument(c =>
       {

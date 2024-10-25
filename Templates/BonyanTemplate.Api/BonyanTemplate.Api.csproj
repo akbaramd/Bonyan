@@ -27,7 +27,6 @@
       <ProjectReference Include="..\..\Framework\Bonyan.AspNetCore.Persistence.EntityFrameworkCore.SqlServer\Bonyan.AspNetCore.Persistence.EntityFrameworkCore.SqlServer.csproj" />
       <ProjectReference Include="..\BonyanTemplate.Application\BonyanTemplate.Application.csproj" />
       <ProjectReference Include="..\BonyanTemplate.Infrastructure\BonyanTemplate.Infrastructure.csproj" />
-      <ProjectReference Include="..\BonyanTemplate.Persistence\BonyanTemplate.Persistence.csproj" />
     </ItemGroup>
 
 </Project>

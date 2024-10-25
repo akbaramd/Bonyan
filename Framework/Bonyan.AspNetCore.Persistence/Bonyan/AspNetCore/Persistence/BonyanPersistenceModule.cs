@@ -11,6 +11,19 @@ namespace Bonyan.AspNetCore.Persistence
     typeof(BonyanJobModule))]
   public class BonyanPersistenceModule : Module
   {
+    public override Task OnConfigureAsync(ModularityContext context)
+    {
+      var options = context.RequireService<IOptions<PersistenceConfiguration>>();
+      var optionsValue = options.Value;
+
+      foreach (var seeder in optionsValue.Seeders)
+      {
+        context.Services.AddSingleton(seeder);
+      }
+
+      return base.OnConfigureAsync(context);
+    }
+
     public override Task OnPreConfigureAsync(ModularityContext context)
     {
       context.Services.Configure<JobConfiguration>(c =>

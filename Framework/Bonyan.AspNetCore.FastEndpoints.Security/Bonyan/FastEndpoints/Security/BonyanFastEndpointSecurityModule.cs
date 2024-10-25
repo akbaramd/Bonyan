@@ -14,29 +14,19 @@ namespace Bonyan.FastEndpoints.Security
     public override Task OnConfigureAsync(ModularityContext context)
     {
       // Attempt to retrieve JwtSigningOptions
-      JwtSigningOptions jwtSigningOptions;
-
-      var options = context.RequireService<IOptions<JwtSigningOptions>>();
-      jwtSigningOptions = options.Value;
-
-      if (string.IsNullOrWhiteSpace(jwtSigningOptions.SigningKey))
-      {
-        throw new InvalidOperationException(
-          $"SigningKey in JwtSigningOptions is not configured. Please configure it using context.Services.Configure<JwtSigningOptions>() in your main module. {nameof(IModule.OnPreConfigureAsync)}");
-      }
+      var jwtSigningOptions = context.GetRequiredOption<JwtSigningOptions>();
 
       // Validate the size of the SigningKey
-      if (jwtSigningOptions.SigningKey.Length < MinimumSigningKeyLength)
+      if (jwtSigningOptions?.SigningKey?.Length < MinimumSigningKeyLength)
       {
         throw new InvalidOperationException(
           $"SigningKey in JwtSigningOptions is too short. It must be at least {MinimumSigningKeyLength} characters long. Please configure it using context.Services.Configure<JwtSigningOptions>() in your main module. {nameof(IModule.OnPreConfigureAsync)}");
       }
 
-
       // Add JWT Bearer Authentication using the configured options via a lambda
       context.Services.AddAuthenticationJwtBearer(options =>
       {
-        options.SigningKey = jwtSigningOptions.SigningKey;
+        options.SigningKey = jwtSigningOptions?.SigningKey;
         // Configure other properties as needed
       });
 

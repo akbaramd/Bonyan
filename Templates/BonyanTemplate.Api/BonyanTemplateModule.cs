@@ -7,6 +7,7 @@ using Bonyan.Modularity;
 using Bonyan.Modularity.Abstractions;
 using Bonyan.Modularity.Attributes;
 using BonyanTemplate.Application.Jobs;
+using BonyanTemplate.Infrastructure;
 using FastEndpoints.Security;
 using FastEndpoints.Swagger;
 using Hangfire;
@@ -17,13 +18,13 @@ namespace BonyanTemplate.Api;
   typeof(BonyanFastEndpointSecurityModule),
   // typeof(BonyanJobHangfireModule),
   typeof(BonyanPersistenceModule),
-  typeof(BonyanFastEndpointSwaggerModule)
+  typeof(BonyanFastEndpointSwaggerModule),
+  typeof(InfrastructureModule)
   )]
 public class BonyanTemplateModule : WebModule
 {
   public override Task OnPreConfigureAsync(ModularityContext context)
   {
-    Console.WriteLine("BonyanTemplateModule:OnPreConfigureAsync");
     context.Services.Configure<JwtSigningOptions>(c =>
     {
       c.SigningKey = "adfdfadasdadsasdasdasdad";
@@ -37,8 +38,7 @@ public class BonyanTemplateModule : WebModule
         s.Version = "v1";
       };
     });
-
-   
+    
     return base.OnPreConfigureAsync(context);
   }
 

@@ -56,7 +56,7 @@ public class BonyanJobModule : WebModule
       foreach (var (jobType, cronExpression) in jobOptions.CronJobTypes)
       {
         var addCronJobMethod = typeof(IOptimumJobsManager).GetMethod("AddCronJob")?.MakeGenericMethod(jobType);
-        addCronJobMethod?.Invoke(jobManager, new object[] { cronExpression, context.BonyanApplication.Application.Services });
+        addCronJobMethod?.Invoke(jobManager, new object[] { cronExpression });
                     
       }
 
@@ -64,7 +64,7 @@ public class BonyanJobModule : WebModule
       foreach (var jobType in jobOptions.BackgroundJobTypes)
       {
         var addBackgroundJobMethod = typeof(IOptimumJobsManager).GetMethod("AddBackgroundJob")?.MakeGenericMethod(jobType);
-        addBackgroundJobMethod?.Invoke(jobManager, new object[] { context.BonyanApplication.Application.Services });
+        addBackgroundJobMethod?.Invoke(jobManager, new object[] {  });
                     
       }
     }

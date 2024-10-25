@@ -4,7 +4,6 @@ using BonyanTemplate.Application.Jobs;
 using BonyanTemplate.Domain.Repositories;
 using BonyanTemplate.Infrastructure.Data;
 using BonyanTemplate.Infrastructure.Data.Repositories;
-using BonyanTemplate.Persistence.Seeds;
 using FastEndpoints;
 using Hangfire;
 
