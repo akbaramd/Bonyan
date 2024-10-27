@@ -4,16 +4,16 @@ namespace Bonyan.Modularity;
 
 public class ModularityApplicationContext
 {
-  public ModularityApplicationContext(BonyanApplication bonyanApplication)
+  public ModularityApplicationContext(WebApplication webApplication)
   {
-    BonyanApplication = bonyanApplication;
+    WebApplication = webApplication;
   }
 
-  public BonyanApplication BonyanApplication { get; set; }
+  public WebApplication WebApplication { get; set; }
 
   public T? GetService<T>()
   {
-    var serviceProvider = BonyanApplication.Application.Services;
+    var serviceProvider = WebApplication.Services;
     return serviceProvider.GetService<T>();
   }
 
@@ -22,7 +22,7 @@ public class ModularityApplicationContext
   /// </summary>
   public T RequireService<T>() where T : notnull
   {
-    var serviceProvider = BonyanApplication.Application.Services;
+    var serviceProvider = WebApplication.Services;
     return serviceProvider.GetRequiredService<T>();
   }
 }

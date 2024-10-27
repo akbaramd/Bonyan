@@ -1,6 +1,6 @@
 ﻿namespace Microsoft.AspNetCore.Builder;
 
-public  static class BonyanApplicationDependencyInjectionExtensions
+public  static class WebApplicationDependencyInjectionExtensions
 {
   public static IBonyanApplicationBuilder RegisterService(this IBonyanApplicationBuilder applicationBuilder ,Type service,Type implement, ServiceLifetime lifetime = ServiceLifetime.Scoped) 
   {

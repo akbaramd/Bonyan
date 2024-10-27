@@ -29,7 +29,7 @@ namespace Bonyan.FastEndpoints.Swagger
       {
         c.AddAfterInitializer(app =>
         {
-          app.Application.UseSwaggerGen();
+          app.UseSwaggerGen();
         });
       });
       return base.OnConfigureAsync(context);

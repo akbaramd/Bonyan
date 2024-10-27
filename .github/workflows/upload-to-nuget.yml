@@ -1,4 +1,4 @@
-name: Upload to NuGet and Update Changelog
+name: Upload to NuGet, Update Changelog, and Publish Docs
 
 on:
   push:
@@ -10,7 +10,7 @@ jobs:
     runs-on: windows-latest
     environment: Nuget
     steps:
-     
+
       - name: Checkout code
         uses: actions/checkout@v3
 
@@ -22,10 +22,21 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore
 
+      - name: Install DocFX
+        run: choco install docfx -y
+
+      - name: Build documentation with DocFX
+        run: docfx docfx.json
+
       - name: Run upload script
         run: ./upload.ps1
         shell: pwsh
         env:
           NugetKey: ${{ secrets.KEY }}  # Pass the NuGet API key secret to the script
 
-      
+      - name: Deploy documentation to GitHub Pages
+        if: success()
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: _site

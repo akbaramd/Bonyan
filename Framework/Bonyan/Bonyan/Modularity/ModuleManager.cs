@@ -109,7 +109,7 @@ public class ModuleManager : IModuleManager
         await ExecuteModuleLifecycleAsync(context, (module, ctx) => module.OnConfigureAsync(ctx));
         await ExecuteModuleLifecycleAsync(context, (module, ctx) => module.OnPostConfigureAsync(ctx));
     }
-    // public async Task ConfigureModulesAsync(BonyanApplication app)
+    // public async Task ConfigureModulesAsync(WebApplication app)
     // {
     //   await ExecuteModuleLifecycleAsync(app, async (module, ctx) =>
     //   {

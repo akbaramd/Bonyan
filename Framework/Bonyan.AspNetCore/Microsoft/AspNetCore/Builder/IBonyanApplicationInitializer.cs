@@ -1,6 +1,6 @@
 ﻿namespace Microsoft.AspNetCore.Builder;
 
-public interface IBonyanApplicationInitializer
+public interface IWebApplicationInitializer
 {
-  Task InitializeAsync(BonyanApplication application);
+  Task InitializeAsync(WebApplication application);
 }

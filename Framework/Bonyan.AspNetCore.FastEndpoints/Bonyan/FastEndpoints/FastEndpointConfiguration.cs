@@ -3,21 +3,21 @@ namespace Bonyan.FastEndpoints;
 public class FastEndpointConfiguration
 {
  
-  private List<Action<BonyanApplication>> _beforeInitializer = new List<Action<BonyanApplication>>();
-  private List<Action<BonyanApplication>> _afterInitializer = new List<Action<BonyanApplication>>();
+  private List<Action<WebApplication>> _beforeInitializer = new List<Action<WebApplication>>();
+  private List<Action<WebApplication>> _afterInitializer = new List<Action<WebApplication>>();
 
 
-  public void AddBeforeInitializer(Action<BonyanApplication> action)
+  public void AddBeforeInitializer(Action<WebApplication> action)
   {
     _beforeInitializer.Add(action);
   }
   
-  public void AddAfterInitializer(Action<BonyanApplication> action)
+  public void AddAfterInitializer(Action<WebApplication> action)
   {
     _afterInitializer.Add(action);
   }
   
-  public void InitBefore(BonyanApplication bonyanApplication)
+  public void InitBefore(WebApplication bonyanApplication)
   {
     foreach (var action in _beforeInitializer)
     {
@@ -25,7 +25,7 @@ public class FastEndpointConfiguration
     }
   }
   
-  public void InitAfter(BonyanApplication bonyanApplication)
+  public void InitAfter(WebApplication bonyanApplication)
   {
     foreach (var action in _afterInitializer)
     {

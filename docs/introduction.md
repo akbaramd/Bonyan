@@ -39,7 +39,7 @@ Make sure to replace `latest` with the version of the package you want to use.
 Once the `Bonyan` package is installed, you can configure it in your project by setting up an application builder. Here's a sample code snippet to get you started:
 
 ```csharp
-var builder = BonyanApplication
+var builder = WebApplication
     .CreateApplicationBuilder<BonyanTemplateModule>(args);
 
 var app = builder.Build();

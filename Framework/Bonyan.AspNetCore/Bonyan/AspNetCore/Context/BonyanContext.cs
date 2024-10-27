@@ -8,8 +8,8 @@ public class BonyanContext : IBonyanContext
 
   
 
-  private readonly List<Action<BonyanApplication>> _syncActions = new();
-  private readonly List<Action<BonyanApplication>> _syncBeforeActions = new();
+  private readonly List<Action<WebApplication>> _syncActions = new();
+  private readonly List<Action<WebApplication>> _syncBeforeActions = new();
   
   public BonyanContext(BonyanApplicationBuilder bonyanApplicationBuilder)
   {
@@ -82,24 +82,24 @@ public class BonyanContext : IBonyanContext
     _bonyanApplicationBuilder.Services.AddTransient(serviceType);
   }
 
-  public void AddBeforeInitializer(Action<BonyanApplication> action)
+  public void AddBeforeInitializer(Action<WebApplication> action)
           {
             _syncBeforeActions.Add(action);
           }
   
-          public void AddInitializer(Action<BonyanApplication> action)
+          public void AddInitializer(Action<WebApplication> action)
           {
               _syncActions.Add(action);
           }
   
-          public void AddBeforeInitializer<TInitializer>() where TInitializer : class, IBonyanApplicationInitializer
+          public void AddBeforeInitializer<TInitializer>() where TInitializer : class, IWebApplicationInitializer
           {
             _bonyanApplicationBuilder.Services.AddSingleton<TInitializer>();
             _syncBeforeActions.Add(app =>
             {
               try
               {
-                var initializer = app.Application.Services.GetRequiredService<TInitializer>();
+                var initializer = app.Services.GetRequiredService<TInitializer>();
                 initializer.InitializeAsync(app).GetAwaiter().GetResult();
               }
               catch (Exception ex)
@@ -109,14 +109,14 @@ public class BonyanContext : IBonyanContext
             });
           }
   
-          public void AddInitializer<TInitializer>() where TInitializer : class, IBonyanApplicationInitializer
+          public void AddInitializer<TInitializer>() where TInitializer : class, IWebApplicationInitializer
           {
             _bonyanApplicationBuilder.Services.AddSingleton<TInitializer>();
               _syncActions.Add(app =>
               {
                   try
                   {
-                      var initializer = app.Application.Services.GetRequiredService<TInitializer>();
+                      var initializer = app.Services.GetRequiredService<TInitializer>();
                       initializer.InitializeAsync(app).GetAwaiter().GetResult();
                   }
                   catch (Exception ex)
@@ -126,7 +126,7 @@ public class BonyanContext : IBonyanContext
               });
           }
 
-  public void Build(BonyanApplication application)
+  public void Build(WebApplication application)
   {
     foreach (var action in _syncBeforeActions)
     {

@@ -21,7 +21,7 @@ public class BonyanJobHangfireModule : WebModule
 
   public override Task OnPreApplicationAsync(ModularityApplicationContext app)
   {
-    app.BonyanApplication.Application.UseHangfireDashboard();
+    app.WebApplication.UseHangfireDashboard();
     return base.OnPreApplicationAsync(app);
   }
 }

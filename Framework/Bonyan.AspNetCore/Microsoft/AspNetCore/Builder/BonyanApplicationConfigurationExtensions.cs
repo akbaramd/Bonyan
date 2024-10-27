@@ -1,6 +1,6 @@
 ﻿namespace Microsoft.AspNetCore.Builder;
 
-public static class BonyanApplicationConfigurationExtensions
+public static class WebApplicationConfigurationExtensions
 {
   public static TType? GetConfiguration<TType>(this IBonyanApplicationBuilder applicationBuilder, string key)
   {

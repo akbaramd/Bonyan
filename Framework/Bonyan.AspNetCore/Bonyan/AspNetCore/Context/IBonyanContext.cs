@@ -5,10 +5,10 @@ namespace Bonyan.AspNetCore.Context;
 public interface IBonyanContext
 {
   // Synchronous methods
-  void AddBeforeInitializer(Action<BonyanApplication> action);
-  void AddInitializer(Action<BonyanApplication> action);
-  void AddBeforeInitializer<TInitializer>() where TInitializer : class, IBonyanApplicationInitializer;
-  void AddInitializer<TInitializer>() where TInitializer : class, IBonyanApplicationInitializer;
+  void AddBeforeInitializer(Action<WebApplication> action);
+  void AddInitializer(Action<WebApplication> action);
+  void AddBeforeInitializer<TInitializer>() where TInitializer : class, IWebApplicationInitializer;
+  void AddInitializer<TInitializer>() where TInitializer : class, IWebApplicationInitializer;
 
 
   // Dependency Injection methods
@@ -27,5 +27,5 @@ public interface IBonyanContext
   void AddTransient(Type serviceType, Type implementationType);
   void AddTransient(Type serviceType);
   
-  void Build(BonyanApplication application);
+  void Build(WebApplication application);
 }

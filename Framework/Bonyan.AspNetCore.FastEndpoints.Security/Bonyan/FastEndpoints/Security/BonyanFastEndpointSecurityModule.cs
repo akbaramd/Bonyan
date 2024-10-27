@@ -37,8 +37,8 @@ namespace Bonyan.FastEndpoints.Security
       {
         c.AddBeforeInitializer(app =>
         {
-          app.Application.UseAuthentication();
-          app.Application.UseAuthorization();
+          app.UseAuthentication();
+          app.UseAuthorization();
         });
       });
       

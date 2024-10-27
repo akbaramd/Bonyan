@@ -23,9 +23,9 @@ public class BonyanFastEndpointModule : WebModule
     var options = app.RequireService<IOptions<FastEndpointConfiguration>>();
     var fastEndpointConfiguration = options.Value;
 
-    fastEndpointConfiguration?.InitBefore(app.BonyanApplication);
-    app.BonyanApplication.Application.UseFastEndpoints();
-    fastEndpointConfiguration?.InitAfter(app.BonyanApplication);
+    fastEndpointConfiguration?.InitBefore(app.WebApplication);
+    app.WebApplication.UseFastEndpoints();
+    fastEndpointConfiguration?.InitAfter(app.WebApplication);
     return base.OnApplicationAsync(app);
   }
 }
