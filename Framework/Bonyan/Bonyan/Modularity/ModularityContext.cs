@@ -1,4 +1,6 @@
-using System.Reflection.Metadata;
+using System;
+using System.Reflection;
+using System.Threading.Tasks;
 using Bonyan.Exceptions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -31,14 +33,14 @@ public class ModularityContext
   /// <summary>
   /// دریافت سرویس اجباری از طریق یک ServiceProvider موقت.
   /// </summary>
-  public T GetRequiredOption<T>() where T : class
+  public T RequiredOption<T>() where T : class
   {
 
     var service = RequireService<IOptions<T>>();
 
       if (service.Value == null)
       {
-        throw new ConfigurationNotFoundException(nameof(T));
+        throw new ConfigurationNotFoundException<T>();
       }
       return service.Value;
   }
@@ -61,4 +63,20 @@ public class ModularityContext
     var service = serviceProvider.GetRequiredService<T>();
     return service;
   }
+  
+  public void Configure<TOptions>(Action<TOptions> configureOptions)
+    where TOptions : class
+  {
+    Services.Configure(configureOptions);
+  }
+
+  public void Configure<TOptions>(string name, Action<TOptions> configureOptions)
+    where TOptions : class
+  {
+    Services.Configure(name, configureOptions);
+  }
+
+
+
+
 }

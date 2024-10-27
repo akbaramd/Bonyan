@@ -7,8 +7,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\Framework\Bonyan.AspNetCore.Job\Bonyan.AspNetCore.Job.csproj" />
+      <ProjectReference Include="..\..\Framework\Bonyan.Job\Bonyan.Job.csproj" />
       <ProjectReference Include="..\..\Framework\Bonyan.AspNetCore\Bonyan.AspNetCore.csproj" />
+      <ProjectReference Include="..\..\Framework\Bonyan.AutoMapper\Bonyan.AutoMapper.csproj" />
       <ProjectReference Include="..\BonyanTemplate.Domain\BonyanTemplate.Domain.csproj" />
     </ItemGroup>
 

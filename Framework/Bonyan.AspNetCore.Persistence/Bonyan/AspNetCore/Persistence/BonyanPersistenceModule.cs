@@ -21,16 +21,13 @@ namespace Bonyan.AspNetCore.Persistence
         context.Services.AddSingleton(seeder);
       }
 
+      
       return base.OnConfigureAsync(context);
     }
 
     public override Task OnPreConfigureAsync(ModularityContext context)
     {
-      context.Services.Configure<JobConfiguration>(c =>
-      {
-        c.AddBackgroundJob<SeedBackgroundJobs>();
-      });
-      
+    
       return base.OnPreConfigureAsync(context);
     }
 

@@ -1,3 +1,4 @@
+using Bonyan.DomainDrivenDesign.Application;
 using Bonyan.Modularity;
 using Bonyan.Modularity.Abstractions;
 using Bonyan.Modularity.Attributes;
@@ -11,9 +12,7 @@ namespace Bonyan.AspNetCore.Persistence.EntityFrameworkCore
   {
       public override Task OnConfigureAsync(ModularityContext context)
       {
-          var options = context.RequireService<IOptions<EntityFrameworkCoreConfiguration>>();
-          var optionsValue = options.Value;
-          
+         
           
           return base.OnConfigureAsync(context);
       }

@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 namespace Bonyan.DomainDrivenDesign.Domain.Specifications;
 
 /// <summary>
-/// Base class for implementing specifications in a DDD context.
+/// Base class for implementing specifications in a DomainDrivenDesign context.
 /// </summary>
 /// <typeparam name="TEntity">The entity type.</typeparam>
 public abstract class Specification<TEntity> where TEntity : class, IEntity

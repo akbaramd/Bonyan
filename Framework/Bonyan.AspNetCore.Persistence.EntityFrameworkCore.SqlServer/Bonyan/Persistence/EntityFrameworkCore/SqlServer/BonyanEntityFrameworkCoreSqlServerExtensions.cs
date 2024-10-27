@@ -5,11 +5,13 @@ namespace Bonyan.Persistence.EntityFrameworkCore.SqlServer;
 
 public static class BonyanEntityFrameworkCoreSqlServerExtensions
 {
-  public static EntityFrameworkCoreConfiguration UseSqlServer(this EntityFrameworkCoreConfiguration configuration,string connectionStrings) 
+  public static EntityFrameworkDbContextOptions UseSqlServer(this EntityFrameworkDbContextOptions options,string connectionStrings) 
   {
-    return configuration.Configure(c =>
+    return options.Configure(c =>
     {
       c.UseSqlServer(connectionStrings);
     });
   }
+  
+ 
 }

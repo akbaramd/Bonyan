@@ -1,13 +1,13 @@
-﻿using Bonyan.DDD.Domain;
+﻿using Bonyan.DomainDrivenDesign.Domain;
 using Bonyan.DomainDrivenDesign.Domain.Abstractions;
 using BonyanTemplate.Domain.Entities;
 using BonyanTemplate.Domain.Repositories;
 
 namespace BonyanTemplate.Infrastructure.Data.Repositories;
 
-public class EfBookRepository : EfCoreRepository<Books,Guid,BonyanTemplateDbContext>, IBooksRepository
+public class EfBookRepository : EfCoreRepository<Books,BookId,BonyanTemplateBookDbContext>, IBooksRepository
 {
-  public EfBookRepository(BonyanTemplateDbContext dbContext, IServiceProvider serviceProvider) : base(dbContext, serviceProvider)
+  public EfBookRepository(BonyanTemplateBookDbContext bookDbContext, IServiceProvider serviceProvider) : base(bookDbContext, serviceProvider)
   {
   }
 }

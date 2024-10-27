@@ -14,7 +14,7 @@ namespace Bonyan.FastEndpoints.Security
     public override Task OnConfigureAsync(ModularityContext context)
     {
       // Attempt to retrieve JwtSigningOptions
-      var jwtSigningOptions = context.GetRequiredOption<JwtSigningOptions>();
+      var jwtSigningOptions = context.RequiredOption<JwtSigningOptions>();
 
       // Validate the size of the SigningKey
       if (jwtSigningOptions?.SigningKey?.Length < MinimumSigningKeyLength)

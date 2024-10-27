@@ -1,4 +1,3 @@
-using Bonyan.Exceptions;
 using Bonyan.Extensions;
 using Bonyan.Modularity;
 using Bonyan.Modularity.Abstractions;
@@ -19,7 +18,7 @@ namespace Bonyan.FastEndpoints.Swagger
     public override Task OnConfigureAsync(ModularityContext context)
     {
       
-      var documentOptions = context.GetRequiredOption<DocumentOptions>();
+      var documentOptions = context.RequiredOption<DocumentOptions>();
       
       context.Services.SwaggerDocument(c =>
       {

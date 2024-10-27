@@ -1,4 +1,5 @@
 ﻿using Bonyan.DomainDrivenDesign.Domain.Entities;
+using Bonyan.DomainDrivenDesign.Domain.Events;
 
 namespace Bonyan.DomainDrivenDesign.Domain.Aggregates;
 
@@ -7,16 +8,85 @@ namespace Bonyan.DomainDrivenDesign.Domain.Aggregates;
 /// </summary>
 public abstract class AggregateRoot : Entity, IAggregateRoot
 {
-  // This class inherits everything from Entity and implements IAggregateRoot
-  // No additional members are required unless specific logic is needed for non-generic aggregate roots.
-}
+  private readonly List<IDomainEvent> _domainEvents = new List<IDomainEvent>();
 
+  /// <summary>
+  /// Gets the list of domain events associated with this aggregate.
+  /// </summary>
+  public IReadOnlyCollection<IDomainEvent> DomainEvents => _domainEvents.AsReadOnly();
+
+  public void ClearEvents()
+  {
+    _domainEvents.Clear();;
+  }
+
+  /// <summary>
+  /// Registers a domain event for this aggregate.
+  /// </summary>
+  /// <param name="domainEvent">The domain event to register.</param>
+  protected void AddDomainEvent(DomainEventBase domainEvent)
+  {
+    _domainEvents.Add(domainEvent);
+  }
+
+  /// <summary>
+  /// Clears all domain events for this aggregate.
+  /// </summary>
+  public void ClearDomainEvents()
+  {
+    _domainEvents.Clear();
+  }
+
+  /// <summary>
+  /// Removes a specific domain event.
+  /// </summary>
+  /// <param name="domainEvent">The domain event to remove.</param>
+  protected void RemoveDomainEvent(IDomainEvent domainEvent)
+  {
+    _domainEvents.Remove(domainEvent);
+  }
+}
 /// <summary>
 /// Represents the base class for aggregate roots with a strongly-typed key.
 /// </summary>
 /// <typeparam name="TKey">The type of the key.</typeparam>
-public abstract class AggregateRoot<TKey> : Entity<TKey>, IAggregateRoot
+public abstract class AggregateRoot<TKey> : Entity<TKey>, IAggregateRoot<TKey>
 {
-  // This class inherits everything from Entity<TKey> and implements IAggregateRoot
-  // No additional members are required unless specific logic is needed for generic aggregate roots.
+  private readonly List<IDomainEvent> _domainEvents = new List<IDomainEvent>();
+
+  /// <summary>
+  /// Gets the list of domain events associated with this aggregate.
+  /// </summary>
+  public IReadOnlyCollection<IDomainEvent> DomainEvents => _domainEvents.AsReadOnly();
+
+  public void ClearEvents()
+  {
+    _domainEvents.Clear();
+  }
+
+  /// <summary>
+  /// Registers a domain event for this aggregate.
+  /// </summary>
+  /// <param name="domainEvent">The domain event to register.</param>
+  protected void AddDomainEvent(IDomainEvent domainEvent)
+  {
+    _domainEvents.Add(domainEvent);
+  }
+
+  /// <summary>
+  /// Clears all domain events for this aggregate.
+  /// </summary>
+  public void ClearDomainEvents()
+  {
+    _domainEvents.Clear();
+  }
+
+  /// <summary>
+  /// Removes a specific domain event.
+  /// </summary>
+  /// <param name="domainEvent">The domain event to remove.</param>
+  protected void RemoveDomainEvent(IDomainEvent domainEvent)
+  {
+    _domainEvents.Remove(domainEvent);
+  }
 }

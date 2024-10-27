@@ -5,6 +5,7 @@ using BonyanTemplate.Domain.Repositories;
 
 namespace BonyanTemplate.Application.Jobs;
 
+[CronJob("*/1 * * * *")]
 public class TestJob : IJob
 {
   // private IBooksRepository _booksRepository;

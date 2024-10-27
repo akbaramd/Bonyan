@@ -14,8 +14,8 @@
         <PackageReference Include="Hangfire.InMemory" Version="0.10.3" />
     </ItemGroup>
     <ItemGroup>
-      <ProjectReference Include="..\Bonyan.AspNetCore.Job\Bonyan.AspNetCore.Job.csproj" />
       <ProjectReference Include="..\Bonyan.AspNetCore\Bonyan.AspNetCore.csproj" />
+      <ProjectReference Include="..\Bonyan.Job\Bonyan.Job.csproj" />
     </ItemGroup>
 
 </Project>

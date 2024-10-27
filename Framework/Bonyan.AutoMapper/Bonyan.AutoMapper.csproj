@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <RootNamespace />
+        <PackageId>Bonyan.AutoMapper</PackageId>
+    </PropertyGroup>
+
+    <Import Project="..\..\package.props" />
+    <ItemGroup>
+        <ProjectReference Include="..\Bonyan\Bonyan.csproj" />
+    </ItemGroup>
+    <ItemGroup>
+      <PackageReference Include="AutoMapper" Version="13.0.1" />
+    </ItemGroup>
+</Project>

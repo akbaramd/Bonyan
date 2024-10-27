@@ -2,7 +2,7 @@
 
 namespace Bonyan.DomainDrivenDesign.Domain.Aggregates;
 
-public abstract class FullAuditableAggregateRoot : UpdateAuditableAggregateRoot, IFullAuditable
+public abstract class FullAuditableAggregateRoot : ModifiationAuditableAggregateRoot, IFullAuditable
 {
   public bool IsDeleted { get; private set; }
   public DateTime? DeletedDate { get; set; }
@@ -26,7 +26,7 @@ public abstract class FullAuditableAggregateRoot : UpdateAuditableAggregateRoot,
   }
 }
 
-public abstract class FullAuditableAggregateRoot<TId> : UpdateAuditableAggregateRoot<TId>, IFullAuditable
+public abstract class FullAuditableAggregateRoot<TId> : ModifiationAuditableAggregateRoot<TId>, IFullAuditable
 {
   public bool IsDeleted { get; private set; }
   public DateTime? DeletedDate { get; set; }

@@ -5,9 +5,9 @@ namespace Bonyan.Persistence.EntityFrameworkCore.Sqlite;
 
 public static class BonyanEntityFrameworkCoreSqliteExtensions
 {
-  public static EntityFrameworkCoreConfiguration UseSqlite(this EntityFrameworkCoreConfiguration configuration,string connectionStrings) 
+  public static EntityFrameworkDbContextOptions UseSqlite(this EntityFrameworkDbContextOptions options,string connectionStrings)  
   {
-    return configuration.Configure(c =>
+    return options.Configure(c =>
     {
       c.UseSqlite(connectionStrings);
     });

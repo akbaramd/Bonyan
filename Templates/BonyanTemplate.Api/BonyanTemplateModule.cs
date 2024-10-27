@@ -1,12 +1,14 @@
 using Bonyan.AspNetCore.Job;
-using Bonyan.AspNetCore.Job.Hangfire;
 using Bonyan.AspNetCore.Persistence;
 using Bonyan.FastEndpoints.Security;
 using Bonyan.FastEndpoints.Swagger;
+using Bonyan.Job.Hangfire;
 using Bonyan.Modularity;
 using Bonyan.Modularity.Abstractions;
 using Bonyan.Modularity.Attributes;
+using BonyanTemplate.Application;
 using BonyanTemplate.Application.Jobs;
+using BonyanTemplate.Domain;
 using BonyanTemplate.Infrastructure;
 using FastEndpoints.Security;
 using FastEndpoints.Swagger;
@@ -18,7 +20,9 @@ namespace BonyanTemplate.Api;
   typeof(BonyanFastEndpointSecurityModule),
   // typeof(BonyanJobHangfireModule),
   typeof(BonyanPersistenceModule),
+  typeof(BonyanTemplateApplicationModule),
   typeof(BonyanFastEndpointSwaggerModule),
+  typeof(BonyanJobHangfireModule),
   typeof(InfrastructureModule)
   )]
 public class BonyanTemplateModule : WebModule
@@ -38,16 +42,13 @@ public class BonyanTemplateModule : WebModule
         s.Version = "v1";
       };
     });
-    
+  
     return base.OnPreConfigureAsync(context);
   }
 
   public override Task OnConfigureAsync(ModularityContext context)
   {
-    context.Services.Configure<JobConfiguration>(c =>
-    {
-      c.AddCronJob<TestJob>("*/1 * * * *");
-    });
+  
     return base.OnConfigureAsync(context);
   }
 
