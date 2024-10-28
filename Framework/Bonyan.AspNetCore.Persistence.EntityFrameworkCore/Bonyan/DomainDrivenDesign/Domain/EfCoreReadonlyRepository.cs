@@ -3,8 +3,8 @@ using Bonyan.DomainDrivenDesign.Domain.Abstractions;
 using Bonyan.DomainDrivenDesign.Domain.Entities;
 using Bonyan.DomainDrivenDesign.Domain.Specifications;
 using Microsoft.EntityFrameworkCore;
-using SharedKernel.Model;
 using System.Linq.Dynamic.Core;
+using Bonyan.DomainDrivenDesign.Domain.Model;
 
 namespace Bonyan.DomainDrivenDesign.Domain
 {

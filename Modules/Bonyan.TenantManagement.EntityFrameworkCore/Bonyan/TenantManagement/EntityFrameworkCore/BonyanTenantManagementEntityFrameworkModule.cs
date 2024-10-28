@@ -1,14 +1,11 @@
-
-using Bonyan.AspNetCore;
 using Bonyan.AspNetCore.MultiTenant;
 using Bonyan.AspNetCore.Persistence.EntityFrameworkCore;
 using Bonyan.Modularity;
-using Bonyan.Modularity.Abstractions;
 using Bonyan.Modularity.Attributes;
-using Bonyan.TenantManagement.Domain;
+using Bonyan.TenantManagement.Domain.Bonyan.TenantManagement.Domain;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Bonyan.TenantManagement.EntityFramework;
+namespace Bonyan.TenantManagement.EntityFrameworkCore.Bonyan.TenantManagement.EntityFrameworkCore;
 
 [DependOn(typeof(BonyanPersistenceEntityFrameworkModule),
   typeof(BonyanAspNetCoreMultiTenantModule))]

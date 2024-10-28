@@ -1,6 +1,6 @@
 using Bonyan.DomainDrivenDesign.Domain.Aggregates;
 
-namespace Bonyan.TenantManagement.Domain;
+namespace Bonyan.TenantManagement.Domain.Bonyan.TenantManagement.Domain;
 
 public class Tenant : FullAuditableAggregateRoot<TenantId>
 {

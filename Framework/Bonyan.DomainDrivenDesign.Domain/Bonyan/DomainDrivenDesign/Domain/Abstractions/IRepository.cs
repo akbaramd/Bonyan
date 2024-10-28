@@ -1,7 +1,7 @@
 ﻿using System.Linq.Expressions;
 using Bonyan.DomainDrivenDesign.Domain.Entities;
+using Bonyan.DomainDrivenDesign.Domain.Model;
 using Bonyan.DomainDrivenDesign.Domain.Specifications;
-using SharedKernel.Model;
 
 namespace Bonyan.DomainDrivenDesign.Domain.Abstractions;
 

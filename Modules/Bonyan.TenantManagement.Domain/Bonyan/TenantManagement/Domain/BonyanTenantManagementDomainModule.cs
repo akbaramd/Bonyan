@@ -2,9 +2,8 @@ using Bonyan.Modularity;
 using Bonyan.Modularity.Attributes;
 using Bonyan.MultiTenant;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 
-namespace Bonyan.TenantManagement.Domain;
+namespace Bonyan.TenantManagement.Domain.Bonyan.TenantManagement.Domain;
 
 [DependOn(typeof(BonyanMultiTenantModule))]
 public class BonyanTenantManagementDomainModule : Modularity.Abstractions.Module

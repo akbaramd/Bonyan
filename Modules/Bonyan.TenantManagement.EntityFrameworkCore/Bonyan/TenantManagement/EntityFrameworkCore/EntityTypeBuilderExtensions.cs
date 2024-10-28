@@ -1,9 +1,8 @@
-using Bonyan.TenantManagement.Domain;
+using Bonyan.TenantManagement.Domain.Bonyan.TenantManagement.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builder;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Bonyan.TenantManagement.EntityFramework;
+namespace Bonyan.TenantManagement.EntityFrameworkCore.Bonyan.TenantManagement.EntityFrameworkCore;
 
 public static class EntityTypeBuilderExtensions
 {

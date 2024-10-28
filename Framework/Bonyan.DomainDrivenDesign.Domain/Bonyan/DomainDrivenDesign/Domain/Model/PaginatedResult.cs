@@ -1,4 +1,4 @@
-namespace SharedKernel.Model;
+namespace Bonyan.DomainDrivenDesign.Domain.Model;
 
 public class PaginatedResult<T> where T : class
 {

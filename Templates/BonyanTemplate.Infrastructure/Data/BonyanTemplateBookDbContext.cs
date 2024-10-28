@@ -1,6 +1,7 @@
 ﻿using Bonyan.AspNetCore.Persistence.EntityFrameworkCore;
 using Bonyan.TenantManagement.Domain;
-using Bonyan.TenantManagement.EntityFramework;
+using Bonyan.TenantManagement.Domain.Bonyan.TenantManagement.Domain;
+using Bonyan.TenantManagement.EntityFrameworkCore.Bonyan.TenantManagement.EntityFrameworkCore;
 using BonyanTemplate.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builder;

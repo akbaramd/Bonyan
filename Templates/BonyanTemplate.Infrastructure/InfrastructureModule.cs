@@ -6,7 +6,7 @@ using Bonyan.Modularity.Abstractions;
 using Bonyan.Modularity.Attributes;
 using Bonyan.MultiTenant;
 using Bonyan.Persistence.EntityFrameworkCore.Sqlite;
-using Bonyan.TenantManagement.EntityFramework;
+using Bonyan.TenantManagement.EntityFrameworkCore.Bonyan.TenantManagement.EntityFrameworkCore;
 using BonyanTemplate.Domain.Entities;
 using BonyanTemplate.Domain.Repositories;
 using BonyanTemplate.Infrastructure.Data;
