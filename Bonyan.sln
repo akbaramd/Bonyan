@@ -9,9 +9,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{32FA45AB
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bonyan", "Framework\Bonyan\Bonyan.csproj", "{FBCEBF87-F083-442E-B60E-2B7FFBECF54B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bonyan.DomainDrivenDesign.Domain", "Framework\Bonyan.DomainDrivenDesign.Domain\Bonyan.DomainDrivenDesign.Domain.csproj", "{5BD35C5F-F6C4-4AB7-AF24-893821832A06}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bonyan.Layer.Domain", "Framework\Bonyan.Layer.Domain\Bonyan.Layer.Domain.csproj", "{5BD35C5F-F6C4-4AB7-AF24-893821832A06}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bonyan.DomainDrivenDesign.Application", "Framework\Bonyan.DomainDrivenDesign.Application\Bonyan.DomainDrivenDesign.Application.csproj", "{7D189F02-6CF1-4E44-975A-11E882669C13}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bonyan.Layer.Application", "Framework\Bonyan.Layer.Application\Bonyan.Layer.Application.csproj", "{7D189F02-6CF1-4E44-975A-11E882669C13}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.Tests", "Bonyan.Tests\Bonyan.Tests.csproj", "{AFA9CF2F-B53E-47B6-B4A5-92B05CC16013}"
 EndProject
@@ -21,11 +21,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Templates", "Templates", "{
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.AspNetCore", "Framework\Bonyan.AspNetCore\Bonyan.AspNetCore.csproj", "{62791559-5D8D-4EE2-8AFE-10F32263A700}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.AspNetCore.FastEndpoints", "Framework\Bonyan.AspNetCore.FastEndpoints\Bonyan.AspNetCore.FastEndpoints.csproj", "{2F69EF92-2680-4392-891B-ECB8B03F9EE8}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.AspNetCore.Persistence", "Framework\Bonyan.AspNetCore.Persistence\Bonyan.AspNetCore.Persistence.csproj", "{2D760D42-636B-425A-BA86-47951D058F50}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.AspNetCore.Persistence.EntityFrameworkCore", "Framework\Bonyan.AspNetCore.Persistence.EntityFrameworkCore\Bonyan.AspNetCore.Persistence.EntityFrameworkCore.csproj", "{11C2071F-B6FD-4E7C-8CCD-5D5A2F56399D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.EntityFrameworkCore", "Framework\Bonyan.EntityFrameworkCore\Bonyan.EntityFrameworkCore.csproj", "{11C2071F-B6FD-4E7C-8CCD-5D5A2F56399D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BonyanTemplate.Domain", "Templates\BonyanTemplate.Domain\BonyanTemplate.Domain.csproj", "{F2FAB962-5339-450E-8070-868FB5F7B5E7}"
 EndProject
@@ -35,15 +31,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BonyanTemplate.Infrastructu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BonyanTemplate.Api", "Templates\BonyanTemplate.Api\BonyanTemplate.Api.csproj", "{43CD6FC4-8EB5-44DA-8CAA-9E38699FDD75}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.AspNetCore.Persistence.EntityFrameworkCore.SqlServer", "Framework\Bonyan.AspNetCore.Persistence.EntityFrameworkCore.SqlServer\Bonyan.AspNetCore.Persistence.EntityFrameworkCore.SqlServer.csproj", "{6780A88C-D61F-4C20-8899-C294298196E6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.EntityFrameworkCore.SqlServer", "Framework\Bonyan.EntityFrameworkCore.SqlServer\Bonyan.EntityFrameworkCore.SqlServer.csproj", "{6780A88C-D61F-4C20-8899-C294298196E6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.AspNetCore.Persistence.EntityFrameworkCore.Sqlite", "Framework\Bonyan.AspNetCore.Persistence.EntityFrameworkCore.Sqlite\Bonyan.AspNetCore.Persistence.EntityFrameworkCore.Sqlite.csproj", "{22DAE8E6-9934-4E49-A83B-98E51CC8F46F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.EntityFrameworkCore.Sqlite", "Framework\Bonyan.EntityFrameworkCore.Sqlite\Bonyan.EntityFrameworkCore.Sqlite.csproj", "{22DAE8E6-9934-4E49-A83B-98E51CC8F46F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.AspNetCore.FastEndpoints.Security", "Framework\Bonyan.AspNetCore.FastEndpoints.Security\Bonyan.AspNetCore.FastEndpoints.Security.csproj", "{3A58AE9F-E1CE-444B-85D2-3AC27E0A0414}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.AspNetCore.FastEndpoints.Swagger", "Framework\Bonyan.AspNetCore.FastEndpoints.Swagger\Bonyan.AspNetCore.FastEndpoints.Swagger.csproj", "{4AE5CB79-A6B2-4E34-AEAB-9CA8A9127289}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.Job", "Framework\Bonyan.Job\Bonyan.Job.csproj", "{97A2F0B3-7918-4D01-8EE9-AD35E7DDD456}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.AspNetCore.Job", "Framework\Bonyan.AspNetCore.Job\Bonyan.AspNetCore.Job.csproj", "{97A2F0B3-7918-4D01-8EE9-AD35E7DDD456}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.AspNetCore.Job.Hangfire", "Framework\Bonyan.AspNetCore.Job.Hangfire\Bonyan.AspNetCore.Job.Hangfire.csproj", "{BB354D15-2597-4965-B28A-BAA028C39828}"
 EndProject
@@ -93,14 +85,6 @@ Global
 		{62791559-5D8D-4EE2-8AFE-10F32263A700}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{62791559-5D8D-4EE2-8AFE-10F32263A700}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{62791559-5D8D-4EE2-8AFE-10F32263A700}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2F69EF92-2680-4392-891B-ECB8B03F9EE8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2F69EF92-2680-4392-891B-ECB8B03F9EE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2F69EF92-2680-4392-891B-ECB8B03F9EE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2F69EF92-2680-4392-891B-ECB8B03F9EE8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2D760D42-636B-425A-BA86-47951D058F50}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2D760D42-636B-425A-BA86-47951D058F50}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2D760D42-636B-425A-BA86-47951D058F50}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2D760D42-636B-425A-BA86-47951D058F50}.Release|Any CPU.Build.0 = Release|Any CPU
 		{11C2071F-B6FD-4E7C-8CCD-5D5A2F56399D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{11C2071F-B6FD-4E7C-8CCD-5D5A2F56399D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{11C2071F-B6FD-4E7C-8CCD-5D5A2F56399D}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -129,14 +113,6 @@ Global
 		{22DAE8E6-9934-4E49-A83B-98E51CC8F46F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{22DAE8E6-9934-4E49-A83B-98E51CC8F46F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{22DAE8E6-9934-4E49-A83B-98E51CC8F46F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3A58AE9F-E1CE-444B-85D2-3AC27E0A0414}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3A58AE9F-E1CE-444B-85D2-3AC27E0A0414}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3A58AE9F-E1CE-444B-85D2-3AC27E0A0414}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3A58AE9F-E1CE-444B-85D2-3AC27E0A0414}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4AE5CB79-A6B2-4E34-AEAB-9CA8A9127289}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4AE5CB79-A6B2-4E34-AEAB-9CA8A9127289}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4AE5CB79-A6B2-4E34-AEAB-9CA8A9127289}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4AE5CB79-A6B2-4E34-AEAB-9CA8A9127289}.Release|Any CPU.Build.0 = Release|Any CPU
 		{97A2F0B3-7918-4D01-8EE9-AD35E7DDD456}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{97A2F0B3-7918-4D01-8EE9-AD35E7DDD456}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{97A2F0B3-7918-4D01-8EE9-AD35E7DDD456}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -180,8 +156,6 @@ Global
 		{AFA9CF2F-B53E-47B6-B4A5-92B05CC16013} = {32FA45AB-A310-483C-8D23-9E2D1CE9F218}
 		{F220CCEC-45EB-4DD4-AC2F-37B912A0B708} = {32FA45AB-A310-483C-8D23-9E2D1CE9F218}
 		{62791559-5D8D-4EE2-8AFE-10F32263A700} = {F865B8FC-9BE7-4251-B8D7-519F85EF20B2}
-		{2F69EF92-2680-4392-891B-ECB8B03F9EE8} = {F865B8FC-9BE7-4251-B8D7-519F85EF20B2}
-		{2D760D42-636B-425A-BA86-47951D058F50} = {F865B8FC-9BE7-4251-B8D7-519F85EF20B2}
 		{11C2071F-B6FD-4E7C-8CCD-5D5A2F56399D} = {F865B8FC-9BE7-4251-B8D7-519F85EF20B2}
 		{F2FAB962-5339-450E-8070-868FB5F7B5E7} = {034A5C05-CB06-41AC-AE54-EE94F66019FC}
 		{2325B157-CC0D-4B04-BD5A-5E995B4D380A} = {034A5C05-CB06-41AC-AE54-EE94F66019FC}
@@ -189,8 +163,6 @@ Global
 		{43CD6FC4-8EB5-44DA-8CAA-9E38699FDD75} = {034A5C05-CB06-41AC-AE54-EE94F66019FC}
 		{6780A88C-D61F-4C20-8899-C294298196E6} = {F865B8FC-9BE7-4251-B8D7-519F85EF20B2}
 		{22DAE8E6-9934-4E49-A83B-98E51CC8F46F} = {F865B8FC-9BE7-4251-B8D7-519F85EF20B2}
-		{3A58AE9F-E1CE-444B-85D2-3AC27E0A0414} = {F865B8FC-9BE7-4251-B8D7-519F85EF20B2}
-		{4AE5CB79-A6B2-4E34-AEAB-9CA8A9127289} = {F865B8FC-9BE7-4251-B8D7-519F85EF20B2}
 		{97A2F0B3-7918-4D01-8EE9-AD35E7DDD456} = {F865B8FC-9BE7-4251-B8D7-519F85EF20B2}
 		{BB354D15-2597-4965-B28A-BAA028C39828} = {F865B8FC-9BE7-4251-B8D7-519F85EF20B2}
 		{AA396903-B749-4397-AABA-888A2C28D0C0} = {F865B8FC-9BE7-4251-B8D7-519F85EF20B2}

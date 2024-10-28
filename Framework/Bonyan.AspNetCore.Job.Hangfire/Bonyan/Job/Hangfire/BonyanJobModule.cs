@@ -9,7 +9,7 @@ namespace Bonyan.Job.Hangfire;
 [DependOn(typeof(BonyanJobModule))]
 public class BonyanJobHangfireModule : WebModule
 {
-  public override Task OnConfigureAsync(ModularityContext context)
+  public override Task OnConfigureAsync(ServiceConfigurationContext context)
   {
 
     context.Services.AddHangfire(config => config.UseInMemoryStorage());
@@ -19,9 +19,9 @@ public class BonyanJobHangfireModule : WebModule
     return base.OnConfigureAsync(context);
   }
 
-  public override Task OnPreApplicationAsync(ModularityApplicationContext app)
+  public override Task OnPreApplicationAsync(ApplicationContext context)
   {
-    app.WebApplication.UseHangfireDashboard();
-    return base.OnPreApplicationAsync(app);
+    context.Application.UseHangfireDashboard();
+    return base.OnPreApplicationAsync(context);
   }
 }

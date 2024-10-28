@@ -11,7 +11,7 @@ namespace Bonyan.AspNetCore.MultiTenant;
     )]
 public class BonyanAspNetCoreMultiTenantModule : WebModule
 {
-  public override Task OnConfigureAsync(ModularityContext context)
+  public override Task OnConfigureAsync(ServiceConfigurationContext context)
   {
     context.Services.AddTransient<MultiTenancyMiddleware>();
     context.Services.AddSingleton<ITenantResolveResultAccessor, HttpContextTenantResolveResultAccessor>();
@@ -25,10 +25,10 @@ public class BonyanAspNetCoreMultiTenantModule : WebModule
     return base.OnConfigureAsync(context);
   }
 
-  public override Task OnPreApplicationAsync(ModularityApplicationContext app)
+  public override Task OnPreApplicationAsync(ApplicationContext context)
   {
-    app.WebApplication
+    context.Application
       .UseMiddleware<MultiTenancyMiddleware>();
-    return base.OnPreApplicationAsync(app);
+    return base.OnPreApplicationAsync(context);
   }
 }

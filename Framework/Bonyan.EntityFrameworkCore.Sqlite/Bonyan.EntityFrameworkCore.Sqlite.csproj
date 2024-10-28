@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <Import Project="..\..\package.props" />
+    
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <RootNamespace />
+        <PackageId>Bonyan.EntityFrameworkCore.Sqlite</PackageId>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.8" />
+    </ItemGroup>
+    <ItemGroup>
+      <Folder Include="Microsoft\Persistence\" />
+    </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\Bonyan.EntityFrameworkCore\Bonyan.EntityFrameworkCore.csproj" />
+    </ItemGroup>
+
+
+
+
+</Project>

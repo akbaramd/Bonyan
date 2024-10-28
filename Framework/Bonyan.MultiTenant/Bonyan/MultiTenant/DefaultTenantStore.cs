@@ -4,9 +4,9 @@ namespace Bonyan.MultiTenant;
 
 public class DefaultTenantStore : ITenantStore
 {
-  private readonly AbpDefaultTenantStoreOptions _options;
+  private readonly BonyanDefaultTenantStoreOptions _options;
 
-  public DefaultTenantStore(IOptionsMonitor<AbpDefaultTenantStoreOptions> options)
+  public DefaultTenantStore(IOptionsMonitor<BonyanDefaultTenantStoreOptions> options)
   {
     _options = options.CurrentValue;
   }

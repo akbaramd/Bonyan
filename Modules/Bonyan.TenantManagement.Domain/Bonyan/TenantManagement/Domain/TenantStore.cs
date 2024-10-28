@@ -1,6 +1,6 @@
 using Bonyan.MultiTenant;
 
-namespace Bonyan.TenantManagement.Domain.Bonyan.TenantManagement.Domain;
+namespace Bonyan.TenantManagement.Domain;
 
 public class TenantStore : ITenantStore
 {

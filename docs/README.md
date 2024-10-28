@@ -33,7 +33,7 @@ var builder = BonyanApplication.CreateApplicationBuilder<YourMainModule>(args);
 
 var app = builder.Build();
 
-app.Run();
+context.Run();
 ```
 
 In this example, `YourMainModule` acts as the **entry point**, defining the core structure and dependencies for your entire application. Modules can be organized hierarchically, facilitating seamless dependency management, lifecycle orchestration, and configuration.
@@ -114,9 +114,9 @@ Bonyan introduces two primary types of modules: **Module** and **WebModule**.
 ```csharp
 public class MyWebModule : WebModule
 {
-    public override Task OnPreApplicationAsync(ModularityApplicationContext app)
+    public override Task OnPreApplicationAsync(ModularityApplicationContext context)
     {
-        app.Services.Configure<JwtSigningOptions>(options =>
+        context.Services.Configure<JwtSigningOptions>(options =>
         {
             options.SigningKey = "super-secure-signing-key";
         });
@@ -180,10 +180,10 @@ namespace BonyanAdvancedExample
             return base.OnConfigureAsync(context);
         }
 
-        public override Task OnPreApplicationAsync(ModularityApplicationContext app)
+        public override Task OnPreApplicationAsync(ModularityApplicationContext context)
         {
             // Middleware configuration before application startup
-            app.Services.Configure<JwtSigningOptions>(options =>
+            context.Services.Configure<JwtSigningOptions>(options =>
             {
                 options.SigningKey = "secure-signing-key";
             });

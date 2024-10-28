@@ -8,7 +8,7 @@
     </PropertyGroup>
     <Import Project="..\..\package.props" />
     <ItemGroup>
-      <ProjectReference Include="..\..\Framework\Bonyan.DomainDrivenDesign.Domain\Bonyan.DomainDrivenDesign.Domain.csproj" />
+      <ProjectReference Include="..\..\Framework\Bonyan.Layer.Domain\Bonyan.Layer.Domain.csproj" />
     </ItemGroup>
 
 </Project>

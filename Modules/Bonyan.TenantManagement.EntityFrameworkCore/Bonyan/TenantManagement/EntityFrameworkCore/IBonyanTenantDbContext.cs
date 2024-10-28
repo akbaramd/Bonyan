@@ -1,7 +1,7 @@
-using Bonyan.TenantManagement.Domain.Bonyan.TenantManagement.Domain;
+using Bonyan.TenantManagement.Domain;
 using Microsoft.EntityFrameworkCore;
 
-namespace Bonyan.TenantManagement.EntityFrameworkCore.Bonyan.TenantManagement.EntityFrameworkCore;
+namespace Bonyan.TenantManagement.EntityFrameworkCore;
 
 public interface IBonyanTenantDbContext
 {

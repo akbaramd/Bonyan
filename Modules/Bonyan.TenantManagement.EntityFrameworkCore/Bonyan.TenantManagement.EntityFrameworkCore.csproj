@@ -9,7 +9,7 @@
     <Import Project="..\..\package.props" />
     <ItemGroup>
       <ProjectReference Include="..\..\Framework\Bonyan.AspNetCore.MultiTenant\Bonyan.AspNetCore.MultiTenant.csproj" />
-      <ProjectReference Include="..\..\Framework\Bonyan.AspNetCore.Persistence.EntityFrameworkCore\Bonyan.AspNetCore.Persistence.EntityFrameworkCore.csproj" />
+      <ProjectReference Include="..\..\Framework\Bonyan.EntityFrameworkCore\Bonyan.EntityFrameworkCore.csproj" />
       <ProjectReference Include="..\Bonyan.TenantManagement.Domain\Bonyan.TenantManagement.Domain.csproj" />
     </ItemGroup>
 

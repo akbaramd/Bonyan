@@ -15,7 +15,7 @@
     </ItemGroup>
     <ItemGroup>
       <ProjectReference Include="..\Bonyan.AspNetCore\Bonyan.AspNetCore.csproj" />
-      <ProjectReference Include="..\Bonyan.Job\Bonyan.Job.csproj" />
+      <ProjectReference Include="..\Bonyan.AspNetCore.Job\Bonyan.AspNetCore.Job.csproj" />
     </ItemGroup>
 
 </Project>

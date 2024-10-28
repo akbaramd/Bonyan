@@ -1,31 +1,30 @@
-﻿using Bonyan.AspNetCore.MultiTenant;
-using Bonyan.AspNetCore.Persistence;
-using Bonyan.AspNetCore.Persistence.EntityFrameworkCore;
+﻿using Bonyan.EntityFrameworkCore;
 using Bonyan.Modularity;
 using Bonyan.Modularity.Abstractions;
 using Bonyan.Modularity.Attributes;
 using Bonyan.MultiTenant;
-using Bonyan.Persistence.EntityFrameworkCore.Sqlite;
-using Bonyan.TenantManagement.EntityFrameworkCore.Bonyan.TenantManagement.EntityFrameworkCore;
+using Bonyan.TenantManagement.EntityFrameworkCore;
 using BonyanTemplate.Domain.Entities;
 using BonyanTemplate.Domain.Repositories;
 using BonyanTemplate.Infrastructure.Data;
 using BonyanTemplate.Infrastructure.Data.Repositories;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Sqlite;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace BonyanTemplate.Infrastructure;
 
 [DependOn(
-  typeof(BonyanPersistenceEntityFrameworkModule),
+  typeof(BonyanEntityFrameworkModule),
   typeof(BonyanTenantManagementEntityFrameworkModule))]
 public class InfrastructureModule : Module
 {
-  public override Task OnPreConfigureAsync(ModularityContext context)
+  public override Task OnPreConfigureAsync(ServiceConfigurationContext context)
   {
     return base.OnPreConfigureAsync(context);
   }
 
-  public override Task OnConfigureAsync(ModularityContext context)
+  public override Task OnConfigureAsync(ServiceConfigurationContext context)
   {
     
     context.Configure<BonyanMultiTenancyOptions>(options =>

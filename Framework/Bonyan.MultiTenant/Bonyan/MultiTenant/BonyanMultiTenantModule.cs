@@ -1,6 +1,6 @@
 using Bonyan.Modularity;
 using Bonyan.Modularity.Attributes;
-using Bonyan.User.Bonyan.Security;
+using Bonyan.Security;
 using Microsoft.Extensions.DependencyInjection;
 using Module = Bonyan.Modularity.Abstractions.Module;
 
@@ -9,7 +9,7 @@ namespace Bonyan.MultiTenant;
 [DependOn(typeof(BonyanUserModule))]
 public class BonyanMultiTenantModule : Module
 {
-  public override Task OnConfigureAsync(ModularityContext context)
+  public override Task OnConfigureAsync(ServiceConfigurationContext context)
   {
     context.Services.AddTransient<ITenantResolver,TenantResolver>();
     context.Services.AddTransient<ITenantStore,DefaultTenantStore>();
@@ -19,7 +19,7 @@ public class BonyanMultiTenantModule : Module
     return base.OnConfigureAsync(context);
   }
 
-  public override Task OnPostConfigureAsync(ModularityContext context)
+  public override Task OnPostConfigureAsync(ServiceConfigurationContext context)
   {
     return base.OnPostConfigureAsync(context);
   }

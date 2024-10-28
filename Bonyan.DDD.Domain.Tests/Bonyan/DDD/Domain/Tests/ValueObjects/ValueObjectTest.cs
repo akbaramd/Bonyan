@@ -1,4 +1,4 @@
-﻿using Bonyan.DomainDrivenDesign.Domain.ValueObjects;
+﻿using Bonyan.Layer.Domain.ValueObjects;
 using FluentAssertions;
 
 namespace Bonyan.DDD.Domain.Tests.ValueObjects;

@@ -1,5 +1,4 @@
-﻿using Bonyan.DomainDrivenDesign.Domain;
-using Bonyan.DomainDrivenDesign.Domain.Abstractions;
+﻿using Bonyan.Layer.Domain;
 using BonyanTemplate.Domain.Entities;
 using BonyanTemplate.Domain.Repositories;
 

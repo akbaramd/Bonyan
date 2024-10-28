@@ -1,5 +1,5 @@
-﻿using Bonyan.DomainDrivenDesign.Domain.Aggregates;
-using Bonyan.DomainDrivenDesign.Domain.ValueObjects;
+﻿using Bonyan.Layer.Domain.Aggregates;
+using Bonyan.Layer.Domain.ValueObjects;
 using BonyanTemplate.Domain.Enums;
 
 namespace BonyanTemplate.Domain.Entities;

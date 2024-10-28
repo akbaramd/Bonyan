@@ -22,7 +22,7 @@
     <PackageReference Include="xunit.runner.visualstudio" Version="2.5.3" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Framework\Bonyan.DomainDrivenDesign.Domain\Bonyan.DomainDrivenDesign.Domain.csproj" />
+    <ProjectReference Include="..\Framework\Bonyan.Layer.Domain\Bonyan.Layer.Domain.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Using Include="Xunit" />

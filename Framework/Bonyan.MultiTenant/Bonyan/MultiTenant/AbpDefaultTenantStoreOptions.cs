@@ -1,10 +1,10 @@
 namespace Bonyan.MultiTenant;
 
-public class AbpDefaultTenantStoreOptions
+public class BonyanDefaultTenantStoreOptions
 {
   public TenantConfiguration[] Tenants { get; set; }
 
-  public AbpDefaultTenantStoreOptions()
+  public BonyanDefaultTenantStoreOptions()
   {
     Tenants = Array.Empty<TenantConfiguration>();
   }

@@ -1,20 +1,14 @@
-﻿using System;
-using Bonyan.AspNetCore.Context;
-using Bonyan.AspNetCore.Domain;
-using Bonyan.AspNetCore.Infrastructure;
-using Bonyan.Modularity;
+﻿using Bonyan.Modularity;
 using Bonyan.Modularity.Abstractions;
 
 namespace Microsoft.AspNetCore.Builder
 {
-    public class BonyanApplicationBuilder :  IBonyanApplicationBuilder
+    public class BonyanApplicationBuilder : IBonyanApplicationBuilder
     {
-        private readonly List<ConsoleMessage> _consoleMessages = new();
 
-
+        private readonly IWebModularityApplication _modularApp;
         private readonly WebApplicationBuilder _builder;
 
-        public BonyanServiceInfo ServiceInfo { get; }
         public ILoggingBuilder Logging => _builder.Logging;
         public IServiceCollection Services => _builder.Services;
         public ConfigureHostBuilder Host => _builder.Host;
@@ -22,9 +16,9 @@ namespace Microsoft.AspNetCore.Builder
         public IHostEnvironment Environment => _builder.Environment;
 
 
-        public BonyanApplicationBuilder(BonyanServiceInfo serviceInfo, WebApplicationBuilder builder)
+        public BonyanApplicationBuilder(IWebModularityApplication modularApp, WebApplicationBuilder builder)
         {
-            ServiceInfo = serviceInfo;
+            _modularApp = modularApp;
             _builder = builder;
         }
 
@@ -32,18 +26,8 @@ namespace Microsoft.AspNetCore.Builder
         public WebApplication Build()
         {
             var application = _builder.Build();
-
-
-            var webModularityApplication = application.Services.GetRequiredService<IWebModularityApplication>();
-
-
-            webModularityApplication.InitializeAsync().GetAwaiter().GetResult();
-
-
-            webModularityApplication.ApplicationAsync(new ModularityApplicationContext(application)).GetAwaiter()
-                .GetResult();
-
-
+            _modularApp.InitializeModulesAsync(application.Services).GetAwaiter().GetResult();
+            _modularApp.InitializeApplicationAsync(application).GetAwaiter().GetResult();
             return application;
         }
     }

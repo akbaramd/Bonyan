@@ -1,4 +1,4 @@
-using Bonyan.DomainDrivenDesign.Domain.Events;
+using Bonyan.Layer.Domain.Events;
 using BonyanTemplate.Domain.DomainEvents;
 
 namespace BonyanTemplate.Domain.Handlers;

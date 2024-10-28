@@ -16,8 +16,8 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\Framework\Bonyan.AspNetCore.MultiTenant\Bonyan.AspNetCore.MultiTenant.csproj" />
-      <ProjectReference Include="..\..\Framework\Bonyan.AspNetCore.Persistence.EntityFrameworkCore.Sqlite\Bonyan.AspNetCore.Persistence.EntityFrameworkCore.Sqlite.csproj" />
-      <ProjectReference Include="..\..\Framework\Bonyan.AspNetCore.Persistence.EntityFrameworkCore\Bonyan.AspNetCore.Persistence.EntityFrameworkCore.csproj" />
+      <ProjectReference Include="..\..\Framework\Bonyan.EntityFrameworkCore.Sqlite\Bonyan.EntityFrameworkCore.Sqlite.csproj" />
+      <ProjectReference Include="..\..\Framework\Bonyan.EntityFrameworkCore\Bonyan.EntityFrameworkCore.csproj" />
       <ProjectReference Include="..\..\Modules\Bonyan.TenantManagement.EntityFrameworkCore\Bonyan.TenantManagement.EntityFrameworkCore.csproj" />
       <ProjectReference Include="..\BonyanTemplate.Domain\BonyanTemplate.Domain.csproj" />
     </ItemGroup>

@@ -1,8 +1,10 @@
-using Bonyan.DomainDrivenDesign.Domain.Abstractions;
+using Bonyan.Layer.Domain.Abstractions;
 
-namespace Bonyan.TenantManagement.Domain.Bonyan.TenantManagement.Domain;
+namespace Bonyan.TenantManagement.Domain;
 
-public interface ITenantRepository : IRepository<Tenant,TenantId>
+public interface ITenantRepository : IRepository<Tenant, TenantId>
 {
-  
+    public Task<Tenant?> FindByKeyAsync(string key, CancellationToken? cancellationToken = null);
+    public Task<Tenant?> FindByNameAsync(string name, CancellationToken? cancellationToken = null);
+    
 }

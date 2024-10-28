@@ -9,7 +9,7 @@ namespace Bonyan.AutoMapper
 {
     public class BonyanAutoMapperModule : Module
     {
-        public override Task OnConfigureAsync(ModularityContext context)
+        public override Task OnConfigureAsync(ServiceConfigurationContext context)
         {
 
           context.Services.AddSingleton<IConfigurationProvider>(sp =>

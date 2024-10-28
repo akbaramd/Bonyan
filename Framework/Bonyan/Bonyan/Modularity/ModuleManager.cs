@@ -6,16 +6,20 @@ namespace Bonyan.Modularity;
 
 public class ModuleManager : IModuleManager
 {
-    private readonly Dictionary<Type, ModuleInfo> _modules = new();
+    private readonly IModuleAccessor _moduleAccessor;
+
+    public ModuleManager(IModuleAccessor moduleAccessor)
+    {
+        _moduleAccessor = moduleAccessor;
+    }
 
     public void LoadModules(Type mainModuleType)
     {
         ValidateMainModuleType(mainModuleType);
         LoadModuleRecursive(mainModuleType);
-        var sortedModules = TopologicalSort(_modules.Values.ToList());
-        InitializeModules(sortedModules);
-        UpdateModuleList(sortedModules);
-        PrintModuleHierarchy(_modules[mainModuleType], 0, new HashSet<Type>());
+
+        var sortedModules = TopologicalSort(_moduleAccessor.GetAllModules().ToList());
+        UpdateModuleList(sortedModules); // Update the module list after sorting
     }
 
     private void ValidateMainModuleType(Type mainModuleType)
@@ -29,15 +33,15 @@ public class ModuleManager : IModuleManager
 
     private void LoadModuleRecursive(Type moduleType)
     {
-        if (_modules.ContainsKey(moduleType)) return;
+        if (_moduleAccessor.GetModule(moduleType) != null) return;
 
         var moduleInfo = new ModuleInfo(moduleType);
-        _modules[moduleType] = moduleInfo;
+        _moduleAccessor.AddModule(moduleInfo);
 
         foreach (var dependencyType in GetDependencies(moduleType))
         {
             LoadModuleRecursive(dependencyType);
-            moduleInfo.Dependencies.Add(_modules[dependencyType]);
+            moduleInfo.Dependencies.Add(_moduleAccessor.GetModule(dependencyType)!);
         }
     }
 
@@ -82,93 +86,14 @@ public class ModuleManager : IModuleManager
         return true;
     }
 
-    private void InitializeModules(IEnumerable<ModuleInfo> sortedModules)
-    {
-        foreach (var moduleInfo in sortedModules)
-        {
-            moduleInfo.Instance = (IModule)Activator.CreateInstance(moduleInfo.ModuleType)!;
-            moduleInfo.IsLoaded = true;
-        }
-    }
-
     private void UpdateModuleList(IEnumerable<ModuleInfo> sortedModules)
     {
-        _modules.Clear();
+        _moduleAccessor.ClearModules(); // Clear existing modules to refresh with sorted order
         foreach (var module in sortedModules)
         {
-            _modules[module.ModuleType] = module;
+            _moduleAccessor.AddModule(module); // Add each sorted module to the accessor
         }
     }
 
-    public async Task ConfigureModulesAsync(ModularityContext context)
-    {
-        if (context == null)
-            throw new ArgumentNullException(nameof(context));
-
-        await ExecuteModuleLifecycleAsync(context, (module, ctx) => module.OnPreConfigureAsync(ctx));
-        await ExecuteModuleLifecycleAsync(context, (module, ctx) => module.OnConfigureAsync(ctx));
-        await ExecuteModuleLifecycleAsync(context, (module, ctx) => module.OnPostConfigureAsync(ctx));
-    }
-    // public async Task ConfigureModulesAsync(WebApplication app)
-    // {
-    //   await ExecuteModuleLifecycleAsync(app, async (module, ctx) =>
-    //   {
-    //     if (module is IWebModule webModule)
-    //     {
-    //       await webModule.OnPreApplicationAsync(ctx);
-    //     }
-    //   });
-    //   
-    //   await ExecuteModuleLifecycleAsync(app, async (module, ctx) =>
-    //   {
-    //     if (module is IWebModule webModule)
-    //     {
-    //       await webModule.OnApplicationAsync(ctx);
-    //     }
-    //   });
-    //   
-    //   await ExecuteModuleLifecycleAsync(app, async (module, ctx) =>
-    //   {
-    //     if (module is IWebModule webModule)
-    //     {
-    //       await webModule.OnPostApplicationAsync(ctx);
-    //     }
-    //   });
-    // }
-    public async Task InitializeModulesAsync(ModularityInitializedContext context)
-    {
-        if (context == null)
-            throw new ArgumentNullException(nameof(context));
-
-        await ExecuteModuleLifecycleAsync(context, (module, ctx) => module.OnPreInitializeAsync(ctx));
-        await ExecuteModuleLifecycleAsync(context, (module, ctx) => module.OnInitializeAsync(ctx));
-        await ExecuteModuleLifecycleAsync(context, (module, ctx) => module.OnPostInitializeAsync(ctx));
-    }
-
-    private async Task ExecuteModuleLifecycleAsync<TContext>(TContext context, Func<IModule, TContext, Task> lifecycleMethod)
-    {
-        foreach (var module in _modules.Values)
-        {
-            if (module.Instance != null)
-            {
-                await lifecycleMethod(module.Instance, context);
-            }
-        }
-    }
-    
-
-    public IEnumerable<ModuleInfo> GetLoadedModules() => _modules.Values.ToList().AsReadOnly();
-
-    private void PrintModuleHierarchy(ModuleInfo module, int level, HashSet<Type> printedModules)
-    {
-        if (printedModules.Contains(module.ModuleType)) return;
-
-        printedModules.Add(module.ModuleType);
-        Console.WriteLine($"{new string(' ', level * 2)}- {module.ModuleType.Name} created");
-        foreach (var dependency in module.Dependencies)
-        {
-            PrintModuleHierarchy(dependency, level + 1, printedModules);
-        }
-    }
-
+    public IEnumerable<ModuleInfo> GetLoadedModules() => _moduleAccessor.GetAllModules();
 }

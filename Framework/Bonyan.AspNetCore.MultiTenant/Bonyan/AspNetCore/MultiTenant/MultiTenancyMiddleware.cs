@@ -48,7 +48,7 @@ public class MultiTenancyMiddleware : IMiddleware
                 if (_tenantResolveResultAccessor.Result != null &&
                     _tenantResolveResultAccessor.Result.AppliedResolvers.Contains(QueryStringTenantResolveContributor.ContributorName))
                 {
-                    AbpMultiTenancyCookieHelper.SetTenantCookie(context, _currentTenant.Id, _options.TenantKey);
+                    BonyanMultiTenancyCookieHelper.SetTenantCookie(context, _currentTenant.Id, _options.TenantKey);
                 }
 
                 await next(context);

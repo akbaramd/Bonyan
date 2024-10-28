@@ -1,4 +1,4 @@
-using Bonyan.User.Bonyan.Security;
+using Bonyan.User;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Bonyan.MultiTenant;

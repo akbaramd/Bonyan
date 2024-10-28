@@ -1,7 +1,7 @@
 ﻿using Bonyan.AspNetCore.Job;
-using Bonyan.DomainDrivenDesign.Domain.Abstractions;
+using Bonyan.Layer.Domain.Abstractions;
 using Bonyan.MultiTenant;
-using Bonyan.TenantManagement.Domain.Bonyan.TenantManagement.Domain;
+using Bonyan.TenantManagement.Domain;
 using BonyanTemplate.Domain.Entities;
 using BonyanTemplate.Domain.Repositories;
 

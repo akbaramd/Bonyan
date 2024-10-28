@@ -1,6 +1,6 @@
-using Bonyan.DomainDrivenDesign.Domain.ValueObjects;
+using Bonyan.Layer.Domain.ValueObjects;
 
-namespace Bonyan.TenantManagement.Domain.Bonyan.TenantManagement.Domain;
+namespace Bonyan.TenantManagement.Domain;
 
 public class TenantId : BusinessId<TenantId>
 {

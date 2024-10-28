@@ -7,7 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\Framework\Bonyan.DomainDrivenDesign.Domain\Bonyan.DomainDrivenDesign.Domain.csproj" />
+      <ProjectReference Include="..\..\Framework\Bonyan.Layer.Domain\Bonyan.Layer.Domain.csproj" />
       <ProjectReference Include="..\..\Modules\Bonyan.TenantManagement.Domain\Bonyan.TenantManagement.Domain.csproj" />
     </ItemGroup>
 

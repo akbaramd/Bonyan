@@ -8,22 +8,24 @@ public class WebModularityApplication<TModule> : ModularityApplication<TModule> 
   {
   }
 
-  public async Task ApplicationAsync(ModularityApplicationContext bonyanApplication)
+  public async Task InitializeApplicationAsync(WebApplication application)
   {
     var webModules = Modules.Select(x => x.Instance).OfType<IWebModule>().ToList();
+    var ctx = new ApplicationContext(application);
+    
     foreach (var webModule in webModules)
     {
-     await webModule.OnPreApplicationAsync(bonyanApplication);
+     await webModule.OnPreApplicationAsync(ctx);
     }
             
     foreach (var webModule in webModules)
     {
-      await webModule.OnApplicationAsync(bonyanApplication);
+      await webModule.OnApplicationAsync(ctx);
     }
             
     foreach (var webModule in webModules)
     {
-      await webModule.OnPostApplicationAsync(bonyanApplication);
+      await webModule.OnPostApplicationAsync(ctx);
     }
   }
 }

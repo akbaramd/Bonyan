@@ -17,14 +17,10 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\Framework\Bonyan.AspNetCore.FastEndpoints.Security\Bonyan.AspNetCore.FastEndpoints.Security.csproj" />
-      <ProjectReference Include="..\..\Framework\Bonyan.AspNetCore.FastEndpoints.Swagger\Bonyan.AspNetCore.FastEndpoints.Swagger.csproj" />
-      <ProjectReference Include="..\..\Framework\Bonyan.AspNetCore.FastEndpoints\Bonyan.AspNetCore.FastEndpoints.csproj" />
       <ProjectReference Include="..\..\Framework\Bonyan.AspNetCore.Job.Hangfire\Bonyan.AspNetCore.Job.Hangfire.csproj" />
-      <ProjectReference Include="..\..\Framework\Bonyan.AspNetCore.Persistence.EntityFrameworkCore\Bonyan.AspNetCore.Persistence.EntityFrameworkCore.csproj" />
-      <ProjectReference Include="..\..\Framework\Bonyan.AspNetCore.Persistence\Bonyan.AspNetCore.Persistence.csproj" />
+      <ProjectReference Include="..\..\Framework\Bonyan.EntityFrameworkCore\Bonyan.EntityFrameworkCore.csproj" />
       <ProjectReference Include="..\..\Framework\Bonyan.AspNetCore\Bonyan.AspNetCore.csproj" />
-      <ProjectReference Include="..\..\Framework\Bonyan.AspNetCore.Persistence.EntityFrameworkCore.SqlServer\Bonyan.AspNetCore.Persistence.EntityFrameworkCore.SqlServer.csproj" />
+      <ProjectReference Include="..\..\Framework\Bonyan.EntityFrameworkCore.SqlServer\Bonyan.EntityFrameworkCore.SqlServer.csproj" />
       <ProjectReference Include="..\BonyanTemplate.Application\BonyanTemplate.Application.csproj" />
       <ProjectReference Include="..\BonyanTemplate.Infrastructure\BonyanTemplate.Infrastructure.csproj" />
     </ItemGroup>

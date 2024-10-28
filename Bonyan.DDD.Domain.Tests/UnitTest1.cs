@@ -1,4 +1,4 @@
-﻿using Bonyan.DomainDrivenDesign.Domain.Entities;
+﻿using Bonyan.Layer.Domain.Entities;
 using FluentAssertions;
 
 public class UnitTest1

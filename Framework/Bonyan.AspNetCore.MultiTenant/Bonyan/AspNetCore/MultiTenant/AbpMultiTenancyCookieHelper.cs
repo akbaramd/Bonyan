@@ -1,6 +1,6 @@
 namespace Bonyan.AspNetCore.MultiTenant;
 
-public static class AbpMultiTenancyCookieHelper
+public static class BonyanMultiTenancyCookieHelper
 {
   public static void SetTenantCookie(
     HttpContext context,

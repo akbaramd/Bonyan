@@ -12,7 +12,7 @@ namespace BonyanTemplate.Application
   [DependOn(typeof(BonyanTemplateDomainModule),typeof(BonyanAutoMapperModule))]
   public class BonyanTemplateApplicationModule : Module
   {
-    public override Task OnConfigureAsync(ModularityContext context)
+    public override Task OnConfigureAsync(ServiceConfigurationContext context)
     {
       context.Configure<BonyanAutoMapperOptions>(options =>
       {

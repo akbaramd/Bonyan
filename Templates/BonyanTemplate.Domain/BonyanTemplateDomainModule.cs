@@ -1,20 +1,18 @@
-using Bonyan.DomainDrivenDesign.Domain;
-using Bonyan.DomainDrivenDesign.Domain.Events;
+using Bonyan.Layer.Domain;
 using Bonyan.Modularity;
 using Bonyan.Modularity.Attributes;
 using Bonyan.TenantManagement.Domain;
-using Bonyan.TenantManagement.Domain.Bonyan.TenantManagement.Domain;
 using Microsoft.Extensions.DependencyInjection;
 using Module = Bonyan.Modularity.Abstractions.Module;
 
 
 namespace BonyanTemplate.Domain
 {
-  [DependOn(typeof(BonyanDomainDrivenDesignDomainModule),
+  [DependOn(typeof(BonyanLayerDomainModule),
     typeof(BonyanTenantManagementDomainModule))]
   public class BonyanTemplateDomainModule : Module
   {
-    public override Task OnConfigureAsync(ModularityContext context)
+    public override Task OnConfigureAsync(ServiceConfigurationContext context)
     {
       
       return base.OnConfigureAsync(context);

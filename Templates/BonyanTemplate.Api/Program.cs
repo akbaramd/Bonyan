@@ -1,13 +1,6 @@
-using Bonyan.DomainDrivenDesign.Domain.Abstractions;
-using Bonyan.FastEndpoints;
+using Bonyan.Layer.Domain.Abstractions;
 using BonyanTemplate.Api;
-using BonyanTemplate.Application.Jobs;
 using BonyanTemplate.Domain.Entities;
-using BonyanTemplate.Domain.Repositories;
-using BonyanTemplate.Infrastructure.Data;
-using BonyanTemplate.Infrastructure.Data.Repositories;
-using FastEndpoints;
-using Hangfire;
 using Microsoft.AspNetCore.Mvc;
 
 // create bonyan application builder

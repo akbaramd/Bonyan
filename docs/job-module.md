@@ -19,7 +19,7 @@ The **Bonyan Job Module** is a powerful addition to the Bonyan Modular Applicati
 To install the **Bonyan Job Module**, add the package to your .NET Core project using the following command:
 
 ```bash
-dotnet add package Bonyan.Job
+dotnet add package Bonyan.AspNetCore.Job
 ```
 
 This command will include the necessary libraries and tools for integrating jobs into your application modules.
