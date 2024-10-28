@@ -11,13 +11,15 @@ namespace Bonyan.DomainDrivenDesign.Application;
 public class EfCoreUnitOfWork<TDbContext> : IUnitOfWork where TDbContext : BonyanDbContext<TDbContext>
 {
     private readonly TDbContext _dbContext;
+    private readonly IServiceProvider  _serviceProvider;
     private readonly IDomainEventDispatcher _domainEventDispatcher;
     private IDbContextTransaction? _transaction;
 
-    public EfCoreUnitOfWork(TDbContext dbContext, IDomainEventDispatcher domainEventDispatcher)
+    public EfCoreUnitOfWork(TDbContext dbContext, IDomainEventDispatcher domainEventDispatcher, IServiceProvider serviceProvider)
     {
         _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
         _domainEventDispatcher = domainEventDispatcher ?? throw new ArgumentNullException(nameof(domainEventDispatcher));
+        _serviceProvider = serviceProvider;
     }
 
     public void BeginTransaction()
@@ -108,22 +110,22 @@ public class EfCoreUnitOfWork<TDbContext> : IUnitOfWork where TDbContext : Bonya
 
     public IReadOnlyRepository<TEntity> GetReadonlyRepository<TEntity>() where TEntity : class, IEntity
     {
-        return new EfCoreReadonlyRepository<TEntity, TDbContext>(_dbContext);
+        return new EfCoreReadonlyRepository<TEntity, TDbContext>(_dbContext,_serviceProvider);
     }
 
     public IReadOnlyRepository<TEntity, TKey> GetReadonlyRepository<TEntity, TKey>() where TEntity : class, IEntity<TKey> where TKey : notnull
     {
-        return new EfCoreReadonlyRepository<TEntity, TKey, TDbContext>(_dbContext);
+        return new EfCoreReadonlyRepository<TEntity, TKey, TDbContext>(_dbContext,_serviceProvider);
     }
 
     public IRepository<TEntity> GetRepository<TEntity>() where TEntity : class, IEntity
     {
-        return new EfCoreRepository<TEntity, TDbContext>(_dbContext);
+        return new EfCoreRepository<TEntity, TDbContext>(_dbContext,_serviceProvider);
     }
 
     public IRepository<TEntity, TKey> GetRepository<TEntity, TKey>() where TEntity : class, IEntity<TKey> where TKey : notnull
     {
-        return new EfCoreRepository<TEntity, TKey, TDbContext>(_dbContext);
+        return new EfCoreRepository<TEntity, TKey, TDbContext>(_dbContext,_serviceProvider);
     }
 
     private async Task DispatchDomainEventsAsync()

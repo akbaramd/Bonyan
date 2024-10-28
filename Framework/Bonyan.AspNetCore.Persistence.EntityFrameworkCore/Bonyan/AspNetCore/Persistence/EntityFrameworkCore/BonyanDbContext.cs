@@ -7,6 +7,7 @@ using Bonyan.MultiTenant;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Metadata.Builder;
+using Microsoft.Extensions.Options;
 
 namespace Bonyan.AspNetCore.Persistence.EntityFrameworkCore;
 
@@ -20,6 +21,7 @@ public class BonyanDbContext<TDbContext> : DbContext , IBonyanDbContext<TDbConte
   
   
   public ICurrentTenant CurrentTenant => _serviceProvider.GetRequiredService<ICurrentTenant>();
+  private BonyanMultiTenancyOptions TenancyOptions=> _serviceProvider.GetRequiredService<IOptions<BonyanMultiTenancyOptions>>().Value;
   protected virtual Guid? CurrentTenantId => CurrentTenant?.Id;
 
 
@@ -143,9 +145,9 @@ public class BonyanDbContext<TDbContext> : DbContext , IBonyanDbContext<TDbConte
       expression = e =>  !EF.Property<bool>(e, "IsDeleted");
     }
 
-    if (typeof(IMultiTenant).IsAssignableFrom(typeof(TEntity)))
+    if (TenancyOptions.IsEnabled && typeof(IMultiTenant).IsAssignableFrom(typeof(TEntity)))
     {
-      Expression<Func<TEntity, bool>> multiTenantFilter = e =>   EF.Property<Guid>(e, "TenantId") == CurrentTenantId;
+      Expression<Func<TEntity, bool>> multiTenantFilter = e =>     EF.Property<Guid>(e, "TenantId") == CurrentTenantId;
       expression = expression == null ? multiTenantFilter : QueryFilterExpressionHelper.CombineExpressions(expression, multiTenantFilter);
     }
 

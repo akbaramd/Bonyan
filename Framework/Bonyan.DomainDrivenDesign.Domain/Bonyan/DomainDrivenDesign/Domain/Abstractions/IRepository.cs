@@ -11,6 +11,7 @@ public interface IRepository
 }
 public interface IReadOnlyRepository<TEntity, in TKey> : IReadOnlyRepository<TEntity> where TEntity : class, IEntity<TKey> where TKey : notnull
 {
+  Task<TEntity?> FindByIdAsync(TKey id);
   Task<TEntity?> GetByIdAsync(TKey id);
   Task<IEnumerable<TEntity>> GetByPredicateAsync(Expression<Func<TEntity, bool>> predicate);
 }
@@ -18,8 +19,7 @@ public interface IReadOnlyRepository<TEntity, in TKey> : IReadOnlyRepository<TEn
 // IReadOnlyRepository without specifying the key type (TKesdasdasy is assumed internally by the entity).
 public interface IReadOnlyRepository<TEntity> : IRepository where TEntity : class, IEntity
 {
-  Task<TEntity?> FindByIdAsync(Guid id);
-  Task<TEntity> GetByIdAsync(Guid id);
+
   Task<IEnumerable<TEntity>> FindAsync(Expression<Func<TEntity, bool>> predicate);
   Task<TEntity?> FindOneAsync(Expression<Func<TEntity, bool>> predicate);
   Task<TEntity> GetOneAsync(Expression<Func<TEntity, bool>> predicate);

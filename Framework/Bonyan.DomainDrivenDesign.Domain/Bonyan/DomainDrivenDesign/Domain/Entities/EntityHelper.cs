@@ -295,5 +295,22 @@ public static class EntityHelper
         () => tenantId
       );
     }
-    
+    public static void TrySetTenantId(IEntity entity,Guid? tenantId)
+    {
+      if (entity is not IMultiTenant multiTenantEntity)
+      {
+        return;
+      }
+
+      if (tenantId == multiTenantEntity.TenantId)
+      {
+        return;
+      }
+
+      ObjectHelper.TrySetProperty(
+        multiTenantEntity,
+        x => x.TenantId,
+        () => tenantId
+      );
+    }
 }

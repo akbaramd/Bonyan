@@ -17,7 +17,7 @@ namespace BonyanTemplate.Infrastructure.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
 
-            modelBuilder.Entity("Bonyan.Module.TenantManagment.Domain.Tenant", b =>
+            modelBuilder.Entity("Bonyan.TenantManagement.Domain.Bonyan.TenantManagement.Domain.Tenant", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("TEXT")
@@ -60,6 +60,10 @@ namespace BonyanTemplate.Infrastructure.Migrations
                         .HasColumnType("TEXT")
                         .HasColumnName("Id");
 
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("TenantId");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -77,6 +81,10 @@ namespace BonyanTemplate.Infrastructure.Migrations
 
                     b.Property<int>("Status")
                         .HasColumnType("INTEGER");
+
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("TenantId");
 
                     b.Property<string>("Title")
                         .IsRequired()

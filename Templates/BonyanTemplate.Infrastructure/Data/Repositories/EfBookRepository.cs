@@ -7,7 +7,7 @@ namespace BonyanTemplate.Infrastructure.Data.Repositories;
 
 public class EfBookRepository : EfCoreRepository<Books,BookId,BonyanTemplateBookDbContext>, IBooksRepository
 {
-  public EfBookRepository(BonyanTemplateBookDbContext bookDbContext) : base(bookDbContext)
+  public EfBookRepository(BonyanTemplateBookDbContext bookDbContext,IServiceProvider serviceProvider) : base(bookDbContext,serviceProvider)
   {
   }
 }

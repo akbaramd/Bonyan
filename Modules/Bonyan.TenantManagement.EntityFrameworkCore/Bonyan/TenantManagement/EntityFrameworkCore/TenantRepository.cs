@@ -5,7 +5,7 @@ namespace Bonyan.TenantManagement.EntityFrameworkCore.Bonyan.TenantManagement.En
 
 public class TenantRepository : EfCoreRepository<Tenant,TenantId,BonyanTenantDbContext>,ITenantRepository
 {
-  public TenantRepository(BonyanTenantDbContext dbContext) : base(dbContext)
+  public TenantRepository(BonyanTenantDbContext dbContext , IServiceProvider  serviceProvider) : base(dbContext,serviceProvider)
   {
   }
 }

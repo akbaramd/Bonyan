@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System;
 using System.Linq;
+using Bonyan.MultiTenant;
 
 namespace Microsoft.EntityFrameworkCore.Metadata.Builder
 {
@@ -16,9 +17,18 @@ namespace Microsoft.EntityFrameworkCore.Metadata.Builder
             b.ConfigureModificationAuditable();
             b.ConfigureSoftDeleteAuditable();
             b.ConfigureBusinessIdProperties();
+            b.TryConfigureMultiTenant();
             return b;
         }
-
+        public static void TryConfigureMultiTenant(this EntityTypeBuilder b)
+        {
+          if (b.Metadata.ClrType.IsAssignableTo(typeof(IMultiTenant)))
+          {
+            b.Property(nameof(IMultiTenant.TenantId))
+              .IsRequired(false)
+              .HasColumnName(nameof(IMultiTenant.TenantId));
+          }
+        }
         private static EntityTypeBuilder ConfigureCreationAuditable(this EntityTypeBuilder b)
         {
             try
