@@ -65,7 +65,7 @@ function Publish-ProjectsInDirectory {
         [string]$directoryPath,
         [string]$publishType
     )
-
+    Write-Host "Start Publish project iside  $($directoryPath)." -ForegroundColor Yellow
     Set-Location -Path $directoryPath
     $subdirectories = Get-ChildItem -Directory
 
@@ -90,15 +90,16 @@ function Main {
 
     # Run tests
     dotnet test
-
+    Set-Location -Path $startingDirectory
     # Publish projects in the Framework directory
     $frameworkDirectory = ".\Framework"
+ 
     if (Test-Path $frameworkDirectory) {
         Publish-ProjectsInDirectory -directoryPath $frameworkDirectory -publishType "Framework"
     } else {
         Write-Host "Framework directory not found." -ForegroundColor Yellow
     }
-
+    Set-Location -Path $startingDirectory
     # Publish projects in the Modules directory
     $modulesDirectory = ".\Modules"
     if (Test-Path $modulesDirectory) {
