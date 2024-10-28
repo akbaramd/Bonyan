@@ -1,193 +1,194 @@
-﻿# Entity Framework Core Persistence Module Guide
+﻿# Bonyan.Layer.Domain Module Guide
 
-The **Bonyan.AspNetCore.Persistence.EntityFrameworkCore** module integrates Entity Framework Core with the Bonyan Modular Application Framework to provide developers with powerful persistence capabilities. By using this module, developers can efficiently implement **Domain-Driven Design (DDD)** principles for data access and management, leveraging the full capabilities of **Entity Framework Core** in .NET Core applications. This guide aims to comprehensively explain how to set up and effectively use this module, ensuring that even the most complex domain models can be represented and managed with ease.
-
-> **Note**: If you are unfamiliar with DDD, please refer to the [Domain-Driven Design Module Guide](ddd_domain_module_guide.md) for an overview of DDD concepts such as Entities, Aggregate Roots, and Value Objects.
+The **Bonyan.Layer.Domain** module is intended to facilitate the implementation of Domain-Driven Design (DDD) principles within .NET Core applications. This module provides the foundational abstractions—**Entities**, **Aggregate Roots**, **Value Objects**, and **Enumerations**—essential for modeling sophisticated software domains effectively, thereby enhancing both maintainability and domain clarity.
 
 ## Table of Contents
 - [Introduction](#introduction)
 - [Installation](#installation)
-- [Setting Up Entity Framework Core](#setting-up-entity-framework-core)
-  - [DbContext Configuration](#dbcontext-configuration)
-  - [Repository Implementation](#repository-implementation)
+- [Core DDD Concepts](#core-ddd-concepts)
+  - [Entity](#entity)
+  - [Aggregate Root](#aggregate-root)
+  - [Value Object](#value-object)
+  - [Enumeration](#enumeration)
 - [Usage Examples](#usage-examples)
-  - [Defining a DbContext](#defining-a-dbcontext)
-  - [Implementing a Repository](#implementing-a-repository)
-- [SQL Provider Configuration](#sql-provider-configuration)
-  - [SQLite Setup](#sqlite-setup)
-  - [SQL Server Setup](#sql-server-setup)
-- [Best Practices and Considerations](#best-practices-and-considerations)
+  - [Defining an Entity](#defining-an-entity)
+  - [Defining an Aggregate Root](#defining-an-aggregate-root)
 - [Summary](#summary)
 
 ## Introduction
 
-The **Bonyan.AspNetCore.Persistence.EntityFrameworkCore** module is built to provide a seamless integration with Entity Framework Core, enabling developers to implement persistence strategies following Domain-Driven Design principles. By extending the Bonyan framework, this module allows for creating **DbContexts**, **Repositories**, and handling complex data models efficiently. The module is particularly useful for managing **Aggregate Roots** and other entities that require persistence across different data stores, thereby ensuring consistency, reliability, and scalability within your software application.
+Domain-Driven Design represents an advanced methodology in software development that emphasizes deep collaboration between domain experts and software developers to ensure that the domain model captures the nuances of the business domain with precision. The **Bonyan.Layer.Domain** module equips .NET Core developers with abstractions that facilitate the seamless adoption of DDD principles. By offering critical components out-of-the-box, this module simplifies the construction of complex and rich domain models, thereby allowing developers to focus on capturing intricate business logic accurately.
 
-This module also supports a variety of relational database providers, allowing developers to choose between **SQLite**, **SQL Server**, or any other database compatible with Entity Framework Core. By combining these powerful technologies, the module enables developers to focus on modeling their domain without worrying about the low-level details of database interaction and configuration.
+Additionally, any module that requires access to these foundational DDD constructs must also declare a dependency on `BonyanLayerDomainModule` to ensure seamless integration of domain modeling capabilities. This ensures that all the necessary tools for DDD are readily available for use.
 
-## Installation
+## Add Domain Module Dependency
 
-To install the **Bonyan.AspNetCore.Persistence.EntityFrameworkCore** module, run the following command in your terminal:
+To use the **Bonyan.Layer.Domain** module, your main module must declare a dependency on `BonyanLayerDomainModule`. This ensures that all necessary DDD services and configurations are available for modeling the domain effectively.
+
+Here is how to declare the dependency in your module:
+
+```csharp
+[DependOn(typeof(BonyanLayerDomainModule))]
+public class MyMainModule : Module
+{
+    public override Task OnConfigureAsync(ModularityContext context)
+    {
+        // Example setup code for domain-driven components
+        return base.OnConfigureAsync(context);
+    }
+}
+```
+
+In this example, the `MyMainModule` depends on `BonyanLayerDomainModule`, ensuring that domain modeling constructs such as entities, aggregates, and value objects are available.
+
+To install the necessary library, use the following command:
 
 ```bash
-dotnet add package Bonyan.EntityFrameworkCore
+dotnet add package Bonyan.Layer.Domain
 ```
 
-This command will include the necessary libraries and tools for integrating Entity Framework Core into your Bonyan-based application. After installing the package, you will be ready to start setting up your database context and repositories to interact seamlessly with your domain models.
+This command integrates the necessary libraries and abstractions needed for implementing DDD principles in your .NET Core project.
 
-## Setting Up Entity Framework Core
+## Core DDD Concepts
 
-Setting up Entity Framework Core with the Bonyan framework requires defining a **DbContext** that interacts with your domain models and implementing repositories to abstract away data access logic.
+Once the module is integrated, you can utilize the foundational classes such as `Entity`, `AggregateRoot`, `ValueObject`, and others to construct a rich and effective domain model.
 
-### DbContext Configuration
+### Entity
 
-To use this module, your primary database context must inherit from `BonyanDbContext`. This will ensure that all domain-driven design components, such as entities and aggregate roots, are appropriately configured and integrated. The `BonyanDbContext` provides additional scaffolding and utility methods that make it easier to work with common DDD patterns, including conventions and automatic configuration of related entities.
-
-```csharp
-public class BonyanTemplateBookDbContext : BonyanDbContext<BonyanTemplateBookDbContext>
-{
-    public BonyanTemplateBookDbContext(DbContextOptions<BonyanTemplateBookDbContext> options) : base(options)
-    {
-    }
-
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        base.OnModelCreating(modelBuilder);
-        modelBuilder.Entity<Books>().ConfigureByConvention();
-        modelBuilder.Entity<Authors>().ConfigureByConvention();
-    }
-
-    public DbSet<Books> Books { get; set; }
-    public DbSet<Authors> Authors { get; set; }
-}
-```
-
-In this example, `BonyanTemplateBookDbContext` inherits from `BonyanDbContext` to provide all the basic functionality needed for integrating Entity Framework with DDD elements such as entities and aggregate roots. The `ConfigureByConvention()` method simplifies setting up default conventions, ensuring consistency across the application.
-
-The `OnModelCreating` method is used to define and configure the relationships between entities, which can include specifying primary keys, foreign keys, constraints, and any additional configurations that may be needed to properly reflect the domain model in the database.
-
-### Repository Implementation
-
-Repositories are a key component in managing data persistence in DDD. They abstract the data access logic, making it easier to perform CRUD operations on entities, while maintaining the principles of encapsulation and isolation from infrastructure-level details. This enables developers to focus more on the business logic rather than the intricacies of data access.
+An **Entity** is an object defined by its unique identity, which persists throughout its lifecycle. Entities serve as the primary building blocks of a domain model, encapsulating the core business objects and their associated lifecycle. Within **Bonyan.Layer.Domain**, the `Entity` class functions as the base class for defining entities in your domain.
 
 ```csharp
-public class EfBookRepository : EfCoreRepository<Books, BookId, BonyanTemplateBookDbContext>, IBooksRepository
+public class Customer : Entity<Guid>
 {
-    public EfBookRepository(BonyanTemplateBookDbContext bookDbContext, IServiceProvider serviceProvider) : base(bookDbContext, serviceProvider)
+    public string Name { get; private set; }
+    public string Email { get; private set; }
+
+    public Customer(Guid id, string name, string email) : base(id)
     {
+        Name = name;
+        Email = email;
     }
 }
 ```
 
-In this example, `EfBookRepository` is a repository class that manages `Books` entities by extending the `EfCoreRepository` base class. It handles typical operations like adding, removing, and querying `Books` from the database, while remaining decoupled from the infrastructure specifics. This abstraction is essential for ensuring that the domain model remains agnostic to the underlying persistence technology, allowing changes in the persistence layer without impacting the domain logic.
+In the above example, `Customer` is an entity characterized by properties `Name` and `Email`. By inheriting from the `Entity` base class, each `Customer` instance is ensured to possess a unique identifier (`Guid`).
+
+### Aggregate Root
+
+An **Aggregate Root** is an entity that serves as the entry point for a cluster of related objects (an aggregate) and governs their lifecycle. Aggregates help enforce business rules and consistency boundaries. In **Bonyan.Layer.Domain**, the `AggregateRoot` class facilitates the definition of these aggregate roots.
+
+```csharp
+public class Order : AggregateRoot<Guid>
+{
+    public DateTime OrderDate { get; private set; }
+    public List<OrderItem> Items { get; private set; }
+
+    public Order(Guid id, DateTime orderDate) : base(id)
+    {
+        OrderDate = orderDate;
+        Items = new List<OrderItem>();
+    }
+
+    public void AddItem(OrderItem item)
+    {
+        Items.Add(item);
+    }
+}
+```
+
+In this example, `Order` functions as an aggregate root that manages a collection of `OrderItem` objects, ensuring the consistency and integrity of its internal state.
+
+### Value Object
+
+A **Value Object** is a concept that lacks an inherent identity, meaning its equality is determined by its attribute values. Value objects are useful for representing concepts such as money, measurements, or addresses, where uniqueness is not as important as the value they hold.
+
+```csharp
+public class Address : ValueObject
+{
+    public string Street { get; }
+    public string City { get; }
+    public string PostalCode { get; }
+
+    public Address(string street, string city, string postalCode)
+    {
+        Street = street;
+        City = city;
+        PostalCode = postalCode;
+    }
+
+    protected override IEnumerable<object> GetEqualityComponents()
+    {
+        yield return Street;
+        yield return City;
+        yield return PostalCode;
+    }
+}
+```
+
+The `Address` class represents a value object, consisting of properties `Street`, `City`, and `PostalCode`. The equality of `Address` instances is determined by these property values through the `GetEqualityComponents` method.
+
+### Enumeration
+
+An **Enumeration** is a specialized object that represents a set of predefined values, offering an alternative to primitive types or traditional enumerations. It enhances domain modeling by improving type safety and reducing ambiguity in the codebase.
+
+```csharp
+public class OrderStatus : Enumeration
+{
+    public static readonly OrderStatus Pending = new OrderStatus(1, "Pending");
+    public static readonly OrderStatus Shipped = new OrderStatus(2, "Shipped");
+    public static readonly OrderStatus Delivered = new OrderStatus(3, "Delivered");
+
+    public OrderStatus(int id, string name) : base(id, name) { }
+}
+```
+
+In this example, `OrderStatus` defines possible states for an order, such as `Pending`, `Shipped`, and `Delivered`. This helps to maintain consistency in the domain model, reducing the reliance on loosely typed values like strings or integers.
 
 ## Usage Examples
 
-### Defining a DbContext
+### Defining an Entity
 
-To define a `DbContext` in the Bonyan framework, you need to inherit from `BonyanDbContext`. This base class provides the scaffolding needed to integrate your domain entities with Entity Framework Core seamlessly. It also handles lifecycle events and hooks that you can override to add custom logic during various phases of model creation or context initialization.
-
-```csharp
-public class CustomDbContext : BonyanDbContext<CustomDbContext>
-{
-    public CustomDbContext(DbContextOptions<CustomDbContext> options) : base(options)
-    {
-    }
-
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        base.OnModelCreating(modelBuilder);
-        modelBuilder.Entity<MyEntity>().ConfigureByConvention();
-    }
-
-    public DbSet<MyEntity> MyEntities { get; set; }
-}
-```
-
-In this example, the `CustomDbContext` class manages a set of entities represented by `MyEntity`. The `ConfigureByConvention` method automatically applies default rules for entity properties, making it easier to enforce uniformity across entities.
-
-### Implementing a Repository
-
-Repositories provide an abstraction over the persistence logic, which helps keep your domain model focused on the business logic rather than data access concerns. This decouples the domain model from infrastructure concerns and provides a consistent interface for accessing data.
+To define an entity, extend the `Entity<T>` class provided by the module. The `T` type parameter represents the type of the unique identifier for the entity.
 
 ```csharp
-public class EfCustomRepository : EfCoreRepository<MyEntity, MyEntityId, CustomDbContext>, IMyEntityRepository
+public class Product : Entity<int>
 {
-    public EfCustomRepository(CustomDbContext dbContext, IServiceProvider serviceProvider) : base(dbContext, serviceProvider)
+    public string ProductName { get; private set; }
+    public decimal Price { get; private set; }
+
+    public Product(int id, string productName, decimal price) : base(id)
     {
+        ProductName = productName;
+        Price = price;
     }
 }
 ```
 
-In this example, `EfCustomRepository` is an implementation of the repository pattern that manages the persistence operations for `MyEntity`. By inheriting from `EfCoreRepository`, the repository gains access to generic persistence operations, ensuring consistency in the application's data layer while minimizing redundant code. This pattern makes it easier to replace or modify persistence logic without affecting other parts of the system.
+In this example, `Product` is a simple entity characterized by `ProductName` and `Price` properties.
 
-## SQL Provider Configuration
+### Defining an Aggregate Root
 
-The **Bonyan.AspNetCore.Persistence.EntityFrameworkCore** module supports various SQL providers. Below, we outline how to configure your application to use either **SQLite** or **SQL Server** as the data store. These configurations provide the flexibility to choose a provider that best fits the application's specific needs and deployment context.
-
-### SQLite Setup
-
-SQLite is a lightweight, self-contained SQL database engine that is often used for local development, testing, or small-scale applications. To use SQLite with your Bonyan-based application, install the following package:
-
-```bash
-dotnet add package Bonyan.AspNetCore.Persistence.EntityFrameworkCore.Sqlite
-```
-
-Then, configure your `DbContext` within the infrastructure module:
+To define an aggregate root, extend the `AggregateRoot<T>` class. This ensures that the aggregate root manages its children entities effectively, enforcing domain rules and consistency.
 
 ```csharp
-public override Task OnConfigureAsync(ModularityContext context)
+public class ShoppingCart : AggregateRoot<int>
 {
-    context.AddBonyanDbContext<CustomDbContext>(c =>
-    {
-        c.AddDefaultRepositories(true);
-    });
+    public List<CartItem> CartItems { get; private set; }
 
-    context.Services.Configure<EntityFrameworkDbContextOptions>(configuration =>
+    public ShoppingCart(int id) : base(id)
     {
-        configuration.UseSqlite("Data Source=MyDatabase.db");
-    });
+        CartItems = new List<CartItem>();
+    }
 
-    return base.OnConfigureAsync(context);
+    public void AddItem(CartItem item)
+    {
+        CartItems.Add(item);
+    }
 }
 ```
 
-In this configuration, `AddBonyanDbContext` is used to register `CustomDbContext` and set up the repositories for the context. The configuration uses SQLite as the database provider, and the connection string specifies the location of the database file.
-
-### SQL Server Setup
-
-For enterprise-level applications or where more advanced database features are required, **SQL Server** is a suitable choice. To integrate SQL Server with your Bonyan-based application, use the following package:
-
-```bash
-dotnet add package Bonyan.AspNetCore.Persistence.EntityFrameworkCore.SqlServer
-```
-
-The configuration process for SQL Server is similar to SQLite, but you will specify a SQL Server connection string to connect to your desired database instance:
-
-```csharp
-context.Services.Configure<EntityFrameworkDbContextOptions>(configuration =>
-{
-    configuration.UseSqlServer("Server=MyServer;Database=MyDatabase;User Id=myusername;Password=mypassword;");
-});
-```
-
-This configuration allows your application to interact with a SQL Server database. The connection string includes all necessary details such as server name, database name, user credentials, and other parameters required for establishing the connection.
-
-## Best Practices and Considerations
-
-- **Separation of Concerns**: Always separate domain logic from persistence concerns. Use repositories to abstract the database operations so that the domain remains focused on the core business rules.
-- **Configuration Conventions**: Leverage `ConfigureByConvention` to automatically apply common configurations to entities. This ensures consistency in how entities are mapped to the database.
-- **SQL Provider Selection**: Choose the appropriate SQL provider based on the scale and nature of your application. SQLite is often suitable for small applications or prototyping, whereas SQL Server is more appropriate for large-scale or production environments.
-- **Migration Management**: Use Entity Framework Core migration tools to manage schema changes. Proper migration management can help maintain data integrity as your application evolves.
+The `ShoppingCart` class serves as an aggregate root managing a list of `CartItem` objects, and it provides operations that ensure the integrity of the aggregate's state.
 
 ## Summary
 
-The **Bonyan.AspNetCore.Persistence.EntityFrameworkCore** module provides a streamlined way to integrate Entity Framework Core with your domain-driven .NET Core applications. By utilizing **DbContexts** and **Repositories**, developers can efficiently implement data persistence while adhering to DDD principles. The module also supports a variety of SQL providers, including **SQLite** and **SQL Server**, providing flexibility to meet different application needs. The integration of this module ensures maintainability, scalability, and clear separation of concerns in the persistence layer of your applications.
-
-Through the use of well-defined DbContexts and repository abstractions, you can keep the domain model clean and focused, allowing it to evolve independently of the underlying infrastructure. With support for common SQL providers and configuration conventions, this module is an essential tool for building robust, domain-driven .NET Core applications.
-
-## Available Packages
-- **Bonyan.EntityFrameworkCore**: The core persistence module.
-- **Bonyan.EntityFrameworkCore.Sqlite**: SQLite support for lightweight applications.
-- **Bonyan.EntityFrameworkCore.SqlServer**: SQL Server support for scalable, enterprise-grade applications.
-
+The **Bonyan.Layer.Domain** module provides fundamental constructs for incorporating Domain-Driven Design principles within .NET Core. By using entities, aggregate roots, value objects, and enumerations, developers can construct expressive and comprehensive domain models that encapsulate complex business logic. Leveraging these abstractions ensures that applications remain maintainable, scalable, and thoroughly aligned with the intricate requirements of the business domain they represent.
