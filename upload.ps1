@@ -9,7 +9,7 @@ function Publish-DotnetProject {
     $nugetApiKey = $env:NugetKey 
 
     if (-not $nugetApiKey) {
-        Write-Host "NuGet API Key not found. Please set the NugetKey environment variable. {$nugetApiKey}" -ForegroundColor Red
+        Write-Host "NuGet API Key not found. Please set the NugetKey environment variable." -ForegroundColor Red
         return
     }
 
@@ -59,16 +59,14 @@ function Publish-DotnetProject {
     Set-Location -Path $initialDirectory
 }
 
-# Main script logic
-function Main {
-    # Save the initial directory
-    $startingDirectory = Get-Location
+# Function to iterate over a directory and publish projects
+function Publish-ProjectsInDirectory {
+    param (
+        [string]$directoryPath,
+        [string]$publishType
+    )
 
-    # Run tests
-    dotnet test
-
-    # Publish each project in the Src/Framework directory
-    Set-Location -Path .\Framework\
+    Set-Location -Path $directoryPath
     $subdirectories = Get-ChildItem -Directory
 
     foreach ($subdir in $subdirectories) {
@@ -82,6 +80,31 @@ function Main {
         } else {
             Write-Host "No Dotnet project found in $($subdir.Name)." -ForegroundColor Yellow
         }
+    }
+}
+
+# Main script logic
+function Main {
+    # Save the initial directory
+    $startingDirectory = Get-Location
+
+    # Run tests
+    dotnet test
+
+    # Publish projects in the Framework directory
+    $frameworkDirectory = ".\Framework"
+    if (Test-Path $frameworkDirectory) {
+        Publish-ProjectsInDirectory -directoryPath $frameworkDirectory -publishType "Framework"
+    } else {
+        Write-Host "Framework directory not found." -ForegroundColor Yellow
+    }
+
+    # Publish projects in the Modules directory
+    $modulesDirectory = ".\Modules"
+    if (Test-Path $modulesDirectory) {
+        Publish-ProjectsInDirectory -directoryPath $modulesDirectory -publishType "Modules"
+    } else {
+        Write-Host "Modules directory not found." -ForegroundColor Yellow
     }
 
     # Return to the starting directory

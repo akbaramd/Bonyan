@@ -1,6 +1,7 @@
 ﻿using System.Linq.Expressions;
 using Bonyan.DomainDrivenDesign.Domain.Entities;
 using Bonyan.DomainDrivenDesign.Domain.Specifications;
+using SharedKernel.Model;
 
 namespace Bonyan.DomainDrivenDesign.Domain.Abstractions;
 
@@ -17,13 +18,19 @@ public interface IReadOnlyRepository<TEntity, in TKey> : IReadOnlyRepository<TEn
 // IReadOnlyRepository without specifying the key type (TKesdasdasy is assumed internally by the entity).
 public interface IReadOnlyRepository<TEntity> : IRepository where TEntity : class, IEntity
 {
-  Task<IEnumerable<TEntity>> GetAllAsync();
+  Task<TEntity?> FindByIdAsync(Guid id);
+  Task<TEntity> GetByIdAsync(Guid id);
   Task<IEnumerable<TEntity>> FindAsync(Expression<Func<TEntity, bool>> predicate);
-  Task<IEnumerable<TEntity>> FindAsync(Specification<TEntity> specification);
-  Task<TEntity?> GetSingleByPredicateAsync(Expression<Func<TEntity, bool>> predicate);
-  Task<TEntity?> GetFirstByPredicateAsync(Expression<Func<TEntity, bool>> predicate);
+  Task<TEntity?> FindOneAsync(Expression<Func<TEntity, bool>> predicate);
+  Task<TEntity> GetOneAsync(Expression<Func<TEntity, bool>> predicate);
+  Task<IEnumerable<TEntity>> FindAsync(ISpecification<TEntity> specification);
+  Task<TEntity?> FindOneAsync(ISpecification<TEntity> specification);
+  Task<TEntity> GetOneAsync(ISpecification<TEntity> specification);
   Task<int> CountAsync(Expression<Func<TEntity, bool>> predicate);
   Task<bool> ExistsAsync(Expression<Func<TEntity, bool>> predicate);
+  Task<PaginatedResult<TEntity>> PaginatedAsync(PaginatedSpecification<TEntity> paginateSpecification);
+  Task<PaginatedResult<TEntity>> PaginatedAsync(PaginatedAndSortableSpecification<TEntity> paginateSpecification);
+  Task<PaginatedResult<TEntity>> PaginatedAsync(Expression<Func<TEntity, bool>> predicate,int take , int skip);
 }
 
 // IRepository for full CRUD operations, extending IReadOnlyRepository.
@@ -37,6 +44,6 @@ public interface IRepository<TEntity> : IReadOnlyRepository<TEntity> where TEnti
 {
   Task<TEntity> AddAsync(TEntity entity);
   Task UpdateAsync(TEntity entity);
-  Task DeleteAsync(TEntity entity);
+  Task DeleteAsync(TEntity entity); 
 }
 

@@ -1,16 +1,47 @@
+using System.Linq.Expressions;
+using System.Reflection;
 using Bonyan.AspNetCore.Persistence.EntityFrameworkCore.Abstractions;
 using Bonyan.DomainDrivenDesign.Domain.Abstractions;
+using Bonyan.DomainDrivenDesign.Domain.Entities;
+using Bonyan.MultiTenant;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Metadata.Builder;
 
 namespace Bonyan.AspNetCore.Persistence.EntityFrameworkCore;
 
 public class BonyanDbContext<TDbContext> : DbContext , IBonyanDbContext<TDbContext> where TDbContext: DbContext
 {
-  public BonyanDbContext(DbContextOptions<TDbContext> options):base(options)
+  private IServiceProvider _serviceProvider;
+  public BonyanDbContext(DbContextOptions<TDbContext> options, IServiceProvider serviceProvider):base(options)
   {
-    
+    _serviceProvider = serviceProvider;
   }
   
+  
+  public ICurrentTenant CurrentTenant => _serviceProvider.GetRequiredService<ICurrentTenant>();
+  protected virtual Guid? CurrentTenantId => CurrentTenant?.Id;
+
+
+  private static readonly MethodInfo ConfigureBasePropertiesMethodInfo
+    = typeof(BonyanDbContext<TDbContext>)
+      .GetMethod(
+        nameof(ConfigureBaseProperties),
+        BindingFlags.Instance | BindingFlags.NonPublic
+      )!;
+  
+  protected override void OnModelCreating(ModelBuilder modelBuilder)
+  {
+    base.OnModelCreating(modelBuilder);
+    
+    foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+    {
+      ConfigureBasePropertiesMethodInfo
+        .MakeGenericMethod(entityType.ClrType)
+        .Invoke(this, new object[] { modelBuilder, entityType });
+    }
+  }
+
   public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
   {
     var entries = ChangeTracker.Entries()
@@ -52,5 +83,72 @@ public class BonyanDbContext<TDbContext> : DbContext , IBonyanDbContext<TDbConte
   public override int SaveChanges()
   {
     return SaveChangesAsync().GetAwaiter().GetResult();
+  }
+  
+  
+  
+  protected virtual void ConfigureBaseProperties<TEntity>(ModelBuilder modelBuilder, IMutableEntityType mutableEntityType)
+    where TEntity : class
+  {
+    if (mutableEntityType.IsOwned())
+    {
+      return;
+    }
+
+    if (!typeof(IEntity).IsAssignableFrom(typeof(TEntity)))
+    {
+      return;
+    }
+
+    modelBuilder.Entity<TEntity>().ConfigureByConvention();
+
+    ConfigureGlobalFilters<TEntity>(modelBuilder, mutableEntityType);
+  }
+  
+  protected virtual void ConfigureGlobalFilters<TEntity>(ModelBuilder modelBuilder, IMutableEntityType mutableEntityType)
+    where TEntity : class
+  {
+    if (mutableEntityType.BaseType == null && ShouldFilterEntity<TEntity>(mutableEntityType))
+    {
+      var filterExpression = CreateFilterExpression<TEntity>();
+      if (filterExpression != null)
+      {
+        modelBuilder.Entity<TEntity>().HasAbpQueryFilter(filterExpression);
+      }
+    }
+  }
+  
+  protected virtual bool ShouldFilterEntity<TEntity>(IMutableEntityType entityType) where TEntity : class
+  {
+    if (typeof(IMultiTenant).IsAssignableFrom(typeof(TEntity)))
+    {
+      return true;
+    }
+
+    if (typeof(ISoftDeleteAuditable).IsAssignableFrom(typeof(TEntity)))
+    {
+      return true;
+    }
+
+    return false;
+  }
+
+  protected virtual Expression<Func<TEntity, bool>>? CreateFilterExpression<TEntity>()
+    where TEntity : class
+  {
+    Expression<Func<TEntity, bool>>? expression = null;
+
+    if (typeof(ISoftDeleteAuditable).IsAssignableFrom(typeof(TEntity)))
+    {
+      expression = e =>  !EF.Property<bool>(e, "IsDeleted");
+    }
+
+    if (typeof(IMultiTenant).IsAssignableFrom(typeof(TEntity)))
+    {
+      Expression<Func<TEntity, bool>> multiTenantFilter = e =>   EF.Property<Guid>(e, "TenantId") == CurrentTenantId;
+      expression = expression == null ? multiTenantFilter : QueryFilterExpressionHelper.CombineExpressions(expression, multiTenantFilter);
+    }
+
+    return expression;
   }
 }

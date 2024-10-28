@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace BonyanTemplate.Infrastructure.Data;
 
@@ -9,8 +10,8 @@ public class BonyanTemplateDbContextFactory : IDesignTimeDbContextFactory<Bonyan
     {
         var optionsBuilder = new DbContextOptionsBuilder<BonyanTemplateBookDbContext>();
 
-        optionsBuilder.UseSqlite("Data Source=BonyanTemplate.db");
+        optionsBuilder.UseSqlite($"Data Source=../BonyanTemplate.Api/BonyanTemplate.db");
 
-        return new BonyanTemplateBookDbContext(optionsBuilder.Options);
+        return new BonyanTemplateBookDbContext(optionsBuilder.Options,new ServiceCollection().BuildServiceProvider());
     }
 }

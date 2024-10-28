@@ -5,6 +5,12 @@
 /// </summary>
 public abstract class Entity : IEntity
 {
+
+
+  public Entity()
+  {
+    EntityHelper.TrySetTenantId(this);
+  }
   /// <summary>
   /// Gets the array of keys that uniquely identify the entity.
   /// </summary>

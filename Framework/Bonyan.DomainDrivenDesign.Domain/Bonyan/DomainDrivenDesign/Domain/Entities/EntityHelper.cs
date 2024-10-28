@@ -3,6 +3,7 @@ using System.Reflection;
 using Bonyan.DomainDrivenDesign.Domain.Abstractions;
 using Bonyan.DomainDrivenDesign.Domain.ValueObjects;
 using Bonyan.Helpers;
+using Bonyan.MultiTenant;
 using JetBrains.Annotations;
 
 namespace Bonyan.DomainDrivenDesign.Domain.Entities;
@@ -20,7 +21,7 @@ public static class EntityHelper
 
     public static bool IsMultiTenant(Type type)
     {
-        return typeof(ITenant).IsAssignableFrom(type);
+        return typeof(IMultiTenant).IsAssignableFrom(type);
     }
 
     public static bool EntityEquals(IEntity? entity1, IEntity? entity2)
@@ -45,10 +46,10 @@ public static class EntityHelper
         }
 
         //Different tenants may have an entity with same Id.
-        if (entity1 is ITenant && entity2 is ITenant)
+        if (entity1 is IMultiTenant && entity2 is IMultiTenant)
         {
-            var tenant1Id = ((ITenant)entity1).Tenant;
-            var tenant2Id = ((ITenant)entity2).Tenant;
+            var tenant1Id = ((IMultiTenant)entity1).TenantId;
+            var tenant2Id = ((IMultiTenant)entity2).TenantId;
 
             if (tenant1Id != tenant2Id)
             {
@@ -275,6 +276,24 @@ public static class EntityHelper
                 ? new Type[] { typeof(DisableIdGenerationAttribute) }
                 : new Type[] { });
     }
+    public static void TrySetTenantId(IEntity entity)
+    {
+      if (entity is not IMultiTenant multiTenantEntity)
+      {
+        return;
+      }
 
+      var tenantId = AsyncLocalCurrentTenantAccessor.Instance.Current?.TenantId;
+      if (tenantId == multiTenantEntity.TenantId)
+      {
+        return;
+      }
+
+      ObjectHelper.TrySetProperty(
+        multiTenantEntity,
+        x => x.TenantId,
+        () => tenantId
+      );
+    }
     
 }

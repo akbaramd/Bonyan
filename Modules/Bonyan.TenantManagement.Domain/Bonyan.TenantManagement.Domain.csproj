@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <PackageId>Bonyan.TenantManagement.Domain</PackageId>
+    </PropertyGroup>
+    <Import Project="..\..\package.props" />
+    <ItemGroup>
+      <ProjectReference Include="..\..\Framework\Bonyan.DomainDrivenDesign.Domain\Bonyan.DomainDrivenDesign.Domain.csproj" />
+    </ItemGroup>
+
+</Project>

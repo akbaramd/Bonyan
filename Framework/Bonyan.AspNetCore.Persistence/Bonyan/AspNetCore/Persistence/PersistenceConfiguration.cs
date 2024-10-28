@@ -1,6 +1,4 @@
-﻿using Bonyan.AspNetCore.Infrastructure;
-using Bonyan.DomainDrivenDesign.Domain.Abstractions;
-using Bonyan.DomainDrivenDesign.Domain.Core;
+﻿
 using Castle.DynamicProxy;
 
 namespace Bonyan.AspNetCore.Persistence;
