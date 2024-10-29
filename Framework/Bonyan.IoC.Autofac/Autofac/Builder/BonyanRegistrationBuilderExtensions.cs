@@ -3,16 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using Autofac.Core;
 using Autofac.Extras.DynamicProxy;
+using Bonyan.Castle.DynamicProxy;
 using Bonyan.DependencyInjection;
 using Bonyan.IoC.Autofac;
 using Bonyan.Modularity.Abstractions;
 
-
 namespace Autofac.Builder;
 
-public static class BonyanRegistrationBuilderExtensions
+public static class AbpRegistrationBuilderExtensions
 {
-    public static IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> ConfigureBonyanConventions<TLimit, TActivatorData, TRegistrationStyle>(
+    public static IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> ConfigureAbpConventions<TLimit, TActivatorData, TRegistrationStyle>(
             this IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> registrationBuilder,
             IModuleAccessor moduleContainer,
             ServiceRegistrationActionList registrationActionList)
@@ -50,13 +50,19 @@ public static class BonyanRegistrationBuilderExtensions
             registrationAction.Invoke(serviceRegistredArgs);
         }
 
-        if (serviceRegistredArgs.Interceptors.Any())
+        if (serviceRegistredArgs.Interceptors.Any() && (serviceType.IsPublic ) )
         {
-            registrationBuilder = registrationBuilder.AddInterceptors(
-                registrationActionList,
-                serviceType,
-                serviceRegistredArgs.Interceptors
-            );
+            try
+            {
+                registrationBuilder = registrationBuilder.AddInterceptors(
+                    registrationActionList,
+                    serviceType,
+                    serviceRegistredArgs.Interceptors
+                );
+            }
+            catch (Exception e)
+            {
+            }
         }
 
         return registrationBuilder;
@@ -68,7 +74,7 @@ public static class BonyanRegistrationBuilderExtensions
             Type implementationType)
         where TActivatorData : ReflectionActivatorData
     {
-        // Enable Property Injection only for types in an assembly containing an BonyanModule and without a DisablePropertyInjection attribute on class or properties.
+        // Enable Property Injection only for types in an assembly containing an AbpModule and without a DisablePropertyInjection attribute on class or properties.
         if (moduleContainer.GetAllModules().Any(m => m.AllAssemblies.Contains(implementationType.Assembly)) &&
             implementationType.GetCustomAttributes(typeof(DisablePropertyInjectionAttribute), true).IsNullOrEmpty())
         {
@@ -100,12 +106,12 @@ public static class BonyanRegistrationBuilderExtensions
             (registrationBuilder as IRegistrationBuilder<TLimit, ConcreteReflectionActivatorData, TRegistrationStyle>)?.EnableClassInterceptors();
         }
 
-        // foreach (var interceptor in interceptors)
-        // {
-        //     registrationBuilder.InterceptedBy(
-        //         typeof(BonyanAsyncDeterminationInterceptor<>).MakeGenericType(interceptor)
-        //     );
-        // }
+        foreach (var interceptor in interceptors)
+        {
+            registrationBuilder.InterceptedBy(
+                typeof(AbpAsyncDeterminationInterceptor<>).MakeGenericType(interceptor)
+            );
+        }
 
         return registrationBuilder;
     }

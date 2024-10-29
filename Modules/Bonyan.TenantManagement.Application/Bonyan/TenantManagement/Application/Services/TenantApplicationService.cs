@@ -30,7 +30,7 @@ public class TenantApplicationService : ApplicationService, ITenantApplicationSe
     var tenant = new Tenant(createDto.Key);
     await TenantRepository.AddAsync(tenant);
     await UnitOfWork.SaveChangesAsync(cancellationToken ?? CancellationToken.None);
-
+    await UnitOfWork.CommitAsync();
     return Mapper.Map<Tenant, TenantDto>(tenant);
   }
 

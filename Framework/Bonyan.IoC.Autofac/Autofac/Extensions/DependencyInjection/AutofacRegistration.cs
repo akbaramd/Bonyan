@@ -30,7 +30,6 @@ using Autofac.Builder;
 using Bonyan.Modularity.Abstractions;
 using Microsoft;
 
-
 namespace Autofac.Extensions.DependencyInjection;
 
 /// <summary>
@@ -184,7 +183,6 @@ public static class AutofacRegistration
         var moduleContainer = services.GetSingletonInstance<IModuleAccessor>();
         var registrationActionList = services.GetRegistrationActionList();
 
-
         foreach (var descriptor in services)
         {
             if (descriptor.ImplementationType != null)
@@ -197,8 +195,7 @@ public static class AutofacRegistration
                         .RegisterGeneric(descriptor.ImplementationType)
                         .As(descriptor.ServiceType)
                         .ConfigureLifecycle(descriptor.Lifetime, lifetimeScopeTagForSingletons)
-                        .ConfigureBonyanConventions(moduleContainer,registrationActionList);
-                        
+                        .ConfigureAbpConventions(moduleContainer, registrationActionList);
                 }
                 else
                 {
@@ -206,8 +203,7 @@ public static class AutofacRegistration
                         .RegisterType(descriptor.ImplementationType)
                         .As(descriptor.ServiceType)
                         .ConfigureLifecycle(descriptor.Lifetime, lifetimeScopeTagForSingletons)
-                        .ConfigureBonyanConventions(moduleContainer,registrationActionList);;
-                        
+                        .ConfigureAbpConventions(moduleContainer, registrationActionList);
                 }
             }
             else if (descriptor.ImplementationFactory != null)
@@ -219,7 +215,7 @@ public static class AutofacRegistration
                     })
                     .ConfigureLifecycle(descriptor.Lifetime, lifetimeScopeTagForSingletons)
                     .CreateRegistration();
-                //TODO: ConfigureBonyanConventions ?
+                //TODO: ConfigureAbpConventions ?
 
                 builder.RegisterComponent(registration);
             }

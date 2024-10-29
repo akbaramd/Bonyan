@@ -24,9 +24,7 @@ public class BonyanAutofacServiceProviderFactory : IServiceProviderFactory<Conta
     public ContainerBuilder CreateBuilder(IServiceCollection services)
     {
         _services = services;
-
         _builder.Populate(services);
-
         return _builder;
     }
 

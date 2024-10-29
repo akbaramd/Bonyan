@@ -1,6 +1,6 @@
 using Bonyan.DependencyInjection;
+using Bonyan.UnitOfWork;
 using JetBrains.Annotations;
-using Volo.Abp.Uow;
 
 namespace Bonyan;
 

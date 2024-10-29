@@ -1,4 +1,4 @@
-namespace Volo.Abp.Uow;
+namespace Bonyan.UnitOfWork;
 
 public interface IDatabaseApi
 {

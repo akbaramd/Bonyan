@@ -16,6 +16,7 @@
     </ItemGroup>
     <Import Project="..\..\package.props" />
     <ItemGroup>
+        <ProjectReference Include="..\Bonyan.Castle.Core\Bonyan.Castle.Core.csproj" />
         <ProjectReference Include="..\Bonyan\Bonyan.csproj" />
     </ItemGroup>
 </Project>

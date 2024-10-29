@@ -36,7 +36,6 @@ public class TestJob : IJob
   public async Task ExecuteAsync(CancellationToken cancellationToken = default)
   {
     var res = await _service.CreateAsync(new TenantCreateDto(){Key = "test"});
-    await _unitOfWork.SaveChangesAsync();
     Console.WriteLine("Tick Tok");
   }
 }

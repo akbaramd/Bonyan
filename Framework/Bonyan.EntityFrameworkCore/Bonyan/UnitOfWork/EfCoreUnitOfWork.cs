@@ -1,15 +1,10 @@
 ﻿using System.Collections.Immutable;
 using Bonyan.EntityFrameworkCore;
-using Bonyan.Layer.Domain;
-using Bonyan.Layer.Domain.Abstractions;
 using Bonyan.Layer.Domain.Aggregates;
-using Bonyan.Layer.Domain.Entities;
 using Bonyan.Layer.Domain.Events;
-using Bonyan.UnitOfWork;
 using Microsoft.EntityFrameworkCore.Storage;
-using Volo.Abp.Uow;
 
-namespace Bonyan.Layer.Application;
+namespace Bonyan.UnitOfWork;
 
 public class EfCoreUnitOfWork : IUnitOfWork
 {
@@ -49,10 +44,11 @@ public class EfCoreUnitOfWork : IUnitOfWork
     try
     {
       _isCompleting = true;
+      await DispatchDomainEventsAsync();
       await SaveChangesAsync(cancellationToken);
-
       await CommitTransactionsAsync(cancellationToken);
       IsCompleted = true;
+      
       await OnCompletedAsync();
     }
     catch (Exception ex)
@@ -133,7 +129,7 @@ public class EfCoreUnitOfWork : IUnitOfWork
       }
     }
 
-    await DispatchDomainEventsAsync();
+    
   }
 
   public virtual IReadOnlyList<IDatabaseApi> GetAllActiveDatabaseApis()
