@@ -1,3 +1,4 @@
+using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Bonyan.Modularity.Abstractions;
@@ -37,4 +38,22 @@ public abstract class Module : IModule
     }
 
 
+    internal static void CheckBonyanModuleType(Type moduleType)
+    {
+      if (!IsBonyanModule(moduleType))
+      {
+        throw new ArgumentException("Given type is not an ABP module: " + moduleType.AssemblyQualifiedName);
+      }
+    }
+    
+    public static bool IsBonyanModule(Type type)
+    {
+      var typeInfo = type.GetTypeInfo();
+
+      return
+        typeInfo.IsClass &&
+        !typeInfo.IsAbstract &&
+        !typeInfo.IsGenericType &&
+        typeof(IModule).GetTypeInfo().IsAssignableFrom(type);
+    }
 }

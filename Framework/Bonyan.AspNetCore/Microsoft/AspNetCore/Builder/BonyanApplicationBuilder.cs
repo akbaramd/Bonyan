@@ -11,7 +11,7 @@ namespace Microsoft.AspNetCore.Builder
 
         public ILoggingBuilder Logging => _builder.Logging;
         public IServiceCollection Services => _builder.Services;
-        public ConfigureHostBuilder Host => _builder.Host;
+        public IHostBuilder Host => _builder.Host;
         public IConfigurationManager Configuration => _builder.Configuration;
         public IHostEnvironment Environment => _builder.Environment;
 

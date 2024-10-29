@@ -19,7 +19,7 @@ public class ModuleManager : IModuleManager
         LoadModuleRecursive(mainModuleType);
 
         var sortedModules = TopologicalSort(_moduleAccessor.GetAllModules().ToList());
-        UpdateModuleList(sortedModules); // Update the module list after sorting
+        UpdateModuleListAndInstantiate(sortedModules); // Updated method to include instantiation
     }
 
     private void ValidateMainModuleType(Type mainModuleType)
@@ -86,14 +86,15 @@ public class ModuleManager : IModuleManager
         return true;
     }
 
-    private void UpdateModuleList(IEnumerable<ModuleInfo> sortedModules)
+    private void UpdateModuleListAndInstantiate(IEnumerable<ModuleInfo> sortedModules)
     {
         _moduleAccessor.ClearModules(); // Clear existing modules to refresh with sorted order
         foreach (var module in sortedModules)
         {
+            module.Instance = (IModule?)Activator.CreateInstance(module.ModuleType); // Create instance and assign
             _moduleAccessor.AddModule(module); // Add each sorted module to the accessor
         }
     }
 
-    public IEnumerable<ModuleInfo> GetLoadedModules() => _moduleAccessor.GetAllModules();
+ 
 }

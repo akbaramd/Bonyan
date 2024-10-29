@@ -1,5 +1,6 @@
 using System.Linq.Expressions;
 using System.Reflection;
+using Bonyan.DependencyInjection;
 using Bonyan.EntityFrameworkCore.Abstractions;
 using Bonyan.Layer.Domain.Abstractions;
 using Bonyan.Layer.Domain.Entities;
@@ -13,15 +14,17 @@ namespace Bonyan.EntityFrameworkCore;
 
 public class BonyanDbContext<TDbContext> : DbContext , IBonyanDbContext<TDbContext> where TDbContext: DbContext
 {
-  private IServiceProvider _serviceProvider;
-  public BonyanDbContext(DbContextOptions<TDbContext> options, IServiceProvider serviceProvider):base(options)
+  
+  public IBonyanLazyServiceProvider ServiceProvider { get; set; } = default!;
+  
+  public BonyanDbContext(DbContextOptions<TDbContext> options):base(options)
   {
-    _serviceProvider = serviceProvider;
+    
   }
   
   
-  public ICurrentTenant CurrentTenant => _serviceProvider.GetRequiredService<ICurrentTenant>();
-  private BonyanMultiTenancyOptions TenancyOptions=> _serviceProvider.GetRequiredService<IOptions<BonyanMultiTenancyOptions>>().Value;
+  public ICurrentTenant CurrentTenant => ServiceProvider.GetRequiredService<ICurrentTenant>();
+  private BonyanMultiTenancyOptions TenancyOptions=> ServiceProvider.GetRequiredService<IOptions<BonyanMultiTenancyOptions>>().Value;
   protected virtual Guid? CurrentTenantId => CurrentTenant?.Id;
 
 

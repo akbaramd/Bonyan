@@ -1,11 +1,12 @@
 ﻿using Bonyan.Layer.Domain.Aggregates;
 using Bonyan.Layer.Domain.ValueObjects;
+using Bonyan.MultiTenant;
 using BonyanTemplate.Domain.DomainEvents;
 using BonyanTemplate.Domain.Enums;
 
 namespace BonyanTemplate.Domain.Entities;
 
-public class Authors : TenantAggregateRoot<AuthorId>
+public class Authors : AggregateRoot<AuthorId>,IMultiTenant
 {
   public string Title { get; set; } = string.Empty;
 
@@ -13,6 +14,8 @@ public class Authors : TenantAggregateRoot<AuthorId>
   {
     AddDomainEvent(new BookCreated());
   }
+
+  public Guid? TenantId { get; }
 }
 
 

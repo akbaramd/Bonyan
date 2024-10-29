@@ -1,4 +1,5 @@
 using Bonyan.EntityFrameworkCore;
+using Bonyan.IoC.Autofac;
 using Bonyan.TenantManagement.Domain;
 using Microsoft.EntityFrameworkCore;
 
@@ -6,8 +7,9 @@ namespace Bonyan.TenantManagement.EntityFrameworkCore;
 
 public class BonyanTenantDbContext : BonyanDbContext<BonyanTenantDbContext>,IBonyanTenantDbContext
 {
-  public BonyanTenantDbContext(DbContextOptions<BonyanTenantDbContext> options, IServiceProvider serviceProvider) : base(options, serviceProvider)
+  public BonyanTenantDbContext(DbContextOptions<BonyanTenantDbContext> options) : base(options)
   {
+    Console.Write(ServiceProvider);
   }
   protected override void OnModelCreating(ModelBuilder modelBuilder)
   {

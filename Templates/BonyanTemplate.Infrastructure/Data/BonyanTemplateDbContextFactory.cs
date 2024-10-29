@@ -12,6 +12,6 @@ public class BonyanTemplateDbContextFactory : IDesignTimeDbContextFactory<Bonyan
 
         optionsBuilder.UseSqlite($"Data Source=../BonyanTemplate.Api/BonyanTemplate.db");
 
-        return new BonyanTemplateBookDbContext(optionsBuilder.Options,new ServiceCollection().BuildServiceProvider());
+        return new BonyanTemplateBookDbContext(optionsBuilder.Options);
     }
 }

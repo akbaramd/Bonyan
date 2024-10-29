@@ -8,14 +8,14 @@ namespace Bonyan.Layer.Domain
     where TEntity : class, IEntity
     where TDbContext : BonyanDbContext<TDbContext>
   {
-    public EfCoreRepository(TDbContext dbContext, IServiceProvider serviceProvider)
-      : base(dbContext, serviceProvider)
+    public EfCoreRepository(TDbContext dbContext)
+      : base(dbContext)
     {
     }
 
     public async Task<TEntity> AddAsync(TEntity entity)
     {
-      EntityHelper.TrySetTenantId(entity, _currentTenant.Id);
+      EntityHelper.TrySetTenantId(entity, CurrentTenant?.Id);
       await _dbSet.AddAsync(entity);
       await _dbContext.SaveChangesAsync();
       return entity;
@@ -23,14 +23,14 @@ namespace Bonyan.Layer.Domain
 
     public async Task UpdateAsync(TEntity entity)
     {
-      EntityHelper.TrySetTenantId(entity, _currentTenant.Id);
+      EntityHelper.TrySetTenantId(entity, CurrentTenant?.Id);
       _dbSet.Update(entity);
       await _dbContext.SaveChangesAsync();
     }
 
     public async Task DeleteAsync(TEntity entity)
     {
-      EntityHelper.TrySetTenantId(entity, _currentTenant.Id);
+      EntityHelper.TrySetTenantId(entity, CurrentTenant?.Id);
       _dbSet.Remove(entity);
       await _dbContext.SaveChangesAsync();
     }
@@ -42,8 +42,8 @@ namespace Bonyan.Layer.Domain
     where TDbContext : BonyanDbContext<TDbContext>
     where TKey : notnull
   {
-    public EfCoreRepository(TDbContext dbContext, IServiceProvider serviceProvider)
-      : base(dbContext, serviceProvider)
+    public EfCoreRepository(TDbContext dbContext)
+      : base(dbContext)
     {
     }
 
@@ -58,7 +58,7 @@ namespace Bonyan.Layer.Domain
 
     public async Task<TEntity> AddAsync(TEntity entity)
     {
-      EntityHelper.TrySetTenantId(entity, _currentTenant.Id);
+      EntityHelper.TrySetTenantId(entity, CurrentTenant?.Id);
 
       await _dbSet.AddAsync(entity);
       await _dbContext.SaveChangesAsync();
@@ -67,14 +67,14 @@ namespace Bonyan.Layer.Domain
 
     public async Task UpdateAsync(TEntity entity)
     {
-      EntityHelper.TrySetTenantId(entity, _currentTenant.Id);
+      EntityHelper.TrySetTenantId(entity, CurrentTenant?.Id);
       _dbSet.Update(entity);
       await _dbContext.SaveChangesAsync();
     }
 
     public async Task DeleteAsync(TEntity entity)
     {
-      EntityHelper.TrySetTenantId(entity, _currentTenant.Id);
+      EntityHelper.TrySetTenantId(entity, CurrentTenant?.Id);
       _dbSet.Remove(entity);
       await _dbContext.SaveChangesAsync();
     }

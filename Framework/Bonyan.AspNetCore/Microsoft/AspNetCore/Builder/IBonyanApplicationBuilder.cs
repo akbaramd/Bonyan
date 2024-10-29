@@ -13,7 +13,7 @@ public interface IBonyanApplicationBuilder
 
  IServiceCollection Services { get; }
 
- ConfigureHostBuilder Host { get; }
+ IHostBuilder Host { get; }
 
  WebApplication Build();
 }

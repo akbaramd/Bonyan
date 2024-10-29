@@ -2,4 +2,5 @@
 
 public interface IModularityApplication : IModuleConfigurator,IModuleInitializer
 {
+  public IServiceProvider ServiceProvider { get; set; }
 }

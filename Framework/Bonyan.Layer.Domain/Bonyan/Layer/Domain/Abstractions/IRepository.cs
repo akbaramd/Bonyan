@@ -1,13 +1,17 @@
 ﻿using System.Linq.Expressions;
+using Bonyan.DependencyInjection;
 using Bonyan.Layer.Domain.Entities;
 using Bonyan.Layer.Domain.Model;
 using Bonyan.Layer.Domain.Specifications;
+using Bonyan.MultiTenant;
 
 namespace Bonyan.Layer.Domain.Abstractions;
 
 public interface IRepository
 {
   bool? IsChangeTrackingEnabled { get; }
+  public ICurrentTenant? CurrentTenant { get;  }
+
 }
 public interface IReadOnlyRepository<TEntity, in TKey> : IReadOnlyRepository<TEntity> where TEntity : class, IEntity<TKey> where TKey : notnull
 {

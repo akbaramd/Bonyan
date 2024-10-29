@@ -9,7 +9,7 @@ namespace BonyanTemplate.Infrastructure.Data;
 public class BonyanTemplateBookDbContext : BonyanDbContext<BonyanTemplateBookDbContext> , IBonyanTenantDbContext
 {
 
-  public BonyanTemplateBookDbContext(DbContextOptions<BonyanTemplateBookDbContext> options,IServiceProvider serviceProvider):base(options,serviceProvider)
+  public BonyanTemplateBookDbContext(DbContextOptions<BonyanTemplateBookDbContext> options):base(options)
   {
     
   }

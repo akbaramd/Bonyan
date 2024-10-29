@@ -1,5 +1,4 @@
-﻿
-using Bonyan.Modularity;
+﻿using Bonyan.Modularity;
 using Bonyan.Modularity.Abstractions;
 using Figgle;
 
@@ -18,9 +17,8 @@ public class BonyanApplication(WebApplication application, BonyanServiceInfo ser
     var modularApp = new WebModularityApplication<TModule>(applicationBuilder.Services);
     applicationBuilder.Services.AddSingleton<IModularityApplication>(modularApp);
     applicationBuilder.Services.AddSingleton<IWebModularityApplication>(modularApp);
-    
-    var builder = new BonyanApplicationBuilder(modularApp,applicationBuilder);
+    var builder = new BonyanApplicationBuilder(modularApp, applicationBuilder);
+    builder.Host.UseAutofac();
     return builder;
   }
-
 }

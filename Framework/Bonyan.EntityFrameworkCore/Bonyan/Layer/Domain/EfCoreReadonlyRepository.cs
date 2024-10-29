@@ -1,5 +1,7 @@
 using System.Linq.Dynamic.Core;
 using System.Linq.Expressions;
+using Bonyan.DependencyInjection;
+using Bonyan.IoC.Autofac;
 using Bonyan.Layer.Domain.Entities;
 using Bonyan.Layer.Domain.Model;
 using Bonyan.Layer.Domain.Specifications;
@@ -9,19 +11,22 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Bonyan.Layer.Domain
 {
-    public class EfCoreReadonlyRepository<TEntity, TDbContext> : IReadonlyEfCoreRepository<TEntity>
+    public  class EfCoreReadonlyRepository<TEntity, TDbContext> : IReadonlyEfCoreRepository<TEntity>
         where TEntity : class, IEntity
         where TDbContext : DbContext
     {
         protected readonly TDbContext _dbContext;
-        protected readonly DbSet<TEntity> _dbSet;
-        protected readonly ICurrentTenant _currentTenant;
 
-        public EfCoreReadonlyRepository(TDbContext dbContext, IServiceProvider serviceProvider)
+        protected readonly DbSet<TEntity> _dbSet;
+        
+        public IBonyanLazyServiceProvider LazyServiceProvider { get; set; } = default!;
+        
+        
+        public EfCoreReadonlyRepository(TDbContext dbContext)
         {
-            _currentTenant = serviceProvider.GetRequiredService<ICurrentTenant>();
             _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
             _dbSet = _dbContext.Set<TEntity>();
+
         }
 
         public IQueryable<TEntity> GetQuery()
@@ -35,7 +40,7 @@ namespace Bonyan.Layer.Domain
 
         protected bool IsMultiTenantEntity()
         {
-          return typeof(IMultiTenant).IsAssignableFrom(typeof(TEntity)) && _currentTenant.IsAvailable && _currentTenant.Id.HasValue;
+          return CurrentTenant != null && typeof(IMultiTenant).IsAssignableFrom(typeof(TEntity)) && CurrentTenant.IsAvailable && CurrentTenant.Id.HasValue;
         }
 
 
@@ -162,6 +167,7 @@ namespace Bonyan.Layer.Domain
         }
 
         public bool? IsChangeTrackingEnabled { get; }
+        public ICurrentTenant? CurrentTenant => LazyServiceProvider.LazyGetService<ICurrentTenant>();
     }
     
     public class EfCoreReadonlyRepository<TEntity, TKey, TDbContext> : EfCoreReadonlyRepository<TEntity, TDbContext>, IReadonlyEfCoreRepository<TEntity, TKey>
@@ -169,8 +175,8 @@ namespace Bonyan.Layer.Domain
         where TDbContext : DbContext
         where TKey : notnull
     {
-        public EfCoreReadonlyRepository(TDbContext dbContext, IServiceProvider serviceProvider) 
-            : base(dbContext, serviceProvider) { }
+        public EfCoreReadonlyRepository(TDbContext dbContext) 
+            : base(dbContext) { }
 
         public async Task<TEntity?> GetByIdAsync(TKey id)
         {

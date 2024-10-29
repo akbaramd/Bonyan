@@ -26,8 +26,8 @@ public class BonyanAspNetCoreModule : WebModule
 
     public override Task OnPreApplicationAsync(ApplicationContext context)
     {
-        var exceptionHandlingOptions = context.GetService<IOptions<ExceptionHandlingOptions>>().Value;
-        if (exceptionHandlingOptions.ApiExceptionMiddlewareEnabled)
+        var exceptionHandlingOptions = context.GetService<IOptions<ExceptionHandlingOptions>>()?.Value;
+        if (exceptionHandlingOptions is { ApiExceptionMiddlewareEnabled: true })
         {
             context.Application.UseMiddleware<ExceptionHandlingMiddleware>();
         }

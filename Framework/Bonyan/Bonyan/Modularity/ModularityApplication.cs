@@ -1,4 +1,6 @@
+using Bonyan.DependencyInjection;
 using Bonyan.Modularity.Abstractions;
+using Microsoft;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -18,19 +20,25 @@ public class ModularityApplication<TModule> : IModularityApplication where TModu
         
         // Load and arrange modules
         _moduleManager.LoadModules(typeof(TModule));
-
+        _serviceCollection.TryAddObjectAccessor<IServiceProvider>();
         // Register core services
         _serviceCollection.AddSingleton(_moduleAccessor);
         _serviceCollection.AddSingleton(_moduleManager);
         _serviceCollection.AddSingleton<IModuleLoader>(_moduleManager);
         _serviceCollection.AddSingleton<IModuleConfigurator>(this);
         _serviceCollection.AddSingleton<IModuleInitializer>(this);
+
+        serviceCollection.AddTransient<ICachedServiceProviderBase, BonyanLazyServiceProvider>();
+        serviceCollection.AddTransient<IBonyanLazyServiceProvider, BonyanLazyServiceProvider>();
         
         // Configure services for modules
         ConfigureModulesAsync().GetAwaiter().GetResult();
+       
+        ServiceProvider = _serviceCollection.BuildServiceProvider();
+        
     }
 
-    public IEnumerable<ModuleInfo> Modules => _moduleManager.GetLoadedModules();
+    public IEnumerable<ModuleInfo> Modules => _moduleAccessor.GetAllModules();
 
     public async Task ConfigureModulesAsync()
     {
@@ -100,4 +108,6 @@ public class ModularityApplication<TModule> : IModularityApplication where TModu
             }
         }
     }
+
+    public IServiceProvider ServiceProvider { get; set; }
 }
