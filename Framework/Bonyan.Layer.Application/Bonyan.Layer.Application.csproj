@@ -2,6 +2,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Bonyan.AutoMapper\Bonyan.AutoMapper.csproj" />
     <ProjectReference Include="..\Bonyan.Layer.Domain\Bonyan.Layer.Domain.csproj" />
+    <ProjectReference Include="..\Bonyan.UnitOfWork\Bonyan.UnitOfWork.csproj" />
   </ItemGroup>
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>

@@ -11,7 +11,7 @@ public class BonyanTemplateBookDbContext : BonyanDbContext<BonyanTemplateBookDbC
 
   public BonyanTemplateBookDbContext(DbContextOptions<BonyanTemplateBookDbContext> options):base(options)
   {
-    
+
   }
 
   protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -20,6 +20,8 @@ public class BonyanTemplateBookDbContext : BonyanDbContext<BonyanTemplateBookDbC
     modelBuilder.Entity<Books>().ConfigureByConvention();
     modelBuilder.Entity<Authors>().ConfigureByConvention();
     modelBuilder.ConfigureTenantManagementByConvention();
+    
+   
   }
 
   public DbSet<Books> Books { get; set; }

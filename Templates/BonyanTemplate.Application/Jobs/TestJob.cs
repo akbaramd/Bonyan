@@ -1,7 +1,10 @@
 ﻿using Bonyan.AspNetCore.Job;
 using Bonyan.Layer.Domain.Abstractions;
 using Bonyan.MultiTenant;
+using Bonyan.TenantManagement.Application.Dto;
+using Bonyan.TenantManagement.Application.Services;
 using Bonyan.TenantManagement.Domain;
+using Bonyan.UnitOfWork;
 using BonyanTemplate.Domain.Entities;
 using BonyanTemplate.Domain.Repositories;
 
@@ -10,13 +13,15 @@ namespace BonyanTemplate.Application.Jobs;
 public class TestJob : IJob
 {
   private ITenantRepository _tenantRepository;
-  private IRepository<Books> _repository;
+  private ITenantApplicationService _service;
   private ICurrentTenant _currentTenantAccessor;
-  public TestJob(ITenantRepository tenantRepository, ICurrentTenant currentTenantAccessor, IRepository<Books> repository)
+  private IUnitOfWork _unitOfWork;
+  public TestJob(ITenantRepository tenantRepository, ICurrentTenant currentTenantAccessor, ITenantApplicationService repository, IUnitOfWork unitOfWork)
   {
     _tenantRepository = tenantRepository;
     _currentTenantAccessor = currentTenantAccessor;
-    _repository = repository;
+    _service = repository;
+    _unitOfWork = unitOfWork;
   }
   // private IRepository<Books,Guid> _repository;
   // private IRepository<Books> _2repository;
@@ -30,8 +35,8 @@ public class TestJob : IJob
 
   public async Task ExecuteAsync(CancellationToken cancellationToken = default)
   {
-    _currentTenantAccessor.Change(id:Guid.Parse("40C84038-6B5B-492C-B257-774B2BCB2FA1"));
-    var res = await _repository.FindAsync(x=>true);
+    var res = await _service.CreateAsync(new TenantCreateDto(){Key = "test"});
+    await _unitOfWork.SaveChangesAsync();
     Console.WriteLine("Tick Tok");
   }
 }

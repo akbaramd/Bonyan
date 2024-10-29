@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Bonyan.EntityFrameworkCore.Abstractions;
 
-public interface IBonyanDbContext<TDbContext> : IDisposable where TDbContext: DbContext
+public interface IBonyanDbContext<TDbContext> : IEfCoreDbContext where TDbContext: DbContext
 {
   
 }

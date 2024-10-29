@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BonyanTemplate.Infrastructure.Migrations
 {
     [DbContext(typeof(BonyanTemplateBookDbContext))]
-    [Migration("20241028102603_Init2")]
-    partial class Init2
+    [Migration("20241029135438_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -20,7 +20,7 @@ namespace BonyanTemplate.Infrastructure.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
 
-            modelBuilder.Entity("Bonyan.TenantManagement.Domain.Bonyan.TenantManagement.Domain.Tenant", b =>
+            modelBuilder.Entity("Bonyan.TenantManagement.Domain.Tenant", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("TEXT")
@@ -48,11 +48,10 @@ namespace BonyanTemplate.Infrastructure.Migrations
                         .HasColumnType("TEXT")
                         .HasColumnName("ModifiedDate");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
                     b.HasKey("Id");
+
+                    b.HasIndex("Key")
+                        .IsUnique();
 
                     b.ToTable("Tenants");
                 });

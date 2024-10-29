@@ -16,23 +16,21 @@ namespace Bonyan.Layer.Domain
     public async Task<TEntity> AddAsync(TEntity entity)
     {
       EntityHelper.TrySetTenantId(entity, CurrentTenant?.Id);
-      await _dbSet.AddAsync(entity);
-      await _dbContext.SaveChangesAsync();
+      await (await GetDbContextAsync()).Set<TEntity>().AddAsync(entity);
       return entity;
     }
 
     public async Task UpdateAsync(TEntity entity)
     {
       EntityHelper.TrySetTenantId(entity, CurrentTenant?.Id);
-      _dbSet.Update(entity);
-      await _dbContext.SaveChangesAsync();
+       (await GetDbContextAsync()).Set<TEntity>().Update(entity);
+    
     }
 
     public async Task DeleteAsync(TEntity entity)
     {
       EntityHelper.TrySetTenantId(entity, CurrentTenant?.Id);
-      _dbSet.Remove(entity);
-      await _dbContext.SaveChangesAsync();
+      (await GetDbContextAsync()).Set<TEntity>().Remove(entity);
     }
   }
 
@@ -52,31 +50,28 @@ namespace Bonyan.Layer.Domain
       var entity = await GetByIdAsync(id);
       if (entity == null) throw new KeyNotFoundException("Entity not found for deletion.");
 
-      _dbSet.Remove(entity);
-      await _dbContext.SaveChangesAsync();
+      (await GetDbContextAsync()).Set<TEntity>().Remove(entity);
+    
     }
 
     public async Task<TEntity> AddAsync(TEntity entity)
     {
       EntityHelper.TrySetTenantId(entity, CurrentTenant?.Id);
 
-      await _dbSet.AddAsync(entity);
-      await _dbContext.SaveChangesAsync();
+      await (await GetDbContextAsync()).Set<TEntity>().AddAsync(entity);
       return entity;
     }
 
     public async Task UpdateAsync(TEntity entity)
     {
       EntityHelper.TrySetTenantId(entity, CurrentTenant?.Id);
-      _dbSet.Update(entity);
-      await _dbContext.SaveChangesAsync();
+      (await GetDbContextAsync()).Set<TEntity>().Update(entity);
     }
 
     public async Task DeleteAsync(TEntity entity)
     {
       EntityHelper.TrySetTenantId(entity, CurrentTenant?.Id);
-      _dbSet.Remove(entity);
-      await _dbContext.SaveChangesAsync();
+      (await GetDbContextAsync()).Set<TEntity>().Remove(entity);
     }
   }
 }

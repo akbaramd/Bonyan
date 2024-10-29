@@ -59,6 +59,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.IoC.Autofac", "Frame
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.TenantManagement.Application", "Modules\Bonyan.TenantManagement.Application\Bonyan.TenantManagement.Application.csproj", "{4D86AACB-E786-4A64-8BC8-E199DEC3B5C5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.UnitOfWork", "Framework\Bonyan.UnitOfWork\Bonyan.UnitOfWork.csproj", "{BB80CF95-26CA-4F2C-9C16-CE4E799A32F6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -157,6 +159,10 @@ Global
 		{4D86AACB-E786-4A64-8BC8-E199DEC3B5C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4D86AACB-E786-4A64-8BC8-E199DEC3B5C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4D86AACB-E786-4A64-8BC8-E199DEC3B5C5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BB80CF95-26CA-4F2C-9C16-CE4E799A32F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB80CF95-26CA-4F2C-9C16-CE4E799A32F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BB80CF95-26CA-4F2C-9C16-CE4E799A32F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BB80CF95-26CA-4F2C-9C16-CE4E799A32F6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -186,6 +192,7 @@ Global
 		{593EDDD0-08C2-454C-88D5-A734EFA46B46} = {73E98A46-A1E6-49D9-B432-F9121B8365D3}
 		{01496085-9C09-4605-9238-57D69D2C9EDC} = {F865B8FC-9BE7-4251-B8D7-519F85EF20B2}
 		{4D86AACB-E786-4A64-8BC8-E199DEC3B5C5} = {73E98A46-A1E6-49D9-B432-F9121B8365D3}
+		{BB80CF95-26CA-4F2C-9C16-CE4E799A32F6} = {F865B8FC-9BE7-4251-B8D7-519F85EF20B2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CACE9943-7714-471F-BCCD-CC6CA1DA43C5}

@@ -15,7 +15,7 @@ public class Authors : AggregateRoot<AuthorId>,IMultiTenant
     AddDomainEvent(new BookCreated());
   }
 
-  public Guid? TenantId { get; }
+  public Guid? TenantId { get; set; }
 }
 
 

@@ -1,6 +1,8 @@
 using System.Linq.Dynamic.Core;
 using System.Linq.Expressions;
 using Bonyan.DependencyInjection;
+using Bonyan.EntityFrameworkCore;
+using Bonyan.EntityFrameworkCore.Abstractions;
 using Bonyan.IoC.Autofac;
 using Bonyan.Layer.Domain.Entities;
 using Bonyan.Layer.Domain.Model;
@@ -13,29 +15,15 @@ namespace Bonyan.Layer.Domain
 {
     public  class EfCoreReadonlyRepository<TEntity, TDbContext> : IReadonlyEfCoreRepository<TEntity>
         where TEntity : class, IEntity
-        where TDbContext : DbContext
+        where TDbContext : DbContext, IBonyanDbContext<TDbContext>
     {
-        protected readonly TDbContext _dbContext;
 
-        protected readonly DbSet<TEntity> _dbSet;
-        
         public IBonyanLazyServiceProvider LazyServiceProvider { get; set; } = default!;
-        
+        public IDbContextProvider<TDbContext> DbContextProvider { get; set; } = default!;
         
         public EfCoreReadonlyRepository(TDbContext dbContext)
         {
-            _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
-            _dbSet = _dbContext.Set<TEntity>();
 
-        }
-
-        public IQueryable<TEntity> GetQuery()
-        {
-            var query = _dbContext.Set<TEntity>().AsQueryable();
-
-          
-
-            return query;
         }
 
         protected bool IsMultiTenantEntity()
@@ -47,29 +35,34 @@ namespace Bonyan.Layer.Domain
         // Retrieve all entities of type T
         public async Task<IEnumerable<TEntity>> GetAllAsync()
         {
-            return await GetQuery().ToListAsync();
+            return await (await GetDbContextAsync()).Set<TEntity>().ToListAsync();
+        }
+
+        public async Task<TDbContext> GetDbContextAsync()
+        {
+          return await DbContextProvider.GetDbContextAsync();
         }
 
         // Find entities matching a specific predicate (filter)
         public async Task<IEnumerable<TEntity>> FindAsync(Expression<Func<TEntity, bool>> predicate)
         {
-            return await GetQuery().Where(predicate).ToListAsync();
+            return await (await GetDbContextAsync()).Set<TEntity>().Where(predicate).ToListAsync();
         }
 
         // Find the first entity that matches a specific predicate (filter)
         public async Task<TEntity?> FindOneAsync(Expression<Func<TEntity, bool>> predicate)
         {
-            return await GetQuery().FirstOrDefaultAsync(predicate);
+            return await (await GetDbContextAsync()).Set<TEntity>().FirstOrDefaultAsync(predicate);
         }
 
         public async Task<int> CountAsync(Expression<Func<TEntity, bool>> predicate)
         {
-            return await GetQuery().Where(predicate).CountAsync();
+            return await (await GetDbContextAsync()).Set<TEntity>().Where(predicate).CountAsync();
         }
 
         public async Task<bool> ExistsAsync(Expression<Func<TEntity, bool>> predicate)
         {
-            return await GetQuery().Where(predicate).AnyAsync();
+            return await (await GetDbContextAsync()).Set<TEntity>().Where(predicate).AnyAsync();
         }
 
         // Find entities based on a specification
@@ -77,12 +70,12 @@ namespace Bonyan.Layer.Domain
         {
             if (specification is PaginatedSpecification<TEntity> s)
             {
-                var query = ApplyPaginatedSpecification(GetQuery(), s);
+                var query = ApplyPaginatedSpecification((await GetDbContextAsync()).Set<TEntity>(), s);
                 return await query.ToListAsync();
             }
             else
             {
-                var query = ApplySpecification(GetQuery(), specification);
+                var query = ApplySpecification((await GetDbContextAsync()).Set<TEntity>(), specification);
                 return await query.ToListAsync();
             }
         }
@@ -90,7 +83,7 @@ namespace Bonyan.Layer.Domain
         // Find the first entity that matches a specification
         public async Task<TEntity?> FindOneAsync(ISpecification<TEntity> specification)
         {
-            var query = ApplySpecification(GetQuery(), specification);
+            var query = ApplySpecification((await GetDbContextAsync()).Set<TEntity>(), specification);
             return await query.FirstOrDefaultAsync();
         }
 
@@ -111,7 +104,7 @@ namespace Bonyan.Layer.Domain
         // Retrieve paginated results based on a PaginatedSpecification
         public async Task<PaginatedResult<TEntity>> PaginatedAsync(PaginatedSpecification<TEntity> paginateSpecification)
         {
-            var query = ApplySpecification(GetQuery(), paginateSpecification);
+            var query = ApplySpecification((await GetDbContextAsync()).Set<TEntity>(), paginateSpecification);
 
             var totalCount = await query.CountAsync();
             var paginatedResults = await query.Skip(paginateSpecification.Skip)
@@ -123,7 +116,7 @@ namespace Bonyan.Layer.Domain
   
         public async Task<PaginatedResult<TEntity>> PaginatedAsync(PaginatedAndSortableSpecification<TEntity> paginateSpecification)
         {
-            var query = ApplySpecification(GetQuery(), paginateSpecification);
+            var query = ApplySpecification((await GetDbContextAsync()).Set<TEntity>(), paginateSpecification);
 
             var totalCount = await query.CountAsync();
 
@@ -142,7 +135,7 @@ namespace Bonyan.Layer.Domain
 
         public async Task<PaginatedResult<TEntity>> PaginatedAsync(Expression<Func<TEntity, bool>> predicate, int take, int skip)
         {
-            var query = GetQuery().Where(predicate);
+            var query = (await GetDbContextAsync()).Set<TEntity>().Where(predicate);
             var totalCount = await query.CountAsync();
 
             var results = await query.Skip(skip)
@@ -172,7 +165,7 @@ namespace Bonyan.Layer.Domain
     
     public class EfCoreReadonlyRepository<TEntity, TKey, TDbContext> : EfCoreReadonlyRepository<TEntity, TDbContext>, IReadonlyEfCoreRepository<TEntity, TKey>
         where TEntity : class, IEntity<TKey>
-        where TDbContext : DbContext
+        where TDbContext : DbContext, IBonyanDbContext<TDbContext>
         where TKey : notnull
     {
         public EfCoreReadonlyRepository(TDbContext dbContext) 
@@ -180,20 +173,20 @@ namespace Bonyan.Layer.Domain
 
         public async Task<TEntity?> GetByIdAsync(TKey id)
         {
-            return await GetQuery().FirstOrDefaultAsync(e => e.Id!.Equals(id));
+            return await (await GetDbContextAsync()).Set<TEntity>().FirstOrDefaultAsync(e => e.Id!.Equals(id));
         }
         // Retrieve entity by ID or throw an exception if not found
         // Find entity by its unique identifier
         public async Task<TEntity?> FindByIdAsync(TKey id)
         {
-          return await GetQuery().FirstOrDefaultAsync(e => e.Id.Equals(id));
+          return await (await GetDbContextAsync()).Set<TEntity>().FirstOrDefaultAsync(e => e.Id.Equals(id));
         }
 
 
 
         public async Task<IEnumerable<TEntity>> GetByPredicateAsync(Expression<Func<TEntity, bool>> predicate)
         {
-            return await GetQuery().Where(predicate).ToListAsync();
+            return await (await GetDbContextAsync()).Set<TEntity>().Where(predicate).ToListAsync();
         }
     }
 }

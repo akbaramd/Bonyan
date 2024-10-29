@@ -15,7 +15,7 @@ namespace Bonyan.EntityFrameworkCore;
 public class BonyanDbContext<TDbContext> : DbContext , IBonyanDbContext<TDbContext> where TDbContext: DbContext
 {
   
-  public IBonyanLazyServiceProvider ServiceProvider { get; set; } = default!;
+  public IBonyanLazyServiceProvider? ServiceProvider { get; set; } = default!;
   
   public BonyanDbContext(DbContextOptions<TDbContext> options):base(options)
   {
@@ -23,8 +23,8 @@ public class BonyanDbContext<TDbContext> : DbContext , IBonyanDbContext<TDbConte
   }
   
   
-  public ICurrentTenant CurrentTenant => ServiceProvider.GetRequiredService<ICurrentTenant>();
-  private BonyanMultiTenancyOptions TenancyOptions=> ServiceProvider.GetRequiredService<IOptions<BonyanMultiTenancyOptions>>().Value;
+  public ICurrentTenant? CurrentTenant => ServiceProvider?.GetService<ICurrentTenant>();
+  private IOptions<BonyanMultiTenancyOptions>? TenancyOptions => ServiceProvider?.GetService<IOptions<BonyanMultiTenancyOptions>>();
   protected virtual Guid? CurrentTenantId => CurrentTenant?.Id;
 
 
@@ -85,12 +85,11 @@ public class BonyanDbContext<TDbContext> : DbContext , IBonyanDbContext<TDbConte
     return await base.SaveChangesAsync(cancellationToken);
   }
 
-  public override int SaveChanges()
+  public Task<int> SaveChangesOnDbContextAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
   {
-    return SaveChangesAsync().GetAwaiter().GetResult();
+    return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
   }
-  
-  
+
   
   protected virtual void ConfigureBaseProperties<TEntity>(ModelBuilder modelBuilder, IMutableEntityType mutableEntityType)
     where TEntity : class
@@ -147,8 +146,8 @@ public class BonyanDbContext<TDbContext> : DbContext , IBonyanDbContext<TDbConte
     {
       expression = e =>  !EF.Property<bool>(e, "IsDeleted");
     }
-
-    if (TenancyOptions.IsEnabled && typeof(IMultiTenant).IsAssignableFrom(typeof(TEntity)))
+    
+    if (TenancyOptions != null && TenancyOptions is { Value.IsEnabled: true } && typeof(IMultiTenant).IsAssignableFrom(typeof(TEntity)))
     {
       Expression<Func<TEntity, bool>> multiTenantFilter = e =>     EF.Property<Guid>(e, "TenantId") == CurrentTenantId;
       expression = expression == null ? multiTenantFilter : QueryFilterExpressionHelper.CombineExpressions(expression, multiTenantFilter);

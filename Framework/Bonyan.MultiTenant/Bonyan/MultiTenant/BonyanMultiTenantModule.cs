@@ -6,7 +6,7 @@ using Module = Bonyan.Modularity.Abstractions.Module;
 
 namespace Bonyan.MultiTenant;
 
-[DependOn(typeof(BonyanUserModule))]
+[DependOn(typeof(BonyanSecurityModule))]
 public class BonyanMultiTenantModule : Module
 {
   public override Task OnConfigureAsync(ServiceConfigurationContext context)

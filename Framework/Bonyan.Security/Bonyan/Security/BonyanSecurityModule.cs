@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Bonyan.Security;
 
-public class BonyanUserModule : Module
+public class BonyanSecurityModule : Module
 {
   public override Task OnConfigureAsync(ServiceConfigurationContext context)
   {
