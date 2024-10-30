@@ -1,6 +1,6 @@
 ﻿using Bonyan.Modularity;
 using Bonyan.Modularity.Abstractions;
-using Figgle;
+using Microsoft.Hosting;
 
 namespace Microsoft.AspNetCore.Builder;
 

@@ -3,7 +3,6 @@ using Bonyan.DependencyInjection;
 using Bonyan.MultiTenant;
 using Bonyan.UnitOfWork;
 using Bonyan.User;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Bonyan.Layer.Application.Services;
 
@@ -13,5 +12,6 @@ public class ApplicationService : IApplicationService
   public ICurrentUser CurrentUser => ServiceProvider.LazyGetRequiredService<ICurrentUser>();
   public ICurrentTenant CurrentTenant => ServiceProvider.LazyGetRequiredService<ICurrentTenant>();
   public IMapper Mapper => ServiceProvider.LazyGetRequiredService<IMapper>();
-  public IUnitOfWork UnitOfWork => ServiceProvider.LazyGetRequiredService<IUnitOfWork>();
+  protected IUnitOfWorkManager UnitOfWorkManager => ServiceProvider.LazyGetRequiredService<IUnitOfWorkManager>();
+  protected IUnitOfWork? CurrentUnitOfWork => UnitOfWorkManager?.Current;
 }

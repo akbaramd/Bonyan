@@ -1,12 +1,9 @@
 ﻿using Bonyan.AspNetCore.Job;
-using Bonyan.Layer.Domain.Abstractions;
 using Bonyan.MultiTenant;
 using Bonyan.TenantManagement.Application.Dto;
 using Bonyan.TenantManagement.Application.Services;
 using Bonyan.TenantManagement.Domain;
 using Bonyan.UnitOfWork;
-using BonyanTemplate.Domain.Entities;
-using BonyanTemplate.Domain.Repositories;
 
 namespace BonyanTemplate.Application.Jobs;
 
@@ -35,7 +32,7 @@ public class TestJob : IJob
 
   public async Task ExecuteAsync(CancellationToken cancellationToken = default)
   {
-    var res = await _service.CreateAsync(new TenantCreateDto(){Key = "test"});
+    // var res = await _service.CreateAsync(new TenantCreateDto(){Key = "test"});
     Console.WriteLine("Tick Tok");
   }
 }

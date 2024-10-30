@@ -2,12 +2,9 @@ using Bonyan.AutoMapper;
 using Bonyan.Modularity;
 using Bonyan.Modularity.Attributes;
 using Bonyan.TenantManagement.Application;
-using Bonyan.TenantManagement.Application.Services;
-using Bonyan.TenantManagement.Domain;
 using BonyanTemplate.Application.Dtos;
 using BonyanTemplate.Application.Jobs;
 using BonyanTemplate.Domain;
-using Microsoft.Extensions.DependencyInjection;
 using Module = Bonyan.Modularity.Abstractions.Module;
 
 

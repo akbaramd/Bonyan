@@ -3,13 +3,11 @@ using System.Linq.Expressions;
 using Bonyan.DependencyInjection;
 using Bonyan.EntityFrameworkCore;
 using Bonyan.EntityFrameworkCore.Abstractions;
-using Bonyan.IoC.Autofac;
 using Bonyan.Layer.Domain.Entities;
 using Bonyan.Layer.Domain.Model;
 using Bonyan.Layer.Domain.Specifications;
 using Bonyan.MultiTenant;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Bonyan.Layer.Domain
 {

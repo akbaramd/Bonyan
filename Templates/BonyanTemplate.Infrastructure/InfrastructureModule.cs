@@ -4,12 +4,8 @@ using Bonyan.Modularity.Abstractions;
 using Bonyan.Modularity.Attributes;
 using Bonyan.MultiTenant;
 using Bonyan.TenantManagement.EntityFrameworkCore;
-using BonyanTemplate.Domain.Entities;
-using BonyanTemplate.Domain.Repositories;
 using BonyanTemplate.Infrastructure.Data;
-using BonyanTemplate.Infrastructure.Data.Repositories;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Sqlite;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace BonyanTemplate.Infrastructure;

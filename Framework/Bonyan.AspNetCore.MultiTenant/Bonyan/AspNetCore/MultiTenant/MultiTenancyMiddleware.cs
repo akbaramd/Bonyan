@@ -1,4 +1,3 @@
-using System.Globalization;
 using Bonyan.MultiTenant;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;

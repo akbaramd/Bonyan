@@ -1,4 +1,3 @@
-using System;
 using Bonyan.Modularity.Abstractions;
 
 namespace Bonyan.Exceptions;

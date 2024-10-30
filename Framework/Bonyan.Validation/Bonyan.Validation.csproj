@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <PackageId>Bonyan.Validation</PackageId>
+        <RootNamespace />
+    </PropertyGroup>
+    <Import Project="..\..\package.props" />
+    <ItemGroup>
+        <ProjectReference Include="..\Bonyan\Bonyan.csproj" />
+    </ItemGroup>
+
+</Project>

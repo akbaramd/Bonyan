@@ -1,4 +1,3 @@
-using Bonyan.Layer.Application;
 using Bonyan.Modularity;
 using Bonyan.Modularity.Abstractions;
 using Bonyan.Modularity.Attributes;
@@ -13,7 +12,6 @@ namespace Bonyan.EntityFrameworkCore
       public override Task OnConfigureAsync(ServiceConfigurationContext context)
       {
         context.Services.AddTransient(typeof(IDbContextProvider<>),typeof(UnitOfWorkDbContextProvider<>));
-        context.Services.AddSingleton<IUnitOfWork, EfCoreUnitOfWork>();
           return base.OnConfigureAsync(context);
       }
   }

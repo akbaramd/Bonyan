@@ -41,5 +41,25 @@ public static class ServiceCollectionRegistrationActionExtensions
 
     // OnExposing
 
- 
+    public static void OnExposing(this IServiceCollection services, Action<IOnServiceExposingContext> exposeAction)
+    {
+        GetOrCreateExposingList(services).Add(exposeAction);
+    }
+
+    public static ServiceExposingActionList GetExposingActionList(this IServiceCollection services)
+    {
+        return GetOrCreateExposingList(services);
+    }
+
+    private static ServiceExposingActionList GetOrCreateExposingList(IServiceCollection services)
+    {
+        var actionList = services.GetSingletonInstanceOrNull<IObjectAccessor<ServiceExposingActionList>>()?.Value;
+        if (actionList == null)
+        {
+            actionList = new ServiceExposingActionList();
+            services.AddObjectAccessor(actionList);
+        }
+
+        return actionList;
+    }
 }

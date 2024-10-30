@@ -11,7 +11,6 @@
   <Import Project="..\..\package.props" />
   
   <ItemGroup>
-    <ProjectReference Include="..\Bonyan.IoC.Autofac\Bonyan.IoC.Autofac.csproj" />
     <ProjectReference Include="..\Bonyan.Layer.Application\Bonyan.Layer.Application.csproj" />
   </ItemGroup>
   

@@ -29,8 +29,7 @@ public class TenantApplicationService : ApplicationService, ITenantApplicationSe
   {
     var tenant = new Tenant(createDto.Key);
     await TenantRepository.AddAsync(tenant);
-    await UnitOfWork.SaveChangesAsync(cancellationToken ?? CancellationToken.None);
-    await UnitOfWork.CommitAsync();
+    await CurrentUnitOfWork.SaveChangesAsync(cancellationToken ?? CancellationToken.None);
     return Mapper.Map<Tenant, TenantDto>(tenant);
   }
 
@@ -41,7 +40,6 @@ public class TenantApplicationService : ApplicationService, ITenantApplicationSe
 
     tenant.Key = updateDto.Key;
     await TenantRepository.UpdateAsync(tenant);
-    await UnitOfWork.SaveChangesAsync();
 
     return Mapper.Map<Tenant, TenantDto>(tenant);
   }
@@ -52,7 +50,6 @@ public class TenantApplicationService : ApplicationService, ITenantApplicationSe
     if (tenant == null) throw new TenantNotFoundException(tenantId:tenantId,errorCode:$"{nameof(TenantApplicationService)}:{nameof(DeleteAsync)}");
 
     await TenantRepository.DeleteAsync(tenant);
-    await UnitOfWork.SaveChangesAsync(cancellationToken ?? CancellationToken.None);
 
     return Mapper.Map<Tenant, TenantDto>(tenant);
   }

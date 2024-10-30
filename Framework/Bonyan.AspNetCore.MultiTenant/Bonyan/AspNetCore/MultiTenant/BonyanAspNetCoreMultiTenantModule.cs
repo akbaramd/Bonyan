@@ -1,5 +1,4 @@
 using Bonyan.Modularity;
-using Bonyan.Modularity.Abstractions;
 using Bonyan.Modularity.Attributes;
 using Bonyan.MultiTenant;
 

@@ -60,7 +60,7 @@ public class ModuleManager : IModuleManager
         foreach (var module in modules)
         {
             if (!Visit(module, visited, sorted))
-                throw new InvalidOperationException("Circular dependency detected.");
+                throw new InvalidOperationException($"Circular dependency detected. {module.ModuleType.FullName} - {visited} ");
         }
 
         return sorted;

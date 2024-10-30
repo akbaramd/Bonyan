@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using Bonyan;
 using Bonyan.Security.Claims;
 using JetBrains.Annotations;

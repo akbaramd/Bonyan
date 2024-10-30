@@ -1,7 +1,5 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using System;
-using System.Linq;
 using Bonyan.Layer.Domain.Abstractions;
 using Bonyan.Layer.Domain.ValueObjects;
 using Bonyan.MultiTenant;

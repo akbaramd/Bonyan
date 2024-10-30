@@ -2,7 +2,6 @@
 using Bonyan.Layer.Domain.ValueObjects;
 using Bonyan.MultiTenant;
 using BonyanTemplate.Domain.DomainEvents;
-using BonyanTemplate.Domain.Enums;
 
 namespace BonyanTemplate.Domain.Entities;
 

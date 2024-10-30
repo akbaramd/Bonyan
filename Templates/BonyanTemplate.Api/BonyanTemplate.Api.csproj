@@ -21,7 +21,7 @@
       <ProjectReference Include="..\..\Framework\Bonyan.EntityFrameworkCore\Bonyan.EntityFrameworkCore.csproj" />
       <ProjectReference Include="..\..\Framework\Bonyan.AspNetCore\Bonyan.AspNetCore.csproj" />
       <ProjectReference Include="..\..\Framework\Bonyan.EntityFrameworkCore.SqlServer\Bonyan.EntityFrameworkCore.SqlServer.csproj" />
-      <ProjectReference Include="..\..\Framework\Bonyan.IoC.Autofac\Bonyan.IoC.Autofac.csproj" />
+      <ProjectReference Include="..\..\Modules\Bonyan.TenantManagement.Web\Bonyan.TenantManagement.Web.csproj" />
       <ProjectReference Include="..\BonyanTemplate.Application\BonyanTemplate.Application.csproj" />
       <ProjectReference Include="..\BonyanTemplate.Infrastructure\BonyanTemplate.Infrastructure.csproj" />
     </ItemGroup>

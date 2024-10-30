@@ -1,5 +1,4 @@
 using Bonyan.Layer.Application.Dto;
-using Bonyan.Layer.Domain.Aggregates;
 using Bonyan.TenantManagement.Domain;
 
 namespace Bonyan.TenantManagement.Application.Dto;

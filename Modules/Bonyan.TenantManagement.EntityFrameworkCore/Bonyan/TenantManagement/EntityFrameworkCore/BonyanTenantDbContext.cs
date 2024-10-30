@@ -1,5 +1,4 @@
 using Bonyan.EntityFrameworkCore;
-using Bonyan.IoC.Autofac;
 using Bonyan.TenantManagement.Domain;
 using Microsoft.EntityFrameworkCore;
 

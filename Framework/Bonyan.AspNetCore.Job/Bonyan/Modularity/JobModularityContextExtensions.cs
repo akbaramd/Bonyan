@@ -1,5 +1,4 @@
 using Bonyan.AspNetCore.Job;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Bonyan.Modularity;
 

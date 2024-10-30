@@ -1,5 +1,3 @@
-using Microsoft.Extensions.DependencyInjection;
-
 namespace Bonyan.Modularity;
 
 public class ApplicationContext : ServiceContextBase

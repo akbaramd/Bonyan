@@ -15,6 +15,6 @@ public class TenantPaginateSpec : PaginatedSpecification<Tenant>
 
   public override void Handle(ISpecificationContext<Tenant> context)
   {
-    context.AddCriteria(x=>_filterDto.Search != null && x.Key.Contains(_filterDto.Search));
+    context.AddCriteria(x=>_filterDto.Search == null || x.Key.Contains(_filterDto.Search));
   }
 }

@@ -1,52 +1,70 @@
 using Bonyan.EntityFrameworkCore;
 using Bonyan.EntityFrameworkCore.Abstractions;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 
 namespace Bonyan.UnitOfWork;
 
 public class UnitOfWorkDbContextProvider<TDbContext> : IDbContextProvider<TDbContext>
     where TDbContext : DbContext, IBonyanDbContext<TDbContext>
 {
+    private const string TransactionsNotSupportedWarningMessage = "Current database does not support transactions. Your database may remain in an inconsistent state in an error case.";
+    
     private readonly IServiceProvider _serviceProvider;
-    private readonly IUnitOfWork _unitOfWork;
+    protected readonly IUnitOfWorkManager UnitOfWorkManager;
 
-    public UnitOfWorkDbContextProvider(IServiceProvider serviceProvider, IUnitOfWork unitOfWork)
+    public UnitOfWorkDbContextProvider(IServiceProvider serviceProvider, IUnitOfWorkManager unitOfWork)
     {
         _serviceProvider = serviceProvider;
-        _unitOfWork = unitOfWork;
+        UnitOfWorkManager = unitOfWork;
     }
 
     public async Task<TDbContext> GetDbContextAsync()
     {
+        var unitOfWork = UnitOfWorkManager.Current;
+        if (unitOfWork == null)
+        {
+            throw new Exception("A DbContext can only be created inside a unit of work!");
+        }
+
         var dbContextKey = $"{typeof(TDbContext).FullName}";
 
-        var databaseApi = _unitOfWork.FindDatabaseApi(dbContextKey);
+        var databaseApi = unitOfWork.FindDatabaseApi(dbContextKey);
 
         if (databaseApi == null)
         {
             databaseApi = new EfCoreDatabaseApi(
-                await CreateDbContextAsync(CancellationToken.None)
+                await CreateDbContextAsync(unitOfWork, CancellationToken.None)
             );
 
-            _unitOfWork.AddDatabaseApi(dbContextKey, databaseApi);
+            unitOfWork.AddDatabaseApi(dbContextKey, databaseApi);
         }
 
         return (TDbContext)((EfCoreDatabaseApi)databaseApi).DbContext;
     }
 
-    private async Task<IEfCoreDbContext> CreateDbContextAsync(CancellationToken cancellationToken)
+    private async Task<IEfCoreDbContext> CreateDbContextAsync(IUnitOfWork unitOfWork,
+        CancellationToken cancellationToken)
     {
         var transactionApiKey = $"EntityFrameworkCore_{typeof(TDbContext)}";
-
-        var activeTransaction = _unitOfWork.FindTransactionApi(transactionApiKey) as EfCoreTransactionApi;
+        var activeTransaction = unitOfWork.FindTransactionApi(transactionApiKey) as EfCoreTransactionApi;
         if (activeTransaction == null)
         {
             var dbContext = _serviceProvider.GetRequiredService<TDbContext>();
-            var transaction = await dbContext.Database.BeginTransactionAsync();
-            _unitOfWork.AddTransactionApi(transactionApiKey, new EfCoreTransactionApi(transaction, dbContext));
+
+            try
+            {
+                var dbTransaction = unitOfWork.Options.IsolationLevel.HasValue
+                    ? await dbContext.Database.BeginTransactionAsync(unitOfWork.Options.IsolationLevel.Value,
+                        cancellationToken)
+                    : await dbContext.Database.BeginTransactionAsync(cancellationToken);
+                unitOfWork.AddTransactionApi(transactionApiKey, new EfCoreTransactionApi(dbTransaction, dbContext));
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(TransactionsNotSupportedWarningMessage);
+                return dbContext;
+            }
             return dbContext;
         }
         else

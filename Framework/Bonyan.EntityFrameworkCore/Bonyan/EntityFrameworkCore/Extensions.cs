@@ -1,8 +1,6 @@
 ﻿using Bonyan.EntityFrameworkCore.Abstractions;
 using Bonyan.EntityFrameworkCore.Builders;
-using Bonyan.Layer.Application;
 using Bonyan.Modularity;
-using Bonyan.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;

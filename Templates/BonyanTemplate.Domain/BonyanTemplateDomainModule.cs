@@ -2,7 +2,6 @@ using Bonyan.Layer.Domain;
 using Bonyan.Modularity;
 using Bonyan.Modularity.Attributes;
 using Bonyan.TenantManagement.Domain;
-using Microsoft.Extensions.DependencyInjection;
 using Module = Bonyan.Modularity.Abstractions.Module;
 
 

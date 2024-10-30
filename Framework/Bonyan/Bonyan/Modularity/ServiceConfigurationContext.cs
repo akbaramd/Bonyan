@@ -1,4 +1,3 @@
-using System;
 using Bonyan.Exceptions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

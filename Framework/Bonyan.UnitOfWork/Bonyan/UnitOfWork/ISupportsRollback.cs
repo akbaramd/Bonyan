@@ -1,6 +1,6 @@
-namespace Bonyan.UnitOfWork;
+﻿namespace Bonyan.UnitOfWork;
 
 public interface ISupportsRollback
 {
-  Task RollbackAsync(CancellationToken cancellationToken = default);
+    Task RollbackAsync(CancellationToken cancellationToken = default);
 }

@@ -1,20 +1,51 @@
-﻿
-namespace Bonyan.UnitOfWork
-{
-  public interface IUnitOfWork : ITransactionApiContainer,IDatabaseApiContainer,IDisposable
-  {
-   
-    // Commit the transaction asynchronously
-    Task CommitAsync(CancellationToken? cancellationToken = default);
+﻿using JetBrains.Annotations;
 
-    // Rollback the transaction
+namespace Bonyan.UnitOfWork;
+
+public interface IUnitOfWork : IDatabaseApiContainer, ITransactionApiContainer, IDisposable
+{
+    Guid Id { get; }
+
+    Dictionary<string, object> Items { get; }
+
+    //TODO: Switch to OnFailed (sync) and OnDisposed (sync) methods to be compatible with OnCompleted
+    event EventHandler<UnitOfWorkFailedEventArgs> Failed;
+
+    event EventHandler<UnitOfWorkEventArgs> Disposed;
+
+    IBonyanUnitOfWorkOptions Options { get; }
+
+    IUnitOfWork? Outer { get; }
+
+    bool IsReserved { get; }
+
+    bool IsDisposed { get; }
+
+    bool IsCompleted { get; }
+
+    string? ReservationName { get; }
+
+    void SetOuter(IUnitOfWork? outer);
+
+    void Initialize([NotNull] BonyanUnitOfWorkOptions options);
+
+    void Reserve([NotNull] string reservationName);
+
+    Task SaveChangesAsync(CancellationToken cancellationToken = default);
+
+    Task CompleteAsync(CancellationToken cancellationToken = default);
+
     Task RollbackAsync(CancellationToken cancellationToken = default);
 
-    // Check if a transaction is currently active
+    void OnCompleted(Func<Task> handler);
 
-    // Save changes asynchronously
-    Task SaveChangesAsync(CancellationToken? cancellationToken = default);
+    void AddOrReplaceLocalEvent(
+        UnitOfWorkEventRecord eventRecord,
+        Predicate<UnitOfWorkEventRecord>? replacementSelector = null
+    );
 
-
-  }
+    void AddOrReplaceDistributedEvent(
+        UnitOfWorkEventRecord eventRecord,
+        Predicate<UnitOfWorkEventRecord>? replacementSelector = null
+    );
 }

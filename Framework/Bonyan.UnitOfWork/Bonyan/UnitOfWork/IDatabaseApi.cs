@@ -1,4 +1,4 @@
-namespace Bonyan.UnitOfWork;
+﻿namespace Bonyan.UnitOfWork;
 
 public interface IDatabaseApi
 {

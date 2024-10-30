@@ -1,3 +1,4 @@
+using Bonyan.Castle.DynamicProxy;
 using Bonyan.DependencyInjection;
 using Bonyan.Modularity.Abstractions;
 using Microsoft;
@@ -27,7 +28,8 @@ public class ModularityApplication<TModule> : IModularityApplication where TModu
         _serviceCollection.AddSingleton<IModuleLoader>(_moduleManager);
         _serviceCollection.AddSingleton<IModuleConfigurator>(this);
         _serviceCollection.AddSingleton<IModuleInitializer>(this);
-
+        _serviceCollection.AddTransient(typeof(BonyanAsyncDeterminationInterceptor<>));
+        
         serviceCollection.AddTransient<ICachedServiceProviderBase, BonyanLazyServiceProvider>();
         serviceCollection.AddTransient<IBonyanLazyServiceProvider, BonyanLazyServiceProvider>();
         
