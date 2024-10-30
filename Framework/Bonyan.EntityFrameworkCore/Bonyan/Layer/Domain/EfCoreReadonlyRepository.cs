@@ -3,6 +3,7 @@ using System.Linq.Expressions;
 using Bonyan.DependencyInjection;
 using Bonyan.EntityFrameworkCore;
 using Bonyan.EntityFrameworkCore.Abstractions;
+using Bonyan.Exceptions;
 using Bonyan.Layer.Domain.Entities;
 using Bonyan.Layer.Domain.Model;
 using Bonyan.Layer.Domain.Specifications;
@@ -90,13 +91,13 @@ namespace Bonyan.Layer.Domain
         // Retrieve one entity matching a specific predicate, or throw an exception
         public async Task<TEntity> GetOneAsync(Expression<Func<TEntity, bool>> predicate)
         {
-            return await FindOneAsync(predicate) ?? throw new Exception($"Entity with predicate {predicate} not found");
+            return await FindOneAsync(predicate) ?? throw new BonyanException($"Entity with predicate {predicate} not found");
         }
 
         // Retrieve one entity matching a specification, or throw an exception
         public async Task<TEntity> GetOneAsync(ISpecification<TEntity> specification)
         {
-            return await FindOneAsync(specification) ?? throw new Exception($"Entity with specification {specification} not found");
+            return await FindOneAsync(specification) ?? throw new BonyanException($"Entity with specification {specification} not found");
         }
 
         // Retrieve paginated results based on a PaginatedSpecification

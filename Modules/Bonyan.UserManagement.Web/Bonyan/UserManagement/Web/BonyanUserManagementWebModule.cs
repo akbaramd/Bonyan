@@ -1,5 +1,4 @@
 ﻿using Bonyan.Modularity;
-using Bonyan.Modularity.Attributes;
 using Bonyan.UserManagement.Application;
 
 namespace Bonyan.UserManagement.Web;

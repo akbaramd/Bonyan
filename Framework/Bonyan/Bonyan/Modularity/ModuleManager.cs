@@ -1,6 +1,5 @@
 using System.Reflection;
 using Bonyan.Modularity.Abstractions;
-using Bonyan.Modularity.Attributes;
 
 namespace Bonyan.Modularity;
 

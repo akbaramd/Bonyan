@@ -1,6 +1,5 @@
 using Bonyan.Layer.Application;
 using Bonyan.Modularity;
-using Bonyan.Modularity.Attributes;
 using Bonyan.UserManagement.Domain;
 
 namespace Bonyan.UserManagement.Application;

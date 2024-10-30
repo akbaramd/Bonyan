@@ -1,7 +1,6 @@
 using Bonyan.AspNetCore.MultiTenant;
 using Bonyan.EntityFrameworkCore;
 using Bonyan.Modularity;
-using Bonyan.Modularity.Attributes;
 using Bonyan.TenantManagement.Domain;
 using Microsoft.Extensions.DependencyInjection;
 

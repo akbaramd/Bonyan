@@ -1,6 +1,5 @@
 using Bonyan.AutoMapper;
 using Bonyan.Modularity;
-using Bonyan.Modularity.Attributes;
 using Bonyan.TenantManagement.Application;
 using BonyanTemplate.Application.Dtos;
 using BonyanTemplate.Application.Jobs;

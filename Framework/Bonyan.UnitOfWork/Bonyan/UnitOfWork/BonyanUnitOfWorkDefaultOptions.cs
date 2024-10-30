@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using Bonyan.Exceptions;
 
 namespace Bonyan.UnitOfWork;
 
@@ -44,7 +45,7 @@ public class BonyanUnitOfWorkDefaultOptions
             case UnitOfWorkTransactionBehavior.Auto:
                 return autoValue;
             default:
-                throw new Exception("Not implemented TransactionBehavior value: " + TransactionBehavior);
+                throw new BonyanException("Not implemented TransactionBehavior value: " + TransactionBehavior);
         }
     }
 }

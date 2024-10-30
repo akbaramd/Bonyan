@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Bonyan.Exceptions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
@@ -21,9 +22,9 @@ public class ObjectValidator : IObjectValidator
 
         if (errors.Any())
         {
-            throw new Exception(
+            throw new BusinessException(
                 "Object state is not valid! See ValidationErrors for details."
-            );
+            ).WithData("erros",errors);
         }
     }
 

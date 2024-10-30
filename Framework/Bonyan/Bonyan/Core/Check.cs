@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using JetBrains.Annotations;
 
-namespace Bonyan;
+namespace Bonyan.Core;
 
 [DebuggerStepThrough]
 public static class Check

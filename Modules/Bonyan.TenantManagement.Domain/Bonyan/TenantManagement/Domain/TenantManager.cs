@@ -1,3 +1,4 @@
+using Bonyan.Core;
 using Bonyan.Exceptions;
 using Bonyan.Layer.Domain.Services;
 

@@ -1,5 +1,7 @@
 using System.Reflection;
 using Bonyan;
+using Bonyan.Core;
+using Bonyan.Exceptions;
 using Bonyan.Modularity.Abstractions;
 using Bonyan.Reflection;
 using JetBrains.Annotations;
@@ -78,7 +80,9 @@ public static class ServiceCollectionCommonExtensions
         var serviceProviderFactory = services.GetSingletonInstanceOrNull<IServiceProviderFactory<TContainerBuilder>>();
         if (serviceProviderFactory == null)
         {
-            throw new Exception($"Could not find {typeof(IServiceProviderFactory<TContainerBuilder>).FullName} in {services}.");
+            throw new BusinessException(
+                code:$"{nameof(ServiceCollectionCommonExtensions)}:{nameof(BuildServiceProviderFromFactory)}",
+                message:$"Could not find {typeof(IServiceProviderFactory<TContainerBuilder>).FullName} in {services}.");
         }
 
         var builder = serviceProviderFactory.CreateBuilder(services);

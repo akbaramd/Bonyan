@@ -1,5 +1,4 @@
 using Bonyan.Modularity;
-using Bonyan.Modularity.Attributes;
 using Bonyan.Security;
 using Microsoft.Extensions.DependencyInjection;
 using Module = Bonyan.Modularity.Abstractions.Module;

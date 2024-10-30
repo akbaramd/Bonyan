@@ -1,4 +1,6 @@
 using System.Collections.Immutable;
+using Bonyan.Core;
+using Bonyan.Exceptions;
 using JetBrains.Annotations;
 using Microsoft.Extensions.Options;
 
@@ -69,7 +71,7 @@ public class UnitOfWork : IUnitOfWork
 
         if (Options != null)
         {
-            throw new Exception("This unit of work has already been initialized.");
+            throw new BonyanException("This unit of work has already been initialized.");
         }
 
         Options = _defaultOptions.Normalize(options.Clone());
@@ -187,7 +189,7 @@ public class UnitOfWork : IUnitOfWork
 
         if (_databaseApis.ContainsKey(key))
         {
-            throw new Exception("This unit of work already contains a database API for the given key.");
+            throw new BonyanException("This unit of work already contains a database API for the given key.");
         }
 
         _databaseApis.Add(key, api);
@@ -215,7 +217,7 @@ public class UnitOfWork : IUnitOfWork
 
         if (_transactionApis.ContainsKey(key))
         {
-            throw new Exception("This unit of work already contains a transaction API for the given key.");
+            throw new BonyanException("This unit of work already contains a transaction API for the given key.");
         }
 
         _transactionApis.Add(key, api);
@@ -326,7 +328,7 @@ public class UnitOfWork : IUnitOfWork
     {
         if (IsCompleted || _isCompleting)
         {
-            throw new Exception("Completion has already been requested for this unit of work.");
+            throw new BonyanException("Completion has already been requested for this unit of work.");
         }
     }
 

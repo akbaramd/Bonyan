@@ -1,6 +1,6 @@
 using JetBrains.Annotations;
 
-namespace Bonyan;
+namespace Bonyan.Core;
 
 /// <summary>
 /// This class can be used to provide an action when

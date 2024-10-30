@@ -1,7 +1,6 @@
 ﻿using Bonyan.EntityFrameworkCore;
 using Bonyan.Modularity;
 using Bonyan.Modularity.Abstractions;
-using Bonyan.Modularity.Attributes;
 using Bonyan.MultiTenant;
 using Bonyan.TenantManagement.EntityFrameworkCore;
 using BonyanTemplate.Infrastructure.Data;

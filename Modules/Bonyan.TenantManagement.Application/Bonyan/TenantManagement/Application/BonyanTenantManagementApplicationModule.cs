@@ -1,7 +1,6 @@
 using Bonyan.AutoMapper;
 using Bonyan.Layer.Application;
 using Bonyan.Modularity;
-using Bonyan.Modularity.Attributes;
 using Bonyan.TenantManagement.Application.Profiles;
 using Bonyan.TenantManagement.Application.Services;
 using Bonyan.TenantManagement.Domain;

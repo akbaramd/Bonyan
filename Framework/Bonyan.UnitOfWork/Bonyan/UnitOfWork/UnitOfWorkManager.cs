@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Bonyan.Core;
+using Bonyan.Exceptions;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Bonyan.UnitOfWork;
 
@@ -57,7 +59,7 @@ public class UnitOfWorkManager : IUnitOfWorkManager
     {
         if (!TryBeginReserved(reservationName, options))
         {
-            throw new Exception($"Could not find a reserved unit of work with reservation name: {reservationName}");
+            throw new BonyanException($"Could not find a reserved unit of work with reservation name: {reservationName}");
         }
     }
 

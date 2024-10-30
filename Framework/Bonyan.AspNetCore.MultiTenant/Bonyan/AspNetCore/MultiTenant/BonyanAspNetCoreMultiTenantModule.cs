@@ -1,5 +1,4 @@
 using Bonyan.Modularity;
-using Bonyan.Modularity.Attributes;
 using Bonyan.MultiTenant;
 
 namespace Bonyan.AspNetCore.MultiTenant;

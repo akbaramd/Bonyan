@@ -1,6 +1,5 @@
 using Bonyan.AspNetCore.Job;
 using Bonyan.Modularity;
-using Bonyan.Modularity.Attributes;
 using Hangfire;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 

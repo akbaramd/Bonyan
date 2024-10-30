@@ -1,3 +1,5 @@
+using Bonyan.Core;
+
 namespace Bonyan.MultiTenant;
 
 public class CurrentTenant : ICurrentTenant

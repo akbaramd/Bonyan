@@ -1,9 +1,8 @@
 using Bonyan.AspNetCore.MultiTenant;
 using Bonyan.EntityFrameworkCore;
 using Bonyan.Modularity;
-using Bonyan.Modularity.Attributes;
 
-namespace Bonyan.TenantManagement.EntityFrameworkCore;
+namespace Bonyan.UserManagement.EntityFrameworkCore;
 
 [DependOn(typeof(BonyanEntityFrameworkModule),
   typeof(BonyanAspNetCoreMultiTenantModule))]

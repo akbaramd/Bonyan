@@ -1,5 +1,7 @@
 using System.Linq.Expressions;
 using System.Reflection;
+using Bonyan.Core;
+using Bonyan.Exceptions;
 using Bonyan.Helpers;
 using Bonyan.Layer.Domain.ValueObjects;
 using Bonyan.MultiTenant;
@@ -139,7 +141,7 @@ public static class EntityHelper
         Check.NotNull(type, nameof(type));
         if (!IsEntity(type))
         {
-            throw new Exception($"Given {nameof(type)} is not an entity: {type.AssemblyQualifiedName}. It must implement {typeof(IEntity).AssemblyQualifiedName}.");
+            throw new BonyanException($"Given {nameof(type)} is not an entity: {type.AssemblyQualifiedName}. It must implement {typeof(IEntity).AssemblyQualifiedName}.");
         }
     }
 
@@ -234,7 +236,7 @@ public static class EntityHelper
     {
         if (!typeof(IEntity).IsAssignableFrom(entityType))
         {
-            throw new Exception(
+            throw new BonyanException(
                 $"Given {nameof(entityType)} is not an entity. It should implement {typeof(IEntity).AssemblyQualifiedName}!");
         }
 

@@ -1,4 +1,5 @@
 using System.Reflection;
+using Bonyan.Exceptions;
 
 namespace Bonyan.AspNetCore.Job;
 
@@ -10,7 +11,7 @@ public class JobRegistererHostedService(IServiceProvider serviceProvider) : IHos
 
     if (jobManager == null)
     {
-      throw new Exception(
+      throw new BonyanException(
         $"Please add your current job provider module, like: Hangfire or others.");
     }
 

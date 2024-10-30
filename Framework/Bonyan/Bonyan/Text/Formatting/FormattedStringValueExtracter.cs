@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using Bonyan.Core;
 
 namespace Bonyan.Text.Formatting;
 

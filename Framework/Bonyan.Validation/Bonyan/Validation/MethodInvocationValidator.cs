@@ -1,4 +1,6 @@
 ﻿using System.Reflection;
+using Bonyan.Core;
+using Bonyan.Exceptions;
 using Bonyan.Helpers;
 
 namespace Bonyan.Validation;
@@ -33,7 +35,7 @@ public class MethodInvocationValidator : IMethodInvocationValidator
 
         if (context.Parameters.Length != context.ParameterValues.Length)
         {
-            throw new Exception("Method parameter count does not match with argument count!");
+            throw new BonyanException("Method parameter count does not match with argument count!");
         }
 
         //todo: consider to remove this condition
@@ -72,7 +74,7 @@ public class MethodInvocationValidator : IMethodInvocationValidator
 
     protected virtual void ThrowValidationError(MethodInvocationValidationContext context)
     {
-        throw new Exception(
+        throw new BonyanException(
             "Method arguments are not valid! See ValidationErrors for details."
          
         );

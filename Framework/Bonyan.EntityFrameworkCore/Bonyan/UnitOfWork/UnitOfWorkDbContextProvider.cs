@@ -1,5 +1,6 @@
 using Bonyan.EntityFrameworkCore;
 using Bonyan.EntityFrameworkCore.Abstractions;
+using Bonyan.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -24,7 +25,7 @@ public class UnitOfWorkDbContextProvider<TDbContext> : IDbContextProvider<TDbCon
         var unitOfWork = UnitOfWorkManager.Current;
         if (unitOfWork == null)
         {
-            throw new Exception("A DbContext can only be created inside a unit of work!");
+            throw new UnitOfWorkNotFoundException("A DbContext can only be created inside a unit of work!");
         }
 
         var dbContextKey = $"{typeof(TDbContext).FullName}";

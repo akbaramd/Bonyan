@@ -1,4 +1,5 @@
 using Bonyan.Collections;
+using Bonyan.Core;
 using JetBrains.Annotations;
 
 namespace Bonyan.DependencyInjection;

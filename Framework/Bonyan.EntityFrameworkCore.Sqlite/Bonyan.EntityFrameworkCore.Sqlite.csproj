@@ -13,9 +13,6 @@
         <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.8" />
     </ItemGroup>
     <ItemGroup>
-      <Folder Include="Microsoft\Persistence\" />
-    </ItemGroup>
-    <ItemGroup>
       <ProjectReference Include="..\Bonyan.EntityFrameworkCore\Bonyan.EntityFrameworkCore.csproj" />
     </ItemGroup>
 

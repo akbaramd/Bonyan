@@ -1,4 +1,5 @@
 using Bonyan.DependencyInjection;
+using Bonyan.Exceptions;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Microsoft;
@@ -29,7 +30,7 @@ public static class ServiceCollectionObjectAccessorExtensions
   {
     if (services.Any(s => s.ServiceType == typeof(ObjectAccessor<T>)))
     {
-      throw new Exception("An object accessor is registered before for type: " + typeof(T).AssemblyQualifiedName);
+      throw new BonyanException("An object accessor is registered before for type: " + typeof(T).AssemblyQualifiedName);
     }
 
     //Add to the beginning for fast retrieve
@@ -48,6 +49,6 @@ public static class ServiceCollectionObjectAccessorExtensions
   public static T GetObject<T>(this IServiceCollection services)
     where T : class
   {
-    return services.GetObjectOrNull<T>() ?? throw new Exception($"Could not find an object of {typeof(T).AssemblyQualifiedName} in services. Be sure that you have used AddObjectAccessor before!");
+    return services.GetObjectOrNull<T>() ?? throw new BonyanException($"Could not find an object of {typeof(T).AssemblyQualifiedName} in services. Be sure that you have used AddObjectAccessor before!");
   }
 }

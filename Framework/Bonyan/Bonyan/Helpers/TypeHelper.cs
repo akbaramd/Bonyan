@@ -2,6 +2,7 @@ using System.Collections;
 using System.ComponentModel;
 using System.Globalization;
 using System.Reflection;
+using Bonyan.Core;
 using JetBrains.Annotations;
 
 namespace Bonyan.Helpers;

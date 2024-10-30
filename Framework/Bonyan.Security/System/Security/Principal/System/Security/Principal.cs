@@ -1,5 +1,6 @@
 ﻿using System.Security.Claims;
 using Bonyan;
+using Bonyan.Core;
 using Bonyan.Security.Claims;
 using JetBrains.Annotations;
 

@@ -1,4 +1,4 @@
-namespace Bonyan.Modularity.Attributes;
+namespace Bonyan.Modularity;
 
 /// <summary>
 /// Used to define dependencies of a type.

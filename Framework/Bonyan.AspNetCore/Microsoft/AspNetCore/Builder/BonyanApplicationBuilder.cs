@@ -24,6 +24,7 @@ namespace Microsoft.AspNetCore.Builder
 
         public WebApplication Build()
         {
+            
             var application = _builder.Build();
             _modularApp.InitializeModulesAsync(application.Services).GetAwaiter().GetResult();
             _modularApp.InitializeApplicationAsync(application).GetAwaiter().GetResult();

@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using Bonyan.Core;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace Bonyan.Layer.Domain.Enumerations;

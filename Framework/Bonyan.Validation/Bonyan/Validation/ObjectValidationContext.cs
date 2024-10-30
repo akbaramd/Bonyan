@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Bonyan.Core;
 using JetBrains.Annotations;
 
 namespace Bonyan.Validation;

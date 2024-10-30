@@ -1,6 +1,5 @@
 using Bonyan.Job.Hangfire;
 using Bonyan.Modularity;
-using Bonyan.Modularity.Attributes;
 using Bonyan.TenantManagement.Web;
 using BonyanTemplate.Application;
 using BonyanTemplate.Infrastructure;

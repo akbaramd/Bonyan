@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using Bonyan.Core;
 using JetBrains.Annotations;
 
 namespace Bonyan.UnitOfWork;

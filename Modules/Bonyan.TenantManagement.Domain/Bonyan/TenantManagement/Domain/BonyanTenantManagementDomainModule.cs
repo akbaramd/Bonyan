@@ -1,6 +1,5 @@
 using Bonyan.Layer.Domain;
 using Bonyan.Modularity;
-using Bonyan.Modularity.Attributes;
 using Bonyan.MultiTenant;
 using Microsoft.Extensions.DependencyInjection;
 

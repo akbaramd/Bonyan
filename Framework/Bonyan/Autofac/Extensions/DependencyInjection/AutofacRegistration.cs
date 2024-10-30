@@ -26,6 +26,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using Autofac.Builder;
+using Bonyan.Exceptions;
 using Bonyan.Modularity.Abstractions;
 using Microsoft;
 using Microsoft.Extensions.DependencyInjection;
@@ -102,7 +103,9 @@ public static class AutofacRegistration
         var autofacServiceScopeFactory = typeof(AutofacServiceProvider).Assembly.GetType("Autofac.Extensions.DependencyInjection.AutofacServiceScopeFactory");
         if (autofacServiceScopeFactory == null)
         {
-            throw new Exception("Unable get type of Autofac.Extensions.DependencyInjection.AutofacServiceScopeFactory!");
+            throw new BusinessException(
+                code:$"{nameof(AutofacRegistration)}:{nameof(Populate)}",
+                message:"Unable get type of Autofac.Extensions.DependencyInjection.AutofacServiceScopeFactory!");
         }
 
         // Issue #83: IServiceScopeFactory must be a singleton and scopes must be flat, not hierarchical.
