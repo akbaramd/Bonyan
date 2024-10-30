@@ -49,64 +49,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.Security", "Framewor
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modules", "Modules", "{CAC9F2FC-7BFD-457E-B17C-E9A90BD941EF}"
 	ProjectSection(SolutionItems) = preProject
-		Modules\Bonyan.TenantManagement.Web\bin\Debug\Bonyan.TenantManagement.Web.1.1.1.nupkg = Modules\Bonyan.TenantManagement.Web\bin\Debug\Bonyan.TenantManagement.Web.1.1.1.nupkg
-		Modules\Bonyan.TenantManagement.Web\bin\Debug\net8.0\Bonyan.AspNetCore.dll = Modules\Bonyan.TenantManagement.Web\bin\Debug\net8.0\Bonyan.AspNetCore.dll
-		Modules\Bonyan.TenantManagement.Web\bin\Debug\net8.0\Bonyan.AspNetCore.pdb = Modules\Bonyan.TenantManagement.Web\bin\Debug\net8.0\Bonyan.AspNetCore.pdb
-		Modules\Bonyan.TenantManagement.Web\bin\Debug\net8.0\Bonyan.AutoMapper.dll = Modules\Bonyan.TenantManagement.Web\bin\Debug\net8.0\Bonyan.AutoMapper.dll
-		Modules\Bonyan.TenantManagement.Web\bin\Debug\net8.0\Bonyan.AutoMapper.pdb = Modules\Bonyan.TenantManagement.Web\bin\Debug\net8.0\Bonyan.AutoMapper.pdb
-		Modules\Bonyan.TenantManagement.Web\bin\Debug\net8.0\Bonyan.dll = Modules\Bonyan.TenantManagement.Web\bin\Debug\net8.0\Bonyan.dll
-		Modules\Bonyan.TenantManagement.Web\bin\Debug\net8.0\Bonyan.Layer.Application.dll = Modules\Bonyan.TenantManagement.Web\bin\Debug\net8.0\Bonyan.Layer.Application.dll
-		Modules\Bonyan.TenantManagement.Web\bin\Debug\net8.0\Bonyan.Layer.Application.pdb = Modules\Bonyan.TenantManagement.Web\bin\Debug\net8.0\Bonyan.Layer.Application.pdb
-		Modules\Bonyan.TenantManagement.Web\bin\Debug\net8.0\Bonyan.Layer.Domain.dll = Modules\Bonyan.TenantManagement.Web\bin\Debug\net8.0\Bonyan.Layer.Domain.dll
-		Modules\Bonyan.TenantManagement.Web\bin\Debug\net8.0\Bonyan.Layer.Domain.pdb = Modules\Bonyan.TenantManagement.Web\bin\Debug\net8.0\Bonyan.Layer.Domain.pdb
-		Modules\Bonyan.TenantManagement.Web\bin\Debug\net8.0\Bonyan.MultiTenant.dll = Modules\Bonyan.TenantManagement.Web\bin\Debug\net8.0\Bonyan.MultiTenant.dll
-		Modules\Bonyan.TenantManagement.Web\bin\Debug\net8.0\Bonyan.MultiTenant.pdb = Modules\Bonyan.TenantManagement.Web\bin\Debug\net8.0\Bonyan.MultiTenant.pdb
-		Modules\Bonyan.TenantManagement.Web\bin\Debug\net8.0\Bonyan.pdb = Modules\Bonyan.TenantManagement.Web\bin\Debug\net8.0\Bonyan.pdb
-		Modules\Bonyan.TenantManagement.Web\bin\Debug\net8.0\Bonyan.Security.dll = Modules\Bonyan.TenantManagement.Web\bin\Debug\net8.0\Bonyan.Security.dll
-		Modules\Bonyan.TenantManagement.Web\bin\Debug\net8.0\Bonyan.Security.pdb = Modules\Bonyan.TenantManagement.Web\bin\Debug\net8.0\Bonyan.Security.pdb
-		Modules\Bonyan.TenantManagement.Web\bin\Debug\net8.0\Bonyan.TenantManagement.Application.dll = Modules\Bonyan.TenantManagement.Web\bin\Debug\net8.0\Bonyan.TenantManagement.Application.dll
-		Modules\Bonyan.TenantManagement.Web\bin\Debug\net8.0\Bonyan.TenantManagement.Application.pdb = Modules\Bonyan.TenantManagement.Web\bin\Debug\net8.0\Bonyan.TenantManagement.Application.pdb
-		Modules\Bonyan.TenantManagement.Web\bin\Debug\net8.0\Bonyan.TenantManagement.Domain.dll = Modules\Bonyan.TenantManagement.Web\bin\Debug\net8.0\Bonyan.TenantManagement.Domain.dll
-		Modules\Bonyan.TenantManagement.Web\bin\Debug\net8.0\Bonyan.TenantManagement.Domain.pdb = Modules\Bonyan.TenantManagement.Web\bin\Debug\net8.0\Bonyan.TenantManagement.Domain.pdb
-		Modules\Bonyan.TenantManagement.Web\bin\Debug\net8.0\Bonyan.TenantManagement.Web.deps.json = Modules\Bonyan.TenantManagement.Web\bin\Debug\net8.0\Bonyan.TenantManagement.Web.deps.json
-		Modules\Bonyan.TenantManagement.Web\bin\Debug\net8.0\Bonyan.TenantManagement.Web.dll = Modules\Bonyan.TenantManagement.Web\bin\Debug\net8.0\Bonyan.TenantManagement.Web.dll
-		Modules\Bonyan.TenantManagement.Web\bin\Debug\net8.0\Bonyan.TenantManagement.Web.pdb = Modules\Bonyan.TenantManagement.Web\bin\Debug\net8.0\Bonyan.TenantManagement.Web.pdb
-		Modules\Bonyan.TenantManagement.Web\bin\Debug\net8.0\Bonyan.UnitOfWork.dll = Modules\Bonyan.TenantManagement.Web\bin\Debug\net8.0\Bonyan.UnitOfWork.dll
-		Modules\Bonyan.TenantManagement.Web\bin\Debug\net8.0\Bonyan.UnitOfWork.pdb = Modules\Bonyan.TenantManagement.Web\bin\Debug\net8.0\Bonyan.UnitOfWork.pdb
-		Modules\Bonyan.TenantManagement.Web\bin\Debug\net8.0\Bonyan.Validation.dll = Modules\Bonyan.TenantManagement.Web\bin\Debug\net8.0\Bonyan.Validation.dll
-		Modules\Bonyan.TenantManagement.Web\bin\Debug\net8.0\Bonyan.Validation.pdb = Modules\Bonyan.TenantManagement.Web\bin\Debug\net8.0\Bonyan.Validation.pdb
-		Modules\Bonyan.TenantManagement.Web\Bonyan\TenantManagement\Web\BonyanTenantManagementWebModule.cs = Modules\Bonyan.TenantManagement.Web\Bonyan\TenantManagement\Web\BonyanTenantManagementWebModule.cs
-		Modules\Bonyan.TenantManagement.Web\Bonyan\TenantManagement\Web\TenantManagmentEndpointOptions.cs = Modules\Bonyan.TenantManagement.Web\Bonyan\TenantManagement\Web\TenantManagmentEndpointOptions.cs
-		Modules\Bonyan.TenantManagement.Web\Bonyan.TenantManagement.Web.csproj = Modules\Bonyan.TenantManagement.Web\Bonyan.TenantManagement.Web.csproj
-		Modules\Bonyan.TenantManagement.Web\Microsoft\AspNetCore\Builder\TenantManagementEndpointExtensions.cs = Modules\Bonyan.TenantManagement.Web\Microsoft\AspNetCore\Builder\TenantManagementEndpointExtensions.cs
-		Modules\Bonyan.TenantManagement.Web\obj\Bonyan.TenantManagement.Web.csproj.nuget.dgspec.json = Modules\Bonyan.TenantManagement.Web\obj\Bonyan.TenantManagement.Web.csproj.nuget.dgspec.json
-		Modules\Bonyan.TenantManagement.Web\obj\Bonyan.TenantManagement.Web.csproj.nuget.g.props = Modules\Bonyan.TenantManagement.Web\obj\Bonyan.TenantManagement.Web.csproj.nuget.g.props
-		Modules\Bonyan.TenantManagement.Web\obj\Bonyan.TenantManagement.Web.csproj.nuget.g.targets = Modules\Bonyan.TenantManagement.Web\obj\Bonyan.TenantManagement.Web.csproj.nuget.g.targets
-		Modules\Bonyan.TenantManagement.Web\obj\Debug\Bonyan.TenantManagement.Web.1.1.1.nuspec = Modules\Bonyan.TenantManagement.Web\obj\Debug\Bonyan.TenantManagement.Web.1.1.1.nuspec
-		Modules\Bonyan.TenantManagement.Web\obj\Debug\net8.0\.NETCoreApp,Version=v8.0.AssemblyAttributes.cs = Modules\Bonyan.TenantManagement.Web\obj\Debug\net8.0\.NETCoreApp,Version=v8.0.AssemblyAttributes.cs
-		Modules\Bonyan.TenantManagement.Web\obj\Debug\net8.0\Bonyan.T.BDE3EAD0.Up2Date = Modules\Bonyan.TenantManagement.Web\obj\Debug\net8.0\Bonyan.T.BDE3EAD0.Up2Date
-		Modules\Bonyan.TenantManagement.Web\obj\Debug\net8.0\Bonyan.TenantManagement.Web.AssemblyInfo.cs = Modules\Bonyan.TenantManagement.Web\obj\Debug\net8.0\Bonyan.TenantManagement.Web.AssemblyInfo.cs
-		Modules\Bonyan.TenantManagement.Web\obj\Debug\net8.0\Bonyan.TenantManagement.Web.AssemblyInfoInputs.cache = Modules\Bonyan.TenantManagement.Web\obj\Debug\net8.0\Bonyan.TenantManagement.Web.AssemblyInfoInputs.cache
-		Modules\Bonyan.TenantManagement.Web\obj\Debug\net8.0\Bonyan.TenantManagement.Web.assets.cache = Modules\Bonyan.TenantManagement.Web\obj\Debug\net8.0\Bonyan.TenantManagement.Web.assets.cache
-		Modules\Bonyan.TenantManagement.Web\obj\Debug\net8.0\Bonyan.TenantManagement.Web.csproj.AssemblyReference.cache = Modules\Bonyan.TenantManagement.Web\obj\Debug\net8.0\Bonyan.TenantManagement.Web.csproj.AssemblyReference.cache
-		Modules\Bonyan.TenantManagement.Web\obj\Debug\net8.0\Bonyan.TenantManagement.Web.csproj.CoreCompileInputs.cache = Modules\Bonyan.TenantManagement.Web\obj\Debug\net8.0\Bonyan.TenantManagement.Web.csproj.CoreCompileInputs.cache
-		Modules\Bonyan.TenantManagement.Web\obj\Debug\net8.0\Bonyan.TenantManagement.Web.csproj.FileListAbsolute.txt = Modules\Bonyan.TenantManagement.Web\obj\Debug\net8.0\Bonyan.TenantManagement.Web.csproj.FileListAbsolute.txt
-		Modules\Bonyan.TenantManagement.Web\obj\Debug\net8.0\Bonyan.TenantManagement.Web.dll = Modules\Bonyan.TenantManagement.Web\obj\Debug\net8.0\Bonyan.TenantManagement.Web.dll
-		Modules\Bonyan.TenantManagement.Web\obj\Debug\net8.0\Bonyan.TenantManagement.Web.GeneratedMSBuildEditorConfig.editorconfig = Modules\Bonyan.TenantManagement.Web\obj\Debug\net8.0\Bonyan.TenantManagement.Web.GeneratedMSBuildEditorConfig.editorconfig
-		Modules\Bonyan.TenantManagement.Web\obj\Debug\net8.0\Bonyan.TenantManagement.Web.GlobalUsings.g.cs = Modules\Bonyan.TenantManagement.Web\obj\Debug\net8.0\Bonyan.TenantManagement.Web.GlobalUsings.g.cs
-		Modules\Bonyan.TenantManagement.Web\obj\Debug\net8.0\Bonyan.TenantManagement.Web.pdb = Modules\Bonyan.TenantManagement.Web\obj\Debug\net8.0\Bonyan.TenantManagement.Web.pdb
-		Modules\Bonyan.TenantManagement.Web\obj\Debug\net8.0\Bonyan.TenantManagement.Web.sourcelink.json = Modules\Bonyan.TenantManagement.Web\obj\Debug\net8.0\Bonyan.TenantManagement.Web.sourcelink.json
-		Modules\Bonyan.TenantManagement.Web\obj\Debug\net8.0\ref\Bonyan.TenantManagement.Web.dll = Modules\Bonyan.TenantManagement.Web\obj\Debug\net8.0\ref\Bonyan.TenantManagement.Web.dll
-		Modules\Bonyan.TenantManagement.Web\obj\Debug\net8.0\refint\Bonyan.TenantManagement.Web.dll = Modules\Bonyan.TenantManagement.Web\obj\Debug\net8.0\refint\Bonyan.TenantManagement.Web.dll
-		Modules\Bonyan.TenantManagement.Web\obj\Debug\net8.0\staticwebassets\msbuild.build.Bonyan.TenantManagement.Web.props = Modules\Bonyan.TenantManagement.Web\obj\Debug\net8.0\staticwebassets\msbuild.build.Bonyan.TenantManagement.Web.props
-		Modules\Bonyan.TenantManagement.Web\obj\Debug\net8.0\staticwebassets\msbuild.buildMultiTargeting.Bonyan.TenantManagement.Web.props = Modules\Bonyan.TenantManagement.Web\obj\Debug\net8.0\staticwebassets\msbuild.buildMultiTargeting.Bonyan.TenantManagement.Web.props
-		Modules\Bonyan.TenantManagement.Web\obj\Debug\net8.0\staticwebassets\msbuild.buildTransitive.Bonyan.TenantManagement.Web.props = Modules\Bonyan.TenantManagement.Web\obj\Debug\net8.0\staticwebassets\msbuild.buildTransitive.Bonyan.TenantManagement.Web.props
-		Modules\Bonyan.TenantManagement.Web\obj\Debug\net8.0\staticwebassets.build.json = Modules\Bonyan.TenantManagement.Web\obj\Debug\net8.0\staticwebassets.build.json
-		Modules\Bonyan.TenantManagement.Web\obj\project.assets.json = Modules\Bonyan.TenantManagement.Web\obj\project.assets.json
-		Modules\Bonyan.TenantManagement.Web\obj\project.nuget.cache = Modules\Bonyan.TenantManagement.Web\obj\project.nuget.cache
-		Modules\Bonyan.TenantManagement.Web\obj\project.packagespec.json = Modules\Bonyan.TenantManagement.Web\obj\project.packagespec.json
-		Modules\Bonyan.TenantManagement.Web\obj\rider.project.model.nuget.info = Modules\Bonyan.TenantManagement.Web\obj\rider.project.model.nuget.info
-		Modules\Bonyan.TenantManagement.Web\obj\rider.project.restore.info = Modules\Bonyan.TenantManagement.Web\obj\rider.project.restore.info
+		Modules\Bonyan.TenantManagement.Web\obj\Debug\net8.0\.NETCoreApp,Version = v8.0.AssemblyAttributes.cs = Modules\Bonyan.TenantManagement.Web\obj\Debug\net8.0\.NETCoreApp,Version=v8.0.AssemblyAttributes.cs
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TenantMangment", "TenantMangment", "{73E98A46-A1E6-49D9-B432-F9121B8365D3}"
@@ -121,9 +64,17 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.UnitOfWork", "Framew
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.Validation", "Framework\Bonyan.Validation\Bonyan.Validation.csproj", "{E71B11EA-8D38-40BB-A44C-E2CEA795B7E8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.TenantManagement.Web", "Modules\Bonyan.TenantManagement.Web\Bonyan.TenantManagement.Web.csproj", "{BFFF163F-8F85-4709-9BE6-A29A845EB7C8}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.TenantManagement.Web", "Modules\Bonyan.TenantManagement.Web\Bonyan.TenantManagement.Web.csproj", "{CAFB8C25-1062-4A94-B7B4-70B23557A3FB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UserManagement", "UserManagement", "{2C373FDE-63AD-4F29-896E-686DC0819303}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.UserManagement.Application", "Modules\Bonyan.UserManagement.Application\Bonyan.UserManagement.Application.csproj", "{BA9FF048-DE8A-4E15-9822-D1ECBD6B6927}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.UserManagement.Domain", "Modules\Bonyan.UserManagement.Domain\Bonyan.UserManagement.Domain.csproj", "{3BBDB052-4AF3-4C54-BF87-A89F9B418B83}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.UserManagement.EntityFrameworkCore", "Modules\Bonyan.UserManagement.EntityFrameworkCore\Bonyan.UserManagement.EntityFrameworkCore.csproj", "{DF429857-4882-454A-BF53-A973FFAFC496}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.UserManagement.Web", "Modules\Bonyan.UserManagement.Web\Bonyan.UserManagement.Web.csproj", "{E8D34A4F-C11A-4DAE-9D7A-81BB076F8A55}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -227,14 +178,26 @@ Global
 		{E71B11EA-8D38-40BB-A44C-E2CEA795B7E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E71B11EA-8D38-40BB-A44C-E2CEA795B7E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E71B11EA-8D38-40BB-A44C-E2CEA795B7E8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BFFF163F-8F85-4709-9BE6-A29A845EB7C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BFFF163F-8F85-4709-9BE6-A29A845EB7C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BFFF163F-8F85-4709-9BE6-A29A845EB7C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BFFF163F-8F85-4709-9BE6-A29A845EB7C8}.Release|Any CPU.Build.0 = Release|Any CPU
 		{CAFB8C25-1062-4A94-B7B4-70B23557A3FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CAFB8C25-1062-4A94-B7B4-70B23557A3FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CAFB8C25-1062-4A94-B7B4-70B23557A3FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CAFB8C25-1062-4A94-B7B4-70B23557A3FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BA9FF048-DE8A-4E15-9822-D1ECBD6B6927}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA9FF048-DE8A-4E15-9822-D1ECBD6B6927}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA9FF048-DE8A-4E15-9822-D1ECBD6B6927}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA9FF048-DE8A-4E15-9822-D1ECBD6B6927}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3BBDB052-4AF3-4C54-BF87-A89F9B418B83}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3BBDB052-4AF3-4C54-BF87-A89F9B418B83}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3BBDB052-4AF3-4C54-BF87-A89F9B418B83}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3BBDB052-4AF3-4C54-BF87-A89F9B418B83}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DF429857-4882-454A-BF53-A973FFAFC496}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DF429857-4882-454A-BF53-A973FFAFC496}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DF429857-4882-454A-BF53-A973FFAFC496}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DF429857-4882-454A-BF53-A973FFAFC496}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E8D34A4F-C11A-4DAE-9D7A-81BB076F8A55}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E8D34A4F-C11A-4DAE-9D7A-81BB076F8A55}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E8D34A4F-C11A-4DAE-9D7A-81BB076F8A55}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E8D34A4F-C11A-4DAE-9D7A-81BB076F8A55}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -265,8 +228,12 @@ Global
 		{4D86AACB-E786-4A64-8BC8-E199DEC3B5C5} = {73E98A46-A1E6-49D9-B432-F9121B8365D3}
 		{BB80CF95-26CA-4F2C-9C16-CE4E799A32F6} = {F865B8FC-9BE7-4251-B8D7-519F85EF20B2}
 		{E71B11EA-8D38-40BB-A44C-E2CEA795B7E8} = {F865B8FC-9BE7-4251-B8D7-519F85EF20B2}
-		{BFFF163F-8F85-4709-9BE6-A29A845EB7C8} = {034A5C05-CB06-41AC-AE54-EE94F66019FC}
 		{CAFB8C25-1062-4A94-B7B4-70B23557A3FB} = {73E98A46-A1E6-49D9-B432-F9121B8365D3}
+		{2C373FDE-63AD-4F29-896E-686DC0819303} = {CAC9F2FC-7BFD-457E-B17C-E9A90BD941EF}
+		{BA9FF048-DE8A-4E15-9822-D1ECBD6B6927} = {2C373FDE-63AD-4F29-896E-686DC0819303}
+		{3BBDB052-4AF3-4C54-BF87-A89F9B418B83} = {2C373FDE-63AD-4F29-896E-686DC0819303}
+		{DF429857-4882-454A-BF53-A973FFAFC496} = {2C373FDE-63AD-4F29-896E-686DC0819303}
+		{E8D34A4F-C11A-4DAE-9D7A-81BB076F8A55} = {2C373FDE-63AD-4F29-896E-686DC0819303}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CACE9943-7714-471F-BCCD-CC6CA1DA43C5}

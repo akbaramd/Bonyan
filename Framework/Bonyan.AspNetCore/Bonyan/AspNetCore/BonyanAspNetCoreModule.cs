@@ -5,7 +5,6 @@ using Bonyan.Modularity;
 using Bonyan.Modularity.Attributes;
 using Bonyan.UnitOfWork;
 using Microsoft;
-using Microsoft.Extensions.Options;
 
 namespace Bonyan.AspNetCore;
 

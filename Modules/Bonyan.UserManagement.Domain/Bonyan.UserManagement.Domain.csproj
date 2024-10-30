@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <PackageId>Bonyan.UserManagement.Domain</PackageId>
+    </PropertyGroup>
+    <Import Project="..\..\package.props" />
+    <ItemGroup>
+        <ProjectReference Include="..\..\Framework\Bonyan.Layer.Domain\Bonyan.Layer.Domain.csproj" />
+    </ItemGroup>
+
+</Project>

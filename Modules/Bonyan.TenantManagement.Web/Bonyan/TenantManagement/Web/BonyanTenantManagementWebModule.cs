@@ -4,7 +4,6 @@ using Bonyan.Modularity.Attributes;
 using Bonyan.TenantManagement.Application;
 using Bonyan.TenantManagement.Application.Profiles;
 using Bonyan.TenantManagement.Application.Services;
-using Bonyan.TenantManagement.Domain;
 
 namespace Bonyan.TenantManagement.Web;
 

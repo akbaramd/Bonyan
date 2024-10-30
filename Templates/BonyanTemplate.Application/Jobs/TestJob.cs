@@ -1,6 +1,5 @@
 ﻿using Bonyan.AspNetCore.Job;
 using Bonyan.MultiTenant;
-using Bonyan.TenantManagement.Application.Dto;
 using Bonyan.TenantManagement.Application.Services;
 using Bonyan.TenantManagement.Domain;
 using Bonyan.UnitOfWork;
