@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Bonyan.Core;
+using Microsoft;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Bonyan.Autofac;
@@ -33,7 +34,8 @@ public class BonyanAutofacServiceProviderFactory : IServiceProviderFactory<Conta
     public IServiceProvider CreateServiceProvider(ContainerBuilder containerBuilder)
     {
         Check.NotNull(containerBuilder, nameof(containerBuilder));
-
-        return new AutofacServiceProvider(containerBuilder.Build());
+        var container = containerBuilder.Build();
+        _services.AddObjectAccessor<IContainer>(container);
+        return new AutofacServiceProvider(container);
     }
 }

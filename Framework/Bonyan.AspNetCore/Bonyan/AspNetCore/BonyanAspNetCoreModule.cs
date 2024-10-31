@@ -10,9 +10,14 @@ namespace Bonyan.AspNetCore;
 /// <summary>
 /// Configures services and middleware specific to the Bonyan ASP.NET Core module.
 /// </summary>
-[DependOn(typeof(BonyanLayerDomainModule))]
+
 public class BonyanAspNetCoreModule : WebModule
 {
+
+    public BonyanAspNetCoreModule()
+    {
+        DependOn<BonyanLayerDomainModule>();
+    }
     /// <summary>
     /// Configures exception handling settings before the module configuration phase.
     /// </summary>
@@ -50,7 +55,7 @@ public class BonyanAspNetCoreModule : WebModule
     /// <param name="context">The configuration context for services.</param>
     private void ConfigureExceptionHandling(ServiceConfigurationContext context)
     {
-        context.Configure<ExceptionHandlingOptions>(options => 
+        context.ConfigureOptions<ExceptionHandlingOptions>(options => 
         {
             options.ApiExceptionMiddlewareEnabled = false;
         });

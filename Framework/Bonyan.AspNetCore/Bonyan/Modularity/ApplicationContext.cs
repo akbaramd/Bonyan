@@ -1,12 +1,37 @@
-namespace Bonyan.Modularity;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Configuration;
 
-public class ApplicationContext : ServiceContextBase
+namespace Bonyan.Modularity
 {
-    public WebApplication Application { get; }
-
-    public ApplicationContext(WebApplication application)
-        : base(application.Services)
+    /// <summary>
+    /// Context for managing application services and environment settings.
+    /// </summary>
+    public class ApplicationContext : ApplicationContextBase
     {
-        Application = application;
+        public WebApplication Application { get; }
+
+        public ApplicationContext(WebApplication application)
+            : base(application.Services, application.Configuration)
+        {
+            Application = application;
+        }
+
+        /// <summary>
+        /// Registers middleware in the application pipeline.
+        /// </summary>
+        public void UseMiddleware(Action<IApplicationBuilder> configure)
+        {
+            configure(Application);
+        }
+
+        /// <summary>
+        /// Checks if the current environment is Development.
+        /// </summary>
+        public bool IsDevelopment() => Application.Environment.IsDevelopment();
+
+        /// <summary>
+        /// Checks if the current environment is Production.
+        /// </summary>
+        public bool IsProduction() => Application.Environment.IsProduction();
     }
 }

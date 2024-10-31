@@ -1,57 +1,82 @@
-using Bonyan.Exceptions;
+using System;
+using System.Collections.Generic;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
-namespace Bonyan.Modularity;
-
-public class ServiceConfigurationContext : ServiceContextBase
+namespace Bonyan.Modularity
 {
-    public IServiceCollection Services { get; }
-    public IConfiguration Configuration { get; }
-
-    public ServiceConfigurationContext(IServiceCollection services, IConfiguration configuration)
-        : base(services.BuildServiceProvider())
-    {
-        Services = services;
-        Configuration = configuration;
-    }
-
     /// <summary>
-    /// Configure options of type TOptions.
+    /// Context for configuring services, allowing options setup and configuration binding.
     /// </summary>
-    public void Configure<TOptions>(Action<TOptions> configureOptions) where TOptions : class
+    public class ServiceConfigurationContext : ApplicationContextBase
     {
-        Services.Configure(configureOptions);
-    }
+        public IServiceCollection Services { get; }
 
-    /// <summary>
-    /// Configure named options of type TOptions.
-    /// </summary>
-    public void Configure<TOptions>(string name, Action<TOptions> configureOptions) where TOptions : class
-    {
-        Services.Configure(name, configureOptions);
-    }
-
-    /// <summary>
-    /// Get a required configuration option, throwing an exception if not found.
-    /// </summary>
-    public T RequiredOption<T>() where T : class
-    {
-        var service = RequireService<IOptions<T>>();
-        if (service.Value == null)
+        public ServiceConfigurationContext(IServiceCollection services, IConfiguration configuration)
+            : base(services.BuildServiceProvider(), configuration)
         {
-            throw new ConfigurationNotFoundException<T>();
+            Services = services;
         }
-        return service.Value;
-    }
 
-    /// <summary>
-    /// Get an optional configuration option.
-    /// </summary>
-    public T? GetOption<T>() where T : class
-    {
-        var service = GetService<IOptions<T>>();
-        return service?.Value;
+
+        /// <summary>
+        /// Configures options of type <typeparamref name="TOptions"/> using an action.
+        /// </summary>
+        /// <typeparam name="TOptions">The type of options to configure.</typeparam>
+        /// <param name="configureOptions">The action to configure options.</param>
+        public void ConfigureOptions<TOptions>(Action<TOptions> configureOptions) where TOptions : class
+        {
+            Services.Configure(configureOptions);
+        }
+
+        /// <summary>
+        /// Configures options of type <typeparamref name="TOptions"/> and validates them using a validation function.
+        /// </summary>
+        /// <typeparam name="TOptions">The type of options to configure and validate.</typeparam>
+        /// <param name="configureOptions">The action to configure options.</param>
+        /// <param name="validate">The function to validate options. Returns true if valid; otherwise, false.</param>
+        public void ConfigureAndValidate<TOptions>(Action<TOptions> configureOptions, Func<TOptions, bool> validate) where TOptions : class, new()
+        {
+            Services.Configure<TOptions>(configureOptions);
+            Services.PostConfigure<TOptions>(options =>
+            {
+                if (!validate(options))
+                {
+                    throw new OptionsValidationException(typeof(TOptions).Name, typeof(TOptions), new[] { "Validation failed for configured options." });
+                }
+            });
+        }
+        
+
+        /// <summary>
+        /// Configures named options of type <typeparamref name="TOptions"/>.
+        /// </summary>
+        /// <typeparam name="TOptions">The type of options to configure.</typeparam>
+        /// <param name="name">The name of the options instance to configure.</param>
+        /// <param name="configureOptions">The action to configure the named options.</param>
+        public void ConfigureNamedOptions<TOptions>(string name, Action<TOptions> configureOptions) where TOptions : class
+        {
+            Services.Configure(name, configureOptions);
+        }
+
+        /// <summary>
+        /// Configures and validates named options of type <typeparamref name="TOptions"/>.
+        /// </summary>
+        /// <typeparam name="TOptions">The type of options to configure and validate.</typeparam>
+        /// <param name="name">The name of the options instance to configure.</param>
+        /// <param name="configureOptions">The action to configure the named options.</param>
+        /// <param name="validate">The function to validate options. Returns true if valid; otherwise, false.</param>
+        public void ConfigureAndValidateNamedOptions<TOptions>(string name, Action<TOptions> configureOptions, Func<TOptions, bool> validate) where TOptions : class, new()
+        {
+            Services.Configure(name, configureOptions);
+            Services.PostConfigure<TOptions>(name, options =>
+            {
+                if (!validate(options))
+                {
+                    throw new OptionsValidationException(typeof(TOptions).Name, typeof(TOptions), new[] { $"Validation failed for named options '{name}'." });
+                }
+            });
+        }
     }
 }

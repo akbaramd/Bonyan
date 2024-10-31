@@ -1,6 +1,13 @@
-﻿namespace BonyanTemplate.Domain.Entities;
+﻿using Bonyan.UserManagement.Domain;
+using Bonyan.UserManagement.Domain.ValueObjects;
 
-public class User
+namespace BonyanTemplate.Domain.Entities;
+
+public class User : BonyanUser
 {
+    protected User(){}
     
+    public User(UserId id, string userName) : base(id, userName)
+    {
+    }
 }

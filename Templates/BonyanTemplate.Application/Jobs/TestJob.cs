@@ -3,21 +3,21 @@ using Bonyan.MultiTenant;
 using Bonyan.TenantManagement.Application.Services;
 using Bonyan.TenantManagement.Domain;
 using Bonyan.UnitOfWork;
+using Bonyan.UserManagement.Domain.ValueObjects;
+using BonyanTemplate.Domain.Entities;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace BonyanTemplate.Application.Jobs;
 
 public class TestJob : IJob
 {
-  private ITenantRepository _tenantRepository;
-  private ITenantApplicationService _service;
-  private ICurrentTenant _currentTenantAccessor;
-  private IUnitOfWork _unitOfWork;
-  public TestJob(ITenantRepository tenantRepository, ICurrentTenant currentTenantAccessor, ITenantApplicationService repository, IUnitOfWork unitOfWork)
+  
+  private UserManager<User> _userManager;
+
+  public TestJob( IServiceProvider userManage)
   {
-    _tenantRepository = tenantRepository;
-    _currentTenantAccessor = currentTenantAccessor;
-    _service = repository;
-    _unitOfWork = unitOfWork;
+    _userManager = userManage.GetRequiredService<UserManager<User>>();
   }
   // private IRepository<Books,Guid> _repository;
   // private IRepository<Books> _2repository;
@@ -32,6 +32,9 @@ public class TestJob : IJob
   public async Task ExecuteAsync(CancellationToken cancellationToken = default)
   {
     // var res = await _service.CreateAsync(new TenantCreateDto(){Key = "test"});
+    var res = await _userManager.CreateAsync(new User(new UserId(),"akbarsafari00"), "Aa@13567975");
+    
+    
     Console.WriteLine("Tick Tok");
   }
 }

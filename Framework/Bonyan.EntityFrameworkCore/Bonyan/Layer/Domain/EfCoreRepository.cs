@@ -40,8 +40,8 @@ namespace Bonyan.Layer.Domain
     where TDbContext : BonyanDbContext<TDbContext>
     where TKey : notnull
   {
-    public EfCoreRepository(TDbContext dbContext)
-      : base(dbContext)
+    public EfCoreRepository(TDbContext userManagementDbContext)
+      : base(userManagementDbContext)
     {
     }
 

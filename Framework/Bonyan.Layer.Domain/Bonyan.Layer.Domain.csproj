@@ -13,6 +13,8 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Bonyan.MultiTenant\Bonyan.MultiTenant.csproj" />
+    <ProjectReference Include="..\Bonyan.UnitOfWork\Bonyan.UnitOfWork.csproj" />
+    <ProjectReference Include="..\Bonyan.Validation\Bonyan.Validation.csproj" />
     <ProjectReference Include="..\Bonyan\Bonyan.csproj" />
   </ItemGroup>
 </Project>

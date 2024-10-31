@@ -4,18 +4,12 @@ using Bonyan.UserManagement.Domain.Enumerations;
 using Bonyan.UserManagement.Domain.Repositories;
 using Bonyan.UserManagement.Domain.ValueObjects;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace Bonyan.IdentityManagement.EntityFrameworkCore
+namespace Bonyan.UserManagement.EntityFrameworkCore
 {
-    public class BonyanUserEfRepository<TUser> : EfCoreRepository<TUser, UserId, BonyanIdentityDbContext<TUser>>, IBonyanUserRepository<TUser> where TUser : BonyanUser
+    public class BonyanUserEfRepository<TUser> : EfCoreRepository<TUser, UserId, BonUserManagementDbContext<TUser>>, IBonyanUserRepository<TUser>,IUserPasswordStore<TUser> where TUser : BonyanUser
     {
-        public BonyanUserEfRepository(BonyanIdentityDbContext<TUser> dbContext) : base(dbContext)
+        public BonyanUserEfRepository(BonUserManagementDbContext<TUser> userManagementDbContext) : base(userManagementDbContext)
         {
         }
 

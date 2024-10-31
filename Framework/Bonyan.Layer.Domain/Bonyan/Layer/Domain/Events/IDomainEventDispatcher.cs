@@ -12,6 +12,6 @@ namespace Bonyan.Layer.Domain.Events
     /// </summary>
     /// <param name="aggregatesWithEvents">The aggregates containing the domain events to be dispatched.</param>
     /// <returns>A task that represents the asynchronous operation.</returns>
-    Task DispatchAndClearEvents(IEnumerable<IAggregateRoot> aggregatesWithEvents);
+    Task DispatchAsync<TEvent>(TEvent domainEvent) where TEvent : IDomainEvent;
   }
 }

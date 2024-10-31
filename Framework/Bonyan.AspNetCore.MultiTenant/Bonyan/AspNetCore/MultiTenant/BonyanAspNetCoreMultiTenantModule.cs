@@ -3,17 +3,22 @@ using Bonyan.MultiTenant;
 
 namespace Bonyan.AspNetCore.MultiTenant;
 
-[DependOn(
-    typeof(BonyanMultiTenantModule),
-    typeof(BonyanAspNetCoreModule)
-    )]
+
 public class BonyanAspNetCoreMultiTenantModule : WebModule
 {
+
+  public BonyanAspNetCoreMultiTenantModule()
+  {
+    DependOn([
+      typeof(BonyanMultiTenantModule),
+      typeof(BonyanAspNetCoreModule)
+    ]);
+  }
   public override Task OnConfigureAsync(ServiceConfigurationContext context)
   {
     context.Services.AddTransient<MultiTenancyMiddleware>();
     context.Services.AddSingleton<ITenantResolveResultAccessor, HttpContextTenantResolveResultAccessor>();
-    context.Configure<BonyanTenantResolveOptions>(options =>
+    context.ConfigureOptions<BonyanTenantResolveOptions>(options =>
     {
       options.TenantResolvers.Add(new QueryStringTenantResolveContributor());
       options.TenantResolvers.Add(new RouteTenantResolveContributor());

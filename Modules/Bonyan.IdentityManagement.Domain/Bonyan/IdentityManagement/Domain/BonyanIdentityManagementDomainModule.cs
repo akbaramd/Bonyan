@@ -13,8 +13,7 @@ public class BonyanIdentityManagementDomainModule<TUser> : Modularity.Abstractio
   public BonyanIdentityManagementDomainModule()
   {
     DependOn([
-      typeof(BonyanMultiTenantModule),
-      typeof(BonyanUserManagementDomainModule),
+      typeof(BonyanUserManagementDomainModule<TUser>),
     ]);
   }
   public override Task OnConfigureAsync(ServiceConfigurationContext context)

@@ -1,58 +1,100 @@
+using System;
+using System.Collections.Generic;
 using System.Reflection;
+using System.Threading.Tasks;
 
-namespace Bonyan.Modularity.Abstractions;
-
-public abstract class Module : IModule
+namespace Bonyan.Modularity.Abstractions
 {
-
-
-    public virtual Task OnPreConfigureAsync(ServiceConfigurationContext context)
+    /// <summary>
+    /// Base class for a module in the Bonyan modular system, providing methods for configuring dependencies.
+    /// </summary>
+    public abstract class Module : IModule
     {
-        return Task.CompletedTask;
-    }
+        public virtual Task OnPreConfigureAsync(ServiceConfigurationContext context) => Task.CompletedTask;
 
-    public virtual Task OnConfigureAsync(ServiceConfigurationContext context)
-    {
-        return Task.CompletedTask;
-    }
+        public virtual Task OnConfigureAsync(ServiceConfigurationContext context) => Task.CompletedTask;
 
-    public virtual Task OnPostConfigureAsync(ServiceConfigurationContext context)
-    {
-        return Task.CompletedTask;
-    }
+        public virtual Task OnPostConfigureAsync(ServiceConfigurationContext context) => Task.CompletedTask;
 
-    public virtual Task OnPreInitializeAsync(ServiceInitializationContext context)
-    {
-        return Task.CompletedTask;
-    }
+        public virtual Task OnPreInitializeAsync(ServiceInitializationContext context) => Task.CompletedTask;
 
-    public virtual Task OnInitializeAsync(ServiceInitializationContext context)
-    {
-        return Task.CompletedTask;
-    }
+        public virtual Task OnInitializeAsync(ServiceInitializationContext context) => Task.CompletedTask;
 
-    public virtual Task OnPostInitializeAsync(ServiceInitializationContext context)
-    {
-        return Task.CompletedTask;
-    }
+        public virtual Task OnPostInitializeAsync(ServiceInitializationContext context) => Task.CompletedTask;
 
+        /// <summary>
+        /// Checks if the provided type is a valid Bonyan module type.
+        /// </summary>
+        /// <param name="moduleType">The type to check.</param>
+        /// <exception cref="ArgumentException">Thrown if the provided type is not a valid module type.</exception>
+        internal static void CheckBonyanModuleType(Type moduleType)
+        {
+            if (!IsBonyanModule(moduleType))
+            {
+                throw new ArgumentException("The provided type is not a Bonyan module: " + moduleType.AssemblyQualifiedName);
+            }
+        }
 
-    internal static void CheckBonyanModuleType(Type moduleType)
-    {
-      if (!IsBonyanModule(moduleType))
-      {
-        throw new ArgumentException("Given type is not an ABP module: " + moduleType.AssemblyQualifiedName);
-      }
-    }
-    
-    public static bool IsBonyanModule(Type type)
-    {
-      var typeInfo = type.GetTypeInfo();
+        /// <summary>
+        /// Determines if the provided type is a Bonyan module.
+        /// </summary>
+        /// <param name="type">The type to check.</param>
+        /// <returns>True if the type is a non-abstract, non-generic class that implements IModule; otherwise, false.</returns>
+        public static bool IsBonyanModule(Type type)
+        {
+            var typeInfo = type.GetTypeInfo();
+            return typeInfo.IsClass &&
+                   !typeInfo.IsAbstract &&
+                   typeof(IModule).GetTypeInfo().IsAssignableFrom(type);
+        }
 
-      return
-        typeInfo.IsClass &&
-        !typeInfo.IsAbstract &&
-        !typeInfo.IsGenericType &&
-        typeof(IModule).GetTypeInfo().IsAssignableFrom(type);
+        /// <summary>
+        /// List of dependent modules required by this module.
+        /// </summary>
+        public List<Type> DependedModules { get; set; } = new List<Type>();
+
+        /// <summary>
+        /// Adds a dependency on the specified module type.
+        /// </summary>
+        /// <typeparam name="TModule">The module type to depend on.</typeparam>
+        /// <exception cref="ArgumentException">Thrown if the specified type is not a valid module type.</exception>
+        public void DependOn<TModule>() where TModule : IModule
+        {
+            var moduleType = typeof(TModule);
+            CheckBonyanModuleType(moduleType);
+
+            if (!DependedModules.Contains(moduleType))
+            {
+                DependedModules.Add(moduleType);
+            }
+        }
+
+        /// <summary>
+        /// Adds dependencies on the specified module types.
+        /// </summary>
+        /// <param name="types">The types to depend on.</param>
+        /// <exception cref="ArgumentException">Thrown if any specified type is not a valid module type.</exception>
+        public void DependOn(params Type[] types)
+        {
+            if (types == null || types.Length == 0)
+            {
+                throw new ArgumentException("At least one module type must be specified.");
+            }
+
+            foreach (var type in types)
+            {
+                if (type == null)
+                {
+                    throw new ArgumentException("Module type cannot be null.");
+                }
+
+                CheckBonyanModuleType(type);
+
+                if (!DependedModules.Contains(type))
+                {
+                    DependedModules.Add(type);
+                }
+            }
+        }
     }
 }

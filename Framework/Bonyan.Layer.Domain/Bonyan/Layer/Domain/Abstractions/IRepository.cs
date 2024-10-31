@@ -3,6 +3,7 @@ using Bonyan.Layer.Domain.Entities;
 using Bonyan.Layer.Domain.Model;
 using Bonyan.Layer.Domain.Specifications;
 using Bonyan.MultiTenant;
+using Bonyan.UnitOfWork;
 
 namespace Bonyan.Layer.Domain.Abstractions;
 
@@ -43,7 +44,7 @@ public interface IRepository<TEntity, in TKey> :IRepository<TEntity>, IReadOnlyR
 }
 
 // IRepository without specifying the key type (uses IEntity directly).
-public interface IRepository<TEntity> : IReadOnlyRepository<TEntity> where TEntity : class, IEntity
+public interface IRepository<TEntity> : IReadOnlyRepository<TEntity>,IUnitOfWorkEnabled where TEntity : class, IEntity
 {
   Task<TEntity> AddAsync(TEntity entity);
   Task UpdateAsync(TEntity entity);

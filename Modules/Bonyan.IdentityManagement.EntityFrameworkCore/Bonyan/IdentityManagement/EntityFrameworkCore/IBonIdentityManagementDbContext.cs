@@ -1,6 +1,8 @@
-﻿namespace Bonyan.IdentityManagement.EntityFrameworkCore;
+﻿using Bonyan.UserManagement.Domain;
+using Bonyan.UserManagement.EntityFrameworkCore;
 
-public class IBonIdentityManagementDbContext
+namespace Bonyan.IdentityManagement.EntityFrameworkCore;
+
+public interface IBonIdentityManagementDbContext<TUser>: IBonUserManagementDbContext<TUser> where TUser: BonyanUser
 {
-    
 }

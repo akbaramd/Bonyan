@@ -1,4 +1,5 @@
 using Bonyan.AutoMapper;
+using Bonyan.Job.Hangfire;
 using Bonyan.Modularity;
 using Bonyan.TenantManagement.Application;
 using BonyanTemplate.Application.Dtos;
@@ -9,15 +10,18 @@ using Module = Bonyan.Modularity.Abstractions.Module;
 
 namespace BonyanTemplate.Application
 {
-  [DependOn(
-    typeof(BonyanTemplateDomainModule),
-    typeof(BonyanTenantManagementApplicationModule)
-    ,typeof(BonyanAutoMapperModule))]
+
   public class BonyanTemplateApplicationModule : Module
   {
+    public BonyanTemplateApplicationModule()
+    {
+      DependOn<BonyanTenantManagementApplicationModule>();
+      DependOn<BonyanTemplateDomainModule>();
+      DependOn<BonyanJobHangfireModule>();
+    }
     public override Task OnConfigureAsync(ServiceConfigurationContext context)
     {
-      context.Configure<BonyanAutoMapperOptions>(options =>
+      context.ConfigureOptions<BonyanAutoMapperOptions>(options =>
       {
         options.AddProfile<BookMapper>();
       });

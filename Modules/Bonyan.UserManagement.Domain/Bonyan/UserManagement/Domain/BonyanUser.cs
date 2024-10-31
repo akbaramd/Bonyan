@@ -49,11 +49,10 @@ namespace Bonyan.UserManagement.Domain
         /// <param name="id">The unique identifier of the user.</param>
         /// <param name="userName">The unique username of the user.</param>
         /// <param name="initialPassword">The initial password of the user.</param>
-        public BonyanUser(UserId id, string userName, string initialPassword)
+        public BonyanUser(UserId id, string userName)
         {
             Id = id;
             UserName = userName;
-            Password = new Password(initialPassword);
             Status = UserStatus.Active; // Default status
             AddDomainEvent(new UserCreatedEvent(this));
         }

@@ -5,9 +5,13 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Bonyan.EntityFrameworkCore
 {
-  [DependOn(typeof(BonyanUnitOfWorkModule))]
+  
   public class BonyanEntityFrameworkModule : Module
   {
+      public BonyanEntityFrameworkModule()
+      {
+          DependOn<BonyanUnitOfWorkModule>();
+      }
       public override Task OnConfigureAsync(ServiceConfigurationContext context)
       {
         context.Services.AddTransient(typeof(IDbContextProvider<>),typeof(UnitOfWorkDbContextProvider<>));

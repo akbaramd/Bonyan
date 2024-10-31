@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 // create bonyan application builder
 var builder = BonyanApplication.CreateApplicationBuilder<BonyanTemplateModule>(args);
 
-var app = builder.Build();
+var app = await builder.BuildAsync();
 
 app.MapGet("/", async ([FromServices]IRepository<Books> book) =>
 {

@@ -4,9 +4,9 @@ using BonyanTemplate.Domain.Repositories;
 
 namespace BonyanTemplate.Infrastructure.Data.Repositories;
 
-public class EfBookRepository : EfCoreRepository<Books,BookId,BonyanTemplateBookDbContext>, IBooksRepository
+public class EfBookRepository : EfCoreRepository<Books,BookId,BonyanTemplateBookManagementDbContext>, IBooksRepository
 {
-  public EfBookRepository(BonyanTemplateBookDbContext bookDbContext) : base(bookDbContext)
+  public EfBookRepository(BonyanTemplateBookManagementDbContext bookManagementDbContext) : base(bookManagementDbContext)
   {
   }
 }

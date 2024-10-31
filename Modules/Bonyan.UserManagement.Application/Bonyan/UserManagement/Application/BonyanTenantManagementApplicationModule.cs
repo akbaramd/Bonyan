@@ -5,12 +5,12 @@ using Bonyan.UserManagement.Domain;
 namespace Bonyan.UserManagement.Application;
 
 
-public class BonyanUserManagementApplicationModule : Modularity.Abstractions.Module
+public class BonyanUserManagementApplicationModule<TUser> : Modularity.Abstractions.Module where TUser : BonyanUser
 {
   public BonyanUserManagementApplicationModule()
   {
     DependOn<BonyanLayerApplicationModule>();
-    DependOn<BonyanUserManagementDomainModule>();
+    DependOn<BonyanUserManagementDomainModule<TUser>>();
   }
   public override Task OnConfigureAsync(ServiceConfigurationContext context)
   {

@@ -13,10 +13,10 @@ using Microsoft.Extensions.DependencyInjection;
 namespace BonyanTemplate.Infrastructure;
 
 
-public class InfrastructureModule : Module
+public class BonaynTempalteInfrastructureModule : Module
 {
 
-  public InfrastructureModule()
+  public BonaynTempalteInfrastructureModule()
   {
     DependOn<BonyanTenantManagementEntityFrameworkModule>();
     DependOn<BonyanIdentityManagementEntityFrameworkCoreModule<User>>();

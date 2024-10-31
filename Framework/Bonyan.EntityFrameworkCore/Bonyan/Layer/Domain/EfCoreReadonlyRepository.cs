@@ -20,7 +20,7 @@ namespace Bonyan.Layer.Domain
         public IBonyanLazyServiceProvider LazyServiceProvider { get; set; } = default!;
         public IDbContextProvider<TDbContext> DbContextProvider { get; set; } = default!;
         
-        public EfCoreReadonlyRepository(TDbContext dbContext)
+        public EfCoreReadonlyRepository(TDbContext userManagementDbContext)
         {
 
         }
@@ -167,8 +167,8 @@ namespace Bonyan.Layer.Domain
         where TDbContext : DbContext, IBonyanDbContext<TDbContext>
         where TKey : notnull
     {
-        public EfCoreReadonlyRepository(TDbContext dbContext) 
-            : base(dbContext) { }
+        public EfCoreReadonlyRepository(TDbContext userManagementDbContext) 
+            : base(userManagementDbContext) { }
 
         public async Task<TEntity?> GetByIdAsync(TKey id)
         {

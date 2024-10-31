@@ -3,7 +3,9 @@ using System.Reflection;
 using Bonyan.DependencyInjection;
 using Bonyan.EntityFrameworkCore.Abstractions;
 using Bonyan.Layer.Domain.Abstractions;
+using Bonyan.Layer.Domain.Aggregates;
 using Bonyan.Layer.Domain.Entities;
+using Bonyan.Layer.Domain.Events;
 using Bonyan.MultiTenant;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
@@ -25,6 +27,7 @@ public class BonyanDbContext<TDbContext> : DbContext , IBonyanDbContext<TDbConte
   
   public ICurrentTenant? CurrentTenant => ServiceProvider?.GetService<ICurrentTenant>();
   private IOptions<BonyanMultiTenancyOptions>? TenancyOptions => ServiceProvider?.GetService<IOptions<BonyanMultiTenancyOptions>>();
+  private IDomainEventDispatcher? DomainEventDispatcher => ServiceProvider?.GetService<IDomainEventDispatcher>();
   protected virtual Guid? CurrentTenantId => CurrentTenant?.Id;
 
 
@@ -80,8 +83,17 @@ public class BonyanDbContext<TDbContext> : DbContext , IBonyanDbContext<TDbConte
           }
         }
       }
+
+      if (DomainEventDispatcher == null || entry.Entity is not IAggregateRoot agge) continue;
+      
+      foreach (var @event in agge.DomainEvents)
+      {
+        await DomainEventDispatcher.DispatchAsync(@event);
+      }
     }
 
+    
+    
     return await base.SaveChangesAsync(cancellationToken);
   }
 

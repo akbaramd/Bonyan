@@ -2,37 +2,38 @@ using Bonyan.Exceptions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 
-namespace Bonyan.Modularity;
-
-public class ServiceInitializationContext : ServiceContextBase
+namespace Bonyan.Modularity
 {
-    public IConfiguration Configuration { get; }
-
-    public ServiceInitializationContext(IServiceProvider services, IConfiguration configuration)
-        : base(services)
-    {
-        Configuration = configuration;
-    }
-
     /// <summary>
-    /// Get a required configuration option, throwing an exception if not found.
+    /// Context for initializing services with configuration and dependency resolution capabilities.
     /// </summary>
-    public T RequiredOption<T>() where T : class
+    public class ServiceInitializationContext : ApplicationContextBase
     {
-        var service = RequireService<IOptions<T>>();
-        if (service.Value == null)
+        public ServiceInitializationContext(IServiceProvider services, IConfiguration configuration)
+            : base(services, configuration)
         {
-            throw new ConfigurationNotFoundException<T>();
         }
-        return service.Value;
-    }
 
-    /// <summary>
-    /// Get an optional configuration option.
-    /// </summary>
-    public T? GetOption<T>() where T : class
-    {
-        var service = GetService<IOptions<T>>();
-        return service?.Value;
+        /// <summary>
+        /// Asynchronously retrieves an optional configuration option.
+        /// </summary>
+        public async Task<T?> GetOptionAsync<T>() where T : class
+        {
+            var service = await Task.FromResult(GetService<IOptions<T>>());
+            return service?.Value;
+        }
+
+        /// <summary>
+        /// Retrieves a required configuration option, throwing an exception if validation fails.
+        /// </summary>
+        public T RequiredValidatedOption<T>(Func<T, bool> validate) where T : class, new()
+        {
+            var option = RequiredOption<T>();
+            if (!validate(option))
+            {
+                throw new ConfigurationValidationException(typeof(T), "Validation failed for required configuration option.");
+            }
+            return option;
+        }
     }
 }

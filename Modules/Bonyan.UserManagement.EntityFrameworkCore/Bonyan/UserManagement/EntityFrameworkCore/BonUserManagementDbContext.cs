@@ -2,9 +2,9 @@ using Bonyan.EntityFrameworkCore;
 using Bonyan.UserManagement.Domain;
 using Microsoft.EntityFrameworkCore;
 
-namespace Bonyan.IdentityManagement.EntityFrameworkCore;
+namespace Bonyan.UserManagement.EntityFrameworkCore;
 
-public class BonUserManagementManagementDbContext<TUser> : BonyanDbContext<BonUserManagementManagementDbContext<TUser>>,IBonUserManagementDbContext<TUser> where TUser : BonyanUser
+public class BonUserManagementDbContext<TUser> : BonyanDbContext<BonUserManagementDbContext<TUser>>,IBonUserManagementDbContext<TUser> where TUser : BonyanUser
 {
   protected override void OnModelCreating(ModelBuilder modelBuilder)
   {
@@ -14,7 +14,7 @@ public class BonUserManagementManagementDbContext<TUser> : BonyanDbContext<BonUs
 
   public DbSet<TUser> Users { get; set; }
 
-  public BonUserManagementManagementDbContext(DbContextOptions<BonUserManagementManagementDbContext<TUser>> options) : base(options)
+  public BonUserManagementDbContext(DbContextOptions<BonUserManagementDbContext<TUser>> options) : base(options)
   {
   }
 }
