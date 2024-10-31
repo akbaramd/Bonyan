@@ -9,7 +9,7 @@ namespace Bonyan.TenantManagement.Application.Services;
 
 public class TenantApplicationService : ApplicationService, ITenantApplicationService
 {
-  public ITenantRepository TenantRepository => ServiceProvider.LazyGetRequiredService<ITenantRepository>();
+  public ITenantRepository TenantRepository => LazyServiceProvider.LazyGetRequiredService<ITenantRepository>();
 
   public async Task<PaginatedResult<TenantDto>> PaginateAsync(TenantFilterDto paginateDto, CancellationToken? cancellationToken = default)
   {

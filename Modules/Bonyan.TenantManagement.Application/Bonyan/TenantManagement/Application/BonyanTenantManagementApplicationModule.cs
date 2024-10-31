@@ -8,12 +8,16 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Bonyan.TenantManagement.Application;
 
-[DependOn([
-  typeof(BonyanLayerApplicationModule),
-  typeof(BonyanTenantManagementDomainModule)
-])]
+
 public class BonyanTenantManagementApplicationModule : Modularity.Abstractions.Module
 {
+  public BonyanTenantManagementApplicationModule()
+  {
+    DependOn([
+      typeof(BonyanLayerApplicationModule),
+      typeof(BonyanTenantManagementDomainModule)
+    ]);
+  }
   public override Task OnConfigureAsync(ServiceConfigurationContext context)
   {
     context.Services.AddTransient<ITenantApplicationService, TenantApplicationService>();

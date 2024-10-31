@@ -6,10 +6,14 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Bonyan.TenantManagement.EntityFrameworkCore;
 
-[DependOn(typeof(BonyanEntityFrameworkModule),
-  typeof(BonyanAspNetCoreMultiTenantModule))]
+
 public class BonyanTenantManagementEntityFrameworkModule : Modularity.Abstractions.Module
 {
+  public BonyanTenantManagementEntityFrameworkModule()
+  {
+    DependOn(typeof(BonyanEntityFrameworkModule),
+      typeof(BonyanAspNetCoreMultiTenantModule));
+  }
   public override Task OnConfigureAsync(ServiceConfigurationContext context)
   {
     context.Services.AddTransient<ITenantRepository, TenantRepository>();

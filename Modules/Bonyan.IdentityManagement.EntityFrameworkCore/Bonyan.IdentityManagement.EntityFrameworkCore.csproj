@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <PackageId>Bonyan.IdentityManagement.EntityFrameworkCore</PackageId>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\Framework\Bonyan.EntityFrameworkCore\Bonyan.EntityFrameworkCore.csproj" />
+      <ProjectReference Include="..\Bonyan.UserManagement.Domain\Bonyan.UserManagement.Domain.csproj" />
+      <ProjectReference Include="..\Bonyan.UserManagement.EntityFrameworkCore\Bonyan.UserManagement.EntityFrameworkCore.csproj" />
+    </ItemGroup>
+    
+    <Import Project="..\..\package.props" />
+    
+</Project>

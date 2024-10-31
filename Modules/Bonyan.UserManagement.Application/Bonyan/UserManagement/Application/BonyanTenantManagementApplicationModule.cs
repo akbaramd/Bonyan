@@ -4,12 +4,14 @@ using Bonyan.UserManagement.Domain;
 
 namespace Bonyan.UserManagement.Application;
 
-[DependOn([
-  typeof(BonyanLayerApplicationModule),
-  typeof(BonyanUserManagementDomainModule)
-])]
+
 public class BonyanUserManagementApplicationModule : Modularity.Abstractions.Module
 {
+  public BonyanUserManagementApplicationModule()
+  {
+    DependOn<BonyanLayerApplicationModule>();
+    DependOn<BonyanUserManagementDomainModule>();
+  }
   public override Task OnConfigureAsync(ServiceConfigurationContext context)
   {
     return base.OnConfigureAsync(context);

@@ -5,12 +5,16 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Bonyan.TenantManagement.Domain;
 
-[DependOn([
-  typeof(BonyanMultiTenantModule),
-  typeof(BonyanLayerDomainModule),
-])]
+
 public class BonyanTenantManagementDomainModule : Modularity.Abstractions.Module
 {
+  public BonyanTenantManagementDomainModule()
+  {
+    DependOn([
+      typeof(BonyanMultiTenantModule),
+      typeof(BonyanLayerDomainModule),
+    ]);
+  }
   public override Task OnConfigureAsync(ServiceConfigurationContext context)
   {
     context.Services.AddTransient<ITenantStore, TenantStore>();

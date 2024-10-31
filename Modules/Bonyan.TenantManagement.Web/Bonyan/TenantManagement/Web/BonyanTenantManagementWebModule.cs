@@ -6,11 +6,15 @@ using Bonyan.TenantManagement.Application.Services;
 
 namespace Bonyan.TenantManagement.Web;
 
-[DependOn([
-    typeof(BonyanTenantManagementApplicationModule),
-])]
+
 public class BonyanTenantManagementWebModule : WebModule
 {
+    public BonyanTenantManagementWebModule()
+    {
+        DependOn([
+            typeof(BonyanTenantManagementApplicationModule),
+        ]);
+    }
     public override Task OnPreConfigureAsync(ServiceConfigurationContext context)
     {
         context.Services.Configure<TenantManagementEndpointOptions>(c =>
