@@ -35,15 +35,7 @@ public class TestJob : IJob
 
   public async Task ExecuteAsync(CancellationToken cancellationToken = default)
   {
-    using (var uow  = _unitOfWorkManager.Begin())
-    {
       var res = await _userManager.CreateAsync(new User(new UserId(),"akbarsafari00"), "Aa@13567975");
-
-      await uow.CompleteAsync();
-    }
-    // var res = await _service.CreateAsync(new TenantCreateDto(){Key = "test"});
-    
-    
     
     Console.WriteLine("Tick Tok");
   }

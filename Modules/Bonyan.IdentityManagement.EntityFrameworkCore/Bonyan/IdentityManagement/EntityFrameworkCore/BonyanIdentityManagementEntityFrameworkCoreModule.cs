@@ -1,4 +1,5 @@
 using Bonyan.EntityFrameworkCore;
+using Bonyan.IdentityManagement.Domain;
 using Bonyan.Modularity;
 using Bonyan.Modularity.Abstractions;
 using Bonyan.MultiTenant;
@@ -10,7 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Bonyan.IdentityManagement.EntityFrameworkCore;
 
-public class BonyanIdentityManagementEntityFrameworkCoreModule<TUser> : Module where TUser : BonyanUser
+public class BonyanIdentityManagementEntityFrameworkCoreModule<TUser,TRole> : Module where TUser : BonyanUser where TRole : BonRole
 {
     public BonyanIdentityManagementEntityFrameworkCoreModule()
     {
@@ -19,7 +20,7 @@ public class BonyanIdentityManagementEntityFrameworkCoreModule<TUser> : Module w
 
     public override Task OnConfigureAsync(ServiceConfigurationContext context)
     {
-        context.AddBonyanDbContext<BonIdentityManagementDbContext<TUser>>();
+        context.AddBonyanDbContext<BonIdentityManagementDbContext<TUser,TRole>>();
         return base.OnConfigureAsync(context);
     }
 }

@@ -65,14 +65,8 @@ namespace Bonyan.Layer.Domain
     public async Task UpdateAsync(TEntity entity)
     {
       var dbContext = await GetDbContextAsync();
-
-      if (dbContext.Set<TEntity>().Local.All(e => e != entity))
-      {
-        dbContext.Set<TEntity>().Attach(entity);
-        dbContext.Update(entity);
-
-        await dbContext.SaveChangesAsync();
-      }
+      dbContext.Attach(entity);
+      dbContext.Update(entity);
     }
 
     public async Task DeleteAsync(TEntity entity)

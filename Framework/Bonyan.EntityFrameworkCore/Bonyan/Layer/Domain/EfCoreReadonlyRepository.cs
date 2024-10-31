@@ -160,6 +160,13 @@ namespace Bonyan.Layer.Domain
 
         public bool? IsChangeTrackingEnabled { get; }
         public ICurrentTenant? CurrentTenant => LazyServiceProvider.LazyGetService<ICurrentTenant>();
+
+        public void Dispose()
+        {
+            
+        }
+        
+        public IQueryable<TEntity> Queryable => GetDbContextAsync().GetAwaiter().GetResult().Set<TEntity>();
     }
     
     public class EfCoreReadonlyRepository<TEntity, TKey, TDbContext> : EfCoreReadonlyRepository<TEntity, TDbContext>, IReadonlyEfCoreRepository<TEntity, TKey>
@@ -187,5 +194,7 @@ namespace Bonyan.Layer.Domain
         {
             return await (await GetDbContextAsync()).Set<TEntity>().Where(predicate).ToListAsync();
         }
+
+        
     }
 }

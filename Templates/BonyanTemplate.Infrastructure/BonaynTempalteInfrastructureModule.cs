@@ -19,7 +19,7 @@ public class BonaynTempalteInfrastructureModule : Module
   public BonaynTempalteInfrastructureModule()
   {
     DependOn<BonyanTenantManagementEntityFrameworkModule>();
-    DependOn<BonyanIdentityManagementEntityFrameworkCoreModule<User>>();
+    DependOn<BonyanIdentityManagementEntityFrameworkCoreModule<User,Role>>();
     DependOn<BonyanTemplateDomainModule>();
   }
 

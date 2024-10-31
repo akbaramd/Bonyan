@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BonyanTemplate.Infrastructure.Data;
 
-public class BonyanTemplateBookManagementDbContext : BonyanDbContext<BonyanTemplateBookManagementDbContext> , IBonyanTenantDbContext , IBonIdentityManagementDbContext<User>
+public class BonyanTemplateBookManagementDbContext : BonyanDbContext<BonyanTemplateBookManagementDbContext> , IBonyanTenantDbContext , IBonIdentityManagementDbContext<User,Role>
 {
 
   public BonyanTemplateBookManagementDbContext(DbContextOptions<BonyanTemplateBookManagementDbContext> options):base(options)
@@ -29,4 +29,5 @@ public class BonyanTemplateBookManagementDbContext : BonyanDbContext<BonyanTempl
   public DbSet<Authors> Authors { get; set; }
   public DbSet<Tenant> Tenants { get; set; }
   public DbSet<User> Users { get; set; }
+  public DbSet<Role> Roles { get; set; }
 }

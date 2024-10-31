@@ -13,6 +13,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\Framework\Bonyan.EntityFrameworkCore\Bonyan.EntityFrameworkCore.csproj" />
+      <ProjectReference Include="..\Bonyan.IdentityManagement.Domain\Bonyan.IdentityManagement.Domain.csproj" />
       <ProjectReference Include="..\Bonyan.UserManagement.Domain\Bonyan.UserManagement.Domain.csproj" />
       <ProjectReference Include="..\Bonyan.UserManagement.EntityFrameworkCore\Bonyan.UserManagement.EntityFrameworkCore.csproj" />
     </ItemGroup>

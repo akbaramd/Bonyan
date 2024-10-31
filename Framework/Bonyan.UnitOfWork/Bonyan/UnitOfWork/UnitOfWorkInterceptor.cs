@@ -20,32 +20,28 @@ public class UnitOfWorkInterceptor : BonyanInterceptor
             await invocation.ProceedAsync();
             return;
         }
+        Console.WriteLine(invocation.Method.Name);
+        using var scope = _serviceScopeFactory.CreateScope();
+        var options = CreateOptions(scope.ServiceProvider, invocation, unitOfWorkAttribute);
 
-        using (var scope = _serviceScopeFactory.CreateScope())
+        var unitOfWorkManager = scope.ServiceProvider.GetRequiredService<IUnitOfWorkManager>();
+
+        //Trying to begin a reserved UOW by BonyanUnitOfWorkMiddleware
+        if (unitOfWorkManager.TryBeginReserved(UnitOfWork.UnitOfWorkReservationName, options))
         {
-            var options = CreateOptions(scope.ServiceProvider, invocation, unitOfWorkAttribute);
+            await invocation.ProceedAsync();
 
-            var unitOfWorkManager = scope.ServiceProvider.GetRequiredService<IUnitOfWorkManager>();
-
-            //Trying to begin a reserved UOW by BonyanUnitOfWorkMiddleware
-            if (unitOfWorkManager.TryBeginReserved(UnitOfWork.UnitOfWorkReservationName, options))
+            if (unitOfWorkManager.Current != null)
             {
-                await invocation.ProceedAsync();
-
-                if (unitOfWorkManager.Current != null)
-                {
-                    await unitOfWorkManager.Current.SaveChangesAsync();
-                }
-
-                return;
+                await unitOfWorkManager.Current.SaveChangesAsync();
             }
 
-            using (var uow = unitOfWorkManager.Begin(options))
-            {
-                await invocation.ProceedAsync();
-                await uow.CompleteAsync();
-            }
+            return;
         }
+
+        using var uow = unitOfWorkManager.Begin(options);
+        await invocation.ProceedAsync();
+        await uow.CompleteAsync();
     }
 
     private BonyanUnitOfWorkOptions CreateOptions(IServiceProvider serviceProvider, IBonyanMethodInvocation invocation, UnitOfWorkAttribute? unitOfWorkAttribute)

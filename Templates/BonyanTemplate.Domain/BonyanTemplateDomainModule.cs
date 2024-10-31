@@ -17,7 +17,7 @@ namespace BonyanTemplate.Domain
     public BonyanTemplateDomainModule()
     {
       DependOn<BonyanTenantManagementDomainModule>();
-      DependOn<BonyanIdentityManagementDomainModule<User>>();
+      DependOn<BonyanIdentityManagementDomainModule<User,Role>>();
     }
     public override Task OnConfigureAsync(ServiceConfigurationContext context)
     {

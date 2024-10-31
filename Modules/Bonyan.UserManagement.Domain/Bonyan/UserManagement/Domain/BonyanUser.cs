@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using Bonyan.Layer.Domain.Aggregates;
 using Bonyan.Layer.Domain.ValueObjects;
 using Bonyan.Layer.Domain.Events;
@@ -41,6 +42,8 @@ namespace Bonyan.UserManagement.Domain
         /// </summary>
         public UserStatus Status { get; private set; }
 
+        [ConcurrencyCheck]
+        public Guid Version { get; set; }
         protected BonyanUser(){}
         
         /// <summary>

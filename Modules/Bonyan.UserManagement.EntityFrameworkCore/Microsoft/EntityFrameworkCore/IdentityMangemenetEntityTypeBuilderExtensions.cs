@@ -1,5 +1,7 @@
 ﻿
+using Bonyan.Layer.Domain.Enumerations;
 using Bonyan.UserManagement.Domain;
+using Bonyan.UserManagement.Domain.Enumerations;
 
 namespace Microsoft.EntityFrameworkCore;
 
@@ -24,8 +26,12 @@ public static class IdentityManagementEntityTypeBuilderExtensions
             v.Property(x => x.HashedPassword).HasColumnName("PasswordHash");
             v.Property(x => x.Salt).HasColumnName("PasswordSalt");
         });
+        modelBuilder.Entity<TUser>().Property(x => x.Status).HasConversion(x => x.Name,
+            v => Enumeration.FromName<UserStatus>(v) ?? UserStatus.PendingApproval);
         modelBuilder.Entity<TUser>().HasIndex(x => x.UserName).IsUnique();
-    
+        modelBuilder.Entity<TUser>()
+            .Property(p => p.Version)
+            .IsConcurrencyToken();
         return modelBuilder;
     }
 }
