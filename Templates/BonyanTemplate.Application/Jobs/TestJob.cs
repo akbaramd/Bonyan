@@ -14,10 +14,12 @@ public class TestJob : IJob
 {
   
   private UserManager<User> _userManager;
+  private IUnitOfWorkManager _unitOfWorkManager;
 
-  public TestJob( IServiceProvider userManage)
+  public TestJob( UserManager<User> userManage, IUnitOfWorkManager unitOfWorkManager)
   {
-    _userManager = userManage.GetRequiredService<UserManager<User>>();
+    _unitOfWorkManager = unitOfWorkManager;
+    _userManager = userManage;
   }
   // private IRepository<Books,Guid> _repository;
   // private IRepository<Books> _2repository;
@@ -29,10 +31,18 @@ public class TestJob : IJob
     // _2repository = repository1;
   // }
 
+
+
   public async Task ExecuteAsync(CancellationToken cancellationToken = default)
   {
+    using (var uow  = _unitOfWorkManager.Begin())
+    {
+      var res = await _userManager.CreateAsync(new User(new UserId(),"akbarsafari00"), "Aa@13567975");
+
+      await uow.CompleteAsync();
+    }
     // var res = await _service.CreateAsync(new TenantCreateDto(){Key = "test"});
-    var res = await _userManager.CreateAsync(new User(new UserId(),"akbarsafari00"), "Aa@13567975");
+    
     
     
     Console.WriteLine("Tick Tok");

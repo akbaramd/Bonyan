@@ -31,12 +31,12 @@ namespace Bonyan.UserManagement.EntityFrameworkCore
 
         public Task<string> GetNormalizedUserNameAsync(TUser user, CancellationToken cancellationToken)
         {
-            return Task.FromResult(user.UserName);
+            return Task.FromResult(user.UserName.ToLower());
         }
 
         public Task SetNormalizedUserNameAsync(TUser user, string normalizedName, CancellationToken cancellationToken)
         {
-            user.UserName = normalizedName;
+            user.UserName = normalizedName.ToLower();
             return UpdateUserAsync(user);
         }
 
@@ -58,14 +58,14 @@ namespace Bonyan.UserManagement.EntityFrameworkCore
             return IdentityResult.Success;
         }
 
-        public async Task<TUser> FindByIdAsync(string userId, CancellationToken cancellationToken)
+        public async Task<TUser?> FindByIdAsync(string userId, CancellationToken cancellationToken)
         {
-            return await GetOneAsync(x => x.Id.Value.ToString() == userId);
+            return await FindOneAsync(x => x.Id.Value.ToString() == userId);
         }
 
-        public async Task<TUser> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken)
+        public async Task<TUser?> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken)
         {
-            return await GetOneAsync(x => x.UserName == normalizedUserName);
+            return await FindOneAsync(x => x.UserName.ToLower() == normalizedUserName.ToLower());
         }
 
         public Task SetPasswordHashAsync(TUser user, string passwordHash, CancellationToken cancellationToken)
@@ -116,7 +116,6 @@ namespace Bonyan.UserManagement.EntityFrameworkCore
 
         public void Dispose()
         {
-            GetDbContextAsync().GetAwaiter().GetResult().Dispose();
         }
     }
 }

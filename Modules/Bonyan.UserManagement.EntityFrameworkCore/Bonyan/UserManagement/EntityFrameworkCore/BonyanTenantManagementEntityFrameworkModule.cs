@@ -24,7 +24,7 @@ public class BonyanUserManagementEntityFrameworkModule<TUser> : Modularity.Abstr
   public override Task OnConfigureAsync(ServiceConfigurationContext context)
   {
 
-    context.Services.Tr<IUserStore<TUser>>(c => c.GetRequiredService<IBonyanUserRepository<TUser>>());
+  
     
     context.Services.AddTransient<BonyanUserEfRepository<TUser>>();
     context.Services.AddTransient<IBonyanUserRepository<TUser>>(c=>c.GetRequiredService<BonyanUserEfRepository<TUser>>());

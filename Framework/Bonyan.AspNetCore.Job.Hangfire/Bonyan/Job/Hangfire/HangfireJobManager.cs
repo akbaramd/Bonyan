@@ -30,7 +30,8 @@ public class HangfireJobManager : IBonyanJobsManager
   public void AddBackgroundJob<TJob>() where TJob : IJob
   {
     var scope = _serviceProvider.CreateScope().ServiceProvider;
-    var jobInstance = scope.GetRequiredService<TJob>();
+    var x = typeof(TJob);
+    var jobInstance = scope.GetService<TJob>();
     _backgroundJobClient.Enqueue(() => jobInstance.ExecuteAsync(CancellationToken.None));
     Console.WriteLine($"Registered background job: {typeof(TJob).Name}");
   }
