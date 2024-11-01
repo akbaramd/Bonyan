@@ -1,5 +1,4 @@
 ﻿using Bonyan.Layer.Domain.Aggregates;
-using Bonyan.Layer.Domain.ValueObjects;
 using Bonyan.UserManagement.Domain.Enumerations;
 using Bonyan.UserManagement.Domain.ValueObjects;
 

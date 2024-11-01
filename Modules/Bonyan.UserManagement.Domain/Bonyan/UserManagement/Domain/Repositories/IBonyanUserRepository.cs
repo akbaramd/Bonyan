@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using Bonyan.Layer.Domain.Abstractions;
-using Bonyan.UserManagement.Domain.Enumerations;
+﻿using Bonyan.Layer.Domain.Abstractions;
 using Bonyan.UserManagement.Domain.ValueObjects;
 
 namespace Bonyan.UserManagement.Domain.Repositories

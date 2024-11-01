@@ -1,12 +1,11 @@
 ﻿using Bonyan.Layer.Domain.Entities;
-using Bonyan.Layer.Domain.ValueObjects;
 
 namespace Bonyan.IdentityManagement.Domain;
 
 public interface IBonRole : IEntity<RoleId>
 {
-    public string Title { get; set; }
-    public string Name { get; set; }
-}
+    public string Title { get;  }
+    public string Name { get;  }
 
-public class RoleId : BusinessId<RoleId>{}
+    public IReadOnlyCollection<BonPermission> Permissions { get; }
+}

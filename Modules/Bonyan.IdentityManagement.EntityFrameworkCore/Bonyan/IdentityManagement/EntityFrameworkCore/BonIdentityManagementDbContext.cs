@@ -1,7 +1,6 @@
 using Bonyan.EntityFrameworkCore;
 using Bonyan.IdentityManagement.Domain;
 using Bonyan.UserManagement.Domain;
-using Bonyan.UserManagement.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Bonyan.IdentityManagement.EntityFrameworkCore;
@@ -11,12 +10,14 @@ public class BonIdentityManagementDbContext<TUser,TRole> : BonyanDbContext<BonId
 {
   protected override void OnModelCreating(ModelBuilder modelBuilder)
   {
-    modelBuilder.ConfigureIdentityManagementByConvention<TUser>();
+    modelBuilder.ConfigureIdentityManagementByConvention<TUser,TRole>();
     base.OnModelCreating(modelBuilder);
   }
 
   public DbSet<TUser> Users { get; set; }
   public DbSet<TRole> Roles { get; set; }
+  public DbSet<BonPermission> Permissions { get; set; }
+  public DbSet<BonUserRole<TUser, TRole>> UserRoles { get; set; }
 
   public BonIdentityManagementDbContext(DbContextOptions<BonIdentityManagementDbContext<TUser,TRole>> options) : base(options)
   {

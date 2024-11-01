@@ -1,7 +1,4 @@
-﻿using System;
-using Microsoft.Extensions.DependencyInjection;
-
-namespace Bonyan.DependencyInjection
+﻿namespace Bonyan.DependencyInjection
 {
     /// <summary>
     /// Implementation of <see cref="ILayServiceProviderConfigurator"/> for managing and accessing services within a lazy-loaded service provider context.

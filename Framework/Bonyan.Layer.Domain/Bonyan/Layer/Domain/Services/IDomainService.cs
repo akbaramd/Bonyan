@@ -1,4 +1,3 @@
-using Bonyan.DependencyInjection;
 using Bonyan.UnitOfWork;
 using Bonyan.Validation;
 

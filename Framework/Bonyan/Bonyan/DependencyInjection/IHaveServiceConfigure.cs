@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Bonyan.DependencyInjection
+﻿namespace Bonyan.DependencyInjection
 {
     /// <summary>
     /// Provides methods for accessing and managing services within a service provider.

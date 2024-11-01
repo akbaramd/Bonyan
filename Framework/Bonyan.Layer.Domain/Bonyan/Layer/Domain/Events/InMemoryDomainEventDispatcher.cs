@@ -1,4 +1,3 @@
-using Bonyan.Layer.Domain.Aggregates;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Bonyan.Layer.Domain.Events

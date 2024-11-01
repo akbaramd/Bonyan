@@ -1,8 +1,5 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using Bonyan.Layer.Domain.Aggregates;
-using Bonyan.Layer.Domain.ValueObjects;
-using Bonyan.Layer.Domain.Events;
 using Bonyan.UserManagement.Domain.Enumerations;
 using Bonyan.UserManagement.Domain.Events;
 using Bonyan.UserManagement.Domain.ValueObjects;
@@ -45,7 +42,7 @@ namespace Bonyan.UserManagement.Domain
         [ConcurrencyCheck]
         public Guid Version { get; set; }
         protected BonyanUser(){}
-        
+
         /// <summary>
         /// Initializes a new user with basic information and sets the default status to Active.
         /// </summary>

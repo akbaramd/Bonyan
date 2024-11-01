@@ -14,7 +14,6 @@ public static class BonyanApplicationBuilderExtensions
     public static IApplicationBuilder UseUnitOfWork(this IApplicationBuilder app)
     {
         return app
-            .UseBonyanExceptionHandling()
             .UseMiddleware<BonyanUnitOfWorkMiddleware>();
     }
 

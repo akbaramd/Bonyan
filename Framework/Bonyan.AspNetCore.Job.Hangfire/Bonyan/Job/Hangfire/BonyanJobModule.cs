@@ -1,5 +1,4 @@
 using Autofac;
-using Autofac.Core.Lifetime;
 using Bonyan.AspNetCore.Job;
 using Bonyan.Modularity;
 using Hangfire;

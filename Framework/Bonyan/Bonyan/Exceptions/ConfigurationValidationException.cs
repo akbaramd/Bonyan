@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Bonyan.Exceptions
+﻿namespace Bonyan.Exceptions
 {
     /// <summary>
     /// Exception that is thrown when configuration validation fails for a specific type.

@@ -2,7 +2,6 @@ using System.Reflection;
 using Bonyan;
 using Bonyan.Core;
 using Bonyan.Exceptions;
-using Bonyan.Modularity.Abstractions;
 using Bonyan.Reflection;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;

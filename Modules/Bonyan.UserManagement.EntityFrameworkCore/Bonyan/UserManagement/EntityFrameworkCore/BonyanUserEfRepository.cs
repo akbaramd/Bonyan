@@ -1,9 +1,7 @@
 using Bonyan.Layer.Domain;
 using Bonyan.UserManagement.Domain;
-using Bonyan.UserManagement.Domain.Enumerations;
 using Bonyan.UserManagement.Domain.Repositories;
 using Bonyan.UserManagement.Domain.ValueObjects;
-using Microsoft.AspNetCore.Identity;
 
 namespace Bonyan.UserManagement.EntityFrameworkCore
 {

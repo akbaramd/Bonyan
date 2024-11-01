@@ -8,10 +8,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\..\Framework\Bonyan.EntityFrameworkCore\Bonyan.EntityFrameworkCore.csproj" />
       <ProjectReference Include="..\Bonyan.IdentityManagement.Domain\Bonyan.IdentityManagement.Domain.csproj" />
       <ProjectReference Include="..\Bonyan.UserManagement.Domain\Bonyan.UserManagement.Domain.csproj" />

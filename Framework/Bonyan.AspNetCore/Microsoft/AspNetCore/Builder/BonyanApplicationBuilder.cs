@@ -1,8 +1,4 @@
 ﻿using Bonyan.Modularity.Abstractions;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Configuration;
 
 namespace Microsoft.AspNetCore.Builder
 {

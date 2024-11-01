@@ -1,5 +1,3 @@
-using Bonyan.Layer.Domain.Aggregates;
-
 namespace Bonyan.Layer.Domain.Events
 {
   /// <summary>

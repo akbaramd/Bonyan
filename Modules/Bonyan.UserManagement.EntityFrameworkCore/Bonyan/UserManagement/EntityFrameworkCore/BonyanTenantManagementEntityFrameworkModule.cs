@@ -3,10 +3,7 @@ using Bonyan.EntityFrameworkCore;
 using Bonyan.Modularity;
 using Bonyan.UserManagement.Domain;
 using Bonyan.UserManagement.Domain.Repositories;
-using Microsoft;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Bonyan.UserManagement.EntityFrameworkCore;
 

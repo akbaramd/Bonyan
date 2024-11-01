@@ -1,8 +1,6 @@
 using Bonyan.IdentityManagement.Domain;
-using Bonyan.Layer.Domain;
 using Bonyan.Modularity;
 using Bonyan.TenantManagement.Domain;
-using BonyanTemplate.Domain.DomainEvents;
 using BonyanTemplate.Domain.Entities;
 using BonyanTemplate.Domain.Handlers;
 using Microsoft.Extensions.DependencyInjection;
