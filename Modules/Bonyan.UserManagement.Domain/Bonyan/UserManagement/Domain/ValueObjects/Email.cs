@@ -15,7 +15,7 @@ namespace Bonyan.UserManagement.Domain.ValueObjects
 
         public Email(string address)
         {
-            if (string.IsNullOrWhiteSpace(address) || !EmailRegex.IsMatch(address))
+            if (!IsValidEmail(address))
             {
                 throw new ArgumentException("Invalid email address.", nameof(address));
             }
@@ -28,6 +28,16 @@ namespace Bonyan.UserManagement.Domain.ValueObjects
         public void Verify()
         {
             IsVerified = true;
+        }
+
+        /// <summary>
+        /// Static method to validate an email address.
+        /// </summary>
+        /// <param name="address">The email address to validate.</param>
+        /// <returns>True if the email address is valid; otherwise, false.</returns>
+        public static bool IsValidEmail(string address)
+        {
+            return !string.IsNullOrWhiteSpace(address) && EmailRegex.IsMatch(address);
         }
 
         protected override IEnumerable<object?> GetEqualityComponents()

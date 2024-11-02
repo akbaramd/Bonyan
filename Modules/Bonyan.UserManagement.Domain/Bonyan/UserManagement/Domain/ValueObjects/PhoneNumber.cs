@@ -15,7 +15,10 @@ namespace Bonyan.UserManagement.Domain.ValueObjects
 
         public PhoneNumber(string number)
         {
-            if (string.IsNullOrWhiteSpace(number) || !PhoneRegex.IsMatch(number))
+            // Trim the first '0' if it exists
+            number = number.TrimStart('0');
+
+            if (!IsValidPhoneNumber(number))
             {
                 throw new ArgumentException("Invalid phone number.", nameof(number));
             }
@@ -28,6 +31,23 @@ namespace Bonyan.UserManagement.Domain.ValueObjects
         public void Verify()
         {
             IsVerified = true;
+        }
+
+        /// <summary>
+        /// Static method to validate a phone number.
+        /// </summary>
+        /// <param name="number">The phone number to validate.</param>
+        /// <returns>True if the phone number is valid; otherwise, false.</returns>
+        public static bool IsValidPhoneNumber(string number)
+        {
+            if (string.IsNullOrWhiteSpace(number))
+            {
+                return false;
+            }
+
+            // Trim the first '0' for validation purposes
+            number = number.TrimStart('0');
+            return PhoneRegex.IsMatch(number);
         }
 
         protected override IEnumerable<object?> GetEqualityComponents()
