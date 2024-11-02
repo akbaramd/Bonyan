@@ -20,7 +20,7 @@ public class UnitOfWorkInterceptor : BonyanInterceptor
             await invocation.ProceedAsync();
             return;
         }
-        Console.WriteLine(invocation.Method.Name);
+  
         using var scope = _serviceScopeFactory.CreateScope();
         var options = CreateOptions(scope.ServiceProvider, invocation, unitOfWorkAttribute);
 

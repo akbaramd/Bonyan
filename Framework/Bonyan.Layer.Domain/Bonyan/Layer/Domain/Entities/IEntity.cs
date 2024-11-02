@@ -2,10 +2,10 @@
 
 public interface IEntity
 {
-  object[] GetKeys();
+    object[] GetKeys();
 }
 
 public interface IEntity<TKey> : IEntity
 {
-  public TKey Id { get; set; }
+    public TKey Id { get; set; }
 }

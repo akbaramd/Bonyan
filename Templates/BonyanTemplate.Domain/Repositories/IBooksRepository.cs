@@ -3,7 +3,6 @@ using BonyanTemplate.Domain.Entities;
 
 namespace BonyanTemplate.Domain.Repositories;
 
-public interface  IBooksRepository : IRepository<Books,BookId>
+public interface IBooksRepository : IRepository<Books, BookId>
 {
-      
 }

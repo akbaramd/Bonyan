@@ -10,21 +10,21 @@
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="8.0.7" NoWarn="NU1605"/>
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.7"/>
-        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.8" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.8"/>
         <PackageReference Include="Microsoft.Identity.Web" Version="2.15.2"/>
         <PackageReference Include="Microsoft.Identity.Web.DownstreamApi" Version="2.15.2"/>
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0"/>
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\Framework\Bonyan.AspNetCore.Job.Hangfire\Bonyan.AspNetCore.Job.Hangfire.csproj" />
-      <ProjectReference Include="..\..\Framework\Bonyan.EntityFrameworkCore\Bonyan.EntityFrameworkCore.csproj" />
-      <ProjectReference Include="..\..\Framework\Bonyan.AspNetCore\Bonyan.AspNetCore.csproj" />
-      <ProjectReference Include="..\..\Framework\Bonyan.EntityFrameworkCore.SqlServer\Bonyan.EntityFrameworkCore.SqlServer.csproj" />
-      <ProjectReference Include="..\..\Modules\Bonyan.IdentityManagement.Web\Bonyan.IdentityManagement.Web.csproj" />
-      <ProjectReference Include="..\..\Modules\Bonyan.TenantManagement.Web\Bonyan.TenantManagement.Web.csproj" />
-      <ProjectReference Include="..\BonyanTemplate.Application\BonyanTemplate.Application.csproj" />
-      <ProjectReference Include="..\BonyanTemplate.Infrastructure\BonyanTemplate.Infrastructure.csproj" />
+        <ProjectReference Include="..\..\Framework\Bonyan.AspNetCore.Job.Hangfire\Bonyan.AspNetCore.Job.Hangfire.csproj"/>
+        <ProjectReference Include="..\..\Framework\Bonyan.EntityFrameworkCore\Bonyan.EntityFrameworkCore.csproj"/>
+        <ProjectReference Include="..\..\Framework\Bonyan.AspNetCore\Bonyan.AspNetCore.csproj"/>
+        <ProjectReference Include="..\..\Framework\Bonyan.EntityFrameworkCore.SqlServer\Bonyan.EntityFrameworkCore.SqlServer.csproj"/>
+        <ProjectReference Include="..\..\Modules\Bonyan.IdentityManagement.Web\Bonyan.IdentityManagement.Web.csproj"/>
+        <ProjectReference Include="..\..\Modules\Bonyan.TenantManagement.Web\Bonyan.TenantManagement.Web.csproj"/>
+        <ProjectReference Include="..\BonyanTemplate.Application\BonyanTemplate.Application.csproj"/>
+        <ProjectReference Include="..\BonyanTemplate.Infrastructure\BonyanTemplate.Infrastructure.csproj"/>
     </ItemGroup>
 
 </Project>

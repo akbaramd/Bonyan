@@ -7,20 +7,20 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.8" />
-      <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.8">
-        <PrivateAssets>all</PrivateAssets>
-        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      </PackageReference>
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.8"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.8">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\Framework\Bonyan.AspNetCore.MultiTenant\Bonyan.AspNetCore.MultiTenant.csproj" />
-      <ProjectReference Include="..\..\Framework\Bonyan.EntityFrameworkCore.Sqlite\Bonyan.EntityFrameworkCore.Sqlite.csproj" />
-      <ProjectReference Include="..\..\Framework\Bonyan.EntityFrameworkCore\Bonyan.EntityFrameworkCore.csproj" />
-      <ProjectReference Include="..\..\Modules\Bonyan.IdentityManagement.EntityFrameworkCore\Bonyan.IdentityManagement.EntityFrameworkCore.csproj" />
-      <ProjectReference Include="..\..\Modules\Bonyan.TenantManagement.EntityFrameworkCore\Bonyan.TenantManagement.EntityFrameworkCore.csproj" />
-      <ProjectReference Include="..\BonyanTemplate.Domain\BonyanTemplate.Domain.csproj" />
+        <ProjectReference Include="..\..\Framework\Bonyan.AspNetCore.MultiTenant\Bonyan.AspNetCore.MultiTenant.csproj"/>
+        <ProjectReference Include="..\..\Framework\Bonyan.EntityFrameworkCore.Sqlite\Bonyan.EntityFrameworkCore.Sqlite.csproj"/>
+        <ProjectReference Include="..\..\Framework\Bonyan.EntityFrameworkCore\Bonyan.EntityFrameworkCore.csproj"/>
+        <ProjectReference Include="..\..\Modules\Bonyan.IdentityManagement.EntityFrameworkCore\Bonyan.IdentityManagement.EntityFrameworkCore.csproj"/>
+        <ProjectReference Include="..\..\Modules\Bonyan.TenantManagement.EntityFrameworkCore\Bonyan.TenantManagement.EntityFrameworkCore.csproj"/>
+        <ProjectReference Include="..\BonyanTemplate.Domain\BonyanTemplate.Domain.csproj"/>
     </ItemGroup>
 
 </Project>

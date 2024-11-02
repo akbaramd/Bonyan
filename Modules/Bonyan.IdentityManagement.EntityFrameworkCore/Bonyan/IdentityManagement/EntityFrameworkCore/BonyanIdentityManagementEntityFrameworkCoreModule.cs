@@ -7,7 +7,8 @@ using Bonyan.UserManagement.EntityFrameworkCore;
 
 namespace Bonyan.IdentityManagement.EntityFrameworkCore;
 
-public class BonyanIdentityManagementEntityFrameworkCoreModule<TUser,TRole> : Module where TUser : BonyanUser where TRole : BonRole
+public class BonyanIdentityManagementEntityFrameworkCoreModule<TUser, TRole> : Module
+    where TUser : BonyanUser where TRole : BonRole
 {
     public BonyanIdentityManagementEntityFrameworkCoreModule()
     {
@@ -16,7 +17,7 @@ public class BonyanIdentityManagementEntityFrameworkCoreModule<TUser,TRole> : Mo
 
     public override Task OnConfigureAsync(ServiceConfigurationContext context)
     {
-        context.AddBonyanDbContext<BonIdentityManagementDbContext<TUser,TRole>>();
+        context.AddBonyanDbContext<BonIdentityManagementDbContext<TUser, TRole>>();
         return base.OnConfigureAsync(context);
     }
 }

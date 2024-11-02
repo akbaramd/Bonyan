@@ -2,5 +2,6 @@
 
 public enum BookStatus
 {
-  Available,OutOfStock
+    Available,
+    OutOfStock
 }

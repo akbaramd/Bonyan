@@ -6,9 +6,9 @@
         <Nullable>enable</Nullable>
         <PackageId>Bonyan.TenantManagement.Domain</PackageId>
     </PropertyGroup>
-    <Import Project="..\..\package.props" />
+    <Import Project="..\..\package.props"/>
     <ItemGroup>
-      <ProjectReference Include="..\..\Framework\Bonyan.Layer.Domain\Bonyan.Layer.Domain.csproj" />
+        <ProjectReference Include="..\..\Framework\Bonyan.Layer.Domain\Bonyan.Layer.Domain.csproj"/>
     </ItemGroup>
 
 </Project>

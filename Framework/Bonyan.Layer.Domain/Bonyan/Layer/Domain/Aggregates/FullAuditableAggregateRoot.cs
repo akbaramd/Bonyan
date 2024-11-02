@@ -4,48 +4,48 @@ namespace Bonyan.Layer.Domain.Aggregates;
 
 public abstract class FullAuditableAggregateRoot : ModifiationAuditableAggregateRoot, IFullAuditable
 {
-  public bool IsDeleted { get; private set; }
-  public DateTime? DeletedDate { get; set; }
+    public bool IsDeleted { get; private set; }
+    public DateTime? DeletedDate { get; set; }
 
-  public void SoftDelete()
-  {
-    if (!IsDeleted)
+    public void SoftDelete()
     {
-      IsDeleted = true;
-      DeletedDate = DateTime.UtcNow;
+        if (!IsDeleted)
+        {
+            IsDeleted = true;
+            DeletedDate = DateTime.UtcNow;
+        }
     }
-  }
 
-  public void Restore()
-  {
-    if (IsDeleted)
+    public void Restore()
     {
-      IsDeleted = false;
-      DeletedDate = null;
+        if (IsDeleted)
+        {
+            IsDeleted = false;
+            DeletedDate = null;
+        }
     }
-  }
 }
 
 public abstract class FullAuditableAggregateRoot<TId> : ModifiationAuditableAggregateRoot<TId>, IFullAuditable
 {
-  public bool IsDeleted { get; private set; }
-  public DateTime? DeletedDate { get; set; }
+    public bool IsDeleted { get; private set; }
+    public DateTime? DeletedDate { get; set; }
 
-  public void SoftDelete()
-  {
-    if (!IsDeleted)
+    public void SoftDelete()
     {
-      IsDeleted = true;
-      DeletedDate = DateTime.UtcNow;
+        if (!IsDeleted)
+        {
+            IsDeleted = true;
+            DeletedDate = DateTime.UtcNow;
+        }
     }
-  }
 
-  public void Restore()
-  {
-    if (IsDeleted)
+    public void Restore()
     {
-      IsDeleted = false;
-      DeletedDate = null;
+        if (IsDeleted)
+        {
+            IsDeleted = false;
+            DeletedDate = null;
+        }
     }
-  }
 }

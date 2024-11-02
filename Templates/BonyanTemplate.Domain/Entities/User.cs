@@ -5,8 +5,10 @@ namespace BonyanTemplate.Domain.Entities;
 
 public class User : BonyanUser
 {
-    protected User(){}
-    
+    protected User()
+    {
+    }
+
     public User(UserId id, string userName) : base(id, userName)
     {
     }

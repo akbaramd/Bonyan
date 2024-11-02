@@ -2,5 +2,5 @@
 
 public interface ICreationAuditable
 {
-  DateTime CreatedDate { get; set; }
+    DateTime CreatedDate { get; set; }
 }

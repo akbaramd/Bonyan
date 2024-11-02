@@ -5,8 +5,8 @@ namespace BonyanTemplate.Domain.Handlers;
 
 public class BookDomainHandler : IDomainEventHandler<BookCreated>
 {
-  public Task Handle(BookCreated domainEvent)
-  {
-    throw new NotImplementedException();
-  }
+    public Task Handle(BookCreated domainEvent)
+    {
+        throw new NotImplementedException();
+    }
 }

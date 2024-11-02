@@ -3,15 +3,15 @@
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <RootNamespace />
+        <RootNamespace/>
         <PackageId>Bonyan.AutoMapper</PackageId>
     </PropertyGroup>
 
-    <Import Project="..\..\package.props" />
+    <Import Project="..\..\package.props"/>
     <ItemGroup>
-        <ProjectReference Include="..\Bonyan\Bonyan.csproj" />
+        <ProjectReference Include="..\Bonyan\Bonyan.csproj"/>
     </ItemGroup>
     <ItemGroup>
-      <PackageReference Include="AutoMapper" Version="13.0.1" />
+        <PackageReference Include="AutoMapper" Version="13.0.1"/>
     </ItemGroup>
 </Project>

@@ -3,19 +3,19 @@
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <RootNamespace />
+        <RootNamespace/>
         <OutputType>Library</OutputType>
         <PackageId>Bonyan.AspNetCore.Job</PackageId>
     </PropertyGroup>
 
-    <Import Project="..\..\package.props" />
+    <Import Project="..\..\package.props"/>
     <ItemGroup>
-      <PackageReference Include="NCrontab" Version="3.3.3" />
+        <PackageReference Include="NCrontab" Version="3.3.3"/>
     </ItemGroup>
     <ItemGroup>
-      <ProjectReference Include="..\Bonyan.AspNetCore\Bonyan.AspNetCore.csproj" />
+        <ProjectReference Include="..\Bonyan.AspNetCore\Bonyan.AspNetCore.csproj"/>
     </ItemGroup>
     <ItemGroup>
-      <Folder Include="Bonyan\AspNetCore\" />
+        <Folder Include="Bonyan\AspNetCore\"/>
     </ItemGroup>
 </Project>

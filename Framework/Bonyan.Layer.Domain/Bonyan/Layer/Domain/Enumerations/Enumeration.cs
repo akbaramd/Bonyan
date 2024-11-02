@@ -5,22 +5,12 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 namespace Bonyan.Layer.Domain.Enumerations;
 
 /// <summary>
-/// Base class for implementing strongly-typed enums with additional utility methods.
+///     Base class for implementing strongly-typed enums with additional utility methods.
 /// </summary>
 public abstract class Enumeration : IComparable
 {
     /// <summary>
-    /// Gets the name of the enumeration.
-    /// </summary>
-    public string Name { get; private init; }
-
-    /// <summary>
-    /// Gets the identifier of the enumeration.
-    /// </summary>
-    public int Id { get; private init; }
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="Enumeration"/> class.
+    ///     Initializes a new instance of the <see cref="Enumeration" /> class.
     /// </summary>
     /// <param name="id">The identifier of the enumeration.</param>
     /// <param name="name">The name of the enumeration.</param>
@@ -31,11 +21,21 @@ public abstract class Enumeration : IComparable
     }
 
     /// <summary>
-    /// Compares this enumeration instance to another based on Id.
+    ///     Gets the name of the enumeration.
+    /// </summary>
+    public string Name { get; }
+
+    /// <summary>
+    ///     Gets the identifier of the enumeration.
+    /// </summary>
+    public int Id { get; }
+
+    /// <summary>
+    ///     Compares this enumeration instance to another based on Id.
     /// </summary>
     /// <param name="other">The other enumeration instance to compare to.</param>
     /// <returns>An integer that indicates the relative order of the objects being compared.</returns>
-    /// <exception cref="ArgumentException">Thrown when the other object is not of type <see cref="Enumeration"/>.</exception>
+    /// <exception cref="ArgumentException">Thrown when the other object is not of type <see cref="Enumeration" />.</exception>
     public int CompareTo(object? other)
     {
         if (other is not Enumeration otherEnumeration)
@@ -45,13 +45,16 @@ public abstract class Enumeration : IComparable
     }
 
     /// <summary>
-    /// Returns a string representation of the enumeration.
+    ///     Returns a string representation of the enumeration.
     /// </summary>
     /// <returns>The name of the enumeration.</returns>
-    public override string ToString() => Name;
+    public override string ToString()
+    {
+        return Name;
+    }
 
     /// <summary>
-    /// Determines whether the specified object is equal to the current enumeration.
+    ///     Determines whether the specified object is equal to the current enumeration.
     /// </summary>
     /// <param name="obj">The object to compare with the current enumeration.</param>
     /// <returns>True if the specified object is equal to the current enumeration; otherwise, false.</returns>
@@ -61,13 +64,16 @@ public abstract class Enumeration : IComparable
     }
 
     /// <summary>
-    /// Serves as the default hash function.
+    ///     Serves as the default hash function.
     /// </summary>
     /// <returns>A hash code for the current object.</returns>
-    public override int GetHashCode() => Id.GetHashCode();
+    public override int GetHashCode()
+    {
+        return Id.GetHashCode();
+    }
 
     /// <summary>
-    /// Implicitly converts an enumeration to its integer Id.
+    ///     Implicitly converts an enumeration to its integer Id.
     /// </summary>
     /// <param name="enumeration">The enumeration to convert.</param>
     /// <returns>The Id of the enumeration.</returns>
@@ -77,7 +83,7 @@ public abstract class Enumeration : IComparable
     }
 
     /// <summary>
-    /// Implicitly converts an enumeration to its string Name.
+    ///     Implicitly converts an enumeration to its string Name.
     /// </summary>
     /// <param name="enumeration">The enumeration to convert.</param>
     /// <returns>The Name of the enumeration.</returns>
@@ -87,7 +93,7 @@ public abstract class Enumeration : IComparable
     }
 
     /// <summary>
-    /// Retrieves all instances of the enumeration type.
+    ///     Retrieves all instances of the enumeration type.
     /// </summary>
     /// <typeparam name="T">The type of the enumeration.</typeparam>
     /// <returns>An enumerable collection of all enumeration instances.</returns>
@@ -99,7 +105,7 @@ public abstract class Enumeration : IComparable
     }
 
     /// <summary>
-    /// Retrieves an enumeration instance by its Id.
+    ///     Retrieves an enumeration instance by its Id.
     /// </summary>
     /// <typeparam name="T">The type of the enumeration.</typeparam>
     /// <param name="id">The Id of the enumeration.</param>
@@ -110,7 +116,7 @@ public abstract class Enumeration : IComparable
     }
 
     /// <summary>
-    /// Retrieves an enumeration instance by its Name.
+    ///     Retrieves an enumeration instance by its Name.
     /// </summary>
     /// <typeparam name="T">The type of the enumeration.</typeparam>
     /// <param name="name">The Name of the enumeration.</param>
@@ -122,7 +128,7 @@ public abstract class Enumeration : IComparable
     }
 
     /// <summary>
-    /// Tries to retrieve an enumeration instance by its Id.
+    ///     Tries to retrieve an enumeration instance by its Id.
     /// </summary>
     /// <typeparam name="T">The type of the enumeration.</typeparam>
     /// <param name="id">The Id of the enumeration.</param>
@@ -135,7 +141,7 @@ public abstract class Enumeration : IComparable
     }
 
     /// <summary>
-    /// Tries to retrieve an enumeration instance by its Name.
+    ///     Tries to retrieve an enumeration instance by its Name.
     /// </summary>
     /// <typeparam name="T">The type of the enumeration.</typeparam>
     /// <param name="name">The Name of the enumeration.</param>
@@ -149,7 +155,7 @@ public abstract class Enumeration : IComparable
     }
 
     /// <summary>
-    /// Equality operator for Enumeration.
+    ///     Equality operator for Enumeration.
     /// </summary>
     /// <param name="left">The left Enumeration to compare.</param>
     /// <param name="right">The right Enumeration to compare.</param>
@@ -166,15 +172,18 @@ public abstract class Enumeration : IComparable
     }
 
     /// <summary>
-    /// Inequality operator for Enumeration.
+    ///     Inequality operator for Enumeration.
     /// </summary>
     /// <param name="left">The left Enumeration to compare.</param>
     /// <param name="right">The right Enumeration to compare.</param>
     /// <returns>True if both enumerations are not equal; otherwise, false.</returns>
-    public static bool operator !=(Enumeration? left, Enumeration? right) => !(left == right);
+    public static bool operator !=(Enumeration? left, Enumeration? right)
+    {
+        return !(left == right);
+    }
 
     /// <summary>
-    /// Less than operator for Enumeration.
+    ///     Less than operator for Enumeration.
     /// </summary>
     /// <param name="left">The left Enumeration to compare.</param>
     /// <param name="right">The right Enumeration to compare.</param>
@@ -187,7 +196,7 @@ public abstract class Enumeration : IComparable
     }
 
     /// <summary>
-    /// Greater than operator for Enumeration.
+    ///     Greater than operator for Enumeration.
     /// </summary>
     /// <param name="left">The left Enumeration to compare.</param>
     /// <param name="right">The right Enumeration to compare.</param>
@@ -200,7 +209,7 @@ public abstract class Enumeration : IComparable
     }
 
     /// <summary>
-    /// Less than or equal operator for Enumeration.
+    ///     Less than or equal operator for Enumeration.
     /// </summary>
     /// <param name="left">The left Enumeration to compare.</param>
     /// <param name="right">The right Enumeration to compare.</param>
@@ -213,7 +222,7 @@ public abstract class Enumeration : IComparable
     }
 
     /// <summary>
-    /// Greater than or equal operator for Enumeration.
+    ///     Greater than or equal operator for Enumeration.
     /// </summary>
     /// <param name="left">The left Enumeration to compare.</param>
     /// <param name="right">The right Enumeration to compare.</param>
@@ -226,29 +235,38 @@ public abstract class Enumeration : IComparable
     }
 
     /// <summary>
-    /// Retrieves the names of all instances of the enumeration type.
+    ///     Retrieves the names of all instances of the enumeration type.
     /// </summary>
     /// <typeparam name="T">The type of the enumeration.</typeparam>
     /// <returns>An enumerable collection of all enumeration names.</returns>
-    public static IEnumerable<string> GetNames<T>() where T : Enumeration => GetAll<T>().Select(e => e.Name);
+    public static IEnumerable<string> GetNames<T>() where T : Enumeration
+    {
+        return GetAll<T>().Select(e => e.Name);
+    }
 
     /// <summary>
-    /// Retrieves the Ids of all instances of the enumeration type.
+    ///     Retrieves the Ids of all instances of the enumeration type.
     /// </summary>
     /// <typeparam name="T">The type of the enumeration.</typeparam>
     /// <returns>An enumerable collection of all enumeration Ids.</returns>
-    public static IEnumerable<int> GetIds<T>() where T : Enumeration => GetAll<T>().Select(e => e.Id);
+    public static IEnumerable<int> GetIds<T>() where T : Enumeration
+    {
+        return GetAll<T>().Select(e => e.Id);
+    }
 
     /// <summary>
-    /// Retrieves an enumeration instance by its Id, or returns null if not found.
+    ///     Retrieves an enumeration instance by its Id, or returns null if not found.
     /// </summary>
     /// <typeparam name="T">The type of the enumeration.</typeparam>
     /// <param name="id">The Id of the enumeration.</param>
     /// <returns>The enumeration instance if found; otherwise, null.</returns>
-    public static T? GetByIdOrDefault<T>(int id) where T : Enumeration => FromId<T>(id);
+    public static T? GetByIdOrDefault<T>(int id) where T : Enumeration
+    {
+        return FromId<T>(id);
+    }
 
     /// <summary>
-    /// Retrieves an enumeration instance by its Id, or throws an exception if not found.
+    ///     Retrieves an enumeration instance by its Id, or throws an exception if not found.
     /// </summary>
     /// <typeparam name="T">The type of the enumeration.</typeparam>
     /// <param name="id">The Id of the enumeration.</param>
@@ -260,7 +278,7 @@ public abstract class Enumeration : IComparable
     }
 
     /// <summary>
-    /// Retrieves an enumeration instance by its Name, or returns null if not found.
+    ///     Retrieves an enumeration instance by its Name, or returns null if not found.
     /// </summary>
     /// <typeparam name="T">The type of the enumeration.</typeparam>
     /// <param name="name">The Name of the enumeration.</param>
@@ -272,7 +290,7 @@ public abstract class Enumeration : IComparable
     }
 
     /// <summary>
-    /// Retrieves an enumeration instance by its Name, or throws an exception if not found.
+    ///     Retrieves an enumeration instance by its Name, or throws an exception if not found.
     /// </summary>
     /// <typeparam name="T">The type of the enumeration.</typeparam>
     /// <param name="name">The Name of the enumeration.</param>
@@ -281,22 +299,25 @@ public abstract class Enumeration : IComparable
     public static T GetByNameOrThrow<T>(string name) where T : Enumeration
     {
         Check.NotNullOrEmpty(name, nameof(name));
-        return FromName<T>(name) ?? throw new InvalidOperationException($"No {typeof(T).Name} with Name '{name}' found.");
+        return FromName<T>(name) ??
+               throw new InvalidOperationException($"No {typeof(T).Name} with Name '{name}' found.");
     }
 
     /// <summary>
-    /// Retrieves a list of Id and Name pairs for all instances of the enumeration type.
+    ///     Retrieves a list of Id and Name pairs for all instances of the enumeration type.
     /// </summary>
     /// <typeparam name="T">The type of the enumeration.</typeparam>
     /// <returns>An enumerable collection of Id and Name pairs.</returns>
-    public static IEnumerable<(int Id, string Name)> GetIdNamePairs<T>() where T : Enumeration =>
-        GetAll<T>().Select(e => (e.Id, e.Name));
+    public static IEnumerable<(int Id, string Name)> GetIdNamePairs<T>() where T : Enumeration
+    {
+        return GetAll<T>().Select(e => (e.Id, e.Name));
+    }
 
     /// <summary>
-    /// Provides a custom value comparer for Entity Framework Core when mapping Enumeration types.
+    ///     Provides a custom value comparer for Entity Framework Core when mapping Enumeration types.
     /// </summary>
     /// <typeparam name="T">The type of the enumeration.</typeparam>
-    /// <returns>A <see cref="ValueComparer{T}"/> for the enumeration type.</returns>
+    /// <returns>A <see cref="ValueComparer{T}" /> for the enumeration type.</returns>
     public static ValueComparer<T> GetValueComparer<T>() where T : Enumeration
     {
         return new ValueComparer<T>(

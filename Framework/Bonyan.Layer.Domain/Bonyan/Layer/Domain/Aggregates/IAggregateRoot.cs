@@ -5,8 +5,8 @@ namespace Bonyan.Layer.Domain.Aggregates;
 
 public interface IAggregateRoot : IEntity
 {
-  public IReadOnlyCollection<IDomainEvent> DomainEvents { get; }
-  public void ClearEvents();
+    public IReadOnlyCollection<IDomainEvent> DomainEvents { get; }
+    public void ClearEvents();
 }
 
 public interface IAggregateRoot<TKey> : IAggregateRoot, IEntity<TKey>

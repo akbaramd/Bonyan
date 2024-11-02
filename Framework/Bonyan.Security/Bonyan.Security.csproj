@@ -5,11 +5,11 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <PackageId>Bonyan.Security</PackageId>
-        <RootNamespace />
+        <RootNamespace/>
     </PropertyGroup>
-    <Import Project="..\..\package.props" />
+    <Import Project="..\..\package.props"/>
     <ItemGroup>
-      <ProjectReference Include="..\Bonyan\Bonyan.csproj" />
+        <ProjectReference Include="..\Bonyan\Bonyan.csproj"/>
     </ItemGroup>
 
 </Project>

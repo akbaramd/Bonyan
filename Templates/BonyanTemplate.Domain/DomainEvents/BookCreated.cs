@@ -4,5 +4,4 @@ namespace BonyanTemplate.Domain.DomainEvents;
 
 public class BookCreated : DomainEventBase
 {
-  
 }

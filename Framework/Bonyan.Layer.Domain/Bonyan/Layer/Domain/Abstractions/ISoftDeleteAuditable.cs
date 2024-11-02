@@ -2,6 +2,6 @@
 
 public interface ISoftDeleteAuditable
 {
-  bool IsDeleted { get; }
-  DateTime? DeletedDate { get; set; }
+    bool IsDeleted { get; }
+    DateTime? DeletedDate { get; set; }
 }

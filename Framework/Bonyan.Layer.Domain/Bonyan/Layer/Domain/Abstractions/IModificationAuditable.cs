@@ -2,5 +2,5 @@
 
 public interface IModificationAuditable
 {
-  DateTime? ModifiedDate { get; set; }
+    DateTime? ModifiedDate { get; set; }
 }

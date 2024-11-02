@@ -7,9 +7,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\Framework\Bonyan.Layer.Domain\Bonyan.Layer.Domain.csproj" />
-      <ProjectReference Include="..\..\Modules\Bonyan.IdentityManagement.Domain\Bonyan.IdentityManagement.Domain.csproj" />
-      <ProjectReference Include="..\..\Modules\Bonyan.TenantManagement.Domain\Bonyan.TenantManagement.Domain.csproj" />
+        <ProjectReference Include="..\..\Framework\Bonyan.Layer.Domain\Bonyan.Layer.Domain.csproj"/>
+        <ProjectReference Include="..\..\Modules\Bonyan.IdentityManagement.Domain\Bonyan.IdentityManagement.Domain.csproj"/>
+        <ProjectReference Include="..\..\Modules\Bonyan.TenantManagement.Domain\Bonyan.TenantManagement.Domain.csproj"/>
     </ItemGroup>
 
 </Project>

@@ -8,12 +8,12 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Bonyan.UserManagement.Domain\Bonyan.UserManagement.Domain.csproj" />
+        <ProjectReference Include="..\Bonyan.UserManagement.Domain\Bonyan.UserManagement.Domain.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Microsoft\Extensions\DependencyInjection\" />
+        <Folder Include="Microsoft\Extensions\DependencyInjection\"/>
     </ItemGroup>
-    <Import Project="..\..\package.props" />
+    <Import Project="..\..\package.props"/>
 
 </Project>

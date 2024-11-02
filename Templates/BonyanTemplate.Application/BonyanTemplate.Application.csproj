@@ -7,12 +7,12 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\Framework\Bonyan.AspNetCore.Job.Hangfire\Bonyan.AspNetCore.Job.Hangfire.csproj" />
-      <ProjectReference Include="..\..\Framework\Bonyan.AspNetCore.Job\Bonyan.AspNetCore.Job.csproj" />
-      <ProjectReference Include="..\..\Framework\Bonyan.AspNetCore\Bonyan.AspNetCore.csproj" />
-      <ProjectReference Include="..\..\Framework\Bonyan.AutoMapper\Bonyan.AutoMapper.csproj" />
-      <ProjectReference Include="..\..\Modules\Bonyan.TenantManagement.Application\Bonyan.TenantManagement.Application.csproj" />
-      <ProjectReference Include="..\BonyanTemplate.Domain\BonyanTemplate.Domain.csproj" />
+        <ProjectReference Include="..\..\Framework\Bonyan.AspNetCore.Job.Hangfire\Bonyan.AspNetCore.Job.Hangfire.csproj"/>
+        <ProjectReference Include="..\..\Framework\Bonyan.AspNetCore.Job\Bonyan.AspNetCore.Job.csproj"/>
+        <ProjectReference Include="..\..\Framework\Bonyan.AspNetCore\Bonyan.AspNetCore.csproj"/>
+        <ProjectReference Include="..\..\Framework\Bonyan.AutoMapper\Bonyan.AutoMapper.csproj"/>
+        <ProjectReference Include="..\..\Modules\Bonyan.TenantManagement.Application\Bonyan.TenantManagement.Application.csproj"/>
+        <ProjectReference Include="..\BonyanTemplate.Domain\BonyanTemplate.Domain.csproj"/>
     </ItemGroup>
 
 </Project>

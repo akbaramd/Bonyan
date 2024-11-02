@@ -4,6 +4,7 @@ namespace BonyanTemplate.Domain.Entities;
 
 public class Role : BonRole
 {
-    protected Role(){}
-    
+    protected Role()
+    {
+    }
 }
