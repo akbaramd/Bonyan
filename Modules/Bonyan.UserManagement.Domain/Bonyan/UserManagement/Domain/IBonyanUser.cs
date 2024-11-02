@@ -13,7 +13,7 @@ namespace Bonyan.UserManagement.Domain
         /// <summary>
         /// Gets or sets the user's unique username.
         /// </summary>
-        string UserName { get; set; }
+        string UserName { get;  }
 
         /// <summary>
         /// Gets the user's hashed password.

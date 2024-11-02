@@ -15,7 +15,7 @@ namespace Bonyan.UserManagement.Domain
         /// <summary>
         /// Gets or sets the user's unique username.
         /// </summary>
-        public string UserName { get; set; }
+        public string UserName { get; private set; }
 
         /// <summary>
         /// Gets the user's hashed password.
@@ -40,21 +40,59 @@ namespace Bonyan.UserManagement.Domain
         public UserStatus Status { get; private set; }
 
         [ConcurrencyCheck]
-        public Guid Version { get; set; }
-        protected BonyanUser(){}
+        public Guid Version { get; private set; }
+
+        // Parameterless constructor for EF Core
+        protected BonyanUser() { }
 
         /// <summary>
-        /// Initializes a new user with basic information and sets the default status to Active.
+        /// Initializes a new user with a username only.
         /// </summary>
         /// <param name="id">The unique identifier of the user.</param>
         /// <param name="userName">The unique username of the user.</param>
-        /// <param name="initialPassword">The initial password of the user.</param>
         public BonyanUser(UserId id, string userName)
         {
             Id = id;
             UserName = userName;
             Status = UserStatus.Active; // Default status
             AddDomainEvent(new UserCreatedEvent(this));
+        }
+
+        /// <summary>
+        /// Initializes a new user with a username and password.
+        /// </summary>
+        /// <param name="id">The unique identifier of the user.</param>
+        /// <param name="userName">The unique username of the user.</param>
+        /// <param name="password">The initial password of the user.</param>
+        public BonyanUser(UserId id, string userName, string password) : this(id, userName)
+        {
+            SetPassword(password);
+        }
+
+        /// <summary>
+        /// Initializes a new user with complete details including email and phone number.
+        /// </summary>
+        /// <param name="id">The unique identifier of the user.</param>
+        /// <param name="userName">The unique username of the user.</param>
+        /// <param name="password">The initial password of the user.</param>
+        /// <param name="email">The initial email address of the user.</param>
+        /// <param name="phoneNumber">The initial phone number of the user.</param>
+        public BonyanUser(UserId id, string userName, string password, Email? email, PhoneNumber? phoneNumber)
+            : this(id, userName, password)
+        {
+            Email = email;
+            PhoneNumber = phoneNumber;
+            AddDomainEvent(new UserProfileUpdatedEvent(this));
+        }
+
+        /// <summary>
+        /// Sets a new password for the user.
+        /// </summary>
+        /// <param name="newPassword">The new password in plain text.</param>
+        public void SetPassword(string newPassword)
+        {
+            Password = new Password(newPassword);
+            AddDomainEvent(new PasswordChangedEvent(this));
         }
 
         /// <summary>
@@ -72,13 +110,23 @@ namespace Bonyan.UserManagement.Domain
         }
 
         /// <summary>
-        /// Sets a new password for the user.
+        /// Adds or updates the phone number.
         /// </summary>
-        /// <param name="newPassword">The new password in plain text.</param>
-        public void SetPassword(string newPassword)
+        /// <param name="phoneNumber">The phone number to set.</param>
+        public void SetPhoneNumber(PhoneNumber phoneNumber)
         {
-            Password = new Password(newPassword);
-            AddDomainEvent(new PasswordChangedEvent(this));
+            PhoneNumber = phoneNumber;
+            AddDomainEvent(new UserProfileUpdatedEvent(this));
+        }
+
+        /// <summary>
+        /// Adds or updates the email address.
+        /// </summary>
+        /// <param name="email">The email to set.</param>
+        public void SetEmail(Email email)
+        {
+            Email = email;
+            AddDomainEvent(new UserProfileUpdatedEvent(this));
         }
 
         /// <summary>

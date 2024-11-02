@@ -10,27 +10,29 @@ namespace Bonyan.UserManagement.EntityFrameworkCore
         public BonyanUserEfRepository(BonUserManagementDbContext<TUser> userManagementDbContext) : base(userManagementDbContext)
         {
         }
-
        
-
         public async Task<TUser?> GetUserByUsernameAsync(string userName)
         {
-            return await GetOneAsync(x => x.UserName == userName);
+            return await FindOneAsync(x => x.UserName == userName);
         }
 
         public async Task<TUser?> GetUserByEmailAsync(Email email)
         {
-            return await GetOneAsync(x => x.Email == email);
+            return await FindOneAsync(x => x.Email == email);
+        }
+        public async Task<TUser?> GetUserByEmailAsync(string email)
+        {
+            return await GetUserByEmailAsync(new Email(email));
         }
 
         public async Task<TUser?> GetUserByPhoneNumberAsync(PhoneNumber phoneNumber)
         {
-            return await GetOneAsync(x => x.PhoneNumber == phoneNumber);
+            return await FindOneAsync(x => x.PhoneNumber == phoneNumber);
         }
-
-        public void Dispose()
+        public async Task<TUser?> GetUserByPhoneNumberAsync(string phoneNumber)
         {
-            
+            return await GetUserByPhoneNumberAsync(new PhoneNumber(phoneNumber));
         }
+       
     }
 }
