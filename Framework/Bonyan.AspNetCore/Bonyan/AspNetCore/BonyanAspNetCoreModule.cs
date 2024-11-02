@@ -2,6 +2,7 @@ using Bonyan.AspNetCore.Security;
 using Bonyan.ExceptionHandling;
 using Bonyan.Layer.Domain;
 using Bonyan.Modularity;
+using Bonyan.Security.Claims;
 using Bonyan.UnitOfWork;
 using Microsoft;
 
@@ -79,7 +80,7 @@ public class BonyanAspNetCoreModule : WebModule
     {
         context.Services.AddAuthorization();
         context.Services.AddHttpContextAccessor();
-        
+        context.Services.AddTransient<ICurrentPrincipalAccessor, HttpContextCurrentPrincipalAccessor>();
         // Ensures IApplicationBuilder is accessible throughout the application's service configuration lifecycle
         context.Services.AddObjectAccessor<IApplicationBuilder>();
     }
