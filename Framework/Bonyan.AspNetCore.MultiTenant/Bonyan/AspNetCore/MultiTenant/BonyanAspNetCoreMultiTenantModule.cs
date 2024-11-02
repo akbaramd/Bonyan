@@ -30,8 +30,6 @@ public class BonyanAspNetCoreMultiTenantModule : WebModule
 
   public override Task OnPreApplicationAsync(ApplicationContext context)
   {
-    context.Application
-      .UseMiddleware<MultiTenancyMiddleware>();
     return base.OnPreApplicationAsync(context);
   }
 }

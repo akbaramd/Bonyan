@@ -6,7 +6,9 @@ using Bonyan.MultiTenant;
 using Bonyan.TenantManagement.EntityFrameworkCore;
 using BonyanTemplate.Domain;
 using BonyanTemplate.Domain.Entities;
+using BonyanTemplate.Domain.Repositories;
 using BonyanTemplate.Infrastructure.Data;
+using BonyanTemplate.Infrastructure.Data.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -30,7 +32,8 @@ public class BonaynTempalteInfrastructureModule : Module
     {
       options.IsEnabled = true;
     });
-    
+    context.Services.AddTransient<IBooksRepository, EfBookRepository>();
+    context.Services.AddTransient<IAuthorsRepository, EfAuthorRepository>();
     context.AddBonyanDbContext<BonyanTemplateBookManagementDbContext>(c =>
     {
       c.AddDefaultRepositories(true);

@@ -1,4 +1,5 @@
 using System.Collections.Concurrent;
+using Bonyan.UnitOfWork;
 using NCrontab;
 
 namespace Bonyan.AspNetCore.Job
@@ -16,7 +17,7 @@ namespace Bonyan.AspNetCore.Job
         }
 
         // Add and register cron jobs
-        public void AddCronJob<TJob>(string cronExpression) where TJob : IJob
+        public void AddCronJob<TJob>(TJob  job,string cronExpression) where TJob : IJob
         {
             try
             {
@@ -29,8 +30,6 @@ namespace Bonyan.AspNetCore.Job
                 {
                     try
                     {
-                        using var scope = _serviceProvider.CreateScope();
-                        var job = scope.ServiceProvider.GetRequiredService<TJob>();
                         await job.ExecuteAsync();
                         _logger.LogInformation("Executed cron job: {JobName} at {Time}", typeof(TJob).Name, DateTime.Now);
                     }
@@ -69,7 +68,7 @@ namespace Bonyan.AspNetCore.Job
         }
 
         // Add and register background jobs
-        public void AddBackgroundJob<TJob>() where TJob : IJob
+        public void AddBackgroundJob<TJob>(TJob job) where TJob : IJob
         {
             try
             {
@@ -77,8 +76,6 @@ namespace Bonyan.AspNetCore.Job
                 {
                     try
                     {
-                        using var scope = _serviceProvider.CreateScope();
-                        var job = scope.ServiceProvider.GetRequiredService<TJob>();
                         await job.ExecuteAsync();
                         _logger.LogInformation("Executed background job: {JobName} at {Time}", typeof(TJob).Name, DateTime.Now);
                     }

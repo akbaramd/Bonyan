@@ -1,3 +1,4 @@
+using Bonyan.AspNetCore.Job;
 using Bonyan.AutoMapper;
 using Bonyan.Job.Hangfire;
 using Bonyan.Modularity;
@@ -17,7 +18,7 @@ namespace BonyanTemplate.Application
     {
       DependOn<BonyanTenantManagementApplicationModule>();
       DependOn<BonyanTemplateDomainModule>();
-      DependOn<BonyanJobHangfireModule>();
+      DependOn<BonyanJobModule>();
     }
     public override Task OnConfigureAsync(ServiceConfigurationContext context)
     {

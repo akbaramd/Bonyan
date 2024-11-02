@@ -2,6 +2,6 @@
 
 public interface IBonyanJobsManager
 {
-  void AddCronJob<TJob>(string cronExpression) where TJob : IJob;
-  void AddBackgroundJob<TJob>() where TJob : IJob;
+  void AddCronJob<TJob>(TJob job,string cronExpression) where TJob : IJob;
+  void AddBackgroundJob<TJob>(TJob job) where TJob : IJob;
 }

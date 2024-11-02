@@ -1,5 +1,6 @@
 using System.Reflection;
 using Bonyan.Exceptions;
+using Bonyan.UnitOfWork;
 
 namespace Bonyan.AspNetCore.Job;
 
@@ -27,16 +28,12 @@ public class JobRegistererHostedService(IServiceProvider serviceProvider) : IHos
       {
         // Register as a cron job using the cron expression from the attribute
         var cronExpression = cronAttribute.CronExpression;
-        var addCronJobMethod = typeof(IBonyanJobsManager)
-          .GetMethod("AddCronJob")?.MakeGenericMethod(jobType);
-        addCronJobMethod?.Invoke(jobManager, new object[] { cronExpression });
+        jobManager.AddCronJob(jobService,cronExpression);
       }
       else
       {
         // Register as a background job
-        var addBackgroundJobMethod = typeof(IBonyanJobsManager)
-          .GetMethod("AddBackgroundJob")?.MakeGenericMethod(jobType);
-        addBackgroundJobMethod?.Invoke(jobManager, new object[] { });
+        jobManager.AddBackgroundJob(jobService);
       }
     }
 

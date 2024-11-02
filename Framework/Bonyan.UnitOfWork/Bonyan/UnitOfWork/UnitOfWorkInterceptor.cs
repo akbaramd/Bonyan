@@ -20,28 +20,32 @@ public class UnitOfWorkInterceptor : BonyanInterceptor
             await invocation.ProceedAsync();
             return;
         }
-  
-        using var scope = _serviceScopeFactory.CreateScope();
-        var options = CreateOptions(scope.ServiceProvider, invocation, unitOfWorkAttribute);
 
-        var unitOfWorkManager = scope.ServiceProvider.GetRequiredService<IUnitOfWorkManager>();
-
-        //Trying to begin a reserved UOW by BonyanUnitOfWorkMiddleware
-        if (unitOfWorkManager.TryBeginReserved(UnitOfWork.UnitOfWorkReservationName, options))
+        using (var scope = _serviceScopeFactory.CreateScope())
         {
-            await invocation.ProceedAsync();
+            var options = CreateOptions(scope.ServiceProvider, invocation, unitOfWorkAttribute);
 
-            if (unitOfWorkManager.Current != null)
+            var unitOfWorkManager = scope.ServiceProvider.GetRequiredService<IUnitOfWorkManager>();
+
+            //Trying to begin a reserved UOW by AbpUnitOfWorkMiddleware
+            if (unitOfWorkManager.TryBeginReserved(UnitOfWork.UnitOfWorkReservationName, options))
             {
-                await unitOfWorkManager.Current.SaveChangesAsync();
+                await invocation.ProceedAsync();
+
+                if (unitOfWorkManager.Current != null)
+                {
+                    await unitOfWorkManager.Current.SaveChangesAsync();
+                }
+
+                return;
             }
 
-            return;
+            using (var uow = unitOfWorkManager.Begin(options))
+            {
+                await invocation.ProceedAsync();
+                await uow.CompleteAsync();
+            }
         }
-
-        using var uow = unitOfWorkManager.Begin(options);
-        await invocation.ProceedAsync();
-        await uow.CompleteAsync();
     }
 
     private BonyanUnitOfWorkOptions CreateOptions(IServiceProvider serviceProvider, IBonyanMethodInvocation invocation, UnitOfWorkAttribute? unitOfWorkAttribute)

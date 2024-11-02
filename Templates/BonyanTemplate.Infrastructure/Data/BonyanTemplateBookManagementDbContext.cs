@@ -20,6 +20,7 @@ public class BonyanTemplateBookManagementDbContext : BonyanDbContext<BonyanTempl
     {
         base.OnModelCreating(modelBuilder);
         modelBuilder.Entity<Books>().ConfigureByConvention();
+        modelBuilder.Entity<Books>().HasOne(x => x.Author).WithMany().HasForeignKey(x => x.AuthorId);
         modelBuilder.Entity<Authors>().ConfigureByConvention();
         modelBuilder.ConfigureTenantManagementByConvention();
         modelBuilder.ConfigureIdentityManagementByConvention<User, Role>();

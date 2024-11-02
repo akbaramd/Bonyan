@@ -5,7 +5,7 @@ using BonyanTemplate.Domain.DomainEvents;
 
 namespace BonyanTemplate.Domain.Entities;
 
-public class Authors : AggregateRoot<AuthorId>, IMultiTenant
+public class Authors : AggregateRoot<AuthorId>
 {
     public Authors()
     {
@@ -14,7 +14,6 @@ public class Authors : AggregateRoot<AuthorId>, IMultiTenant
 
     public string Title { get; set; } = string.Empty;
 
-    public Guid? TenantId { get; set; }
 }
 
 public class AuthorId : BusinessId<AuthorId>
