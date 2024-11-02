@@ -46,7 +46,6 @@ public class BonyanAspNetCoreModule : WebModule
     /// <param name="context">The application context used during application initialization.</param>
     public override Task OnApplicationAsync(ApplicationContext context)
     {
-        context.Application.UseAuthorization();
         return base.OnApplicationAsync(context);
     }
 

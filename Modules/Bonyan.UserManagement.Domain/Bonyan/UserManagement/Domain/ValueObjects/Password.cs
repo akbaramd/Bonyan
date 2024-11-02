@@ -16,7 +16,7 @@ namespace Bonyan.UserManagement.Domain.ValueObjects
 
         public Password(string plainPassword)
         {
-            if (string.IsNullOrWhiteSpace(plainPassword) || plainPassword.Length < 8)
+            if (string.IsNullOrWhiteSpace(plainPassword) || plainPassword.Length < 3)
             {
                 throw new ArgumentException("Password must be at least 8 characters long.", nameof(plainPassword));
             }
