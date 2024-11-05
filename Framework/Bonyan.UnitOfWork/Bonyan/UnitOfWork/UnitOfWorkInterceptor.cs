@@ -27,7 +27,7 @@ public class UnitOfWorkInterceptor : BonyanInterceptor
 
             var unitOfWorkManager = scope.ServiceProvider.GetRequiredService<IUnitOfWorkManager>();
 
-            //Trying to begin a reserved UOW by AbpUnitOfWorkMiddleware
+            //Trying to begin a reserved UOW by BonUnitOfWorkMiddleware
             if (unitOfWorkManager.TryBeginReserved(UnitOfWork.UnitOfWorkReservationName, options))
             {
                 await invocation.ProceedAsync();

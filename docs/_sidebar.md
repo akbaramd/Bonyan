@@ -2,15 +2,15 @@
 
 - Getting started
 
-  - [Quick Start](/)
-  - [Modules](/module.md)
-  - [Web Modules](/web-module.md)
-  - [Autofac DI](/autofac.md)
+  - [Quick Start](/getting-started/getting-started.md)
+  - [Modules](/getting-started/module.md)
+  - [Web Modules](/getting-started/web-module.md)
+  - [Autofac DI](/getting-started/autofac.md)
 
 - Modules
-  - [Bonyan.AutoMapper](/automapper.md)
-  - [Bonyan.Layer.Domain](/ddd-domain.md)
-  - [Bonyan.Layer.Application](/ddd-application.md)
-
+  - [Bonyan.AutoMapper](/frameworks/automapper.md)
+  - [Bonyan.Layer.Domain](/frameworks/ddd-domain.md)
+  - [Bonyan.Layer.Application](/frameworks/ddd-application.md)
+  - [Bonyan.EntityFrameworkCore](/frameworks/entity_framework.md)
 - Authors
   - [Akbar Ahmadi Saray](/akbar-ahmadi.md)

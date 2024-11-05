@@ -1,8 +1,8 @@
 ﻿# Entity Framework Core Persistence Module Guide
 
-The **Bonyan.AspNetCore.Persistence.EntityFrameworkCore** module integrates Entity Framework Core with the Bonyan Modular Application Framework to provide developers with powerful persistence capabilities. By using this module, developers can efficiently implement **Domain-Driven Design (DDD)** principles for data access and management, leveraging the full capabilities of **Entity Framework Core** in .NET Core applications. This guide aims to comprehensively explain how to set up and effectively use this module, ensuring that even the most complex domain models can be represented and managed with ease.
+The **Bonyan.EntityFrameworkCore** module integrates Entity Framework Core with the Bonyan Modular Application Framework to provide developers with powerful persistence capabilities. By using this module, developers can efficiently implement **Domain-Driven Design (DDD)** principles for data access and management, leveraging the full capabilities of **Entity Framework Core** in .NET Core applications. This guide aims to comprehensively explain how to set up and effectively use this module, ensuring that even the most complex domain models can be represented and managed with ease.
 
-> **Note**: If you are unfamiliar with DDD, please refer to the [Domain-Driven Design Module Guide](ddd_domain_module_guide.md) for an overview of DDD concepts such as Entities, Aggregate Roots, and Value Objects.
+> **Note**: If you are unfamiliar with DDD, please refer to the [Domain-Driven Design Module Guide](/frameworks/ddd-domain.md) for an overview of DDD concepts such as Entities, Aggregate Roots, and Value Objects.
 
 ## Table of Contents
 - [Introduction](#introduction)
@@ -21,16 +21,16 @@ The **Bonyan.AspNetCore.Persistence.EntityFrameworkCore** module integrates Enti
 
 ## Introduction
 
-The **Bonyan.AspNetCore.Persistence.EntityFrameworkCore** module is built to provide a seamless integration with Entity Framework Core, enabling developers to implement persistence strategies following Domain-Driven Design principles. By extending the Bonyan framework, this module allows for creating **DbContexts**, **Repositories**, and handling complex data models efficiently. The module is particularly useful for managing **Aggregate Roots** and other entities that require persistence across different data stores, thereby ensuring consistency, reliability, and scalability within your software application.
+The **Bonyan.EntityFrameworkCore** module is built to provide a seamless integration with Entity Framework Core, enabling developers to implement persistence strategies following Domain-Driven Design principles. By extending the Bonyan framework, this module allows for creating **DbContexts**, **Repositories**, and handling complex data models efficiently. The module is particularly useful for managing **Aggregate Roots** and other entities that require persistence across different data stores, thereby ensuring consistency, reliability, and scalability within your software application.
 
 This module also supports a variety of relational database providers, allowing developers to choose between **SQLite**, **SQL Server**, or any other database compatible with Entity Framework Core. By combining these powerful technologies, the module enables developers to focus on modeling their domain without worrying about the low-level details of database interaction and configuration.
 
 ## Installation
 
-To install the **Bonyan.AspNetCore.Persistence.EntityFrameworkCore** module, run the following command in your terminal:
+To install the **Bonyan.EntityFrameworkCore** module, run the following command in your terminal:
 
 ```bash
-dotnet add package Bonyan.AspNetCore.Persistence.EntityFrameworkCore
+dotnet add package Bonyan.EntityFrameworkCore
 ```
 
 This command will include the necessary libraries and tools for integrating Entity Framework Core into your Bonyan-based application. After installing the package, you will be ready to start setting up your database context and repositories to interact seamlessly with your domain models.
@@ -123,20 +123,20 @@ In this example, `EfCustomRepository` is an implementation of the repository pat
 
 ## SQL Provider Configuration
 
-The **Bonyan.AspNetCore.Persistence.EntityFrameworkCore** module supports various SQL providers. Below, we outline how to configure your application to use either **SQLite** or **SQL Server** as the data store. These configurations provide the flexibility to choose a provider that best fits the application's specific needs and deployment context.
+The **Bonyan.EntityFrameworkCore** module supports various SQL providers. Below, we outline how to configure your application to use either **SQLite** or **SQL Server** as the data store. These configurations provide the flexibility to choose a provider that best fits the application's specific needs and deployment context.
 
 ### SQLite Setup
 
 SQLite is a lightweight, self-contained SQL database engine that is often used for local development, testing, or small-scale applications. To use SQLite with your Bonyan-based application, install the following package:
 
 ```bash
-dotnet add package Bonyan.AspNetCore.Persistence.EntityFrameworkCore.Sqlite
+dotnet add package Bonyan.EntityFrameworkCore.Sqlite
 ```
 
 Then, configure your `DbContext` within the infrastructure module:
 
 ```csharp
-public override Task OnConfigureAsync(ModularityContext context)
+public override Task OnConfigureAsync(ServiceConfigurationContext context)
 {
     context.AddBonyanDbContext<CustomDbContext>(c =>
     {
@@ -159,7 +159,7 @@ In this configuration, `AddBonyanDbContext` is used to register `CustomDbContext
 For enterprise-level applications or where more advanced database features are required, **SQL Server** is a suitable choice. To integrate SQL Server with your Bonyan-based application, use the following package:
 
 ```bash
-dotnet add package Bonyan.AspNetCore.Persistence.EntityFrameworkCore.SqlServer
+dotnet add package Bonyan.EntityFrameworkCore.SqlServer
 ```
 
 The configuration process for SQL Server is similar to SQLite, but you will specify a SQL Server connection string to connect to your desired database instance:
@@ -182,7 +182,7 @@ This configuration allows your application to interact with a SQL Server databas
 
 ## Summary
 
-The **Bonyan.AspNetCore.Persistence.EntityFrameworkCore** module provides a streamlined way to integrate Entity Framework Core with your domain-driven .NET Core applications. By utilizing **DbContexts** and **Repositories**, developers can efficiently implement data persistence while adhering to DDD principles. The module also supports a variety of SQL providers, including **SQLite** and **SQL Server**, providing flexibility to meet different application needs. The integration of this module ensures maintainability, scalability, and clear separation of concerns in the persistence layer of your applications.
+The **Bonyan.EntityFrameworkCore** module provides a streamlined way to integrate Entity Framework Core with your domain-driven .NET Core applications. By utilizing **DbContexts** and **Repositories**, developers can efficiently implement data persistence while adhering to DDD principles. The module also supports a variety of SQL providers, including **SQLite** and **SQL Server**, providing flexibility to meet different application needs. The integration of this module ensures maintainability, scalability, and clear separation of concerns in the persistence layer of your applications.
 
 Through the use of well-defined DbContexts and repository abstractions, you can keep the domain model clean and focused, allowing it to evolve independently of the underlying infrastructure. With support for common SQL providers and configuration conventions, this module is an essential tool for building robust, domain-driven .NET Core applications.
 
