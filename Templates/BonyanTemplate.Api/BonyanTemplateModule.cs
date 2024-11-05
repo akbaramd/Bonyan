@@ -27,6 +27,17 @@ public class BonyanTemplateModule : WebModule
         return base.OnConfigureAsync(context);
     }
 
+
+    public override Task OnPostInitializeAsync(ServiceInitializationContext context)
+    {
+        return base.OnPostInitializeAsync(context);
+    }
+
+    public override Task OnPreInitializeAsync(ServiceInitializationContext context)
+    {
+        return base.OnPreInitializeAsync(context);
+    }
+
     public override Task OnPreApplicationAsync(ApplicationContext context)
     {
         // context.Application.UseUnitOfWork();

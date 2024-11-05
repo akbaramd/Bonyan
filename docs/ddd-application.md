@@ -1,182 +1,159 @@
-﻿# Bonyan.Layer.Application Module Guide
+﻿# Application Module Guide
 
-The **Bonyan.Layer.Application** module is designed to streamline the development of application services in .NET Core projects. This module provides key abstractions such as **Application Services**, **Application Exceptions**, and foundational service interfaces like **IApplicationService** and **ApplicationService**. These components simplify the creation of an application layer that interacts between the domain and infrastructure layers, offering a clean separation of business logic and application logic.
-
-## Table of Contents
-- [Introduction](#introduction)
-- [Installation](#installation)
-- [Core Application Layer Concepts](#core-application-layer-concepts)
-  - [Application Service](#application-service)
-  - [Exception Handling](#exception-handling)
-- [Usage Examples](#usage-examples)
-  - [Creating an Application Service](#creating-an-application-service)
-  - [Handling Application Exceptions](#handling-application-exceptions)
-- [Summary](#summary)
-
-## Introduction
-
-The **Bonyan.Layer.Application** module is part of the layered architecture approach in Domain-Driven Design, specifically focusing on the **Application Layer**. The Application Layer is responsible for coordinating domain operations, handling user requests, and integrating with other parts of the system, such as infrastructure services. This layer is vital in keeping the **domain model** pure from external dependencies and in orchestrating **use cases**.
-
-The **Bonyan.Layer.Application** module includes key components that help developers build this layer efficiently, including **IApplicationService**, **ApplicationService**, and **ApplicationException**. By utilizing these abstractions, developers can focus on implementing business processes without worrying about low-level concerns.
-
-To use this module, any component requiring access to the Application Layer should declare a dependency on `BonyanLayerApplicationModule`.
-
-## Add Application Module Dependency
-
-To use the **Bonyan.Layer.Application** module, your main module must declare a dependency on `BonyanLayerApplicationModule`. This ensures that all the necessary services and configurations are available for managing application-level services.
-
-Here is how to declare the dependency in your module:
-
-```csharp
-[DependOn(typeof(BonyanLayerApplicationModule))]
-public class MyMainModule : Module
-{
-    public override Task OnConfigureAsync(ModularityContext context)
-    {
-        // Example setup code for application-level components
-        return base.OnConfigureAsync(context);
-    }
-}
-```
-
-In this example, the `MyMainModule` depends on `BonyanLayerApplicationModule`, making all relevant application services available in the project.
-
-To install the necessary library, use the following command:
+The `BonyanLayerApplicationModule` is a crucial part of the **Bonyan** architecture, designed to facilitate the application layer services by providing useful utilities and base classes. To use this module, you need to add `BonyanLayerApplicationModule` to your module.
 
 ```bash
 dotnet add package Bonyan.Layer.Application
 ```
+## Adding the Application Module
 
-This command integrates the necessary libraries needed for implementing application-level services in your .NET Core project.
-
-## Core Application Layer Concepts
-
-### Application Service
-
-An **Application Service** is a service that encapsulates and orchestrates multiple domain operations. It acts as a middle layer between user interactions and the underlying domain logic. The **Bonyan.Layer.Application** module provides `ApplicationService` as a base class for defining application services in a consistent and reusable way.
-
-The `IApplicationService` interface is also provided to define the base contract that all application services should follow. This helps in creating a standardized approach to application logic.
+To make use of this module, add `BonyanLayerApplicationModule` to your target module's dependencies:
 
 ```csharp
-public class CustomerAppService : ApplicationService, IApplicationService
+public class YourTargetModule : Module
 {
-    private readonly IRepository<Customer, Guid> _customerRepository;
-
-    public CustomerAppService(IRepository<Customer, Guid> customerRepository)
+    public YourTargetModule()
     {
-        _customerRepository = customerRepository;
+        DependOn<BonyanLayerApplicationModule>();
+    }
+}
+```
+
+This module also depends on `Bonyan.AutoMapperModule`, which means that when you add `BonyanLayerApplicationModule`, AutoMapper functionality will also be available, enabling easy object mapping and transformations.
+
+## Application Service Base Classes
+
+The **BonyanLayerApplicationModule** introduces base classes that simplify creating application-level services. The most important base classes are `IApplicationService` and `ApplicationService`.
+
+### `IApplicationService` and `ApplicationService`
+
+These classes form the foundation for creating services in the application layer.
+
+- **`IApplicationService`** is an interface that defines the contract for application services.
+- **`ApplicationService`** is an abstract class that implements `IApplicationService` and provides several commonly used properties to facilitate the development of application services.
+
+Here's an example of `ApplicationService`:
+
+```csharp
+public class ApplicationService : LayServiceProviderConfigurator, IApplicationService
+{
+    public ICurrentUser CurrentUser => LazyServiceProvider.LazyGetRequiredService<ICurrentUser>();
+    public ICurrentTenant CurrentTenant => LazyServiceProvider.LazyGetRequiredService<ICurrentTenant>();
+    public IMapper Mapper => LazyServiceProvider.LazyGetRequiredService<IMapper>();
+    protected IUnitOfWorkManager UnitOfWorkManager => LazyServiceProvider.LazyGetRequiredService<IUnitOfWorkManager>();
+    protected IUnitOfWork? CurrentUnitOfWork => UnitOfWorkManager?.Current;
+}
+```
+
+### Properties Available in `ApplicationService`
+
+1. **`CurrentUser`**: Provides access to information about the current authenticated user. This is helpful for determining user-specific data or permissions.
+2. **`CurrentTenant`**: Access to information about the current tenant, which is useful for multi-tenant applications to isolate data and configurations.
+3. **`Mapper`**: Utilizes **AutoMapper** to perform object mappings between different models. This is helpful for transforming domain objects to DTOs or vice versa.
+4. **`UnitOfWorkManager`**: Manages unit of work instances. This is crucial for managing transactional data changes across multiple repositories.
+5. **`CurrentUnitOfWork`**: Represents the current unit of work if one is active. This helps ensure transactional consistency.
+
+### Creating Application Services
+
+You can use `ApplicationService` as a base class to create services that operate in the application layer. Here's a simple example:
+
+```csharp
+public class ProductAppService : ApplicationService
+{
+    private IProductRepository _productRepository => LazyServiceProvider.LazyGetRequiredService<IProductRepository>();
+
+    public async Task<ProductDto> GetProductByIdAsync(int id)
+    {
+        var product = await _productRepository.GetByIdAsync(id);
+        return Mapper.Map<ProductDto>(product);
+    }
+}
+```
+
+### Explanation
+
+- **`ProductAppService`**: Inherits from `ApplicationService` to gain access to all the helpful properties like `Mapper`, `CurrentUser`, etc.
+- **`IProductRepository`**: Instead of being injected through the constructor, `IProductRepository` is accessed via the `LazyServiceProvider`. This allows for **property injection** without requiring constructor parameters.
+- **`Mapper.Map<ProductDto>(product)`**: Uses AutoMapper to map a `Product` entity to a `ProductDto`, simplifying object transformation logic.
+
+This approach allows developers to easily access dependencies without cluttering constructors, providing a cleaner and more modular design.
+
+## Built-in DTO Classes for Easy Conversion
+
+The Bonyan application layer also provides some pre-prepared DTO classes that make it easier to convert entities to DTOs for common use cases. These include:
+
+1. **`EntityDto`**: A base DTO class for regular entities.
+2. **`AggregateRootDto`**: A DTO specifically for aggregate root entities.
+3. **`FullAuditableAggregateRootDto`**: A DTO designed for fully auditable aggregate root entities.
+4. **`PaginateDto`**: Helps with pagination needs.
+
+    ```csharp
+    public class PaginateDto
+    {
+        public int Take { get; set; }
+        public int Skip { get; set; }
+    }
+    ```
+
+5. **`FilterAndPaginateDto`**: Extends `PaginateDto` to add filtering capability.
+
+    ```csharp
+    public class FilterAndPaginateDto : PaginateDto
+    {
+        public string? Search { get; set; }
+    }
+    ```
+
+These DTO classes provide a standard way to represent entities in a format that is easily consumed by clients or user interfaces.
+
+### Example: Creating a Service with Entity to DTO Mapping
+
+Here’s an example of how you can create an application service that gets entities from the repository and maps them to DTOs using the available tools in the Bonyan layer:
+
+```csharp
+public class OrderAppService : ApplicationService
+{
+    private IOrderRepository _orderRepository => LazyServiceProvider.LazyGetRequiredService<IOrderRepository>();
+
+    public async Task<AggregateRootDto<OrderDto>> GetOrderByIdAsync(int id)
+    {
+        var order = await _orderRepository.GetByIdAsync(id);
+        return Mapper.Map<AggregateRootDto<OrderDto>>(order);
     }
 
-    public async Task<CustomerDto> GetCustomerAsync(Guid id)
+    public async Task<PaginateDto<OrderDto>> GetOrdersWithPaginationAsync(FilterAndPaginateDto input)
     {
-        var customer = await _customerRepository.GetAsync(id);
-        return new CustomerDto
+        var orders = await _orderRepository.GetPaginatedListAsync(input.Skip, input.Take, input.Search);
+        return new PaginateDto<OrderDto>
         {
-            Id = customer.Id,
-            Name = customer.Name,
-            Email = customer.Email
+            Take = input.Take,
+            Skip = input.Skip,
+            Items = Mapper.Map<List<OrderDto>>(orders)
         };
     }
 }
 ```
 
-In the above example, `CustomerAppService` inherits from `ApplicationService` and implements `IApplicationService`, ensuring consistency and making use of available functionality for managing customer data.
+### Explanation
 
-### Exception Handling
+- **`OrderAppService`**: Uses `ApplicationService` as its base class to have access to all useful properties and services.
+- **`IOrderRepository`**: Accessed through the `LazyServiceProvider` for cleaner property injection.
+- **`GetOrderByIdAsync`**: Retrieves an `Order` entity from the repository and maps it to `AggregateRootDto<OrderDto>` using the `Mapper`.
+- **`GetOrdersWithPaginationAsync`**: Uses `FilterAndPaginateDto` to manage pagination and filtering, retrieves the paginated list from the repository, and maps it to a `PaginateDto` to be returned to the client.
 
-The **Application Layer** should handle any exceptions that occur within the boundaries of application services, providing a clear and user-friendly experience. The **Bonyan.Layer.Application** module provides an `ApplicationException` class to handle application-specific errors.
+## Built-in Dependencies and Features
 
-By leveraging `ApplicationException`, developers can ensure that exceptions thrown within the Application Layer are descriptive and consistent, which ultimately leads to better error management across the application.
+The `BonyanLayerApplicationModule` comes with some built-in dependencies that facilitate the creation of services at the application level:
 
-```csharp
-public class CustomerNotFoundException : ApplicationException
-{
-    public CustomerNotFoundException(Guid customerId)
-        : base($"Customer with ID {customerId} was not found.")
-    {
-    }
-}
-```
-
-In the example above, `CustomerNotFoundException` extends `ApplicationException`, providing a meaningful message when a customer cannot be found. This makes the error messages more informative and helps to ensure consistent error handling.
-
-## Usage Examples
-
-### Creating an Application Service
-
-To create an application service, you extend the `ApplicationService` base class and optionally implement `IApplicationService`. Application services should coordinate user requests and domain logic, without containing any business logic themselves.
-
-```csharp
-public class OrderAppService : ApplicationService, IApplicationService
-{
-    private readonly IRepository<Order, Guid> _orderRepository;
-
-    public OrderAppService(IRepository<Order, Guid> orderRepository)
-    {
-        _orderRepository = orderRepository;
-    }
-
-    public async Task<OrderDto> PlaceOrderAsync(OrderDto orderDto)
-    {
-        var order = new Order(orderDto.Id, orderDto.OrderDate);
-        foreach (var itemDto in orderDto.Items)
-        {
-            order.AddItem(new OrderItem(itemDto.ProductId, itemDto.Quantity));
-        }
-        await _orderRepository.InsertAsync(order);
-        return orderDto;
-    }
-}
-```
-
-In this example, the `OrderAppService` interacts with the domain layer to place orders. The actual business rules for adding items and validating them reside within the domain entities (`Order` and `OrderItem`). The application service simply coordinates these actions.
-
-### Handling Application Exceptions
-
-Application exceptions should be used to provide meaningful error feedback in case of any issues during the execution of application logic.
-
-```csharp
-public class OrderAppService : ApplicationService, IApplicationService
-{
-    private readonly IRepository<Order, Guid> _orderRepository;
-
-    public OrderAppService(IRepository<Order, Guid> orderRepository)
-    {
-        _orderRepository = orderRepository;
-    }
-
-    public async Task<OrderDto> GetOrderAsync(Guid id)
-    {
-        var order = await _orderRepository.FindAsync(id);
-        if (order == null)
-        {
-            throw new OrderNotFoundException(id);
-        }
-
-        return new OrderDto
-        {
-            Id = order.Id,
-            OrderDate = order.OrderDate,
-            Items = order.Items.Select(item => new OrderItemDto
-            {
-                ProductId = item.ProductId,
-                Quantity = item.Quantity
-            }).ToList()
-        };
-    }
-}
-
-public class OrderNotFoundException : ApplicationException
-{
-    public OrderNotFoundException(Guid orderId) : base($"Order with ID {orderId} was not found.")
-    {
-    }
-}
-```
-
-In this example, `OrderNotFoundException` is used to handle cases where the requested order does not exist in the database. This ensures that a meaningful and consistent message is returned to the client.
+1. **AutoMapper Integration**: The `BonyanLayerApplicationModule` is dependent on `Bonyan.AutoMapperModule`, making AutoMapper automatically available for use in your application services. This allows for seamless mapping between different models, such as DTOs and domain objects.
+2. **Dependency Injection**: The `ApplicationService` class uses Autofac internally to provide its injected properties, such as `CurrentUser`, `CurrentTenant`, and `UnitOfWorkManager`. This integration ensures that all required services are available when needed, without cluttering the constructors of application services.
+3. **Unit of Work Management**: The `UnitOfWorkManager` and `CurrentUnitOfWork` properties help manage transactions across multiple operations, which is particularly useful when your service is interacting with multiple repositories and you need to ensure transactional consistency.
 
 ## Summary
 
-The **Bonyan.Layer.Application** module provides foundational components for constructing the Application Layer in .NET Core. With abstractions like **Application Services**, **IApplicationService**, and **ApplicationException**, developers can maintain a clean separation of concerns and streamline the development of application services. This approach enhances maintainability, promotes standardization, and ensures that application logic remains distinct from domain and infrastructure concerns.
+The `BonyanLayerApplicationModule` makes it easy to create application-level services by providing a powerful base class (`ApplicationService`) that offers built-in access to many commonly used services, such as `CurrentUser`, `Mapper`, and `UnitOfWorkManager`. By using this module, you can focus on the business logic of your application services while relying on the infrastructure provided by Bonyan to handle the complexity of dependency injection and object mapping.
+
+Additionally, using `LazyServiceProvider` allows you to access dependencies without requiring them to be injected via constructors, simplifying service creation and promoting cleaner, modular code.
+
+The pre-prepared DTO classes, such as `EntityDto`, `AggregateRootDto`, `FullAuditableAggregateRootDto`, and `PaginateDto`, make it easier to convert entities to DTOs, streamlining the development process and ensuring a consistent approach to data transfer.
 
