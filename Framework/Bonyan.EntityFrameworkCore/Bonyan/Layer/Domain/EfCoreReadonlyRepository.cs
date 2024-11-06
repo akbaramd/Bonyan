@@ -24,65 +24,61 @@ namespace Bonyan.Layer.Domain
         public IDbContextProvider<TDbContext> DbContextProvider { get; set; } = default!;
         public ICurrentTenant? CurrentTenant => LazyServiceProvider.LazyGetService<ICurrentTenant>();
 
-        protected virtual IQueryable<TEntity> PrepareQuery(DbSet<TEntity> dbSet)
-        {
-            return dbSet;
-        }
+        // Virtual method to allow including related entities or applying custom logic in derived repositories
+        protected virtual IQueryable<TEntity> PrepareQuery(DbSet<TEntity> dbSet) => dbSet;
 
-        internal async Task<IQueryable<TEntity>> GetPreparedQueryAsync()
+        // Retrieves DbContext instance
+        internal async Task<IQueryable<TEntity>> GetQueryAsync()
         {
             var dbContext = await GetDbContextAsync();
-            var dbSet = dbContext.Set<TEntity>();
-            return PrepareQuery(dbSet);
+            var query = PrepareQuery(dbContext.Set<TEntity>());
+            
+            // Apply AsNoTracking() if change tracking is disabled
+            if (IsChangeTrackingEnabled.HasValue && IsChangeTrackingEnabled.Value)
+            {
+                query = query.AsNoTracking();
+            }
+
+            return query;
         }
 
-        public async Task<TDbContext> GetDbContextAsync()
-        {
-            return await DbContextProvider.GetDbContextAsync();
-        }
+        public async Task<TDbContext> GetDbContextAsync() => await DbContextProvider.GetDbContextAsync();
 
-        public async Task<IEnumerable<TEntity>> GetAllAsync()
-        {
-            var query = await GetPreparedQueryAsync();
-            return await query.ToListAsync();
-        }
 
         public async Task<IEnumerable<TEntity>> FindAsync(Expression<Func<TEntity, bool>> predicate)
         {
-            var query = await GetPreparedQueryAsync();
+            var query = await GetQueryAsync();
             return await query.Where(predicate).ToListAsync();
         }
 
         public async Task<TEntity?> FindOneAsync(Expression<Func<TEntity, bool>> predicate)
         {
-            var query = await GetPreparedQueryAsync();
+            var query = await GetQueryAsync();
             return await query.FirstOrDefaultAsync(predicate);
         }
 
         public async Task<int> CountAsync(Expression<Func<TEntity, bool>> predicate)
         {
-            var query = await GetPreparedQueryAsync();
+            var query = await GetQueryAsync();
             return await query.CountAsync(predicate);
         }
 
         public async Task<bool> ExistsAsync(Expression<Func<TEntity, bool>> predicate)
         {
-            var query = await GetPreparedQueryAsync();
+            var query = await GetQueryAsync();
             return await query.AnyAsync(predicate);
         }
 
         public async Task<IEnumerable<TEntity>> FindAsync(ISpecification<TEntity> specification)
         {
-            var query = await GetPreparedQueryAsync();
-            query = specification is PaginatedSpecification<TEntity> paginatedSpec
-                ? ApplyPaginatedSpecification(query, paginatedSpec)
-                : ApplySpecification(query, specification);
+            var query = await GetQueryAsync();
+            query = ApplySpecification(query, specification);
             return await query.ToListAsync();
         }
 
         public async Task<TEntity?> FindOneAsync(ISpecification<TEntity> specification)
         {
-            var query = ApplySpecification(await GetPreparedQueryAsync(), specification);
+            var query = ApplySpecification(await GetQueryAsync(), specification);
             return await query.FirstOrDefaultAsync();
         }
 
@@ -100,7 +96,7 @@ namespace Bonyan.Layer.Domain
 
         public async Task<PaginatedResult<TEntity>> PaginatedAsync(PaginatedSpecification<TEntity> paginateSpecification)
         {
-            var query = ApplySpecification(await GetPreparedQueryAsync(), paginateSpecification);
+            var query = ApplySpecification(await GetQueryAsync(), paginateSpecification);
             var totalCount = await query.CountAsync();
             var results = await query.Skip(paginateSpecification.Skip).Take(paginateSpecification.Take).ToListAsync();
 
@@ -109,7 +105,7 @@ namespace Bonyan.Layer.Domain
 
         public async Task<PaginatedResult<TEntity>> PaginatedAsync(PaginatedAndSortableSpecification<TEntity> paginateSpecification)
         {
-            var query = ApplySpecification(await GetPreparedQueryAsync(), paginateSpecification);
+            var query = ApplySpecification(await GetQueryAsync(), paginateSpecification);
             var totalCount = await query.CountAsync();
 
             if (!string.IsNullOrEmpty(paginateSpecification.SortBy))
@@ -124,7 +120,7 @@ namespace Bonyan.Layer.Domain
 
         public async Task<PaginatedResult<TEntity>> PaginatedAsync(Expression<Func<TEntity, bool>> predicate, int take, int skip)
         {
-            var query = (await GetPreparedQueryAsync()).Where(predicate);
+            var query = (await GetQueryAsync()).Where(predicate);
             var totalCount = await query.CountAsync();
             var results = await query.Skip(skip).Take(take).ToListAsync();
 
@@ -133,17 +129,17 @@ namespace Bonyan.Layer.Domain
 
         private static IQueryable<TEntity> ApplySpecification(IQueryable<TEntity> query, ISpecification<TEntity> specification)
         {
-            var ctx = new SpecificationContext<TEntity>(query);
-            specification.Handle(ctx);
-            return ctx.Query;
+            var context = new SpecificationContext<TEntity>(query);
+            specification.Handle(context);
+            return context.Query;
         }
 
-        private static IQueryable<TEntity> ApplyPaginatedSpecification(IQueryable<TEntity> query, PaginatedSpecification<TEntity> specification)
+        private static IQueryable<TEntity> ApplyPagination(IQueryable<TEntity> query, PaginatedSpecification<TEntity> specification)
         {
             return ApplySpecification(query, specification).Skip(specification.Skip).Take(specification.Take);
         }
 
-        public bool? IsChangeTrackingEnabled { get; }
+        public bool? IsChangeTrackingEnabled { get; } = true;
         public IQueryable<TEntity> Queryable => GetDbContextAsync().GetAwaiter().GetResult().Set<TEntity>();
     }
 
@@ -157,17 +153,17 @@ namespace Bonyan.Layer.Domain
 
         public async Task<TEntity?> GetByIdAsync(TKey id)
         {
-            return await (await GetPreparedQueryAsync()).FirstOrDefaultAsync(e => e.Id!.Equals(id));
+            return await (await GetQueryAsync()).FirstOrDefaultAsync(e => e.Id!.Equals(id));
         }
 
         public async Task<TEntity?> FindByIdAsync(TKey id)
         {
-            return await (await GetPreparedQueryAsync()).FirstOrDefaultAsync(e => e.Id.Equals(id));
+            return await (await GetQueryAsync()).FirstOrDefaultAsync(e => e.Id.Equals(id));
         }
 
         public async Task<IEnumerable<TEntity>> GetByPredicateAsync(Expression<Func<TEntity, bool>> predicate)
         {
-            return await (await GetPreparedQueryAsync()).Where(predicate).ToListAsync();
+            return await (await GetQueryAsync()).Where(predicate).ToListAsync();
         }
     }
 }

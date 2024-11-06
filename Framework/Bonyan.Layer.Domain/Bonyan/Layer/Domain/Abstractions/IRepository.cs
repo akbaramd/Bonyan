@@ -33,9 +33,9 @@ public interface IReadOnlyRepository<TEntity> : IRepository where TEntity : clas
     Task<TEntity> GetOneAsync(ISpecification<TEntity> specification);
     Task<int> CountAsync(Expression<Func<TEntity, bool>> predicate);
     Task<bool> ExistsAsync(Expression<Func<TEntity, bool>> predicate);
+    
     Task<PaginatedResult<TEntity>> PaginatedAsync(PaginatedSpecification<TEntity> paginateSpecification);
     Task<PaginatedResult<TEntity>> PaginatedAsync(PaginatedAndSortableSpecification<TEntity> paginateSpecification);
-
     Task<PaginatedResult<TEntity>> PaginatedAsync(Expression<Func<TEntity, bool>> predicate, int take, int skip);
 }
 

@@ -1,5 +1,6 @@
 using AutoMapper;
 using Bonyan.Collections;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Bonyan.AutoMapper;
 
@@ -40,9 +41,10 @@ public class BonyanAutoMapperOptions
   public void AddProfile<TProfile>(bool validate = false)
     where TProfile : Profile, new()
   {
+    
     Configurators.Add(context =>
     {
-      context.MapperConfiguration.AddProfile<TProfile>();
+      context.MapperConfiguration.AddProfile(context.ServiceProvider.GetRequiredService<TProfile>());
     });
 
     if (validate)
