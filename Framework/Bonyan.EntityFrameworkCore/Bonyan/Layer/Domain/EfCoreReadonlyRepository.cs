@@ -12,163 +12,141 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Bonyan.Layer.Domain
 {
-    public  class EfCoreReadonlyRepository<TEntity, TDbContext> : IReadonlyEfCoreRepository<TEntity>
+    public abstract class EfCoreReadonlyRepository<TEntity, TDbContext> : IReadonlyEfCoreRepository<TEntity>
         where TEntity : class, IEntity
         where TDbContext : DbContext, IBonyanDbContext<TDbContext>
     {
+        protected EfCoreReadonlyRepository(TDbContext userManagementDbContext)
+        {
+        }
 
         public IBonyanLazyServiceProvider LazyServiceProvider { get; set; } = default!;
         public IDbContextProvider<TDbContext> DbContextProvider { get; set; } = default!;
-        
-        public EfCoreReadonlyRepository(TDbContext userManagementDbContext)
-        {
+        public ICurrentTenant? CurrentTenant => LazyServiceProvider.LazyGetService<ICurrentTenant>();
 
+        protected virtual IQueryable<TEntity> PrepareQuery(DbSet<TEntity> dbSet)
+        {
+            return dbSet;
         }
 
-        protected bool IsMultiTenantEntity()
+        internal async Task<IQueryable<TEntity>> GetPreparedQueryAsync()
         {
-          return CurrentTenant != null && typeof(IMultiTenant).IsAssignableFrom(typeof(TEntity)) && CurrentTenant.IsAvailable && CurrentTenant.Id.HasValue;
-        }
-
-
-        // Retrieve all entities of type T
-        public async Task<IEnumerable<TEntity>> GetAllAsync()
-        {
-            return await (await GetDbContextAsync()).Set<TEntity>().ToListAsync();
+            var dbContext = await GetDbContextAsync();
+            var dbSet = dbContext.Set<TEntity>();
+            return PrepareQuery(dbSet);
         }
 
         public async Task<TDbContext> GetDbContextAsync()
         {
-          return await DbContextProvider.GetDbContextAsync();
+            return await DbContextProvider.GetDbContextAsync();
         }
 
-        // Find entities matching a specific predicate (filter)
+        public async Task<IEnumerable<TEntity>> GetAllAsync()
+        {
+            var query = await GetPreparedQueryAsync();
+            return await query.ToListAsync();
+        }
+
         public async Task<IEnumerable<TEntity>> FindAsync(Expression<Func<TEntity, bool>> predicate)
         {
-            return await (await GetDbContextAsync()).Set<TEntity>().Where(predicate).ToListAsync();
+            var query = await GetPreparedQueryAsync();
+            return await query.Where(predicate).ToListAsync();
         }
 
-        // Find the first entity that matches a specific predicate (filter)
         public async Task<TEntity?> FindOneAsync(Expression<Func<TEntity, bool>> predicate)
         {
-            return await (await GetDbContextAsync()).Set<TEntity>().FirstOrDefaultAsync(predicate);
+            var query = await GetPreparedQueryAsync();
+            return await query.FirstOrDefaultAsync(predicate);
         }
 
         public async Task<int> CountAsync(Expression<Func<TEntity, bool>> predicate)
         {
-            return await (await GetDbContextAsync()).Set<TEntity>().Where(predicate).CountAsync();
+            var query = await GetPreparedQueryAsync();
+            return await query.CountAsync(predicate);
         }
 
         public async Task<bool> ExistsAsync(Expression<Func<TEntity, bool>> predicate)
         {
-            return await (await GetDbContextAsync()).Set<TEntity>().Where(predicate).AnyAsync();
+            var query = await GetPreparedQueryAsync();
+            return await query.AnyAsync(predicate);
         }
 
-        // Find entities based on a specification
         public async Task<IEnumerable<TEntity>> FindAsync(ISpecification<TEntity> specification)
         {
-            if (specification is PaginatedSpecification<TEntity> s)
-            {
-                var query = ApplyPaginatedSpecification((await GetDbContextAsync()).Set<TEntity>(), s);
-                return await query.ToListAsync();
-            }
-            else
-            {
-                var query = ApplySpecification((await GetDbContextAsync()).Set<TEntity>(), specification);
-                return await query.ToListAsync();
-            }
+            var query = await GetPreparedQueryAsync();
+            query = specification is PaginatedSpecification<TEntity> paginatedSpec
+                ? ApplyPaginatedSpecification(query, paginatedSpec)
+                : ApplySpecification(query, specification);
+            return await query.ToListAsync();
         }
 
-        // Find the first entity that matches a specification
         public async Task<TEntity?> FindOneAsync(ISpecification<TEntity> specification)
         {
-            var query = ApplySpecification((await GetDbContextAsync()).Set<TEntity>(), specification);
+            var query = ApplySpecification(await GetPreparedQueryAsync(), specification);
             return await query.FirstOrDefaultAsync();
         }
 
-  
-
-        // Retrieve one entity matching a specific predicate, or throw an exception
         public async Task<TEntity> GetOneAsync(Expression<Func<TEntity, bool>> predicate)
         {
-            return await FindOneAsync(predicate) ?? throw new BonyanException($"Entity with predicate {predicate} not found");
+            return await FindOneAsync(predicate) 
+                ?? throw new BonyanException($"Entity with predicate {predicate} not found");
         }
 
-        // Retrieve one entity matching a specification, or throw an exception
         public async Task<TEntity> GetOneAsync(ISpecification<TEntity> specification)
         {
-            return await FindOneAsync(specification) ?? throw new BonyanException($"Entity with specification {specification} not found");
+            return await FindOneAsync(specification) 
+                ?? throw new BonyanException($"Entity with specification {specification} not found");
         }
 
-        // Retrieve paginated results based on a PaginatedSpecification
         public async Task<PaginatedResult<TEntity>> PaginatedAsync(PaginatedSpecification<TEntity> paginateSpecification)
         {
-            var query = ApplySpecification((await GetDbContextAsync()).Set<TEntity>(), paginateSpecification);
-
+            var query = ApplySpecification(await GetPreparedQueryAsync(), paginateSpecification);
             var totalCount = await query.CountAsync();
-            var paginatedResults = await query.Skip(paginateSpecification.Skip)
-                                              .Take(paginateSpecification.Take)
-                                              .ToListAsync();
+            var results = await query.Skip(paginateSpecification.Skip).Take(paginateSpecification.Take).ToListAsync();
 
-            return new PaginatedResult<TEntity>(paginatedResults, paginateSpecification.Skip, paginateSpecification.Take, totalCount);
+            return new PaginatedResult<TEntity>(results, paginateSpecification.Skip, paginateSpecification.Take, totalCount);
         }
-  
+
         public async Task<PaginatedResult<TEntity>> PaginatedAsync(PaginatedAndSortableSpecification<TEntity> paginateSpecification)
         {
-            var query = ApplySpecification((await GetDbContextAsync()).Set<TEntity>(), paginateSpecification);
-
+            var query = ApplySpecification(await GetPreparedQueryAsync(), paginateSpecification);
             var totalCount = await query.CountAsync();
 
             if (!string.IsNullOrEmpty(paginateSpecification.SortBy))
             {
-                var sortExpression = $"{paginateSpecification.SortBy} {paginateSpecification.SortDirection}";
-                query = query.OrderBy(sortExpression);
+                query = query.OrderBy($"{paginateSpecification.SortBy} {paginateSpecification.SortDirection}");
             }
 
-            var paginatedResults = await query.Skip(paginateSpecification.Skip)
-                                              .Take(paginateSpecification.Take)
-                                              .ToListAsync();
+            var results = await query.Skip(paginateSpecification.Skip).Take(paginateSpecification.Take).ToListAsync();
 
-            return new PaginatedResult<TEntity>(paginatedResults, paginateSpecification.Skip, paginateSpecification.Take, totalCount);
+            return new PaginatedResult<TEntity>(results, paginateSpecification.Skip, paginateSpecification.Take, totalCount);
         }
 
         public async Task<PaginatedResult<TEntity>> PaginatedAsync(Expression<Func<TEntity, bool>> predicate, int take, int skip)
         {
-            var query = (await GetDbContextAsync()).Set<TEntity>().Where(predicate);
+            var query = (await GetPreparedQueryAsync()).Where(predicate);
             var totalCount = await query.CountAsync();
-
-            var results = await query.Skip(skip)
-                                     .Take(take)
-                                     .ToListAsync();
+            var results = await query.Skip(skip).Take(take).ToListAsync();
 
             return new PaginatedResult<TEntity>(results, skip, take, totalCount);
         }
 
-        private IQueryable<TEntity> ApplySpecification(IQueryable<TEntity> query, ISpecification<TEntity> specification)
+        private static IQueryable<TEntity> ApplySpecification(IQueryable<TEntity> query, ISpecification<TEntity> specification)
         {
             var ctx = new SpecificationContext<TEntity>(query);
             specification.Handle(ctx);
             return ctx.Query;
         }
-  
-        private IQueryable<TEntity> ApplyPaginatedSpecification(IQueryable<TEntity> query, PaginatedSpecification<TEntity> specification)
+
+        private static IQueryable<TEntity> ApplyPaginatedSpecification(IQueryable<TEntity> query, PaginatedSpecification<TEntity> specification)
         {
-            query = ApplySpecification(query, specification);
-            query = query.Skip(specification.Skip).Take(specification.Take);
-            return query;
+            return ApplySpecification(query, specification).Skip(specification.Skip).Take(specification.Take);
         }
 
         public bool? IsChangeTrackingEnabled { get; }
-        public ICurrentTenant? CurrentTenant => LazyServiceProvider.LazyGetService<ICurrentTenant>();
-
-        public void Dispose()
-        {
-            
-        }
-        
         public IQueryable<TEntity> Queryable => GetDbContextAsync().GetAwaiter().GetResult().Set<TEntity>();
     }
-    
+
     public class EfCoreReadonlyRepository<TEntity, TKey, TDbContext> : EfCoreReadonlyRepository<TEntity, TDbContext>, IReadonlyEfCoreRepository<TEntity, TKey>
         where TEntity : class, IEntity<TKey>
         where TDbContext : DbContext, IBonyanDbContext<TDbContext>
@@ -179,22 +157,17 @@ namespace Bonyan.Layer.Domain
 
         public async Task<TEntity?> GetByIdAsync(TKey id)
         {
-            return await (await GetDbContextAsync()).Set<TEntity>().FirstOrDefaultAsync(e => e.Id!.Equals(id));
+            return await (await GetPreparedQueryAsync()).FirstOrDefaultAsync(e => e.Id!.Equals(id));
         }
-        // Retrieve entity by ID or throw an exception if not found
-        // Find entity by its unique identifier
+
         public async Task<TEntity?> FindByIdAsync(TKey id)
         {
-          return await (await GetDbContextAsync()).Set<TEntity>().FirstOrDefaultAsync(e => e.Id.Equals(id));
+            return await (await GetPreparedQueryAsync()).FirstOrDefaultAsync(e => e.Id.Equals(id));
         }
-
-
 
         public async Task<IEnumerable<TEntity>> GetByPredicateAsync(Expression<Func<TEntity, bool>> predicate)
         {
-            return await (await GetDbContextAsync()).Set<TEntity>().Where(predicate).ToListAsync();
+            return await (await GetPreparedQueryAsync()).Where(predicate).ToListAsync();
         }
-
-        
     }
 }
