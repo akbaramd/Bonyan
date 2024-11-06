@@ -15,12 +15,12 @@
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.1"/>
         <PackageReference Include="Microsoft.Extensions.Options" Version="8.0.2"/>
         <PackageReference Include="Microsoft.Extensions.Logging" Version="8.0.1"/>
+        <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.1"/>
         <PackageReference Include="Castle.Core" Version="5.1.1"/>
         <PackageReference Include="Castle.Core.AsyncInterceptor" Version="2.1.0"/>
         <PackageReference Include="Autofac" Version="8.1.1"/>
         <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="10.0.0"/>
         <PackageReference Include="Autofac.Extras.DynamicProxy" Version="7.1.0"/>
         <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="8.0.0"/>
-        <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="8.0.1"/>
     </ItemGroup>
 </Project>

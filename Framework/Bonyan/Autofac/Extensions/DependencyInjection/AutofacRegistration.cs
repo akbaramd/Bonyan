@@ -82,6 +82,12 @@ public static class AutofacRegistration
         object? lifetimeScopeTagForSingletons)
     {
         var moduleContainer = services.GetSingletonInstance<IModuleAccessor>();
+
+        foreach (var module in moduleContainer.GetAllModules().Select(x=>x.Instance))
+        {
+            if (module != null) builder.RegisterModule(module);
+        }
+        
         var registrationActionList = services.GetRegistrationActionList();
 
         foreach (var descriptor in services)

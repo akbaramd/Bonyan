@@ -17,12 +17,16 @@ public class BonyanJobHangfireModule : WebModule
   public override Task OnConfigureAsync(ServiceConfigurationContext context)
   {
 
+    var preActions = context.Services.GetPreConfigureActions<IGlobalConfiguration>();
+    
     context.Services.AddHangfire(config =>
     {
       config.UseInMemoryStorage();
       var x = context.Services.GetObjectOrNull<IContainer>();
       config.UseAutofacActivator(x);
+      preActions.Configure(config);
     });
+    
     context.Services.AddHangfireServer();
     
     context.Services.Replace(ServiceDescriptor.Singleton<IBonyanJobsManager, HangfireJobManager>());

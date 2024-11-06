@@ -1,7 +1,7 @@
 using Bonyan.Modularity;
+using Bonyan.Modularity.Abstractions;
 using Bonyan.Security;
 using Microsoft.Extensions.DependencyInjection;
-using Module = Bonyan.Modularity.Abstractions.Module;
 
 namespace Bonyan.MultiTenant;
 

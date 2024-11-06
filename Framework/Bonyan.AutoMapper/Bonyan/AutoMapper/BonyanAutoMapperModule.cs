@@ -2,6 +2,7 @@ using System.Reflection;
 using AutoMapper;
 using AutoMapper.Internal;
 using Bonyan.Modularity;
+using Bonyan.Modularity.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;

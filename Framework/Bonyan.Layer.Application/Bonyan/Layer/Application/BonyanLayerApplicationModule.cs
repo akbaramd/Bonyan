@@ -1,7 +1,7 @@
 using Bonyan.AutoMapper;
+using Bonyan.Modularity.Abstractions;
 using Bonyan.UnitOfWork;
 using Bonyan.Validation;
-using Module = Bonyan.Modularity.Abstractions.Module;
 
 namespace Bonyan.Layer.Application
 {

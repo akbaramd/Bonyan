@@ -2,11 +2,12 @@ using Bonyan.AspNetCore.Job;
 using Bonyan.AutoMapper;
 using Bonyan.Job.Hangfire;
 using Bonyan.Modularity;
+using Bonyan.Modularity.Abstractions;
 using Bonyan.TenantManagement.Application;
 using BonyanTemplate.Application.Dtos;
 using BonyanTemplate.Application.Jobs;
 using BonyanTemplate.Domain;
-using Module = Bonyan.Modularity.Abstractions.Module;
+using Hangfire;
 
 
 namespace BonyanTemplate.Application
@@ -18,10 +19,23 @@ namespace BonyanTemplate.Application
     {
       DependOn<BonyanTenantManagementApplicationModule>();
       DependOn<BonyanTemplateDomainModule>();
-      DependOn<BonyanJobModule>();
+      DependOn<BonyanJobHangfireModule>();
     }
+
+    public override Task OnPreConfigureAsync(ServiceConfigurationContext context)
+    {
+      PreConfigure<IGlobalConfiguration>(c =>
+      {
+        c.ToString();
+      });
+      
+      
+      return base.OnPreConfigureAsync(context);
+    }
+
     public override Task OnConfigureAsync(ServiceConfigurationContext context)
     {
+      
       context.ConfigureOptions<BonyanAutoMapperOptions>(options =>
       {
         options.AddProfile<BookMapper>();

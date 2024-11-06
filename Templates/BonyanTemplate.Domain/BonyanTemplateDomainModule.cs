@@ -1,10 +1,10 @@
 using Bonyan.IdentityManagement.Domain;
 using Bonyan.Modularity;
+using Bonyan.Modularity.Abstractions;
 using Bonyan.TenantManagement.Domain;
 using BonyanTemplate.Domain.Entities;
 using BonyanTemplate.Domain.Handlers;
 using Microsoft.Extensions.DependencyInjection;
-using Module = Bonyan.Modularity.Abstractions.Module;
 
 
 namespace BonyanTemplate.Domain

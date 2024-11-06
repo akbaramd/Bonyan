@@ -1,12 +1,19 @@
 using System.Reflection;
+using Microsoft;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Module = Autofac.Module;
 
 namespace Bonyan.Modularity.Abstractions
 {
     /// <summary>
     /// Base class for a module in the Bonyan modular system, providing methods for configuring dependencies.
     /// </summary>
-    public abstract class Module : IModule
+    public abstract class Module : global::Autofac.Module, IModule
     {
+
+        public IServiceCollection Services { get; set; } 
+        
         public virtual Task OnPreConfigureAsync(ServiceConfigurationContext context) => Task.CompletedTask;
 
         public virtual Task OnConfigureAsync(ServiceConfigurationContext context) => Task.CompletedTask;
@@ -28,7 +35,8 @@ namespace Bonyan.Modularity.Abstractions
         {
             if (!IsBonyanModule(moduleType))
             {
-                throw new ArgumentException("The provided type is not a Bonyan module: " + moduleType.AssemblyQualifiedName);
+                throw new ArgumentException("The provided type is not a Bonyan module: " +
+                                            moduleType.AssemblyQualifiedName);
             }
         }
 
@@ -92,6 +100,49 @@ namespace Bonyan.Modularity.Abstractions
                     DependedModules.Add(type);
                 }
             }
+        }
+        
+        protected void Configure<TOptions>(Action<TOptions> configureOptions)
+            where TOptions : class
+        {
+            Services.Configure(configureOptions);
+        }
+
+        protected void Configure<TOptions>(string name, Action<TOptions> configureOptions)
+            where TOptions : class
+        {
+            Services.Configure(name, configureOptions);
+        }
+
+        protected void Configure<TOptions>(IConfiguration configuration)
+            where TOptions : class
+        {
+            Services.Configure<TOptions>(configuration);
+        }
+
+
+        protected void Configure<TOptions>(string name, IConfiguration configuration)
+            where TOptions : class
+        {
+            Services.Configure<TOptions>(name, configuration);
+        }
+
+        protected void PreConfigure<TOptions>(Action<TOptions> configureOptions)
+            where TOptions : class
+        {
+            Services.PreConfigure(configureOptions);
+        }
+
+        protected void PostConfigure<TOptions>(Action<TOptions> configureOptions)
+            where TOptions : class
+        {
+            Services.PostConfigure(configureOptions);
+        }
+
+        protected void PostConfigureAll<TOptions>(Action<TOptions> configureOptions)
+            where TOptions : class
+        {
+            Services.PostConfigureAll(configureOptions);
         }
     }
 }

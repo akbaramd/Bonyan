@@ -1,7 +1,7 @@
 using Bonyan.Layer.Domain.Events;
 using Bonyan.Modularity;
+using Bonyan.Modularity.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
-using Module = Bonyan.Modularity.Abstractions.Module;
 
 namespace Bonyan.Layer.Domain
 {

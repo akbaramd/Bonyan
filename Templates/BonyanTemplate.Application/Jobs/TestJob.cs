@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace BonyanTemplate.Application.Jobs;
 
-public class TestJob : IJob,IUnitOfWorkEnabled
+public class TestJob : IJob
 {
 
   private IBooksRepository _userRepository;

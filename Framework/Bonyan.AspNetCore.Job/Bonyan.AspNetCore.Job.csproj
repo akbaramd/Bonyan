@@ -11,6 +11,7 @@
     <Import Project="..\..\package.props"/>
     <ItemGroup>
         <PackageReference Include="NCrontab" Version="3.3.3"/>
+        <PackageReference Include="Quartz.AspNetCore" Version="3.13.1" />
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\Bonyan.AspNetCore\Bonyan.AspNetCore.csproj"/>

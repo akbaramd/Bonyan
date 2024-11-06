@@ -57,6 +57,11 @@ public class ModularityApplication<TModule> : IModularityApplication where TModu
         var configuration = serviceProvider.GetRequiredService<IConfiguration>();
         var context = new ServiceConfigurationContext(_serviceCollection, configuration);
 
+        foreach (var module in Modules)
+        {
+            if (module.Instance != null) module.Instance.Services = _serviceCollection;
+        }
+        
         // Execute configuration phases in order
         await ExecuteModulePhaseAsync(context, (module, ctx) => module.OnPreConfigureAsync(ctx));
         await ExecuteModulePhaseAsync(context, (module, ctx) => module.OnConfigureAsync(ctx));

@@ -1,6 +1,8 @@
-﻿namespace Bonyan.AspNetCore.Job;
+﻿using Bonyan.UnitOfWork;
 
-public  interface IJob
+namespace Bonyan.AspNetCore.Job;
+
+public  interface IJob: IUnitOfWorkEnabled
 {
   Task ExecuteAsync(CancellationToken cancellationToken = default!);
 }
