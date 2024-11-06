@@ -33,7 +33,7 @@ public class BonyanApplication
     public static IBonyanApplicationBuilder CreateApplicationBuilder<TModule>(string[] args) where TModule : IModule
     {
         var applicationBuilder = WebApplication.CreateBuilder(args);
-
+        applicationBuilder.Host.UseAutofac();
         // Initialize the modular application and configure modules
         var modularApp = InitializeModularApplication<TModule>(applicationBuilder.Services);
 
@@ -41,9 +41,9 @@ public class BonyanApplication
         applicationBuilder.Services.AddSingleton<IModularityApplication>(modularApp);
         applicationBuilder.Services.AddSingleton<IWebModularityApplication>(modularApp);
 
+      
         // Build the Bonyan application builder with dependency injection support
         var builder = new BonyanApplicationBuilder(modularApp, applicationBuilder);
-        builder.Host.UseAutofac();
         return builder;
     }
 
