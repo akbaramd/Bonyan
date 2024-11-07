@@ -1,4 +1,5 @@
 using Bonyan.AspNetCore.MultiTenant;
+using Bonyan.DependencyInjection;
 using Bonyan.EntityFrameworkCore;
 using Bonyan.Modularity;
 using Bonyan.UserManagement.Domain;
@@ -8,27 +9,28 @@ using Microsoft.Extensions.DependencyInjection;
 namespace Bonyan.UserManagement.EntityFrameworkCore;
 
 
-public class BonyanUserManagementEntityFrameworkModule<TUser> : Modularity.Abstractions.Module where TUser : BonyanUser
+public class BonUserManagementEntityFrameworkModule<TUser> : Modularity.Abstractions.BonModule where TUser : BonUser
 {
 
-  public BonyanUserManagementEntityFrameworkModule()
+  public BonUserManagementEntityFrameworkModule()
   {
     DependOn([
-      typeof(BonyanEntityFrameworkModule),
-      typeof(BonyanAspNetCoreMultiTenantModule)
+      typeof(BonEntityFrameworkModule),
+      typeof(BonAspNetCoreMultiTenantModule)
     ]);
   }
-  public override Task OnConfigureAsync(ServiceConfigurationContext context)
+  public override Task OnConfigureAsync(BonConfigurationContext context)
   {
 
   
     
-    context.Services.AddTransient<BonyanUserEfRepository<TUser>>();
-    context.Services.AddTransient<IBonyanUserRepository<TUser>>(c=>c.GetRequiredService<BonyanUserEfRepository<TUser>>());
+    context.Services.AddTransient<BonUserEfRepository<TUser>>();
+    context.Services.AddTransient<IBonUserRepository<TUser>>(c=>c.GetRequiredService<BonUserEfRepository<TUser>>());
+    context.Services.AddTransient<IBonUserReadOnlyRepository<TUser>>(c=>c.GetRequiredService<BonUserEfReadOnlyRepository<TUser>>());
     
-    context.AddBonyanDbContext<BonUserManagementDbContext<TUser>>(c =>
+    context.AddBonDbContext<BonUserManagementDbContext<TUser>>(c =>
     {
-      c.AddRepository<TUser, BonyanUserEfRepository<TUser>>();
+      c.AddRepository<TUser, BonUserEfRepository<TUser>>();
     });
     
     return base.OnConfigureAsync(context);

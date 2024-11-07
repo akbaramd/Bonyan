@@ -16,7 +16,7 @@ public class HeaderTenantResolveContributor : HttpTenantResolveContributorBase
             return Task.FromResult((string?)null);
         }
 
-        var tenantIdKey = context.ServiceProvider.GetRequiredService<IOptions<BonyanAspNetCoreMultiTenancyOptions>>().Value.TenantKey;
+        var tenantIdKey = context.ServiceProvider.GetRequiredService<IOptions<BonAspNetCoreMultiTenancyOptions>>().Value.TenantKey;
 
         var tenantIdHeader = httpContext.Request.Headers[tenantIdKey];
         if (tenantIdHeader == string.Empty || tenantIdHeader.Count < 1)

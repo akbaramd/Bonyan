@@ -30,16 +30,16 @@ public class BonyanApplication
     /// <typeparam name="TModule">The root module type.</typeparam>
     /// <param name="args">Application arguments.</param>
     /// <returns>An instance of <see cref="IBonyanApplicationBuilder"/> configured with the root module.</returns>
-    public static IBonyanApplicationBuilder CreateApplicationBuilder<TModule>(string[] args) where TModule : IModule
+    public static IBonyanApplicationBuilder CreateApplicationBuilder<TModule>(string[] args) where TModule : IBonModule
     {
         var applicationBuilder = WebApplication.CreateBuilder(args);
-        applicationBuilder.Host.UseAutofac();
+        applicationBuilder.Host.UseBonAutofac();
         // Initialize the modular application and configure modules
         var modularApp = InitializeModularApplication<TModule>(applicationBuilder.Services);
 
         // Register core services for the modular application
-        applicationBuilder.Services.AddSingleton<IModularityApplication>(modularApp);
-        applicationBuilder.Services.AddSingleton<IWebModularityApplication>(modularApp);
+        applicationBuilder.Services.AddSingleton<IBonModularityApplication>(modularApp);
+        applicationBuilder.Services.AddSingleton<IWebBonModularityApplication>(modularApp);
 
       
         // Build the Bonyan application builder with dependency injection support
@@ -52,10 +52,10 @@ public class BonyanApplication
     /// </summary>
     /// <typeparam name="TModule">The root module type.</typeparam>
     /// <param name="services">Service collection to register dependencies.</param>
-    /// <returns>An initialized instance of <see cref="WebModularityApplication{TModule}"/>.</returns>
-    private static WebModularityApplication<TModule> InitializeModularApplication<TModule>(IServiceCollection services) where TModule : IModule
+    /// <returns>An initialized instance of <see cref="WebBonModularityApplication{TModule}"/>.</returns>
+    private static WebBonModularityApplication<TModule> InitializeModularApplication<TModule>(IServiceCollection services) where TModule : IBonModule
     {
-        var modularApp = new WebModularityApplication<TModule>(services);
+        var modularApp = new WebBonModularityApplication<TModule>(services);
         
         // Asynchronously configure modules, handling potential errors
         try

@@ -11,7 +11,7 @@ namespace Bonyan.UserManagement.Domain.Events
         /// <summary>
         /// Gets the user whose status changed.
         /// </summary>
-        public BonyanUser User { get; }
+        public BonUser User { get; }
 
         /// <summary>
         /// Gets the new status assigned to the user.
@@ -23,7 +23,7 @@ namespace Bonyan.UserManagement.Domain.Events
         /// </summary>
         /// <param name="user">The user whose status changed.</param>
         /// <param name="newStatus">The new status assigned to the user.</param>
-        public UserStatusChangedEvent(BonyanUser user, UserStatus newStatus)
+        public UserStatusChangedEvent(BonUser user, UserStatus newStatus)
         {
             User = user;
             NewStatus = newStatus;

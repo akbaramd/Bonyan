@@ -4,11 +4,11 @@ namespace Bonyan.Modularity
 {
     public class ModuleManager : IModuleManager
     {
-        private readonly IModuleAccessor _moduleAccessor;
+        private readonly IBonModuleAccessor _bonModuleAccessor;
 
-        public ModuleManager(IModuleAccessor moduleAccessor)
+        public ModuleManager(IBonModuleAccessor bonModuleAccessor)
         {
-            _moduleAccessor = moduleAccessor;
+            _bonModuleAccessor = bonModuleAccessor;
         }
 
         public void LoadModules(Type mainModuleType)
@@ -16,7 +16,7 @@ namespace Bonyan.Modularity
             ValidateMainModuleType(mainModuleType);
             LoadModuleRecursive(mainModuleType);
 
-            var sortedModules = TopologicalSort(_moduleAccessor.GetAllModules().ToList());
+            var sortedModules = TopologicalSort(_bonModuleAccessor.GetAllModules().ToList());
             UpdateModuleListAndInstantiate(sortedModules);
         }
 
@@ -25,22 +25,22 @@ namespace Bonyan.Modularity
             if (mainModuleType == null)
                 throw new ArgumentNullException(nameof(mainModuleType));
 
-            if (!typeof(IModule).IsAssignableFrom(mainModuleType))
+            if (!typeof(IBonModule).IsAssignableFrom(mainModuleType))
                 throw new ArgumentException($"Type {mainModuleType.FullName} does not implement IModule.");
         }
 
         private void LoadModuleRecursive(Type moduleType)
         {
-            if (_moduleAccessor.GetModule(moduleType) != null) return;
+            if (_bonModuleAccessor.GetModule(moduleType) != null) return;
 
-            var moduleInstance = (IModule)Activator.CreateInstance(moduleType)!;
+            var moduleInstance = (IBonModule)Activator.CreateInstance(moduleType)!;
             var moduleInfo = new ModuleInfo(moduleType) { Instance = moduleInstance };
-            _moduleAccessor.AddModule(moduleInfo);
+            _bonModuleAccessor.AddModule(moduleInfo);
 
             foreach (var dependencyType in moduleInstance.DependedModules)
             {
                 LoadModuleRecursive(dependencyType);
-                moduleInfo.Dependencies.Add(_moduleAccessor.GetModule(dependencyType)!);
+                moduleInfo.Dependencies.Add(_bonModuleAccessor.GetModule(dependencyType)!);
             }
         }
 
@@ -80,17 +80,17 @@ namespace Bonyan.Modularity
 
         private void UpdateModuleListAndInstantiate(IEnumerable<ModuleInfo> sortedModules)
         {
-            _moduleAccessor.ClearModules();
+            _bonModuleAccessor.ClearModules();
             foreach (var module in sortedModules)
             {
-                module.Instance ??= (IModule)Activator.CreateInstance(module.ModuleType)!;
-                _moduleAccessor.AddModule(module);
+                module.Instance ??= (IBonModule)Activator.CreateInstance(module.ModuleType)!;
+                _bonModuleAccessor.AddModule(module);
             }
         }
 
         public static void ValidateModuleType(Type moduleType)
         {
-            if (!typeof(IModule).IsAssignableFrom(moduleType) || moduleType.IsAbstract || moduleType.IsGenericType)
+            if (!typeof(IBonModule).IsAssignableFrom(moduleType) || moduleType.IsAbstract || moduleType.IsGenericType)
             {
                 throw new ArgumentException($"Type {moduleType.FullName} is not a valid module.");
             }

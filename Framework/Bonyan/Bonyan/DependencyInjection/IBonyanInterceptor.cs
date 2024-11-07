@@ -1,6 +1,6 @@
 namespace Bonyan.DependencyInjection;
 
-public interface IBonyanInterceptor
+public interface IBonInterceptor
 {
-  Task InterceptAsync(IBonyanMethodInvocation invocation);
+  Task InterceptAsync(IBonMethodInvocation invocation);
 }

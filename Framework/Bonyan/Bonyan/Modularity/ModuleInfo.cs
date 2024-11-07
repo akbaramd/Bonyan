@@ -6,7 +6,7 @@ namespace Bonyan.Modularity;
 public class ModuleInfo
 {
     public Type ModuleType { get; }
-    public IModule? Instance { get; set; }
+    public IBonModule? Instance { get; set; }
     public List<ModuleInfo> Dependencies { get; }
     
     Assembly Assembly { get; }

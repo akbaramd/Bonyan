@@ -5,7 +5,7 @@ namespace Bonyan.DependencyInjection;
 
 public interface IOnServiceRegistredContext
 {
-  ITypeList<IBonyanInterceptor> Interceptors { get; }
+  ITypeList<IBonInterceptor> Interceptors { get; }
 
   Type ImplementationType { get; }
 }

@@ -10,16 +10,16 @@ using Microsoft.Extensions.DependencyInjection;
 namespace BonyanTemplate.Domain
 {
 
-  public class BonyanTemplateDomainModule : Module
+  public class BonyanTemplateDomainModule : BonModule
   {
     public BonyanTemplateDomainModule()
     {
-      DependOn<BonyanTenantManagementDomainModule>();
-      DependOn<BonyanIdentityManagementDomainModule<User,Role>>();
+      DependOn<BonTenantManagementDomainModule>();
+      DependOn<BonIdentityManagementDomainModule<User,Role>>();
     }
-    public override Task OnConfigureAsync(ServiceConfigurationContext context)
+    public override Task OnConfigureAsync(BonConfigurationContext context)
     {
-      context.AddDomainHandler(typeof(BookDomainHandler));
+      context.AddDomainHandler(typeof(BookBonDomainHandler));
     
       return base.OnConfigureAsync(context);
     }

@@ -3,13 +3,13 @@
 namespace Bonyan.UnitOfWork;
 
 /// <summary>
-/// Used as event arguments on <see cref="IUnitOfWork.Failed"/> event.
+/// Used as event arguments on <see cref="IBonUnitOfWork.Failed"/> event.
 /// </summary>
 public class UnitOfWorkFailedEventArgs : UnitOfWorkEventArgs
 {
     /// <summary>
-    /// Exception that caused failure. This is set only if an error occurred during <see cref="IUnitOfWork.CompleteAsync"/>.
-    /// Can be null if there is no exception, but <see cref="IUnitOfWork.CompleteAsync"/> is not called.
+    /// Exception that caused failure. This is set only if an error occurred during <see cref="IBonUnitOfWork.CompleteAsync"/>.
+    /// Can be null if there is no exception, but <see cref="IBonUnitOfWork.CompleteAsync"/> is not called.
     /// Can be null if another exception occurred during the UOW.
     /// </summary>
     public Exception? Exception { get; }
@@ -22,8 +22,8 @@ public class UnitOfWorkFailedEventArgs : UnitOfWorkEventArgs
     /// <summary>
     /// Creates a new <see cref="UnitOfWorkFailedEventArgs"/> object.
     /// </summary>
-    public UnitOfWorkFailedEventArgs([NotNull] IUnitOfWork unitOfWork, Exception? exception, bool isRolledback)
-        : base(unitOfWork)
+    public UnitOfWorkFailedEventArgs([NotNull] IBonUnitOfWork bonUnitOfWork, Exception? exception, bool isRolledback)
+        : base(bonUnitOfWork)
     {
         Exception = exception;
         IsRolledback = isRolledback;

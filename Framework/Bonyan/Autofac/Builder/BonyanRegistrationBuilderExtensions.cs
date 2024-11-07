@@ -11,8 +11,8 @@ public static class BonyanRegistrationBuilderExtensions
 {
     public static IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> ConfigureBonyanConventions<TLimit, TActivatorData, TRegistrationStyle>(
             this IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> registrationBuilder,
-            IModuleAccessor moduleContainer,
-            ServiceRegistrationActionList registrationActionList)
+            IBonModuleAccessor bonModuleContainer,
+            BonServiceRegistrationActionList registrationActionList)
     {
         var serviceType = registrationBuilder.RegistrationData.Services
             .OfType<IServiceWithType>()
@@ -24,7 +24,7 @@ public static class BonyanRegistrationBuilderExtensions
 
         Type? implementationType = GetImplementationType(registrationBuilder);
 
-        registrationBuilder = registrationBuilder.EnablePropertyInjection(moduleContainer, implementationType);
+        registrationBuilder = registrationBuilder.EnablePropertyInjection(bonModuleContainer, implementationType);
         registrationBuilder = registrationBuilder.InvokeRegistrationActions(registrationActionList, serviceType, implementationType);
 
         return registrationBuilder;
@@ -52,7 +52,7 @@ public static class BonyanRegistrationBuilderExtensions
 
     private static IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> InvokeRegistrationActions<TLimit, TActivatorData, TRegistrationStyle>(
         this IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> registrationBuilder,
-        ServiceRegistrationActionList registrationActionList,
+        BonServiceRegistrationActionList registrationActionList,
         Type serviceType,
         Type? implementationType)
     {
@@ -77,7 +77,7 @@ public static class BonyanRegistrationBuilderExtensions
 
     private static IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> EnablePropertyInjection<TLimit, TActivatorData, TRegistrationStyle>(
             this IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> registrationBuilder,
-            IModuleAccessor moduleContainer,
+            IBonModuleAccessor bonModuleContainer,
             Type? implementationType)
     {
         if (implementationType == null)
@@ -86,7 +86,7 @@ public static class BonyanRegistrationBuilderExtensions
         }
 
         // Enable Property Injection only for types in an assembly containing a BonyanModule and without a DisablePropertyInjection attribute.
-        if (moduleContainer.GetAllModules().Any(m => m.AllAssemblies.Contains(implementationType.Assembly)) &&
+        if (bonModuleContainer.GetAllModules().Any(m => m.AllAssemblies.Contains(implementationType.Assembly)) &&
             implementationType.GetCustomAttributes(typeof(DisablePropertyInjectionAttribute), true).IsNullOrEmpty())
         {
             registrationBuilder = registrationBuilder.PropertiesAutowired(new BonyanPropertySelector(false));
@@ -98,7 +98,7 @@ public static class BonyanRegistrationBuilderExtensions
     private static IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle>
         AddInterceptors<TLimit, TActivatorData, TRegistrationStyle>(
             this IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> registrationBuilder,
-            ServiceRegistrationActionList serviceRegistrationActionList,
+            BonServiceRegistrationActionList bonServiceRegistrationActionList,
             Type serviceType,
             IEnumerable<Type> interceptors)
     {
@@ -108,7 +108,7 @@ public static class BonyanRegistrationBuilderExtensions
         }
         else
         {
-            if (serviceRegistrationActionList.IsClassInterceptorsDisabled)
+            if (bonServiceRegistrationActionList.IsClassInterceptorsDisabled)
             {
                 return registrationBuilder;
             }
@@ -128,7 +128,7 @@ public static class BonyanRegistrationBuilderExtensions
         foreach (var interceptor in interceptors)
         {
             registrationBuilder.InterceptedBy(
-                typeof(BonyanAsyncDeterminationInterceptor<>).MakeGenericType(interceptor)
+                typeof(BonAsyncDeterminationInterceptor<>).MakeGenericType(interceptor)
             );
         }
 

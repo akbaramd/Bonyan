@@ -5,7 +5,7 @@ using BonyanTemplate.Domain.DomainEvents;
 
 namespace BonyanTemplate.Domain.Entities;
 
-public class Authors : AggregateRoot<AuthorId>
+public class Authors : BonAggregateRoot<AuthorId>
 {
     public Authors()
     {
@@ -16,6 +16,6 @@ public class Authors : AggregateRoot<AuthorId>
 
 }
 
-public class AuthorId : BusinessId<AuthorId>
+public class AuthorId : BonBusinessId<AuthorId>
 {
 }

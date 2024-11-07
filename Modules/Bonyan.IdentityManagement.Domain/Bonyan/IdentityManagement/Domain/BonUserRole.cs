@@ -8,26 +8,26 @@ using Bonyan.UserManagement.Domain.ValueObjects;
 
 namespace Bonyan.IdentityManagement.Domain
 {
-    public class BonUserRole<TUser,TRole> : Entity where TUser : BonyanUser where TRole : BonRole
+    public class BonUserRole<TUser,TRole> : BonEntity where TUser : BonUser where TRole : BonRole
     {
         // Private constructor for ORM or factory use only.
         protected BonUserRole() { }
 
-        public BonUserRole(UserId userId, RoleId roleId)
+        public BonUserRole(BonUserId bonUserId, BonRoleId bonRoleId)
         {
-            UserId = userId;
-            RoleId = roleId;
+            BonUserId = bonUserId;
+            BonRoleId = bonRoleId;
         }
 
         public TUser User { get; set; }
-        public UserId UserId { get; set; }
+        public BonUserId BonUserId { get; set; }
         
         public TRole Role { get; set; }
-        public RoleId RoleId { get; set; }
+        public BonRoleId BonRoleId { get; set; }
 
         public override object[] GetKeys()
         {
-            return [UserId, RoleId];
+            return [BonUserId, BonRoleId];
         }
     }
 

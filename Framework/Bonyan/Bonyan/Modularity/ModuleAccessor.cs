@@ -2,7 +2,7 @@
 
 namespace Bonyan.Modularity;
 
-public class ModuleAccessor : IModuleAccessor
+public class BonModuleAccessor : IBonModuleAccessor
 {
     private readonly Dictionary<Type, ModuleInfo> _modules = new();
 

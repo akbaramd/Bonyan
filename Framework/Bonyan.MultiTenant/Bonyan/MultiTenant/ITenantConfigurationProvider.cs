@@ -2,5 +2,5 @@ namespace Bonyan.MultiTenant;
 
 public interface ITenantConfigurationProvider
 {
-  Task<TenantConfiguration?> GetAsync(bool saveResolveResult = false);
+  Task<BonTenantConfiguration?> GetAsync(bool saveResolveResult = false);
 }

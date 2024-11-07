@@ -9,7 +9,7 @@ public class BonyanClaimsMapMiddleware : IMiddleware
     public async Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
         var currentPrincipalAccessor = context.RequestServices
-            .GetRequiredService<ICurrentPrincipalAccessor>();
+            .GetRequiredService<IBonCurrentPrincipalAccessor>();
 
         var mapOptions = context.RequestServices
             .GetRequiredService<IOptions<BonyanClaimsMapOptions>>().Value;

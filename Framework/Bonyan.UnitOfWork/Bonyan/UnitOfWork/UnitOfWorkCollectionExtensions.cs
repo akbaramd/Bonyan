@@ -7,6 +7,6 @@ public static class UnitOfWorkCollectionExtensions
 {
     public static IServiceCollection AddAlwaysDisableUnitOfWorkTransaction(this IServiceCollection services)
     {
-        return services.Replace(ServiceDescriptor.Singleton<IUnitOfWorkManager, AlwaysDisableTransactionsUnitOfWorkManager>());
+        return services.Replace(ServiceDescriptor.Singleton<IBonUnitOfWorkManager, AlwaysDisableTransactionsBonUnitOfWorkManager>());
     }
 }

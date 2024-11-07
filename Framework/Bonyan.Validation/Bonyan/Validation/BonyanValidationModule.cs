@@ -5,9 +5,9 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Bonyan.Validation;
 
-public class BonyanValidationModule : Module
+public class BonyanValidationModule : BonModule
 {
-  public override Task OnPreConfigureAsync(ServiceConfigurationContext context)
+  public override Task OnPreConfigureAsync(BonConfigurationContext context)
   {
     
     context.Services.AddTransient<IAttributeValidationResultProvider,DefaultAttributeValidationResultProvider>();
@@ -20,7 +20,7 @@ public class BonyanValidationModule : Module
     return base.OnPreConfigureAsync(context);
   }
 
-  public override Task OnConfigureAsync(ServiceConfigurationContext context)
+  public override Task OnConfigureAsync(BonConfigurationContext context)
   {
 
     return base.OnConfigureAsync(context);

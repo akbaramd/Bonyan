@@ -4,14 +4,14 @@ namespace Bonyan.UnitOfWork;
 
 public class BonyanUnitOfWorkMiddleware : IMiddleware
 {
-    private readonly IUnitOfWorkManager _unitOfWorkManager;
+    private readonly IBonUnitOfWorkManager _bonUnitOfWorkManager;
     private readonly BonyanAspNetCoreUnitOfWorkOptions _options;
 
     public BonyanUnitOfWorkMiddleware(
-        IUnitOfWorkManager unitOfWorkManager,
+        IBonUnitOfWorkManager bonUnitOfWorkManager,
         IOptions<BonyanAspNetCoreUnitOfWorkOptions> options)
     {
-        _unitOfWorkManager = unitOfWorkManager;
+        _bonUnitOfWorkManager = bonUnitOfWorkManager;
         _options = options.Value;
     }
 
@@ -23,7 +23,7 @@ public class BonyanUnitOfWorkMiddleware : IMiddleware
             return;
         }
 
-        using (var uow = _unitOfWorkManager.Reserve(UnitOfWork.UnitOfWorkReservationName))
+        using (var uow = _bonUnitOfWorkManager.Reserve(BonUnitOfWork.UnitOfWorkReservationName))
         {
             await next(context);
             await uow.CompleteAsync(context.RequestAborted);

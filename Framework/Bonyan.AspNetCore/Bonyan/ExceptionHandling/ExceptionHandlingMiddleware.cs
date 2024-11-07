@@ -1,8 +1,8 @@
 using System.Net;
+using Bonyan.Layer.Application.Exceptions;
 using Bonyan.Layer.Domain.Exceptions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using ApplicationException = Bonyan.Layer.Application.Exceptions.ApplicationException;
 
 
 namespace Bonyan.ExceptionHandling;
@@ -27,17 +27,17 @@ public class ExceptionHandlingMiddleware
       context.Response.ContentType = "application/json";
       context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 
-      if (ex is ApplicationException exception)
+      if (ex is BonApplicationException exception)
       {
-        var response = new HttpExceptionModel(nameof(ApplicationException),exception.ErrorCode, ex.Message,
+        var response = new HttpExceptionModel(nameof(BonApplicationException),exception.ErrorCode, ex.Message,
           (int)HttpStatusCode.InternalServerError, exception.Parameters);
 
         await context.Response.WriteAsync(JsonConvert.SerializeObject(response,
           new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() }));
       }
-      else if (ex is DomainException domainException)
+      else if (ex is BonDomainException domainException)
       {
-          var response = new HttpExceptionModel(nameof(DomainException), domainException.ErrorCode,ex.Message, (int)HttpStatusCode.InternalServerError);
+          var response = new HttpExceptionModel(nameof(BonDomainException), domainException.ErrorCode,ex.Message, (int)HttpStatusCode.InternalServerError);
       
           await context.Response.WriteAsync(JsonConvert.SerializeObject(response, new JsonSerializerSettings
           {

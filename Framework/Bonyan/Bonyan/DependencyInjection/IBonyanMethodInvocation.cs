@@ -2,7 +2,7 @@ using System.Reflection;
 
 namespace Bonyan.DependencyInjection;
 
-public interface IBonyanMethodInvocation
+public interface IBonMethodInvocation
 {
   object[] Arguments { get; }
 

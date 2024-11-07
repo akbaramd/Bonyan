@@ -96,7 +96,7 @@ public static class ServiceCollectionCommonExtensions
     internal static T? GetService<T>(this IServiceCollection services)
     {
         return services
-            .GetSingletonInstance<IModularityApplication>()
+            .GetSingletonInstance<IBonModularityApplication>()
             .ServiceProvider
             .GetService<T>();
     }
@@ -108,7 +108,7 @@ public static class ServiceCollectionCommonExtensions
     internal static object? GetService(this IServiceCollection services, Type type)
     {
         return services
-            .GetSingletonInstance<IModularityApplication>()
+            .GetSingletonInstance<IBonModularityApplication>()
             .ServiceProvider
             .GetService(type);
     }
@@ -121,7 +121,7 @@ public static class ServiceCollectionCommonExtensions
     public static T GetRequiredService<T>(this IServiceCollection services) where T : notnull
     {
         return services
-            .GetSingletonInstance<IModularityApplication>()
+            .GetSingletonInstance<IBonModularityApplication>()
             .ServiceProvider
             .GetRequiredService<T>();
     }
@@ -134,7 +134,7 @@ public static class ServiceCollectionCommonExtensions
     public static object GetRequiredService(this IServiceCollection services, Type type)
     {
         return services
-            .GetSingletonInstance<IModularityApplication>()
+            .GetSingletonInstance<IBonModularityApplication>()
             .ServiceProvider
             .GetRequiredService(type);
     }

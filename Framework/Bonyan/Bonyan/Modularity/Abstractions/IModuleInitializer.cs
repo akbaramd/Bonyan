@@ -1,6 +1,6 @@
 namespace Bonyan.Modularity.Abstractions;
 
-public interface IModuleInitializer
+public interface IBonModuleInitializer
 {
     Task InitializeModulesAsync(IServiceProvider serviceProvider);
 }

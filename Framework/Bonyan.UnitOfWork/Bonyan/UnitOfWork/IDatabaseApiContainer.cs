@@ -3,12 +3,12 @@ using JetBrains.Annotations;
 
 namespace Bonyan.UnitOfWork;
 
-public interface IDatabaseApiContainer : IServiceProviderAccessor
+public interface IDatabaseApiContainer : IBonServiceProviderAccessor
 {
-    IDatabaseApi? FindDatabaseApi([NotNull] string key);
+    IBonDatabaseApi? FindDatabaseApi([NotNull] string key);
 
-    void AddDatabaseApi([NotNull] string key, [NotNull] IDatabaseApi api);
+    void AddDatabaseApi([NotNull] string key, [NotNull] IBonDatabaseApi api);
 
     [NotNull]
-    IDatabaseApi GetOrAddDatabaseApi([NotNull] string key, [NotNull] Func<IDatabaseApi> factory);
+    IBonDatabaseApi GetOrAddDatabaseApi([NotNull] string key, [NotNull] Func<IBonDatabaseApi> factory);
 }

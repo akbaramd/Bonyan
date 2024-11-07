@@ -12,7 +12,7 @@ internal static class DbContextHelper
       from property in dbContextType.GetTypeInfo().GetProperties(BindingFlags.Public | BindingFlags.Instance)
       where
         ReflectionHelper.IsAssignableToGenericType(property.PropertyType, typeof(DbSet<>)) &&
-        typeof(IEntity).IsAssignableFrom(property.PropertyType.GenericTypeArguments[0])
+        typeof(IBonEntity).IsAssignableFrom(property.PropertyType.GenericTypeArguments[0])
       select property.PropertyType.GenericTypeArguments[0];
   }
 }

@@ -18,7 +18,7 @@ public class FormTenantResolveContributor : HttpTenantResolveContributorBase
         }
 
         var form = await httpContext.Request.ReadFormAsync();
-        var tenantKey = context.ServiceProvider.GetRequiredService<IOptions<BonyanAspNetCoreMultiTenancyOptions>>().Value.TenantKey;
+        var tenantKey = context.ServiceProvider.GetRequiredService<IOptions<BonAspNetCoreMultiTenancyOptions>>().Value.TenantKey;
         return form[tenantKey];
     }
 }

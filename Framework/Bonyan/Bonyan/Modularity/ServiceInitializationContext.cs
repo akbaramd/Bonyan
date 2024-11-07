@@ -7,7 +7,7 @@ namespace Bonyan.Modularity
     /// <summary>
     /// Context for initializing services with configuration and dependency resolution capabilities.
     /// </summary>
-    public class ServiceInitializationContext : ApplicationContextBase
+    public class ServiceInitializationContext : BonContextBase
     {
         public ServiceInitializationContext(IServiceProvider services, IConfiguration configuration)
             : base(services, configuration)

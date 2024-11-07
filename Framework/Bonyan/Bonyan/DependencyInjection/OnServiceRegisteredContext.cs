@@ -6,7 +6,7 @@ namespace Bonyan.DependencyInjection;
 
 public class OnServiceRegisteredContext : IOnServiceRegistredContext
 {
-  public virtual ITypeList<IBonyanInterceptor> Interceptors { get; }
+  public virtual ITypeList<IBonInterceptor> Interceptors { get; }
 
   public virtual Type ServiceType { get; }
 
@@ -16,6 +16,6 @@ public class OnServiceRegisteredContext : IOnServiceRegistredContext
   {
     ServiceType = Check.NotNull(serviceType, nameof(serviceType));
     ImplementationType = Check.NotNull(implementationType, nameof(implementationType));
-    Interceptors = new TypeList<IBonyanInterceptor>();
+    Interceptors = new TypeList<IBonInterceptor>();
   }
 }

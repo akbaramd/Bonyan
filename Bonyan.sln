@@ -33,9 +33,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.EntityFrameworkCore.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.EntityFrameworkCore.Sqlite", "Framework\Bonyan.EntityFrameworkCore.Sqlite\Bonyan.EntityFrameworkCore.Sqlite.csproj", "{22DAE8E6-9934-4E49-A83B-98E51CC8F46F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.AspNetCore.Job", "Framework\Bonyan.AspNetCore.Job\Bonyan.AspNetCore.Job.csproj", "{97A2F0B3-7918-4D01-8EE9-AD35E7DDD456}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.Worker.Abstraction", "Framework\Bonyan.Worker.Abstraction\Bonyan.Worker.Abstraction.csproj", "{97A2F0B3-7918-4D01-8EE9-AD35E7DDD456}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.AspNetCore.Job.Hangfire", "Framework\Bonyan.AspNetCore.Job.Hangfire\Bonyan.AspNetCore.Job.Hangfire.csproj", "{BB354D15-2597-4965-B28A-BAA028C39828}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.AspNetCore.Workers.Hangfire", "Framework\Bonyan.AspNetCore.Workers.Hangfire\Bonyan.AspNetCore.Workers.Hangfire.csproj", "{BB354D15-2597-4965-B28A-BAA028C39828}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.AutoMapper", "Framework\Bonyan.AutoMapper\Bonyan.AutoMapper.csproj", "{AA396903-B749-4397-AABA-888A2C28D0C0}"
 EndProject

@@ -4,12 +4,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Bonyan.UserManagement.EntityFrameworkCore;
 
-public class BonUserManagementDbContext<TUser> : BonyanDbContext<BonUserManagementDbContext<TUser>>,IBonUserManagementDbContext<TUser> where TUser : BonyanUser
+public class BonUserManagementDbContext<TUser> : BonDbContext<BonUserManagementDbContext<TUser>>,IBonUserManagementDbContext<TUser> where TUser : BonUser
 {
   protected override void OnModelCreating(ModelBuilder modelBuilder)
   {
     base.OnModelCreating(modelBuilder);
-    modelBuilder.ConfigureUserManagementByConvention<TUser>();
+    modelBuilder.ConfigureBonUserManagementByConvention<TUser>();
   }
 
   public DbSet<TUser> Users { get; set; }

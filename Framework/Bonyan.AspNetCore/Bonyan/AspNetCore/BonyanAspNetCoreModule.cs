@@ -17,13 +17,13 @@ public class BonyanAspNetCoreModule : WebModule
 
     public BonyanAspNetCoreModule()
     {
-        DependOn<BonyanLayerDomainModule>();
+        DependOn<BonLayerDomainModule>();
     }
     /// <summary>
     /// Configures exception handling settings before the module configuration phase.
     /// </summary>
     /// <param name="context">The configuration context for services.</param>
-    public override Task OnPreConfigureAsync(ServiceConfigurationContext context)
+    public override Task OnPreConfigureAsync(BonConfigurationContext context)
     {
         ConfigureExceptionHandling(context);
         return base.OnPreConfigureAsync(context);
@@ -33,7 +33,7 @@ public class BonyanAspNetCoreModule : WebModule
     /// Configures services required by the ASP.NET Core module.
     /// </summary>
     /// <param name="context">The configuration context for services.</param>
-    public override Task OnConfigureAsync(ServiceConfigurationContext context)
+    public override Task OnConfigureAsync(BonConfigurationContext context)
     {
         ConfigureMiddlewares(context);
         ConfigureCoreServices(context);
@@ -44,7 +44,7 @@ public class BonyanAspNetCoreModule : WebModule
     /// Applies application-wide configurations, such as enabling authorization middleware.
     /// </summary>
     /// <param name="context">The application context used during application initialization.</param>
-    public override Task OnApplicationAsync(ApplicationContext context)
+    public override Task OnApplicationAsync(BonContext context)
     {
         return base.OnApplicationAsync(context);
     }
@@ -53,7 +53,7 @@ public class BonyanAspNetCoreModule : WebModule
     /// Configures exception handling options for the application.
     /// </summary>
     /// <param name="context">The configuration context for services.</param>
-    private void ConfigureExceptionHandling(ServiceConfigurationContext context)
+    private void ConfigureExceptionHandling(BonConfigurationContext context)
     {
         context.ConfigureOptions<ExceptionHandlingOptions>(options => 
         {
@@ -65,7 +65,7 @@ public class BonyanAspNetCoreModule : WebModule
     /// Configures middleware dependencies for the application.
     /// </summary>
     /// <param name="context">The configuration context for services.</param>
-    private void ConfigureMiddlewares(ServiceConfigurationContext context)
+    private void ConfigureMiddlewares(BonConfigurationContext context)
     {
         context.Services.AddTransient<BonyanClaimsMapMiddleware>();
         context.Services.AddTransient<BonyanUnitOfWorkMiddleware>();
@@ -75,11 +75,11 @@ public class BonyanAspNetCoreModule : WebModule
     /// Configures core services required for the ASP.NET Core application.
     /// </summary>
     /// <param name="context">The configuration context for services.</param>
-    private void ConfigureCoreServices(ServiceConfigurationContext context)
+    private void ConfigureCoreServices(BonConfigurationContext context)
     {
         context.Services.AddAuthorization();
         context.Services.AddHttpContextAccessor();
-        context.Services.AddTransient<ICurrentPrincipalAccessor, HttpContextCurrentPrincipalAccessor>();
+        context.Services.AddTransient<IBonCurrentPrincipalAccessor, HttpContextBonCurrentPrincipalAccessor>();
         // Ensures IApplicationBuilder is accessible throughout the application's service configuration lifecycle
         context.Services.AddObjectAccessor<IApplicationBuilder>();
     }

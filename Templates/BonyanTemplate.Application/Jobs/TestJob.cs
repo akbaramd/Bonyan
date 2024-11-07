@@ -9,32 +9,33 @@ using Microsoft.AspNetCore.Identity;
 
 namespace BonyanTemplate.Application.Jobs;
 
-public class TestJob : IJob
+public class TestBonWorker : IBonWorker
 {
 
-  private IBooksRepository _userRepository;
-  private IAuthorsRepository _authorsRepository;
-  private IUnitOfWorkManager _unitOfWorkManager;
-  public TestJob(IBooksRepository userRepository, IAuthorsRepository authorsRepository, IUnitOfWorkManager unitOfWorkManager)
+  private IBooksBonRepository _userBonRepository;
+  private IAuthorsBonRepository _authorsBonRepository;
+  private IBonUnitOfWorkManager _bonUnitOfWorkManager;
+  public TestBonWorker(IBooksBonRepository userBonRepository, IAuthorsBonRepository authorsBonRepository, IBonUnitOfWorkManager bonUnitOfWorkManager)
   {
-    _userRepository = userRepository;
-    _authorsRepository = authorsRepository;
-    _unitOfWorkManager = unitOfWorkManager;
+    _userBonRepository = userBonRepository;
+    _authorsBonRepository = authorsBonRepository;
+    _bonUnitOfWorkManager = bonUnitOfWorkManager;
   }
 
 
   
+  [BonUnitOfWork]
   public async Task ExecuteAsync(CancellationToken cancellationToken = default)
   {
 
-      var auth = await _authorsRepository.FindOneAsync(x => x.Title.Equals("asd"));
+      var auth = await _authorsBonRepository.FindOneAsync(x => x.Title.Equals("asd"));
       if (auth == null)
       {
         auth = new Authors() { Id = AuthorId.CreateNew(),Title = "asd" };
-        await _authorsRepository.AddAsync(auth, true);
+        await _authorsBonRepository.AddAsync(auth, true);
       }
     
-      var res = await _userRepository.AddAsync(new Books()
+      var res = await _userBonRepository.AddAsync(new Books()
       {
         Id = BookId.CreateNew(),
         Title = "",
@@ -43,11 +44,11 @@ public class TestJob : IJob
         AuthorId = auth.Id
       },true);
 
-      var s = await _userRepository.FindOneAsync(x => x.Id == res.Id);
+      var s = await _userBonRepository.FindOneAsync(x => x.Id == res.Id);
       
       
       s.Status = BookStatus.OutOfStock;
-      await _userRepository.UpdateAsync(s,true);
+      await _userBonRepository.UpdateAsync(s,true);
 
     
     

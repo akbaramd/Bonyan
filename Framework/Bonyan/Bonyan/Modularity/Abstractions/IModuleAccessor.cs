@@ -1,6 +1,6 @@
 ﻿namespace Bonyan.Modularity.Abstractions;
 
-public interface IModuleAccessor
+public interface IBonModuleAccessor
 {
     void ClearModules();
     void AddModule(ModuleInfo moduleInfo);

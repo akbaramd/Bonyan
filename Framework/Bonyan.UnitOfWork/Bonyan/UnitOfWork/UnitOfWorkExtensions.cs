@@ -5,41 +5,41 @@ namespace Bonyan.UnitOfWork;
 
 public static class UnitOfWorkExtensions
 {
-    public static bool IsReservedFor([NotNull] this IUnitOfWork unitOfWork, string reservationName)
+    public static bool IsReservedFor([NotNull] this IBonUnitOfWork bonUnitOfWork, string reservationName)
     {
-        Check.NotNull(unitOfWork, nameof(unitOfWork));
+        Check.NotNull(bonUnitOfWork, nameof(bonUnitOfWork));
 
-        return unitOfWork.IsReserved && unitOfWork.ReservationName == reservationName;
+        return bonUnitOfWork.IsReserved && bonUnitOfWork.ReservationName == reservationName;
     }
 
-    public static void AddItem<TValue>([NotNull] this IUnitOfWork unitOfWork, string key, TValue value)
+    public static void AddItem<TValue>([NotNull] this IBonUnitOfWork bonUnitOfWork, string key, TValue value)
         where TValue : class
     {
-        Check.NotNull(unitOfWork, nameof(unitOfWork));
+        Check.NotNull(bonUnitOfWork, nameof(bonUnitOfWork));
 
-        unitOfWork.Items[key] = value;
+        bonUnitOfWork.Items[key] = value;
     }
 
-    public static TValue GetItemOrDefault<TValue>([NotNull] this IUnitOfWork unitOfWork, string key)
+    public static TValue GetItemOrDefault<TValue>([NotNull] this IBonUnitOfWork bonUnitOfWork, string key)
         where TValue : class
     {
-        Check.NotNull(unitOfWork, nameof(unitOfWork));
+        Check.NotNull(bonUnitOfWork, nameof(bonUnitOfWork));
 
-        return unitOfWork.Items.FirstOrDefault(x => x.Key == key).Value.As<TValue>();
+        return bonUnitOfWork.Items.FirstOrDefault(x => x.Key == key).Value.As<TValue>();
     }
 
-    public static TValue GetOrAddItem<TValue>([NotNull] this IUnitOfWork unitOfWork, string key, Func<string, TValue> factory)
+    public static TValue GetOrAddItem<TValue>([NotNull] this IBonUnitOfWork bonUnitOfWork, string key, Func<string, TValue> factory)
         where TValue : class
     {
-        Check.NotNull(unitOfWork, nameof(unitOfWork));
+        Check.NotNull(bonUnitOfWork, nameof(bonUnitOfWork));
 
-        return unitOfWork.Items.GetOrAdd(key, factory).As<TValue>();
+        return bonUnitOfWork.Items.GetOrAdd(key, factory).As<TValue>();
     }
 
-    public static void RemoveItem([NotNull] this IUnitOfWork unitOfWork, string key)
+    public static void RemoveItem([NotNull] this IBonUnitOfWork bonUnitOfWork, string key)
     {
-        Check.NotNull(unitOfWork, nameof(unitOfWork));
+        Check.NotNull(bonUnitOfWork, nameof(bonUnitOfWork));
 
-        unitOfWork.Items.RemoveAll(x => x.Key == key);
+        bonUnitOfWork.Items.RemoveAll(x => x.Key == key);
     }
 }

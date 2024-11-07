@@ -2,7 +2,7 @@
 
 namespace Bonyan.IdentityManagement.Domain;
 
-public class BonPermission : Entity, IBonPermission
+public class BonPermission : BonEntity, IBonPermission
 {
     protected BonPermission()
     {

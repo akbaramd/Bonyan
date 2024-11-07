@@ -35,7 +35,7 @@ public class MethodInvocationValidator : IMethodInvocationValidator
 
         if (context.Parameters.Length != context.ParameterValues.Length)
         {
-            throw new BonyanException("Method parameter count does not match with argument count!");
+            throw new BonException("Method parameter count does not match with argument count!");
         }
 
         //todo: consider to remove this condition
@@ -74,7 +74,7 @@ public class MethodInvocationValidator : IMethodInvocationValidator
 
     protected virtual void ThrowValidationError(MethodInvocationValidationContext context)
     {
-        throw new BonyanException(
+        throw new BonException(
             "Method arguments are not valid! See ValidationErrors for details."
          
         );

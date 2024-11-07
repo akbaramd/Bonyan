@@ -5,9 +5,9 @@ using Bonyan.UserManagement.Domain.Enumerations;
 
 namespace Microsoft.EntityFrameworkCore;
 
-public static class IdentityManagementEntityTypeBuilderExtensions
+public static class BonIdentityManagementEntityTypeBuilderExtensions
 {
-    public static ModelBuilder ConfigureUserManagementByConvention<TUser>(this ModelBuilder modelBuilder) where TUser: BonyanUser
+    public static ModelBuilder ConfigureBonUserManagementByConvention<TUser>(this ModelBuilder modelBuilder) where TUser: BonUser
     {
         modelBuilder.Entity<TUser>().ConfigureByConvention();
         modelBuilder.Entity<TUser>().OwnsOne(c => c.Email, v =>
@@ -27,7 +27,7 @@ public static class IdentityManagementEntityTypeBuilderExtensions
             v.Property(x => x.Salt).HasColumnName("PasswordSalt");
         });
         modelBuilder.Entity<TUser>().Property(x => x.Status).HasConversion(x => x.Name,
-            v => Enumeration.FromName<UserStatus>(v) ?? UserStatus.PendingApproval);
+            v => BonEnumeration.FromName<UserStatus>(v) ?? UserStatus.PendingApproval);
         modelBuilder.Entity<TUser>().HasIndex(x => x.UserName).IsUnique();
         modelBuilder.Entity<TUser>()
             .Property(p => p.Version)

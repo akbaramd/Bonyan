@@ -6,7 +6,7 @@ using Bonyan.Layer.Domain.Events;
 
 namespace Bonyan.IdentityManagement.Domain
 {
-    public class BonRole : AggregateRoot<RoleId>, IBonRole
+    public class BonRole : BonAggregateRoot<BonRoleId>, IBonRole
     {
         // Private constructor for ORM or factory use only.
         protected BonRole() { }
@@ -55,7 +55,7 @@ namespace Bonyan.IdentityManagement.Domain
     }
 
     // Domain Events
-    public class PermissionAddedEvent(RoleId RoleId, BonPermission Permission) : DomainEventBase {}
-    public class PermissionRemovedEvent(RoleId RoleId, BonPermission Permission) : DomainEventBase{};
-    public class PermissionsClearedEvent(RoleId RoleId) : DomainEventBase {}
+    public class PermissionAddedEvent(BonRoleId bonRoleId, BonPermission Permission) : BonDomainEventBase {}
+    public class PermissionRemovedEvent(BonRoleId bonRoleId, BonPermission Permission) : BonDomainEventBase{};
+    public class PermissionsClearedEvent(BonRoleId bonRoleId) : BonDomainEventBase {}
 }

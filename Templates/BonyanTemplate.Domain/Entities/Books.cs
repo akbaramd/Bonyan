@@ -5,7 +5,7 @@ using BonyanTemplate.Domain.Enums;
 
 namespace BonyanTemplate.Domain.Entities;
 
-public class Books : AggregateRoot<BookId>
+public class Books : BonAggregateRoot<BookId>
 {
     public string Title { get; set; } = string.Empty;
     public BookStatus Status { get; set; } = BookStatus.Available;
@@ -14,6 +14,6 @@ public class Books : AggregateRoot<BookId>
     public AuthorId  AuthorId { get; set; }
 }
 
-public class BookId : BusinessId<BookId>
+public class BookId : BonBusinessId<BookId>
 {
 }

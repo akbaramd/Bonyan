@@ -7,5 +7,5 @@ namespace Bonyan.MultiTenant;
 
 public interface ICurrentTenantAccessor
 {
-    BasicTenantInfo? Current { get; set; }
+    BonBasicTenantInfo? Current { get; set; }
 }

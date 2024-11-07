@@ -1,22 +1,22 @@
 ﻿namespace Bonyan.UnitOfWork;
 
-public class AmbientUnitOfWork : IAmbientUnitOfWork
+public class BonAmbientBonUnitOfWork : IBonAmbientBonUnitOfWork
 {
-    public IUnitOfWork? UnitOfWork => _currentUow.Value;
+    public IBonUnitOfWork? UnitOfWork => _currentUow.Value;
 
-    private readonly AsyncLocal<IUnitOfWork?> _currentUow;
+    private readonly AsyncLocal<IBonUnitOfWork?> _currentUow;
 
-    public AmbientUnitOfWork()
+    public BonAmbientBonUnitOfWork()
     {
-        _currentUow = new AsyncLocal<IUnitOfWork?>();
+        _currentUow = new AsyncLocal<IBonUnitOfWork?>();
     }
 
-    public void SetUnitOfWork(IUnitOfWork? unitOfWork)
+    public void SetUnitOfWork(IBonUnitOfWork? unitOfWork)
     {
         _currentUow.Value = unitOfWork;
     }
 
-    public IUnitOfWork? GetCurrentByChecking()
+    public IBonUnitOfWork? GetCurrentByChecking()
     {
         var uow = UnitOfWork;
 

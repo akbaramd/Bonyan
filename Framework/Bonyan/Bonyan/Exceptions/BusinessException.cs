@@ -10,7 +10,7 @@ public class BusinessException(
   string? details = null,
   Exception? innerException = null,
   LogLevel logLevel = LogLevel.Warning)
-  : BonyanException(message, innerException),
+  : BonException(message, innerException),
     IBusinessException,
     IHasErrorCode,
     IHasErrorDetails

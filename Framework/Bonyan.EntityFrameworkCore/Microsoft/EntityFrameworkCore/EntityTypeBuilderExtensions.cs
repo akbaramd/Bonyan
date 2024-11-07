@@ -19,22 +19,22 @@ namespace Microsoft.EntityFrameworkCore
         }
         public static void TryConfigureMultiTenant(this EntityTypeBuilder b)
         {
-          if (b.Metadata.ClrType.IsAssignableTo(typeof(IMultiTenant)))
+          if (b.Metadata.ClrType.IsAssignableTo(typeof(IBonMultiTenant)))
           {
-            b.Property(nameof(IMultiTenant.TenantId))
+            b.Property(nameof(IBonMultiTenant.TenantId))
               .IsRequired(false)
-              .HasColumnName(nameof(IMultiTenant.TenantId));
+              .HasColumnName(nameof(IBonMultiTenant.TenantId));
           }
         }
         private static EntityTypeBuilder ConfigureCreationAuditable(this EntityTypeBuilder b)
         {
             try
             {
-                if (b.Metadata.ClrType.IsAssignableTo(typeof(ICreationAuditable)))
+                if (b.Metadata.ClrType.IsAssignableTo(typeof(IBonCreationAuditable)))
                 {
-                    b.Property(nameof(ICreationAuditable.CreatedDate))
+                    b.Property(nameof(IBonCreationAuditable.CreatedDate))
                         .IsRequired()
-                        .HasColumnName(nameof(ICreationAuditable.CreatedDate));
+                        .HasColumnName(nameof(IBonCreationAuditable.CreatedDate));
                 }
             }
             catch (Exception ex)
@@ -50,11 +50,11 @@ namespace Microsoft.EntityFrameworkCore
         {
             try
             {
-                if (b.Metadata.ClrType.IsAssignableTo(typeof(IModificationAuditable)))
+                if (b.Metadata.ClrType.IsAssignableTo(typeof(IBonModificationAuditable)))
                 {
-                    b.Property(nameof(IModificationAuditable.ModifiedDate))
+                    b.Property(nameof(IBonModificationAuditable.ModifiedDate))
                         .IsRequired(false)
-                        .HasColumnName(nameof(IModificationAuditable.ModifiedDate));
+                        .HasColumnName(nameof(IBonModificationAuditable.ModifiedDate));
                 }
             }
             catch (Exception ex)
@@ -70,16 +70,16 @@ namespace Microsoft.EntityFrameworkCore
         {
             try
             {
-                if (b.Metadata.ClrType.IsAssignableTo(typeof(ISoftDeleteAuditable)))
+                if (b.Metadata.ClrType.IsAssignableTo(typeof(IBonSoftDeleteAuditable)))
                 {
-                    b.Property(nameof(ISoftDeleteAuditable.IsDeleted))
+                    b.Property(nameof(IBonSoftDeleteAuditable.IsDeleted))
                         .IsRequired()
                         .HasDefaultValue(false)
-                        .HasColumnName(nameof(ISoftDeleteAuditable.IsDeleted));
+                        .HasColumnName(nameof(IBonSoftDeleteAuditable.IsDeleted));
 
-                    b.Property(nameof(ISoftDeleteAuditable.DeletedDate))
+                    b.Property(nameof(IBonSoftDeleteAuditable.DeletedDate))
                         .IsRequired(false)
-                        .HasColumnName(nameof(ISoftDeleteAuditable.DeletedDate));
+                        .HasColumnName(nameof(IBonSoftDeleteAuditable.DeletedDate));
                 }
             }
             catch (Exception ex)
@@ -105,7 +105,7 @@ namespace Microsoft.EntityFrameworkCore
                     try
                     {
                         var propertyType = property.PropertyType;
-                        var converterType = typeof(BusinessIdConverter<>).MakeGenericType(propertyType);
+                        var converterType = typeof(BonBusinessIdConverter<>).MakeGenericType(propertyType);
 
                         // Try to create an instance of the converter
                         if (Activator.CreateInstance(converterType) is ValueConverter converterInstance)
@@ -140,7 +140,7 @@ namespace Microsoft.EntityFrameworkCore
             try
             {
                 // Check if the type is directly a generic BusinessId<>
-                if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(BusinessId<>))
+                if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(BonBusinessId<>))
                 {
                     return true;
                 }
@@ -149,7 +149,7 @@ namespace Microsoft.EntityFrameworkCore
                 var baseType = type.BaseType;
                 while (baseType != null)
                 {
-                    if (baseType.IsGenericType && baseType.GetGenericTypeDefinition() == typeof(BusinessId<>))
+                    if (baseType.IsGenericType && baseType.GetGenericTypeDefinition() == typeof(BonBusinessId<>))
                     {
                         return true;
                     }

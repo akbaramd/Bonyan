@@ -6,8 +6,8 @@ using Microsoft.EntityFrameworkCore;
 namespace Bonyan.IdentityManagement.EntityFrameworkCore;
 
 public class BonIdentityManagementDbContext<TUser, TRole> :
-    BonyanDbContext<BonIdentityManagementDbContext<TUser, TRole>>
-    , IBonIdentityManagementDbContext<TUser, TRole> where TUser : BonyanUser where TRole : BonRole
+    BonDbContext<BonIdentityManagementDbContext<TUser, TRole>>
+    , IBonIdentityManagementDbContext<TUser, TRole> where TUser : BonUser where TRole : BonRole
 {
     public BonIdentityManagementDbContext(DbContextOptions<BonIdentityManagementDbContext<TUser, TRole>> options) :
         base(options)
@@ -21,7 +21,7 @@ public class BonIdentityManagementDbContext<TUser, TRole> :
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.ConfigureIdentityManagementByConvention<TUser, TRole>();
+        modelBuilder.ConfigureBonIdentityManagementByConvention<TUser, TRole>();
         base.OnModelCreating(modelBuilder);
     }
 }

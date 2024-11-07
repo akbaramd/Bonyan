@@ -6,7 +6,7 @@ namespace Bonyan.UserManagement.Domain.ValueObjects
     /// <summary>
     /// Represents a password value object with hashing and verification.
     /// </summary>
-    public class Password : ValueObject
+    public class Password : BonValueObject
     {
         private const int SaltSize = 16; // Size of salt in bytes
         private const int HashSize = 32; // Size of hash in bytes

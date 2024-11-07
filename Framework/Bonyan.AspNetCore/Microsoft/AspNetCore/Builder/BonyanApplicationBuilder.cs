@@ -7,7 +7,7 @@ namespace Microsoft.AspNetCore.Builder
     /// </summary>
     public class BonyanApplicationBuilder : IBonyanApplicationBuilder
     {
-        private readonly IWebModularityApplication _modularApp;
+        private readonly IWebBonModularityApplication _modularApp;
         private readonly WebApplicationBuilder _builder;
 
         /// <summary>
@@ -40,7 +40,7 @@ namespace Microsoft.AspNetCore.Builder
         /// </summary>
         /// <param name="modularApp">The modular application interface for module management.</param>
         /// <param name="builder">The underlying WebApplicationBuilder instance.</param>
-        public BonyanApplicationBuilder(IWebModularityApplication modularApp, WebApplicationBuilder builder)
+        public BonyanApplicationBuilder(IWebBonModularityApplication modularApp, WebApplicationBuilder builder)
         {
             _modularApp = modularApp;
             _builder = builder;

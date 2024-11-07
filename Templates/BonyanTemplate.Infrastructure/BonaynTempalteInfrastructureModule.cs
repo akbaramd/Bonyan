@@ -1,4 +1,5 @@
-﻿using Bonyan.EntityFrameworkCore;
+﻿using Bonyan.DependencyInjection;
+using Bonyan.EntityFrameworkCore;
 using Bonyan.IdentityManagement.EntityFrameworkCore;
 using Bonyan.Modularity;
 using Bonyan.Modularity.Abstractions;
@@ -15,31 +16,31 @@ using Microsoft.Extensions.DependencyInjection;
 namespace BonyanTemplate.Infrastructure;
 
 
-public class BonaynTempalteInfrastructureModule : Module
+public class BonaynTempalteInfrastructureModule : BonModule
 {
 
   public BonaynTempalteInfrastructureModule()
   {
-    DependOn<BonyanTenantManagementEntityFrameworkModule>();
-    DependOn<BonyanIdentityManagementEntityFrameworkCoreModule<User,Role>>();
+    DependOn<BonTenantManagementEntityFrameworkModule>();
+    DependOn<BonIdentityManagementEntityFrameworkCoreModule<User,Role>>();
     DependOn<BonyanTemplateDomainModule>();
   }
 
-  public override Task OnConfigureAsync(ServiceConfigurationContext context)
+  public override Task OnConfigureAsync(BonConfigurationContext context)
   {
     
-    context.ConfigureOptions<BonyanMultiTenancyOptions>(options =>
+    context.ConfigureOptions<BonMultiTenancyOptions>(options =>
     {
       options.IsEnabled = true;
     });
-    context.Services.AddTransient<IBooksRepository, EfBookRepository>();
-    context.Services.AddTransient<IAuthorsRepository, EfAuthorRepository>();
-    context.AddBonyanDbContext<BonyanTemplateBookManagementDbContext>(c =>
+    context.Services.AddTransient<IBooksBonRepository, EfBookBonRepository>();
+    context.Services.AddTransient<IAuthorsBonRepository, EfAuthorBonRepository>();
+    context.AddBonDbContext<BonTemplateBookManagementDbContext>(c =>
     {
       c.AddDefaultRepositories(true);
     });
 
-    context.Services.Configure<EntityFrameworkDbContextOptions>(configuration =>
+    context.Services.Configure<BonEntityFrameworkDbContextOptions>(configuration =>
     {
       configuration.UseSqlite("Data Source=BonyanTemplate.db");
     });

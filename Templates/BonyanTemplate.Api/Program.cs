@@ -12,12 +12,12 @@ var app = await builder.BuildAsync();
 
 
 
-app.MapGet("/", async ([FromServices]IRepository<Books> book) =>
+app.MapGet("/", async ([FromServices]IBonRepository<Books> book) =>
 {
   return await book.FindAsync(x=>true);
 }).RequireAuthorization();
 
-var s = app.Services.GetRequiredService<ITenantManager>();
+var s = app.Services.GetRequiredService<IBonTenantManager>();
 
 app.Run();
 

@@ -4,10 +4,10 @@ namespace Bonyan.UnitOfWork;
 
 public interface ITransactionApiContainer
 {
-    ITransactionApi? FindTransactionApi([NotNull] string key);
+    IBonTransactionApi? FindTransactionApi([NotNull] string key);
 
-    void AddTransactionApi([NotNull] string key, [NotNull] ITransactionApi api);
+    void AddTransactionApi([NotNull] string key, [NotNull] IBonTransactionApi api);
 
     [NotNull]
-    ITransactionApi GetOrAddTransactionApi([NotNull] string key, [NotNull] Func<ITransactionApi> factory);
+    IBonTransactionApi GetOrAddTransactionApi([NotNull] string key, [NotNull] Func<IBonTransactionApi> factory);
 }

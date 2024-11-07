@@ -13,7 +13,7 @@ public class QueryStringTenantResolveContributor : HttpTenantResolveContributorB
     {
         if (httpContext.Request.QueryString.HasValue)
         {
-            var tenantKey = context.ServiceProvider.GetRequiredService<IOptions<BonyanAspNetCoreMultiTenancyOptions>>().Value.TenantKey;
+            var tenantKey = context.ServiceProvider.GetRequiredService<IOptions<BonAspNetCoreMultiTenancyOptions>>().Value.TenantKey;
             if (httpContext.Request.Query.ContainsKey(tenantKey))
             {
                 var tenantValue = httpContext.Request.Query[tenantKey].ToString();

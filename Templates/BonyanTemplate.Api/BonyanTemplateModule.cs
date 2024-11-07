@@ -12,13 +12,13 @@ public class BonyanTemplateModule : WebModule
 {
     public BonyanTemplateModule()
     {
-        DependOn<BonyanTenantManagementWebModule>();
-        DependOn<BonyanIdentityManagementWebModule<User>>();
+        DependOn<BonTenantManagementWebModule>();
+        DependOn<BonIdentityManagementWebModule<User>>();
         DependOn<BonyanTemplateApplicationModule>();
         DependOn<BonaynTempalteInfrastructureModule>();
     }
 
-    public override Task OnConfigureAsync(ServiceConfigurationContext context)
+    public override Task OnConfigureAsync(BonConfigurationContext context)
     {
         context.Services.Configure<IdentityOptions>(c =>
         {
@@ -38,13 +38,13 @@ public class BonyanTemplateModule : WebModule
         return base.OnPreInitializeAsync(context);
     }
 
-    public override Task OnPreApplicationAsync(ApplicationContext context)
+    public override Task OnPreApplicationAsync(BonContext context)
     {
         // context.Application.UseUnitOfWork();
         return base.OnPreApplicationAsync(context);
     }
 
-    public override Task OnApplicationAsync(ApplicationContext context)
+    public override Task OnApplicationAsync(BonContext context)
     {
         context.Application.MapTenantManagementEndpoints();
         return base.OnApplicationAsync(context);

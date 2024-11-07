@@ -4,7 +4,7 @@ namespace Microsoft.EntityFrameworkCore;
 
 public static class BonyanEntityFrameworkCoreSqliteExtensions
 {
-  public static EntityFrameworkDbContextOptions UseSqlite(this EntityFrameworkDbContextOptions options,string connectionStrings)  
+  public static BonEntityFrameworkDbContextOptions UseSqlite(this BonEntityFrameworkDbContextOptions options,string connectionStrings)  
   {
     return options.Configure(c =>
     {

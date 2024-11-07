@@ -4,7 +4,7 @@ namespace Microsoft.EntityFrameworkCore;
 
 public static class BonyanEntityFrameworkCoreSqlServerExtensions
 {
-    public static EntityFrameworkDbContextOptions UseSqlServer(this EntityFrameworkDbContextOptions options,
+    public static BonEntityFrameworkDbContextOptions UseSqlServer(this BonEntityFrameworkDbContextOptions options,
         string connectionStrings)
     {
         return options.Configure(c => { c.UseSqlServer(connectionStrings); });

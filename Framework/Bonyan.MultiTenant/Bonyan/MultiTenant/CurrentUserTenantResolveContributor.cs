@@ -11,7 +11,7 @@ public class CurrentUserTenantResolveContributor : TenantResolveContributorBase
 
   public override Task ResolveAsync(ITenantResolveContext context)
   {
-    var currentUser = context.ServiceProvider.GetRequiredService<ICurrentUser>();
+    var currentUser = context.ServiceProvider.GetRequiredService<IBonCurrentUser>();
     if (currentUser.IsAuthenticated)
     {
       context.Handled = true;

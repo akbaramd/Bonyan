@@ -3,11 +3,11 @@ namespace Bonyan.Modularity
     /// <summary>
     /// Context for managing application services and environment settings.
     /// </summary>
-    public class ApplicationContext : ApplicationContextBase
+    public class BonContext : BonContextBase
     {
         public WebApplication Application { get; }
 
-        public ApplicationContext(WebApplication application)
+        public BonContext(WebApplication application)
             : base(application.Services, application.Configuration)
         {
             Application = application;

@@ -17,39 +17,39 @@ public static class TenantManagementEndpointExtensions
                 [FromQuery] string? search,
                 [FromQuery] int take,
                 [FromQuery] int skip,
-                [FromServices] ITenantApplicationService tenantApplicationService
-            ) => await tenantApplicationService.PaginateAsync(new TenantFilterDto()
+                [FromServices] IBonTenantBonApplicationService tenantApplicationService
+            ) => await tenantApplicationService.PaginateAsync(new BonTenantFilterDto()
             {
                 Search = search,
                 Skip = skip,
                 Take = take
             }))
-            .Produces<PaginatedResult<TenantDto>>();
+            .Produces<BonPaginatedResult<BonTenantDto>>();
 
         builder.MapGet(options.BaseEndpoint + "/detail/{id:guid}", async (
                 Guid id,
-                [FromServices] ITenantApplicationService tenantApplicationService
-            ) => await tenantApplicationService.DetailAsync(TenantId.FromGuid(id)))
-            .Produces<TenantDto>();
+                [FromServices] IBonTenantBonApplicationService tenantApplicationService
+            ) => await tenantApplicationService.DetailAsync(BonTenantId.FromGuid(id)))
+            .Produces<BonTenantDto>();
 
         builder.MapPut(options.BaseEndpoint, async (
-                [FromBody] TenantCreateDto dto,
-                [FromServices] ITenantApplicationService tenantApplicationService
+                [FromBody] BonTenantCreateDto dto,
+                [FromServices] IBonTenantBonApplicationService tenantApplicationService
             ) => await tenantApplicationService.CreateAsync(dto))
-            .Produces<TenantDto>();
+            .Produces<BonTenantDto>();
 
         builder.MapPut(options.BaseEndpoint + "/{id:guid}", async (
                 Guid id,
-                [FromBody] TenantUpdateDto dto,
-                [FromServices] ITenantApplicationService tenantApplicationService
-            ) => await tenantApplicationService.UpdateAsync(TenantId.FromGuid(id), dto))
-            .Produces<TenantDto>();
+                [FromBody] BonTenantUpdateDto dto,
+                [FromServices] IBonTenantBonApplicationService tenantApplicationService
+            ) => await tenantApplicationService.UpdateAsync(BonTenantId.FromGuid(id), dto))
+            .Produces<BonTenantDto>();
 
         builder.MapPut(options.BaseEndpoint + "/{id:guid}", async (
                 Guid id,
-                [FromServices] ITenantApplicationService tenantApplicationService
-            ) => await tenantApplicationService.DeleteAsync(TenantId.FromGuid(id)))
-            .Produces<TenantDto>();
+                [FromServices] IBonTenantBonApplicationService tenantApplicationService
+            ) => await tenantApplicationService.DeleteAsync(BonTenantId.FromGuid(id)))
+            .Produces<BonTenantDto>();
 
         return builder;
     }

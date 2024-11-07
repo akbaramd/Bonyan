@@ -10,24 +10,24 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </summary>
         /// <typeparam name="THandler">The type of the domain handler to register.</typeparam>
         /// <typeparam name="TEvent">The type of the domain event the handler handles.</typeparam>
-        /// <param name="services">The service collection to add the domain handler to.</param>
+        /// <param name="bon">The service collection to add the domain handler to.</param>
         /// <returns>The updated service collection.</returns>
-        public static ServiceConfigurationContext AddDomainHandler<THandler, TEvent>(this ServiceConfigurationContext services)
-            where THandler : class, IDomainEventHandler<TEvent>
+        public static BonConfigurationContext AddDomainHandler<THandler, TEvent>(this BonConfigurationContext bon)
+            where THandler : class, IBonDomainEventHandler<TEvent>
             where TEvent : IDomainEvent
         {
-            services.Services.AddTransient<IDomainEventHandler<TEvent>, THandler>();
-            return services;
+            bon.Services.AddTransient<IBonDomainEventHandler<TEvent>, THandler>();
+            return bon;
         }
 
         /// <summary>
         /// Registers all domain handlers from the specified type's assembly as transient services.
         /// </summary>
-        /// <param name="services">The service collection to add the domain handlers to.</param>
+        /// <param name="bon">The service collection to add the domain handlers to.</param>
         /// <param name="handlerType">A type whose assembly will be scanned for domain handlers.</param>
         /// <returns>The updated service collection.</returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="handlerType"/> is null.</exception>
-        public static ServiceConfigurationContext AddDomainHandler(this ServiceConfigurationContext services, Type handlerType)
+        public static BonConfigurationContext AddDomainHandler(this BonConfigurationContext bon, Type handlerType)
         {
             if (handlerType == null)
             {
@@ -41,17 +41,17 @@ namespace Microsoft.Extensions.DependencyInjection
             var handlerTypes = assembly.GetTypes()
                 .Where(t => t.IsClass && !t.IsAbstract)
                 .SelectMany(t => t.GetInterfaces()
-                    .Where(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IDomainEventHandler<>))
+                    .Where(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IBonDomainEventHandler<>))
                     .Select(i => new { Handler = t, Interface = i }))
                 .ToList();
 
             // Register each handler type with its corresponding IDomainEventHandler<TEvent> interface
             foreach (var handler in handlerTypes)
             {
-                services.Services.AddTransient(handler.Interface, handler.Handler);
+                bon.Services.AddTransient(handler.Interface, handler.Handler);
             }
 
-            return services;
+            return bon;
         }
     }
 }

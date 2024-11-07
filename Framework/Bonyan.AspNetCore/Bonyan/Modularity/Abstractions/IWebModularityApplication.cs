@@ -1,6 +1,6 @@
 namespace Bonyan.Modularity.Abstractions;
 
-public interface IWebModularityApplication : IModularityApplication
+public interface IWebBonModularityApplication : IBonModularityApplication
 {
   Task InitializeApplicationAsync(WebApplication application);
 }

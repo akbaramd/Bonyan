@@ -81,7 +81,7 @@ public static class AutofacRegistration
         IServiceCollection services,
         object? lifetimeScopeTagForSingletons)
     {
-        var moduleContainer = services.GetSingletonInstance<IModuleAccessor>();
+        var moduleContainer = services.GetSingletonInstance<IBonModuleAccessor>();
 
         foreach (var module in moduleContainer.GetAllModules().Select(x=>x.Instance))
         {

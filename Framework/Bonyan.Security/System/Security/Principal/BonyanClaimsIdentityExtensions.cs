@@ -11,7 +11,7 @@ public static class BonyanClaimsIdentityExtensions
     {
         Check.NotNull(principal, nameof(principal));
 
-        var userIdOrNull = principal.Claims?.FirstOrDefault(c => c.Type == BonyanClaimTypes.UserId);
+        var userIdOrNull = principal.Claims?.FirstOrDefault(c => c.Type == BonClaimTypes.UserId);
         if (userIdOrNull == null || userIdOrNull.Value.IsNullOrWhiteSpace())
         {
             return null;
@@ -31,7 +31,7 @@ public static class BonyanClaimsIdentityExtensions
 
         var claimsIdentity = identity as ClaimsIdentity;
 
-        var userIdOrNull = claimsIdentity?.Claims?.FirstOrDefault(c => c.Type == BonyanClaimTypes.UserId);
+        var userIdOrNull = claimsIdentity?.Claims?.FirstOrDefault(c => c.Type == BonClaimTypes.UserId);
         if (userIdOrNull == null || userIdOrNull.Value.IsNullOrWhiteSpace())
         {
             return null;
@@ -49,7 +49,7 @@ public static class BonyanClaimsIdentityExtensions
     {
         Check.NotNull(principal, nameof(principal));
 
-        var tenantIdOrNull = principal.Claims?.FirstOrDefault(c => c.Type == BonyanClaimTypes.TenantId);
+        var tenantIdOrNull = principal.Claims?.FirstOrDefault(c => c.Type == BonClaimTypes.TenantId);
         if (tenantIdOrNull == null || tenantIdOrNull.Value.IsNullOrWhiteSpace())
         {
             return null;
@@ -69,7 +69,7 @@ public static class BonyanClaimsIdentityExtensions
 
         var claimsIdentity = identity as ClaimsIdentity;
 
-        var tenantIdOrNull = claimsIdentity?.Claims?.FirstOrDefault(c => c.Type == BonyanClaimTypes.TenantId);
+        var tenantIdOrNull = claimsIdentity?.Claims?.FirstOrDefault(c => c.Type == BonClaimTypes.TenantId);
         if (tenantIdOrNull == null || tenantIdOrNull.Value.IsNullOrWhiteSpace())
         {
             return null;
@@ -87,7 +87,7 @@ public static class BonyanClaimsIdentityExtensions
     {
         Check.NotNull(principal, nameof(principal));
 
-        var clientIdOrNull = principal.Claims?.FirstOrDefault(c => c.Type == BonyanClaimTypes.ClientId);
+        var clientIdOrNull = principal.Claims?.FirstOrDefault(c => c.Type == BonClaimTypes.ClientId);
         if (clientIdOrNull == null || clientIdOrNull.Value.IsNullOrWhiteSpace())
         {
             return null;
@@ -102,7 +102,7 @@ public static class BonyanClaimsIdentityExtensions
 
         var claimsIdentity = identity as ClaimsIdentity;
 
-        var clientIdOrNull = claimsIdentity?.Claims?.FirstOrDefault(c => c.Type == BonyanClaimTypes.ClientId);
+        var clientIdOrNull = claimsIdentity?.Claims?.FirstOrDefault(c => c.Type == BonClaimTypes.ClientId);
         if (clientIdOrNull == null || clientIdOrNull.Value.IsNullOrWhiteSpace())
         {
             return null;
@@ -115,7 +115,7 @@ public static class BonyanClaimsIdentityExtensions
     {
         Check.NotNull(principal, nameof(principal));
 
-        var editionIdOrNull = principal.Claims?.FirstOrDefault(c => c.Type == BonyanClaimTypes.EditionId);
+        var editionIdOrNull = principal.Claims?.FirstOrDefault(c => c.Type == BonClaimTypes.EditionId);
         if (editionIdOrNull == null || editionIdOrNull.Value.IsNullOrWhiteSpace())
         {
             return null;
@@ -135,7 +135,7 @@ public static class BonyanClaimsIdentityExtensions
 
         var claimsIdentity = identity as ClaimsIdentity;
 
-        var editionIdOrNull = claimsIdentity?.Claims?.FirstOrDefault(c => c.Type == BonyanClaimTypes.EditionId);
+        var editionIdOrNull = claimsIdentity?.Claims?.FirstOrDefault(c => c.Type == BonClaimTypes.EditionId);
         if (editionIdOrNull == null || editionIdOrNull.Value.IsNullOrWhiteSpace())
         {
             return null;
@@ -153,7 +153,7 @@ public static class BonyanClaimsIdentityExtensions
     {
         Check.NotNull(principal, nameof(principal));
 
-        var impersonatorTenantIdOrNull = principal.Claims?.FirstOrDefault(c => c.Type == BonyanClaimTypes.ImpersonatorTenantId);
+        var impersonatorTenantIdOrNull = principal.Claims?.FirstOrDefault(c => c.Type == BonClaimTypes.ImpersonatorTenantId);
         if (impersonatorTenantIdOrNull == null || impersonatorTenantIdOrNull.Value.IsNullOrWhiteSpace())
         {
             return null;
@@ -173,7 +173,7 @@ public static class BonyanClaimsIdentityExtensions
 
         var claimsIdentity = identity as ClaimsIdentity;
 
-        var impersonatorTenantIdOrNull = claimsIdentity?.Claims?.FirstOrDefault(c => c.Type == BonyanClaimTypes.ImpersonatorTenantId);
+        var impersonatorTenantIdOrNull = claimsIdentity?.Claims?.FirstOrDefault(c => c.Type == BonClaimTypes.ImpersonatorTenantId);
         if (impersonatorTenantIdOrNull == null || impersonatorTenantIdOrNull.Value.IsNullOrWhiteSpace())
         {
             return null;
@@ -191,7 +191,7 @@ public static class BonyanClaimsIdentityExtensions
     {
         Check.NotNull(principal, nameof(principal));
 
-        var impersonatorUserIdOrNull = principal.Claims?.FirstOrDefault(c => c.Type == BonyanClaimTypes.ImpersonatorUserId);
+        var impersonatorUserIdOrNull = principal.Claims?.FirstOrDefault(c => c.Type == BonClaimTypes.ImpersonatorUserId);
         if (impersonatorUserIdOrNull == null || impersonatorUserIdOrNull.Value.IsNullOrWhiteSpace())
         {
             return null;
@@ -211,7 +211,7 @@ public static class BonyanClaimsIdentityExtensions
 
         var claimsIdentity = identity as ClaimsIdentity;
 
-        var impersonatorUserIdOrNull = claimsIdentity?.Claims?.FirstOrDefault(c => c.Type == BonyanClaimTypes.ImpersonatorUserId);
+        var impersonatorUserIdOrNull = claimsIdentity?.Claims?.FirstOrDefault(c => c.Type == BonClaimTypes.ImpersonatorUserId);
         if (impersonatorUserIdOrNull == null || impersonatorUserIdOrNull.Value.IsNullOrWhiteSpace())
         {
             return null;
@@ -282,7 +282,7 @@ public static class BonyanClaimsIdentityExtensions
 
         var claimsIdentity = identity as ClaimsIdentity;
 
-        var sessionIdOrNull = claimsIdentity?.Claims?.FirstOrDefault(c => c.Type == BonyanClaimTypes.SessionId);
+        var sessionIdOrNull = claimsIdentity?.Claims?.FirstOrDefault(c => c.Type == BonClaimTypes.SessionId);
         if (sessionIdOrNull == null || sessionIdOrNull.Value.IsNullOrWhiteSpace())
         {
             return null;
@@ -295,7 +295,7 @@ public static class BonyanClaimsIdentityExtensions
     {
         Check.NotNull(principal, nameof(principal));
 
-        var sessionIdOrNull = principal.Claims?.FirstOrDefault(c => c.Type == BonyanClaimTypes.SessionId);
+        var sessionIdOrNull = principal.Claims?.FirstOrDefault(c => c.Type == BonClaimTypes.SessionId);
         if (sessionIdOrNull == null || sessionIdOrNull.Value.IsNullOrWhiteSpace())
         {
             return null;

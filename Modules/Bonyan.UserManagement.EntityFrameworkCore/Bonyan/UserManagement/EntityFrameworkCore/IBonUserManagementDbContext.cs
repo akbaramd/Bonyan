@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Bonyan.UserManagement.EntityFrameworkCore;
 
-public interface IBonUserManagementDbContext<TUser> where TUser: BonyanUser
+public interface IBonUserManagementDbContext<TUser> where TUser: BonUser
 {
   public DbSet<TUser> Users { get; set; }
 }

@@ -6,7 +6,7 @@ namespace Bonyan.UserManagement.Domain.ValueObjects
     /// <summary>
     /// Represents an email address value object with validation and verification status.
     /// </summary>
-    public class Email : ValueObject
+    public class Email : BonValueObject
     {
         private static readonly Regex EmailRegex = new Regex(@"^[^@\s]+@[^@\s]+\.[^@\s]+$", RegexOptions.Compiled);
 

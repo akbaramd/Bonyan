@@ -1,0 +1,47 @@
+using System.Collections.Concurrent;
+
+namespace Bonyan.DependencyInjection;
+
+public abstract class BonCachedServiceProviderBase : IBonCachedServiceProviderBase
+{
+  protected IServiceProvider ServiceProvider { get; }
+  protected ConcurrentDictionary<Type, Lazy<object?>> CachedServices { get; }
+
+  protected BonCachedServiceProviderBase(IServiceProvider serviceProvider)
+  {
+    ServiceProvider = serviceProvider;
+    CachedServices = new ConcurrentDictionary<Type, Lazy<object?>>();
+    CachedServices.TryAdd(typeof(IServiceProvider), new Lazy<object?>(() => ServiceProvider));
+  }
+
+  public virtual object? GetService(Type serviceType)
+  {
+    return CachedServices.GetOrAdd(
+      serviceType,
+      _ => new Lazy<object?>(() => ServiceProvider.GetService(serviceType))
+    ).Value;
+  }
+    
+  public T GetService<T>(T defaultValue)
+  {
+    return (T)GetService(typeof(T), defaultValue!);
+  }
+
+  public object GetService(Type serviceType, object defaultValue)
+  {
+    return GetService(serviceType) ?? defaultValue;
+  }
+
+  public T GetService<T>(Func<IServiceProvider, object> factory)
+  {
+    return (T)GetService(typeof(T), factory);
+  }
+    
+  public object GetService(Type serviceType, Func<IServiceProvider, object> factory)
+  {
+    return CachedServices.GetOrAdd(
+      serviceType,
+      _ => new Lazy<object?>(() => factory(ServiceProvider))
+    ).Value!;
+  }
+}

@@ -7,16 +7,16 @@ namespace Bonyan.UnitOfWork;
 public static class UnitOfWorkManagerExtensions
 {
     [NotNull]
-    public static IUnitOfWork Begin(
-        [NotNull] this IUnitOfWorkManager unitOfWorkManager,
+    public static IBonUnitOfWork Begin(
+        [NotNull] this IBonUnitOfWorkManager bonUnitOfWorkManager,
         bool requiresNew = false,
         bool isTransactional = false,
         IsolationLevel? isolationLevel = null,
         int? timeout = null)
     {
-        Check.NotNull(unitOfWorkManager, nameof(unitOfWorkManager));
+        Check.NotNull(bonUnitOfWorkManager, nameof(bonUnitOfWorkManager));
 
-        return unitOfWorkManager.Begin(new BonyanUnitOfWorkOptions
+        return bonUnitOfWorkManager.Begin(new BonUnitOfWorkOptions
         {
             IsTransactional = isTransactional,
             IsolationLevel = isolationLevel,
@@ -24,19 +24,19 @@ public static class UnitOfWorkManagerExtensions
         }, requiresNew);
     }
 
-    public static void BeginReserved([NotNull] this IUnitOfWorkManager unitOfWorkManager, [NotNull] string reservationName)
+    public static void BeginReserved([NotNull] this IBonUnitOfWorkManager bonUnitOfWorkManager, [NotNull] string reservationName)
     {
-        Check.NotNull(unitOfWorkManager, nameof(unitOfWorkManager));
+        Check.NotNull(bonUnitOfWorkManager, nameof(bonUnitOfWorkManager));
         Check.NotNull(reservationName, nameof(reservationName));
 
-        unitOfWorkManager.BeginReserved(reservationName, new BonyanUnitOfWorkOptions());
+        bonUnitOfWorkManager.BeginReserved(reservationName, new BonUnitOfWorkOptions());
     }
 
-    public static void TryBeginReserved([NotNull] this IUnitOfWorkManager unitOfWorkManager, [NotNull] string reservationName)
+    public static void TryBeginReserved([NotNull] this IBonUnitOfWorkManager bonUnitOfWorkManager, [NotNull] string reservationName)
     {
-        Check.NotNull(unitOfWorkManager, nameof(unitOfWorkManager));
+        Check.NotNull(bonUnitOfWorkManager, nameof(bonUnitOfWorkManager));
         Check.NotNull(reservationName, nameof(reservationName));
 
-        unitOfWorkManager.TryBeginReserved(reservationName, new BonyanUnitOfWorkOptions());
+        bonUnitOfWorkManager.TryBeginReserved(reservationName, new BonUnitOfWorkOptions());
     }
 }

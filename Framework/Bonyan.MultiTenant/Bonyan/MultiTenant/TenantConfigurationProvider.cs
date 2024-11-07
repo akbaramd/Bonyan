@@ -5,21 +5,21 @@ namespace Bonyan.MultiTenant;
 public class TenantConfigurationProvider : ITenantConfigurationProvider
 {
     protected virtual ITenantResolver TenantResolver { get; }
-    protected virtual ITenantStore TenantStore { get; }
+    protected virtual IBonTenantStore BonTenantStore { get; }
     protected virtual ITenantResolveResultAccessor TenantResolveResultAccessor { get; }
 
 
     public TenantConfigurationProvider(
         ITenantResolver tenantResolver,
-        ITenantStore tenantStore,
+        IBonTenantStore bonTenantStore,
         ITenantResolveResultAccessor tenantResolveResultAccessor)
     {
         TenantResolver = tenantResolver;
-        TenantStore = tenantStore;
+        BonTenantStore = bonTenantStore;
         TenantResolveResultAccessor = tenantResolveResultAccessor;
     }
 
-    public virtual async Task<TenantConfiguration?> GetAsync(bool saveResolveResult = false)
+    public virtual async Task<BonTenantConfiguration?> GetAsync(bool saveResolveResult = false)
     {
         var resolveResult = await TenantResolver.ResolveTenantIdOrNameAsync();
 
@@ -28,7 +28,7 @@ public class TenantConfigurationProvider : ITenantConfigurationProvider
             TenantResolveResultAccessor.Result = resolveResult;
         }
 
-        TenantConfiguration? tenant = null;
+        BonTenantConfiguration? tenant = null;
         if (resolveResult.TenantIdOrName != null)
         {
             tenant = await FindTenantAsync(resolveResult.TenantIdOrName);
@@ -55,15 +55,15 @@ public class TenantConfigurationProvider : ITenantConfigurationProvider
         return tenant;
     }
 
-    protected virtual async Task<TenantConfiguration?> FindTenantAsync(string tenantIdOrName)
+    protected virtual async Task<BonTenantConfiguration?> FindTenantAsync(string tenantIdOrName)
     {
         if (Guid.TryParse(tenantIdOrName, out var parsedTenantId))
         {
-            return await TenantStore.FindAsync(parsedTenantId);
+            return await BonTenantStore.FindAsync(parsedTenantId);
         }
         else
         {
-            return await TenantStore.FindAsync(tenantIdOrName);
+            return await BonTenantStore.FindAsync(tenantIdOrName);
         }
     }
 }

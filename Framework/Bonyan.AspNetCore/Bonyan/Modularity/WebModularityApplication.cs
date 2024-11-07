@@ -6,14 +6,14 @@ namespace Bonyan.Modularity;
 /// Manages the initialization of web modules for a modular application, executing each phase in sequence.
 /// </summary>
 /// <typeparam name="TModule">The root module type.</typeparam>
-public class WebModularityApplication<TModule> : ModularityApplication<TModule>, IWebModularityApplication 
-    where TModule : IModule
+public class WebBonModularityApplication<TModule> : BonModularityApplication<TModule>, IWebBonModularityApplication 
+    where TModule : IBonModule
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="WebModularityApplication{TModule}"/> class.
+    /// Initializes a new instance of the <see cref="WebBonModularityApplication{TModule}"/> class.
     /// </summary>
     /// <param name="serviceCollection">Service collection to register dependencies.</param>
-    public WebModularityApplication(IServiceCollection serviceCollection) : base(serviceCollection)
+    public WebBonModularityApplication(IServiceCollection serviceCollection) : base(serviceCollection)
     {
     }
 
@@ -32,7 +32,7 @@ public class WebModularityApplication<TModule> : ModularityApplication<TModule>,
                                 .OfType<IWebModule>()
                                 .ToList();
 
-        var context = new ApplicationContext(application);
+        var context = new BonContext(application);
 
         // Execute each phase with error handling
         await ExecuteModulePhaseAsync(webModules, (module) => module.OnPreApplicationAsync(context), "Pre-Application");

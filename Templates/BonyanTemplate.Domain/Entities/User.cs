@@ -3,13 +3,13 @@ using Bonyan.UserManagement.Domain.ValueObjects;
 
 namespace BonyanTemplate.Domain.Entities;
 
-public class User : BonyanUser
+public class User : BonUser
 {
     protected User()
     {
     }
 
-    public User(UserId id, string userName) : base(id, userName)
+    public User(BonUserId id, string userName) : base(id, userName)
     {
     }
 }

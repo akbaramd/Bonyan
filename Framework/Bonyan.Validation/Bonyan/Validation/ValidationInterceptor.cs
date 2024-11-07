@@ -2,7 +2,7 @@
 
 namespace Bonyan.Validation;
 
-public class ValidationInterceptor : BonyanInterceptor
+public class ValidationInterceptor : BonInterceptor
 {
     private readonly IMethodInvocationValidator _methodInvocationValidator;
 
@@ -11,13 +11,13 @@ public class ValidationInterceptor : BonyanInterceptor
         _methodInvocationValidator = methodInvocationValidator;
     }
 
-    public override async Task InterceptAsync(IBonyanMethodInvocation invocation)
+    public override async Task InterceptAsync(IBonMethodInvocation invocation)
     {
         await ValidateAsync(invocation);
         await invocation.ProceedAsync();
     }
 
-    protected virtual async Task ValidateAsync(IBonyanMethodInvocation invocation)
+    protected virtual async Task ValidateAsync(IBonMethodInvocation invocation)
     {
         await _methodInvocationValidator.ValidateAsync(
             new MethodInvocationValidationContext(

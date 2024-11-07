@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Bonyan.IdentityManagement.EntityFrameworkCore;
 
 public interface IBonIdentityManagementDbContext<TUser, TRole> : IBonUserManagementDbContext<TUser>
-    where TUser : BonyanUser where TRole : BonRole
+    where TUser : BonUser where TRole : BonRole
 {
     public DbSet<TRole> Roles { get; set; }
     public DbSet<BonPermission> Permissions { get; set; }

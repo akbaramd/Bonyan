@@ -6,7 +6,7 @@ namespace Bonyan.UserManagement.Domain.ValueObjects
     /// <summary>
     /// Represents a phone number value object with validation and verification status.
     /// </summary>
-    public class PhoneNumber : ValueObject
+    public class PhoneNumber : BonValueObject
     {
         private static readonly Regex PhoneRegex = new Regex(@"^\+?[1-9]\d{1,14}$", RegexOptions.Compiled);
 

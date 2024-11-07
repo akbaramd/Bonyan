@@ -17,7 +17,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\Framework\Bonyan.AspNetCore.Job.Hangfire\Bonyan.AspNetCore.Job.Hangfire.csproj"/>
+        <ProjectReference Include="..\..\Framework\Bonyan.AspNetCore.Workers.Hangfire\Bonyan.AspNetCore.Workers.Hangfire.csproj" />
         <ProjectReference Include="..\..\Framework\Bonyan.EntityFrameworkCore\Bonyan.EntityFrameworkCore.csproj"/>
         <ProjectReference Include="..\..\Framework\Bonyan.AspNetCore\Bonyan.AspNetCore.csproj"/>
         <ProjectReference Include="..\..\Framework\Bonyan.EntityFrameworkCore.SqlServer\Bonyan.EntityFrameworkCore.SqlServer.csproj"/>

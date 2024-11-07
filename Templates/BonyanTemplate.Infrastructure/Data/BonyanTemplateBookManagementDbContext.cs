@@ -8,10 +8,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BonyanTemplate.Infrastructure.Data;
 
-public class BonyanTemplateBookManagementDbContext : BonyanDbContext<BonyanTemplateBookManagementDbContext>,
-    IBonyanTenantDbContext, IBonIdentityManagementDbContext<User, Role>
+public class BonTemplateBookManagementDbContext : BonDbContext<BonTemplateBookManagementDbContext>,
+    IBonTenantDbContext, IBonIdentityManagementDbContext<User, Role>
 {
-    public BonyanTemplateBookManagementDbContext(DbContextOptions<BonyanTemplateBookManagementDbContext> options) :
+    public BonTemplateBookManagementDbContext(DbContextOptions<BonTemplateBookManagementDbContext> options) :
         base(options)
     {
     }
@@ -23,12 +23,12 @@ public class BonyanTemplateBookManagementDbContext : BonyanDbContext<BonyanTempl
         modelBuilder.Entity<Books>().HasOne(x => x.Author).WithMany().HasForeignKey(x => x.AuthorId);
         modelBuilder.Entity<Authors>().ConfigureByConvention();
         modelBuilder.ConfigureTenantManagementByConvention();
-        modelBuilder.ConfigureIdentityManagementByConvention<User, Role>();
+        modelBuilder.ConfigureBonIdentityManagementByConvention<User, Role>();
     }
 
     public DbSet<Books> Books { get; set; }
     public DbSet<Authors> Authors { get; set; }
-    public DbSet<Tenant> Tenants { get; set; }
+    public DbSet<BonTenant> Tenants { get; set; }
     public DbSet<User> Users { get; set; }
     public DbSet<Role> Roles { get; set; }
     public DbSet<BonPermission> Permissions { get; set; }

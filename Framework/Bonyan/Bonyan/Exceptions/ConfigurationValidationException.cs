@@ -3,7 +3,7 @@
     /// <summary>
     /// Exception that is thrown when configuration validation fails for a specific type.
     /// </summary>
-    public class ConfigurationValidationException : BonyanException
+    public class ConfigurationValidationException : BonException
     {
         /// <summary>
         /// Gets the type of the configuration that failed validation.

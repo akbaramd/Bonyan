@@ -7,11 +7,11 @@ namespace Bonyan.Modularity
     /// <summary>
     /// Context for configuring services, allowing options setup and configuration binding.
     /// </summary>
-    public class ServiceConfigurationContext : ApplicationContextBase
+    public class BonConfigurationContext : BonContextBase
     {
         public IServiceCollection Services { get; }
 
-        public ServiceConfigurationContext(IServiceCollection services, IConfiguration configuration)
+        public BonConfigurationContext(IServiceCollection services, IConfiguration configuration)
             : base(services.BuildServiceProvider(), configuration)
         {
             Services = services;

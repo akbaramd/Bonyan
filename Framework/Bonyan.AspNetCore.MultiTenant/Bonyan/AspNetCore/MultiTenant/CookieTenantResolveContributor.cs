@@ -11,6 +11,6 @@ public class CookieTenantResolveContributor : HttpTenantResolveContributorBase
 
     protected override Task<string?> GetTenantIdOrNameFromHttpContextOrNullAsync(ITenantResolveContext context, HttpContext httpContext)
     {
-        return Task.FromResult(httpContext.Request.Cookies[context.ServiceProvider.GetRequiredService<IOptions<BonyanAspNetCoreMultiTenancyOptions>>().Value.TenantKey]);
+        return Task.FromResult(httpContext.Request.Cookies[context.ServiceProvider.GetRequiredService<IOptions<BonAspNetCoreMultiTenancyOptions>>().Value.TenantKey]);
     }
 }

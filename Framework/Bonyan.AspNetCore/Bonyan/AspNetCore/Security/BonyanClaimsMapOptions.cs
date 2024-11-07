@@ -10,12 +10,12 @@ public class BonyanClaimsMapOptions
     {
         Maps = new Dictionary<string, Func<string>>()
             {
-                { "sub", () => BonyanClaimTypes.UserId },
-                { "role", () => BonyanClaimTypes.Role },
-                { "email", () => BonyanClaimTypes.Email },
-                { "name", () => BonyanClaimTypes.UserName },
-                { "family_name", () => BonyanClaimTypes.SurName },
-                { "given_name", () => BonyanClaimTypes.Name }
+                { "sub", () => BonClaimTypes.UserId },
+                { "role", () => BonClaimTypes.Role },
+                { "email", () => BonClaimTypes.Email },
+                { "name", () => BonClaimTypes.UserName },
+                { "family_name", () => BonClaimTypes.SurName },
+                { "given_name", () => BonClaimTypes.Name }
             };
     }
 }

@@ -8,12 +8,12 @@ public class UnitOfWorkEventArgs : EventArgs
     /// <summary>
     /// Reference to the unit of work related to this event.
     /// </summary>
-    public IUnitOfWork UnitOfWork { get; }
+    public IBonUnitOfWork BonUnitOfWork { get; }
 
-    public UnitOfWorkEventArgs([NotNull] IUnitOfWork unitOfWork)
+    public UnitOfWorkEventArgs([NotNull] IBonUnitOfWork bonUnitOfWork)
     {
-        Check.NotNull(unitOfWork, nameof(unitOfWork));
+        Check.NotNull(bonUnitOfWork, nameof(bonUnitOfWork));
 
-        UnitOfWork = unitOfWork;
+        BonUnitOfWork = bonUnitOfWork;
     }
 }

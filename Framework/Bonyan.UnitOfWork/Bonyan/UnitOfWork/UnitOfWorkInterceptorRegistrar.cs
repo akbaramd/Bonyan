@@ -10,12 +10,12 @@ public static class UnitOfWorkInterceptorRegistrar
     {
         if (ShouldIntercept(context.ImplementationType))
         {
-            context.Interceptors.TryAdd<UnitOfWorkInterceptor>();
+            context.Interceptors.TryAdd<BonUnitOfWorkInterceptor>();
         }
     }
 
     private static bool ShouldIntercept(Type type)
     {
-        return !DynamicProxyIgnoreTypes.Contains(type) && UnitOfWorkHelper.IsUnitOfWorkType(type.GetTypeInfo());
+        return !DynamicProxyIgnoreTypes.Contains(type) && BonUnitOfWorkHelper.IsUnitOfWorkType(type.GetTypeInfo());
     }
 }

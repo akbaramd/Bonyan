@@ -12,17 +12,17 @@ public static class ServiceCollectionRegistrationActionExtensions
         GetOrCreateRegistrationActionList(services).Add(registrationAction);
     }
 
-    public static ServiceRegistrationActionList GetRegistrationActionList(this IServiceCollection services)
+    public static BonServiceRegistrationActionList GetRegistrationActionList(this IServiceCollection services)
     {
         return GetOrCreateRegistrationActionList(services);
     }
 
-    private static ServiceRegistrationActionList GetOrCreateRegistrationActionList(IServiceCollection services)
+    private static BonServiceRegistrationActionList GetOrCreateRegistrationActionList(IServiceCollection services)
     {
-        var actionList = services.GetSingletonInstanceOrNull<IObjectAccessor<ServiceRegistrationActionList>>()?.Value;
+        var actionList = services.GetSingletonInstanceOrNull<IBonObjectAccessor<BonServiceRegistrationActionList>>()?.Value;
         if (actionList == null)
         {
-            actionList = new ServiceRegistrationActionList();
+            actionList = new BonServiceRegistrationActionList();
             services.AddObjectAccessor(actionList);
         }
 
@@ -46,17 +46,17 @@ public static class ServiceCollectionRegistrationActionExtensions
         GetOrCreateExposingList(services).Add(exposeAction);
     }
 
-    public static ServiceExposingActionList GetExposingActionList(this IServiceCollection services)
+    public static BonServiceExposingActionList GetExposingActionList(this IServiceCollection services)
     {
         return GetOrCreateExposingList(services);
     }
 
-    private static ServiceExposingActionList GetOrCreateExposingList(IServiceCollection services)
+    private static BonServiceExposingActionList GetOrCreateExposingList(IServiceCollection services)
     {
-        var actionList = services.GetSingletonInstanceOrNull<IObjectAccessor<ServiceExposingActionList>>()?.Value;
+        var actionList = services.GetSingletonInstanceOrNull<IBonObjectAccessor<BonServiceExposingActionList>>()?.Value;
         if (actionList == null)
         {
-            actionList = new ServiceExposingActionList();
+            actionList = new BonServiceExposingActionList();
             services.AddObjectAccessor(actionList);
         }
 

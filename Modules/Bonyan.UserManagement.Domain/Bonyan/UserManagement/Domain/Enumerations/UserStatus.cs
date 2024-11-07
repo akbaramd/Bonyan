@@ -5,7 +5,7 @@ namespace Bonyan.UserManagement.Domain.Enumerations
     /// <summary>
     /// Represents the status of a user within the system, allowing various states for user accounts.
     /// </summary>
-    public class UserStatus : Enumeration
+    public class UserStatus : BonEnumeration
     {
         public static readonly UserStatus Active = new(IdActive, nameof(Active));
         public static readonly UserStatus PendingVerification = new(IdPendingVerification, nameof(PendingVerification));

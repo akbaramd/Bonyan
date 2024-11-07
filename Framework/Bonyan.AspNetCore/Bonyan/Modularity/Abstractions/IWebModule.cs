@@ -1,11 +1,11 @@
 namespace Bonyan.Modularity.Abstractions;
 
-public interface IWebModule : IModule{
+public interface IWebModule : IBonModule{
   
-  Task OnPreApplicationAsync(ApplicationContext context) ;
+  Task OnPreApplicationAsync(BonContext context) ;
   
-  Task OnApplicationAsync(ApplicationContext context) ;
+  Task OnApplicationAsync(BonContext context) ;
   
-  Task OnPostApplicationAsync(ApplicationContext context) ;
+  Task OnPostApplicationAsync(BonContext context) ;
   
 }

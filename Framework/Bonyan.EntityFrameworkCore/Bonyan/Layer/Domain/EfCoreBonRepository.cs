@@ -1,0 +1,125 @@
+﻿using Bonyan.EntityFrameworkCore;
+using Bonyan.Layer.Domain.Entities;
+
+namespace Bonyan.Layer.Domain
+{
+    public class EfCoreBonRepository<TEntity, TDbContext> : EfCoreReadonlyRepository<TEntity, TDbContext>,
+        IEfCoreBonRepository<TEntity>
+        where TEntity : class, IBonEntity
+        where TDbContext : BonDbContext<TDbContext>
+    {
+        public EfCoreBonRepository(TDbContext dbContext)
+            : base(dbContext)
+        {
+        }
+
+        public async Task<TEntity> AddAsync(TEntity entity,bool autoSave=  false)
+        {
+            BonEntityHelper.TrySetTenantId(entity, CurrentTenant?.Id);
+            var dbContext = await GetDbContextAsync();
+
+            var savedEntity = (await dbContext.Set<TEntity>().AddAsync(entity)).Entity;
+
+            if (autoSave)
+            {
+                await dbContext.SaveChangesAsync();
+            }
+            return savedEntity;
+        }
+
+        public async Task UpdateAsync(TEntity entity,bool autoSave=  false)
+        {
+            var dbContext = await GetDbContextAsync();
+
+            if (dbContext.Set<TEntity>().Local.All(e => e != entity))
+            {
+                dbContext.Set<TEntity>().Attach(entity);
+                dbContext.Update(entity);
+            }
+            if (autoSave)
+            {
+                await dbContext.SaveChangesAsync();
+            }
+        }
+
+        public async Task DeleteAsync(TEntity entity,bool autoSave=  false)
+        {
+            var dbContext = await GetDbContextAsync();
+
+            dbContext.Set<TEntity>().Remove(entity);
+            
+            if (autoSave)
+            {
+                await dbContext.SaveChangesAsync();
+            }
+        }
+    }
+
+    public class EfCoreBonRepository<TEntity, TKey, TDbContext> : EfCoreReadonlyRepository<TEntity, TKey, TDbContext>,
+        IEfCoreBonRepository<TEntity, TKey>
+        where TEntity : class, IBonEntity<TKey>
+        where TDbContext : BonDbContext<TDbContext>
+        where TKey : notnull
+    {
+        public EfCoreBonRepository(TDbContext userManagementDbContext)
+            : base(userManagementDbContext)
+        {
+        }
+
+        public async Task DeleteByIdAsync(TKey id,bool autoSave=  false)
+        {
+            var dbContext = await GetDbContextAsync();
+
+            var entity = await GetByIdAsync(id);
+            if (entity == null) throw new KeyNotFoundException("Entity not found for deletion.");
+
+            dbContext.Set<TEntity>().Remove(entity);
+            
+            if (autoSave)
+            {
+                await dbContext.SaveChangesAsync();
+            }
+        }
+
+        public async Task<TEntity> AddAsync(TEntity entity,bool autoSave=  false)
+        {
+            BonEntityHelper.TrySetTenantId(entity, CurrentTenant?.Id);
+            var dbContext = await GetDbContextAsync();
+
+            var savedEntity = (await dbContext.Set<TEntity>().AddAsync(entity)).Entity;
+
+            if (autoSave)
+            {
+                await dbContext.SaveChangesAsync();
+            }
+            return savedEntity;
+        }
+
+        public async Task UpdateAsync(TEntity entity,bool autoSave=  false)
+        {
+            var dbContext = await GetDbContextAsync();
+
+            if (dbContext.Set<TEntity>().Local.All(e => e != entity))
+            {
+                dbContext.Set<TEntity>().Attach(entity);
+                dbContext.Update(entity);
+            }
+            if (autoSave)
+            {
+                await dbContext.SaveChangesAsync();
+            }
+        }
+
+        public async Task DeleteAsync(TEntity entity,bool autoSave=  false)
+        {
+            var dbContext = await GetDbContextAsync();
+
+            dbContext.Set<TEntity>().Remove(entity);
+            
+            if (autoSave)
+            {
+                await dbContext.SaveChangesAsync();
+            }
+        }
+    }
+}

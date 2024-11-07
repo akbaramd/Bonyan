@@ -6,9 +6,9 @@ namespace Bonyan.MultiTenant;
 public class TenantResolver : ITenantResolver
 {
   private readonly IServiceProvider _serviceProvider;
-  private readonly BonyanTenantResolveOptions _options;
+  private readonly BonTenantResolveOptions _options;
 
-  public TenantResolver(IOptions<BonyanTenantResolveOptions> options, IServiceProvider serviceProvider)
+  public TenantResolver(IOptions<BonTenantResolveOptions> options, IServiceProvider serviceProvider)
   {
     _serviceProvider = serviceProvider;
     _options = options.Value;

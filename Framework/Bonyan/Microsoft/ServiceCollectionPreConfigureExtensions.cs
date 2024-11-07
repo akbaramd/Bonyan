@@ -23,12 +23,12 @@ public static class ServiceCollectionPreConfigureExtensions
         return options;
     }
 
-    public static PreConfigureActionList<TOptions> GetPreConfigureActions<TOptions>(this IServiceCollection services)
+    public static BonPreConfigureActionList<TOptions> GetPreConfigureActions<TOptions>(this IServiceCollection services)
     {
-        var actionList = services.GetSingletonInstanceOrNull<IObjectAccessor<PreConfigureActionList<TOptions>>>()?.Value;
+        var actionList = services.GetSingletonInstanceOrNull<IBonObjectAccessor<BonPreConfigureActionList<TOptions>>>()?.Value;
         if (actionList == null)
         {
-            actionList = new PreConfigureActionList<TOptions>();
+            actionList = new BonPreConfigureActionList<TOptions>();
             services.AddObjectAccessor(actionList);
         }
 

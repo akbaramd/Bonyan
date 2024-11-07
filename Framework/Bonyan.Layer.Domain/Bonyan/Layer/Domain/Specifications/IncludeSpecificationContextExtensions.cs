@@ -19,7 +19,7 @@ public static class IncludeSpecificationContextExtensions
     public static IncludeSpecificationContext<TEntity, TNextProperty> ThenInclude<TEntity, TPreviousProperty, TNextProperty>(
         this IIncludeSpecificationContext<TEntity, TPreviousProperty> context,
         Expression<Func<TPreviousProperty, TNextProperty>> navigationPropertyPath)
-        where TEntity : class, IEntity
+        where TEntity : class, IBonEntity
     {
         // Apply ThenInclude to the current query
         var query = ((IIncludableQueryable<TEntity, TPreviousProperty>)context.Query).ThenInclude(navigationPropertyPath);
@@ -40,7 +40,7 @@ public static class IncludeSpecificationContextExtensions
     public static IncludeSpecificationContext<TEntity, TNextProperty> ThenInclude<TEntity, TPreviousProperty, TNextProperty>(
         this IIncludeSpecificationContext<TEntity, IEnumerable<TPreviousProperty>> context,
         Expression<Func<TPreviousProperty, TNextProperty>> navigationPropertyPath)
-        where TEntity : class, IEntity
+        where TEntity : class, IBonEntity
     {
         // Apply ThenInclude for collections to the current query
         var query = ((IIncludableQueryable<TEntity, IEnumerable<TPreviousProperty>>)context.Query).ThenInclude(navigationPropertyPath);
@@ -52,7 +52,7 @@ public static class IncludeSpecificationContextExtensions
     public static IncludeSpecificationContext<TEntity, TNextProperty> ThenInclude<TEntity, TPreviousProperty, TNextProperty>(
         this IIncludeSpecificationContext<TEntity, ICollection<TPreviousProperty>> context,
         Expression<Func<TPreviousProperty, TNextProperty>> navigationPropertyPath)
-        where TEntity : class, IEntity
+        where TEntity : class, IBonEntity
     {
         // Apply ThenInclude for collections to the current query
         var query = ((IIncludableQueryable<TEntity, ICollection<TPreviousProperty>>)context.Query).ThenInclude(navigationPropertyPath);
