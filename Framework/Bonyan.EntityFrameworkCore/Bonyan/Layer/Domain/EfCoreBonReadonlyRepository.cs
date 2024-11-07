@@ -34,7 +34,7 @@ namespace Bonyan.Layer.Domain
             var query = PrepareQuery(dbContext.Set<TEntity>());
             
             // Apply AsNoTracking() if change tracking is disabled
-            if (IsChangeTrackingEnabled.HasValue && IsChangeTrackingEnabled.Value)
+            if (IsChangeTrackingEnabled.HasValue && !IsChangeTrackingEnabled.Value)
             {
                 query = query.AsNoTracking();
             }
