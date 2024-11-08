@@ -7,7 +7,7 @@ using Bonyan.TenantManagement.Application.Services;
 namespace Bonyan.TenantManagement.Web;
 
 
-public class BonTenantManagementWebModule : WebModule
+public class BonTenantManagementWebModule : BonWebModule
 {
     public BonTenantManagementWebModule()
     {

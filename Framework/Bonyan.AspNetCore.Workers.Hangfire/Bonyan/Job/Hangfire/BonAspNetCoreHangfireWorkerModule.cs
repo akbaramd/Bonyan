@@ -8,7 +8,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 namespace Bonyan.Job.Hangfire;
 
 
-public class BonAspNetCoreWorkersHangfireModule : WebModule
+public class BonAspNetCoreWorkersHangfireModule : BonWebModule
 {
   public BonAspNetCoreWorkersHangfireModule()
   {

@@ -11,7 +11,7 @@
     <RepositoryUrl>https://github.com/akbaramd/Novin</RepositoryUrl>
     <PackageIcon>logo.jpg</PackageIcon> <!-- Path to the NuGet icon -->
     <PackageReadmeFile>README.md</PackageReadmeFile> <!-- Path to the README file -->
-    <RootNamespace/>
+    
   </PropertyGroup>
   <ItemGroup>
     <None Include="../../logo.jpg" Pack="true" PackagePath="." /> <!-- Include the NuGet icon in the package -->

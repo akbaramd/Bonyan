@@ -4,14 +4,14 @@ using Bonyan.MultiTenant;
 namespace Bonyan.AspNetCore.MultiTenant;
 
 
-public class BonAspNetCoreMultiTenantModule : WebModule
+public class BonAspNetCoreMultiTenantModule : BonWebModule
 {
 
   public BonAspNetCoreMultiTenantModule()
   {
     DependOn([
       typeof(BonMultiTenantModule),
-      typeof(BonyanAspNetCoreModule)
+      typeof(BonAspNetCoreModule)
     ]);
   }
   public override Task OnConfigureAsync(BonConfigurationContext context)

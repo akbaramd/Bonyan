@@ -8,7 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Bonyan.IdentityManagement.Web;
 
-public class BonIdentityManagementWebModule<TUser> : WebModule where TUser : BonUser
+public class BonIdentityManagementWebModule<TUser> : BonWebModule where TUser : BonUser
 {
     public BonIdentityManagementWebModule()
     {

@@ -1,0 +1,113 @@
+﻿@using Microsoft.AspNetCore.Components.Routing
+@inject ThemeService ThemeService
+
+<aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <!-- Brand Logo -->
+    <NavLink href="/dashboard" class="brand-link">
+        <img src="_content/Bonyan.AspNetCore.Components.Admin/dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+        <span class="brand-text font-weight-light">AdminLTE 3</span>
+    </NavLink>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <!-- Sidebar user panel (optional) -->
+        <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+            <div class="image">
+                <img src="_content/Bonyan.AspNetCore.Components.Admin/dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
+            </div>
+            <div class="info">
+                <NavLink href="/profile" class="d-block">امین ارجمند</NavLink>
+            </div>
+        </div>
+
+        <!-- SidebarSearch Form -->
+        <div class="form-inline">
+            <div class="input-group" data-widget="sidebar-search">
+                <input class="form-control form-control-sidebar" type="search" placeholder="جستجو" aria-label="Search">
+                <div class="input-group-append">
+                    <button class="btn btn-sidebar">
+                        <i class="fas fa-search fa-fw"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar Menu -->
+        @if (Menu != null)
+        {
+            <nav class="mt-2">
+                <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                    @foreach (var item in Menu.Items)
+                    {
+                        @RenderMenuItem(item)
+                    }
+                </ul>
+            </nav>
+        }
+    </div>
+    <!-- /.sidebar -->
+</aside>
+
+@code {
+    private Menu Menu;
+
+    protected override void OnInitialized()
+    {
+// Retrieve the menu assigned to the "sidebar" location
+        Menu = ThemeService.MenuService.GetMenuByLocation("sidebar");
+    }
+
+    RenderFragment RenderMenuItem(MenuItem item) => builder =>
+    {
+        int seq = 0;
+        if (item.Children != null && item.Children.Any())
+        {
+// Render parent menu item with children
+            builder.OpenElement(seq++, "li");
+            builder.AddAttribute(seq++, "class", "nav-item has-treeview");
+
+            builder.OpenElement(seq++, "a");
+            builder.AddAttribute(seq++, "href", item.Url ?? "#");
+            builder.AddAttribute(seq++, "class", "nav-link");
+            builder.OpenElement(seq++, "i");
+            builder.AddAttribute(seq++, "class", item.Icon);
+            builder.CloseElement(); // Close <i>
+            builder.AddContent(seq++, $" {item.Title}");
+            builder.OpenElement(seq++, "i");
+            builder.AddAttribute(seq++, "class", "right fas fa-angle-left");
+            builder.CloseElement(); // Close <i>
+            builder.CloseElement(); // Close <a>
+
+            builder.OpenElement(seq++, "ul");
+            builder.AddAttribute(seq++, "class", "nav nav-treeview");
+            foreach (var child in item.Children)
+            {
+                builder.AddContent(seq++, RenderMenuItem(child));
+            }
+
+            builder.CloseElement(); // Close <ul>
+
+            builder.CloseElement(); // Close <li>
+        }
+        else
+        {
+// Render single menu item
+            builder.OpenElement(seq++, "li");
+            builder.AddAttribute(seq++, "class", "nav-item");
+            builder.OpenComponent<NavLink>(seq++);
+            builder.AddAttribute(seq++, "class", "nav-link");
+            builder.AddAttribute(seq++, "href", item.Url);
+            builder.AddAttribute(seq++, "ChildContent", (RenderFragment)(childBuilder =>
+            {
+                int childSeq = 0;
+                childBuilder.OpenElement(childSeq++, "i");
+                childBuilder.AddAttribute(childSeq++, "class", item.Icon);
+                childBuilder.CloseElement(); // Close <i>
+                childBuilder.AddContent(childSeq++, $" {item.Title}");
+            }));
+            builder.CloseComponent();
+            builder.CloseElement(); // Close <li>
+        }
+    };
+
+}

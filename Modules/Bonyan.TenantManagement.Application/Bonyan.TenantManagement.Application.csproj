@@ -5,6 +5,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <PackageId>Bonyan.TenantManagement.Application</PackageId>
+        <RootNamespace/>
     </PropertyGroup>
     <Import Project="..\..\package.props"/>
     <ItemGroup>

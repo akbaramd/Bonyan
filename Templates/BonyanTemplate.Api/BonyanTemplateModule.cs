@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace BonyanTemplate.Api;
 
-public class BonyanTemplateModule : WebModule
+public class BonyanTemplateModule : BonWebModule
 {
     public BonyanTemplateModule()
     {

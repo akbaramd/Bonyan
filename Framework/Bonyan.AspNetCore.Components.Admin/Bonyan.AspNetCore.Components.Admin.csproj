@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <PackageId>Bonyan.AspNetCore.Components.Admin</PackageId>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Bonyan.AspNetCore.Components\Bonyan.AspNetCore.Components.csproj" />
+    </ItemGroup>
+    <ItemGroup>
+      <AdditionalFiles Include="Components\Layouts\AdminLayout.razor" />
+      <AdditionalFiles Include="Components\Layouts\NavMenu.razor" />
+    </ItemGroup>
+</Project>

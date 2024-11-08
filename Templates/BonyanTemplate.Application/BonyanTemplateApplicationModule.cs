@@ -51,7 +51,7 @@ namespace BonyanTemplate.Application
 
     public override Task OnInitializeAsync(ServiceInitializationContext context)
     {
-      context.AddBackgroundWorkerAsync<TestBonWorker>();
+      // context.AddBackgroundWorkerAsync<TestBonWorker>();
       return base.OnInitializeAsync(context);
     }
   }

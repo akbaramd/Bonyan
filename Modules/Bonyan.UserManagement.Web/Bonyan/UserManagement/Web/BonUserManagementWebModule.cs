@@ -4,7 +4,7 @@ using Bonyan.UserManagement.Domain;
 
 namespace Bonyan.UserManagement.Web;
 
-public class BonUserManagementWebModule<TUser> : WebModule where TUser : BonUser
+public class BonUserManagementWebModule<TUser> : BonWebModule where TUser : BonUser
 {
     public BonUserManagementWebModule()
     {
