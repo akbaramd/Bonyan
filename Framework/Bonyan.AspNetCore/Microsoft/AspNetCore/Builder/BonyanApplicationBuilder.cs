@@ -50,7 +50,7 @@ namespace Microsoft.AspNetCore.Builder
         /// Builds and initializes the modular ASP.NET Core application.
         /// </summary>
         /// <returns>Returns a fully built and initialized WebApplication instance.</returns>
-        public async Task<WebApplication> BuildAsync()
+        public async Task RunAsync()
         {
             var application = _builder.Build();
 
@@ -66,7 +66,7 @@ namespace Microsoft.AspNetCore.Builder
                 throw new ApplicationException("An error occurred during module initialization.", ex);
             }
 
-            return application;
+            await application.RunAsync();
         }
     }
 }

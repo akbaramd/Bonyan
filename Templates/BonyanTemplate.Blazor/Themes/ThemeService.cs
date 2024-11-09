@@ -1,14 +1,6 @@
-﻿namespace Bonyan.AspNetCore.Components
+﻿namespace BonyanTemplate.Blazor.Themes
 {
     public class ThemeService
     {
-        public MenuService MenuService { get; }
-
-        public ThemeService()
-        {
-            MenuService = new MenuService();
-        }
-
-        // Additional theme-related services and properties can be added here
     }
 }

@@ -1,9 +1,11 @@
 ﻿@using Bonyan.AspNetCore.Components
-@using Bonyan.AspNetCore.Components.Admin.Consts
+@using Bonyan.AspNetCore.Components.Menus
 @using Bonyan.User
+@using BonyanTemplate.Blazor.Consts
 @using Microsoft.AspNetCore.Components.Routing
-@inject ThemeService ThemeService
 @inject IBonCurrentUser CurrentUser
+@inject IEnumerable<IMenuProvider> MenuProviders
+
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <NavLink href="/dashboard" class="brand-link">
@@ -36,11 +38,11 @@
         </div>
 
         <!-- Sidebar Menu -->
-        @if (Menu != null)
+        @if (Menus != null)
         {
             <nav class="mt-2">
                 <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-                    @foreach (var item in Menu.Items)
+                    @foreach (var item in Menus)
                     {
                         @RenderMenuItem(item)
                     }
@@ -52,12 +54,32 @@
 </aside>
 
 @code {
-    private Menu Menu;
+    private List<MenuItem> Menus;
 
     protected override void OnInitialized()
     {
-// Retrieve the menu assigned to the "sidebar" location
-        Menu = ThemeService.MenuService.GetMenuByLocation(AdminLteMenuConst.SidebarMenu);
+        Menus = new List<MenuItem>();
+
+        foreach (var provider in MenuProviders)
+        {
+            var items = provider.GetMenuItems(AdminLteMenuConst.SidebarMenu);
+            if (items != null)
+            {
+                Menus.AddRange(items);
+            }
+        }
+
+// Sort the menus based on the Order property
+        Menus = Menus.OrderBy(m => m.Order).ToList();
+
+// Optionally, sort child menu items
+        foreach (var menuItem in Menus)
+        {
+            if (menuItem.Children != null && menuItem.Children.Any())
+            {
+                menuItem.Children = menuItem.Children.OrderBy(c => c.Order).ToList();
+            }
+        }
     }
 
     RenderFragment RenderMenuItem(MenuItem item) => builder =>
@@ -65,7 +87,6 @@
         int seq = 0;
         if (item.Children != null && item.Children.Any())
         {
-// Render parent menu item with children
             builder.OpenElement(seq++, "li");
             builder.AddAttribute(seq++, "class", "nav-item has-treeview");
 
@@ -83,6 +104,8 @@
 
             builder.OpenElement(seq++, "ul");
             builder.AddAttribute(seq++, "class", "nav nav-treeview");
+
+// Render sorted child menu items
             foreach (var child in item.Children)
             {
                 builder.AddContent(seq++, RenderMenuItem(child));

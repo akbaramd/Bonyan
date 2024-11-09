@@ -30,7 +30,7 @@ public class BonyanApplication
     /// <typeparam name="TModule">The root module type.</typeparam>
     /// <param name="args">Application arguments.</param>
     /// <returns>An instance of <see cref="IBonyanApplicationBuilder"/> configured with the root module.</returns>
-    public static IBonyanApplicationBuilder CreateApplicationBuilder<TModule>(string[] args) where TModule : IBonModule
+    public static IBonyanApplicationBuilder CreateModularApplication<TModule>(string[] args) where TModule : IBonModule
     {
         var applicationBuilder = WebApplication.CreateBuilder(args);
         applicationBuilder.Host.UseBonAutofac();

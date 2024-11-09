@@ -15,5 +15,5 @@ public interface IBonyanApplicationBuilder
 
  IHostBuilder Host { get; }
 
- Task<WebApplication> BuildAsync();
+ Task RunAsync();
 }

@@ -46,6 +46,7 @@ public class BonAspNetCoreModule : BonWebModule
     /// <param name="context">The application context used during application initialization.</param>
     public override Task OnApplicationAsync(BonContext context)
     {
+        context.Application.UseHttpsRedirection();
         return base.OnApplicationAsync(context);
     }
 

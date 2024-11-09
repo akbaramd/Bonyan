@@ -55,6 +55,8 @@ public class BonIdentityManagementWebModule<TUser> : BonWebModule where TUser : 
                 o.ExpireTimeSpan = TimeSpan.FromMinutes(5);
             }).AddBearerToken();
             
+            
+        
         return base.OnConfigureAsync(context);
     }
 }

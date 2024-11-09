@@ -1,72 +1,34 @@
-﻿namespace Bonyan.AspNetCore.Components
+﻿using Bonyan.AspNetCore.Components.Menus;
+
+namespace BonyanTemplate.Blazor.Themes
 {
     public class MenuService
     {
-        private readonly Dictionary<string, Menu> _menus = new();
-        private readonly Dictionary<string, string> _menuLocations = new();
+        public List<MenuItem> SidebarMenuItems { get; } = new List<MenuItem>();
+        public List<MenuItem> NavbarMenuItems { get; } = new List<MenuItem>();
 
-        // Add a menu
-        public void AddMenu(string menuName, Menu menu)
+        // Add a menu item to the sidebar
+        public void AddSidebarMenuItem(MenuItem menuItem)
         {
-            if (!_menus.ContainsKey(menuName))
-            {
-                _menus[menuName] = menu;
-            }
+            SidebarMenuItems.Add(menuItem);
         }
 
-        // Remove a menu
-        public void RemoveMenu(string menuName)
+        // Remove a menu item from the sidebar
+        public void RemoveSidebarMenuItem(MenuItem menuItem)
         {
-            if (_menus.ContainsKey(menuName))
-            {
-                _menus.Remove(menuName);
-            }
+            SidebarMenuItems.Remove(menuItem);
         }
 
-        // Assign a menu to a location
-        public void AssignMenuToLocation(string locationName, string menuName)
+        // Add a menu item to the navbar
+        public void AddNavbarMenuItem(MenuItem menuItem)
         {
-            if (_menus.ContainsKey(menuName))
-            {
-                _menuLocations[locationName] = menuName;
-            }
+            NavbarMenuItems.Add(menuItem);
         }
 
-        // Remove a menu from a location
-        public void RemoveMenuFromLocation(string locationName)
+        // Remove a menu item from the navbar
+        public void RemoveNavbarMenuItem(MenuItem menuItem)
         {
-            if (_menuLocations.ContainsKey(locationName))
-            {
-                _menuLocations.Remove(locationName);
-            }
-        }
-
-        // Get a menu assigned to a location
-        public Menu GetMenuByLocation(string locationName)
-        {
-            if (_menuLocations.TryGetValue(locationName, out var menuName))
-            {
-                if (_menus.TryGetValue(menuName, out var menu))
-                {
-                    return menu;
-                }
-            }
-            return null;
-        }
-
-        // Define a menu location (e.g., "sidebar", "footer")
-        public void RegisterLocation(string locationName)
-        {
-            if (!_menuLocations.ContainsKey(locationName))
-            {
-                _menuLocations[locationName] = null;
-            }
-        }
-
-        // Get all menu locations
-        public Dictionary<string, string> GetMenuLocations()
-        {
-            return _menuLocations;
+            NavbarMenuItems.Remove(menuItem);
         }
     }
 }

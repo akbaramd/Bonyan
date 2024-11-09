@@ -1,4 +1,4 @@
-﻿namespace Bonyan.AspNetCore.Components.Admin.Consts;
+﻿namespace BonyanTemplate.Blazor.Consts;
 
 public class AdminLteMenuConst
 {
