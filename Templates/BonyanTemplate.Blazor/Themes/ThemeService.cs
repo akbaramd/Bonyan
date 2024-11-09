@@ -4,9 +4,9 @@
     {
         public MenuService MenuService { get; }
 
-        public ThemeService(MenuService menuService)
+        public ThemeService()
         {
-            MenuService = menuService;
+            MenuService = new MenuService();
         }
 
         // Additional theme-related services and properties can be added here

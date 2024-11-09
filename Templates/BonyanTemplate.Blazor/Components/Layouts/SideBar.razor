@@ -1,6 +1,9 @@
-﻿@using Microsoft.AspNetCore.Components.Routing
+﻿@using Bonyan.AspNetCore.Components
+@using Bonyan.AspNetCore.Components.Admin.Consts
+@using Bonyan.User
+@using Microsoft.AspNetCore.Components.Routing
 @inject ThemeService ThemeService
-
+@inject IBonCurrentUser CurrentUser
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <NavLink href="/dashboard" class="brand-link">
@@ -16,7 +19,7 @@
                 <img src="_content/Bonyan.AspNetCore.Components.Admin/dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
             </div>
             <div class="info">
-                <NavLink href="/profile" class="d-block">امین ارجمند</NavLink>
+                <NavLink href="/profile" class="d-block">@CurrentUser.UserName</NavLink>
             </div>
         </div>
 
@@ -54,7 +57,7 @@
     protected override void OnInitialized()
     {
 // Retrieve the menu assigned to the "sidebar" location
-        Menu = ThemeService.MenuService.GetMenuByLocation("sidebar");
+        Menu = ThemeService.MenuService.GetMenuByLocation(AdminLteMenuConst.SidebarMenu);
     }
 
     RenderFragment RenderMenuItem(MenuItem item) => builder =>

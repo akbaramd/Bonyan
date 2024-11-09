@@ -55,7 +55,7 @@
         }
 
         // Define a menu location (e.g., "sidebar", "footer")
-        public void RegisterMenuLocation(string locationName)
+        public void RegisterLocation(string locationName)
         {
             if (!_menuLocations.ContainsKey(locationName))
             {

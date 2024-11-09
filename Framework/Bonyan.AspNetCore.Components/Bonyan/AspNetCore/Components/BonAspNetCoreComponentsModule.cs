@@ -14,8 +14,6 @@ public class BonAspNetCoreComponentsModule : BonWebModule
 
     public override Task OnPreConfigureAsync(BonConfigurationContext context)
     {
-        context.Services.AddSingleton<ThemeService>();
-        context.Services.AddSingleton<MenuService>();
         return base.OnPreConfigureAsync(context);
     }
 }

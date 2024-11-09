@@ -1,10 +1,28 @@
 using Bonyan.AspNetCore.Components;
-using Bonyan.AspNetCore.Components.Admin;
 using Bonyan.AspNetCore.Components.Admin.Components;
 using BonyanTemplate.Blazor;
 using BonyanTemplate.Blazor.Components;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = BonyanApplication.CreateApplicationBuilder<BonyanTemplateBlazorModule>(args);
+
+
+// Add cookie authentication without ASP.NET Identity
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/account/login"; // Path to login page
+        options.AccessDeniedPath = "/account/accessdenied"; // Path to access denied page
+        options.ExpireTimeSpan = TimeSpan.FromMinutes(60); // Set session duration
+        options.SlidingExpiration = true; // Extend expiration on each request
+    });
+
+// Configure authorization policies if needed
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("RequireLoggedIn", policy =>
+        policy.RequireAuthenticatedUser());
+});
 
 // Add services to the container.
 builder.Services.AddRazorComponents()

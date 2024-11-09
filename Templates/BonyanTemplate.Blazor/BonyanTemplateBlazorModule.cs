@@ -20,11 +20,18 @@ public class BonyanTemplateBlazorModule : BonWebModule
         DependOn<BonIdentityManagementWebModule<User>>();
         DependOn<BonyanTemplateApplicationModule>();
         DependOn<BonaynTempalteInfrastructureModule>();
-        DependOn<BonAspNetCoreComponentsAdminModule>();
+        DependOn<BonAspNetCoreComponentsModule>();
+    }
+
+    public override Task OnPreConfigureAsync(BonConfigurationContext context)
+    {
+        context.Services.AddSingleton<ThemeService>();
+        return base.OnPreConfigureAsync(context);
     }
 
     public override Task OnConfigureAsync(BonConfigurationContext context)
     {
+        
         Configure<BonBlazorOptions>(c =>
         {
             c.AppAssembly = typeof(Program).Assembly;

@@ -9,7 +9,7 @@ public class BonyanTemplateDbContextFactory : IDesignTimeDbContextFactory<BonTem
     {
         var optionsBuilder = new DbContextOptionsBuilder<BonTemplateBookManagementDbContext>();
 
-        optionsBuilder.UseSqlite($"Data Source=../BonyanTemplate.Api/BonyanTemplate.db");
+        optionsBuilder.UseSqlite($"Data Source=../BonyanTemplate.Blazor/BonyanTemplate.db");
 
         var xtx =  new BonTemplateBookManagementDbContext(optionsBuilder.Options);
         return xtx;
