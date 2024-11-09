@@ -1,4 +1,6 @@
-﻿using Bonyan.Modularity;
+﻿using Bonyan.IdentityManagement.Application;
+using Bonyan.IdentityManagement.Domain;
+using Bonyan.Modularity;
 using Bonyan.UserManagement.Application;
 using Bonyan.UserManagement.Domain;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -8,11 +10,11 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Bonyan.IdentityManagement.Web;
 
-public class BonIdentityManagementWebModule<TUser> : BonWebModule where TUser : BonUser
+public class BonIdentityManagementWebModule<TUser> : BonWebModule where TUser : BonIdentityUser
 {
     public BonIdentityManagementWebModule()
     {
-        DependOn<BonUserManagementApplicationModule<TUser>>();
+        DependOn<BonIdentityManagementApplicationModule<TUser>>();
     }
 
 

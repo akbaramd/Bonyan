@@ -24,13 +24,22 @@ public class BonUserManagementEntityFrameworkModule<TUser> : Modularity.Abstract
 
   
     
-    context.Services.AddTransient<BonUserEfRepository<TUser>>();
-    context.Services.AddTransient<IBonUserRepository<TUser>>(c=>c.GetRequiredService<BonUserEfRepository<TUser>>());
-    context.Services.AddTransient<IBonUserReadOnlyRepository<TUser>>(c=>c.GetRequiredService<BonUserEfReadOnlyRepository<TUser>>());
+    context.Services.AddTransient<BonEfCoreUserRepository<TUser>>();
+    context.Services.AddTransient<IBonUserRepository<TUser>,BonEfCoreUserRepository<TUser>>();
+    context.Services.AddTransient<IBonUserReadOnlyRepository<TUser>,BonEfCoreUserReadOnlyRepository<TUser>>();
+    
+    context.Services.AddTransient<BonEfCoreUserRepository>();
+    context.Services.AddTransient<IBonUserRepository,BonEfCoreUserRepository>();
+    context.Services.AddTransient<IBonUserReadOnlyRepository,BonEfCoreUserReadOnlyRepository>();
     
     context.AddBonDbContext<BonUserManagementDbContext<TUser>>(c =>
     {
-      c.AddRepository<TUser, BonUserEfRepository<TUser>>();
+      c.AddRepository<TUser, BonEfCoreUserRepository<TUser>>();
+    });
+    
+    context.AddBonDbContext<BonUserManagementDbContext>(c =>
+    {
+      c.AddRepository<TUser, BonEfCoreUserRepository>();
     });
     
     return base.OnConfigureAsync(context);

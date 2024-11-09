@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 namespace BonyanTemplate.Infrastructure.Data;
 
 public class BonTemplateBookManagementDbContext : BonDbContext<BonTemplateBookManagementDbContext>,
-    IBonTenantDbContext, IBonIdentityManagementDbContext<User, Role>
+    IBonTenantDbContext, IBonIdentityManagementDbContext<User>
 {
     public BonTemplateBookManagementDbContext(DbContextOptions<BonTemplateBookManagementDbContext> options) :
         base(options)
@@ -23,14 +23,13 @@ public class BonTemplateBookManagementDbContext : BonDbContext<BonTemplateBookMa
         modelBuilder.Entity<Books>().HasOne(x => x.Author).WithMany().HasForeignKey(x => x.AuthorId);
         modelBuilder.Entity<Authors>().ConfigureByConvention();
         modelBuilder.ConfigureTenantManagementByConvention();
-        modelBuilder.ConfigureBonIdentityManagementByConvention<User, Role>();
+        modelBuilder.ConfigureBonIdentityManagementByConvention<User>();
     }
 
     public DbSet<Books> Books { get; set; }
     public DbSet<Authors> Authors { get; set; }
     public DbSet<BonTenant> Tenants { get; set; }
     public DbSet<User> Users { get; set; }
-    public DbSet<Role> Roles { get; set; }
-    public DbSet<BonPermission> Permissions { get; set; }
-    public DbSet<BonUserRole<User, Role>> UserRoles { get; set; }
+    public DbSet<BonIdentityRole> Roles { get; set; }
+    public DbSet<BonIdentityPermission> Permissions { get; set; }
 }

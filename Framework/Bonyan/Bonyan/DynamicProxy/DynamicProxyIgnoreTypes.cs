@@ -10,7 +10,7 @@
 /// </summary>
 public static class DynamicProxyIgnoreTypes
 {
-    private static HashSet<Type> IgnoredTypes { get; } = new HashSet<Type>();
+    private static HashSet<Type> IgnoredTypes { get; } = new();
 
     public static void Add<T>()
     {

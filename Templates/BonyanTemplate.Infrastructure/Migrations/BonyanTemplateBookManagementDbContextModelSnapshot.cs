@@ -15,9 +15,9 @@ namespace BonyanTemplate.Infrastructure.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
+            modelBuilder.HasAnnotation("ProductVersion", "8.0.10");
 
-            modelBuilder.Entity("Bonyan.IdentityManagement.Domain.BonPermission", b =>
+            modelBuilder.Entity("Bonyan.IdentityManagement.Domain.BonIdentityPermission", b =>
                 {
                     b.Property<string>("Key")
                         .HasColumnType("TEXT");
@@ -31,24 +31,26 @@ namespace BonyanTemplate.Infrastructure.Migrations
                     b.ToTable("Permissions");
                 });
 
-            modelBuilder.Entity("Bonyan.IdentityManagement.Domain.BonUserRole<BonyanTemplate.Domain.Entities.User, BonyanTemplate.Domain.Entities.Role>", b =>
+            modelBuilder.Entity("Bonyan.IdentityManagement.Domain.BonIdentityRole", b =>
                 {
-                    b.Property<Guid>("RoleId")
+                    b.Property<Guid>("Id")
                         .HasColumnType("TEXT")
-                        .HasColumnName("RoleId");
+                        .HasColumnName("Id");
 
-                    b.Property<Guid?>("UserId")
-                        .HasColumnType("TEXT")
-                        .HasColumnName("UserId");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
-                    b.HasKey("RoleId");
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
-                    b.HasIndex("UserId");
+                    b.HasKey("Id");
 
-                    b.ToTable("UserRole", (string)null);
+                    b.ToTable("Roles");
                 });
 
-            modelBuilder.Entity("Bonyan.TenantManagement.Domain.Tenant", b =>
+            modelBuilder.Entity("Bonyan.TenantManagement.Domain.BonTenant", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("TEXT")
@@ -90,10 +92,6 @@ namespace BonyanTemplate.Infrastructure.Migrations
                         .HasColumnType("TEXT")
                         .HasColumnName("Id");
 
-                    b.Property<Guid?>("TenantId")
-                        .HasColumnType("TEXT")
-                        .HasColumnName("TenantId");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -116,10 +114,6 @@ namespace BonyanTemplate.Infrastructure.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("INTEGER");
 
-                    b.Property<Guid?>("TenantId")
-                        .HasColumnType("TEXT")
-                        .HasColumnName("TenantId");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -129,25 +123,6 @@ namespace BonyanTemplate.Infrastructure.Migrations
                     b.HasIndex("AuthorId");
 
                     b.ToTable("Books");
-                });
-
-            modelBuilder.Entity("BonyanTemplate.Domain.Entities.Role", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("TEXT")
-                        .HasColumnName("Id");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Roles");
                 });
 
             modelBuilder.Entity("BonyanTemplate.Domain.Entities.User", b =>
@@ -196,34 +171,32 @@ namespace BonyanTemplate.Infrastructure.Migrations
 
             modelBuilder.Entity("RolePermissions", b =>
                 {
+                    b.Property<Guid>("BonIdentityRoleId")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("PermissionsKey")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("RoleId")
-                        .HasColumnType("TEXT");
+                    b.HasKey("BonIdentityRoleId", "PermissionsKey");
 
-                    b.HasKey("PermissionsKey", "RoleId");
-
-                    b.HasIndex("RoleId");
+                    b.HasIndex("PermissionsKey");
 
                     b.ToTable("RolePermissions");
                 });
 
-            modelBuilder.Entity("Bonyan.IdentityManagement.Domain.BonUserRole<BonyanTemplate.Domain.Entities.User, BonyanTemplate.Domain.Entities.Role>", b =>
+            modelBuilder.Entity("UserRoles", b =>
                 {
-                    b.HasOne("BonyanTemplate.Domain.Entities.Role", "Role")
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Property<Guid>("RolesId")
+                        .HasColumnType("TEXT");
 
-                    b.HasOne("BonyanTemplate.Domain.Entities.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("TEXT");
 
-                    b.Navigation("Role");
+                    b.HasKey("RolesId", "UserId");
 
-                    b.Navigation("User");
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserRoles");
                 });
 
             modelBuilder.Entity("BonyanTemplate.Domain.Entities.Books", b =>
@@ -316,15 +289,30 @@ namespace BonyanTemplate.Infrastructure.Migrations
 
             modelBuilder.Entity("RolePermissions", b =>
                 {
-                    b.HasOne("Bonyan.IdentityManagement.Domain.BonPermission", null)
+                    b.HasOne("Bonyan.IdentityManagement.Domain.BonIdentityRole", null)
+                        .WithMany()
+                        .HasForeignKey("BonIdentityRoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Bonyan.IdentityManagement.Domain.BonIdentityPermission", null)
                         .WithMany()
                         .HasForeignKey("PermissionsKey")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
 
-                    b.HasOne("BonyanTemplate.Domain.Entities.Role", null)
+            modelBuilder.Entity("UserRoles", b =>
+                {
+                    b.HasOne("Bonyan.IdentityManagement.Domain.BonIdentityRole", null)
                         .WithMany()
-                        .HasForeignKey("RoleId")
+                        .HasForeignKey("RolesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BonyanTemplate.Domain.Entities.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

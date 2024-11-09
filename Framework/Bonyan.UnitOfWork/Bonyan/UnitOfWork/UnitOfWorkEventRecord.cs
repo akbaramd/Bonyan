@@ -13,7 +13,7 @@ public class UnitOfWorkEventRecord
     /// <summary>
     /// Extra properties can be used if needed.
     /// </summary>
-    public Dictionary<string, object> Properties { get; } = new Dictionary<string, object>();
+    public Dictionary<string, object> Properties { get; } = new();
 
     public UnitOfWorkEventRecord(
         Type eventType,

@@ -1,9 +1,10 @@
-﻿using Bonyan.UserManagement.Domain;
+﻿using Bonyan.IdentityManagement.Domain;
+using Bonyan.UserManagement.Domain;
 using Bonyan.UserManagement.Domain.ValueObjects;
 
 namespace BonyanTemplate.Domain.Entities;
 
-public class User : BonUser
+public class User : BonIdentityUser
 {
     protected User()
     {

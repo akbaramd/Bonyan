@@ -29,9 +29,9 @@ public class BonUnitOfWork : IBonUnitOfWork
 
     public string? ReservationName { get; set; }
 
-    protected List<Func<Task>> CompletedHandlers { get; } = new List<Func<Task>>();
-    protected List<UnitOfWorkEventRecord> DistributedEvents { get; } = new List<UnitOfWorkEventRecord>();
-    protected List<UnitOfWorkEventRecord> LocalEvents { get; } = new List<UnitOfWorkEventRecord>();
+    protected List<Func<Task>> CompletedHandlers { get; } = new();
+    protected List<UnitOfWorkEventRecord> DistributedEvents { get; } = new();
+    protected List<UnitOfWorkEventRecord> LocalEvents { get; } = new();
 
     public event EventHandler<UnitOfWorkFailedEventArgs> Failed = default!;
     public event EventHandler<UnitOfWorkEventArgs> Disposed = default!;

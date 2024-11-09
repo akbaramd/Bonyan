@@ -8,7 +8,7 @@ namespace Bonyan.UserManagement.Domain.ValueObjects
     /// </summary>
     public class PhoneNumber : BonValueObject
     {
-        private static readonly Regex PhoneRegex = new Regex(@"^\+?[1-9]\d{1,14}$", RegexOptions.Compiled);
+        private static readonly Regex PhoneRegex = new(@"^\+?[1-9]\d{1,14}$", RegexOptions.Compiled);
 
         public string Number { get; }
         public bool IsVerified { get; private set; }

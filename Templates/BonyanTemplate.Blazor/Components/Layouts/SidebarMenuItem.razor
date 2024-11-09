@@ -1,0 +1,49 @@
+﻿@using Bonyan.AspNetCore.Components.Menus
+@using Microsoft.AspNetCore.Components.Routing
+
+<li class="nav-item @(HasChildren ? "has-treeview" : "")">
+    <NavLink href="@(!HasChildren ? MenuItem.Url : "#")" class="nav-link" Match="NavLinkMatch.All" @onclick="(e) => OnClick(e)">
+        <i class="@MenuItem.Icon nav-icon"></i>
+        <p class="d-flex align-items-center gap-2">
+            @MenuItem.Title
+            @if (HasChildren)
+            {
+                <i class="right fas fa-angle-left"></i>
+            }
+        </p>
+    </NavLink>
+
+    @if (HasChildren)
+    {
+        <ul class="nav nav-treeview @(IsExpanded ? "menu-open" : "")">
+            @foreach (var child in MenuItem.Children.OrderBy(c => c.Order))
+            {
+                <SidebarMenuItem MenuItem="child" />
+            }
+        </ul>
+    }
+</li>
+
+@code {
+    [Parameter]
+    public MenuItem MenuItem { get; set; } = new();
+
+    private bool HasChildren => MenuItem.Children != null && MenuItem.Children.Any();
+    private bool IsExpanded { get; set; } = false;
+
+    private void OnClick(MouseEventArgs e)
+    {
+        if (HasChildren)
+        {
+            ToggleSubMenu();
+        }
+    }
+
+    private void ToggleSubMenu()
+    {
+        if (HasChildren)
+        {
+            IsExpanded = !IsExpanded;
+        }
+    }
+}

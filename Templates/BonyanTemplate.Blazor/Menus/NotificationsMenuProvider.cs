@@ -11,7 +11,7 @@ namespace BonyanTemplate.Blazor.Menus
             {
                 return new List<MenuItem>
                 {
-                    new MenuItem
+                    new()
                     {
                         Title = "Notifications",
                         Url = "#",
@@ -23,14 +23,14 @@ namespace BonyanTemplate.Blazor.Menus
                         },
                         Children = new List<MenuItem>
                         {
-                            new MenuItem
+                            new()
                             {
                                 Title = "New Message",
                                 Url = "/messages/new",
                                 Icon = "fas fa-envelope",
                                 Order = 1
                             },
-                            new MenuItem
+                            new()
                             {
                                 Title = "Profile Update",
                                 Url = "/profile/update",

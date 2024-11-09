@@ -11,7 +11,7 @@ namespace BonyanTemplate.Blazor.Menus
             {
                 return new List<MenuItem>
                 {
-                    new MenuItem
+                    new()
                     {
                         Title = "مدیریت کاربران",
                         Url = "#",
@@ -19,17 +19,17 @@ namespace BonyanTemplate.Blazor.Menus
                         Order = 2, // Set the desired order
                         Children = new List<MenuItem>
                         {
-                            new MenuItem
+                            new()
                             {
                                 Title = "لیست کاربران",
                                 Url = "/users",
                                 Icon = "far fa-circle nav-icon",
                                 Order = 1 // Order within the parent menu
                             },
-                            new MenuItem
+                            new()
                             {
                                 Title = "افزودن کاربر",
-                                Url = "/users/add",
+                                Url = "/",
                                 Icon = "far fa-circle nav-icon",
                                 Order = 2 // Order within the parent menu
                             }

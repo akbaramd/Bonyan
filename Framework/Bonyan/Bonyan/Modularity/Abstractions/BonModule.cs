@@ -56,7 +56,7 @@ namespace Bonyan.Modularity.Abstractions
         /// <summary>
         /// List of dependent modules required by this module.
         /// </summary>
-        public List<Type> DependedModules { get; set; } = new List<Type>();
+        public List<Type> DependedModules { get; set; } = new();
 
         /// <summary>
         /// Adds a dependency on the specified module type.

@@ -2,7 +2,10 @@
 
 namespace Bonyan.IdentityManagement.Domain;
 
-public interface IPermissionBonRepository<TPermission> : IBonRepository<TPermission> where TPermission : BonPermission
+public interface IBonPermissionRepository : IBonRepository<BonIdentityPermission>
+{
+        
+}public interface IBonPermissionReadOnlyRepository : IBonReadOnlyRepository<BonIdentityPermission>
 {
         
 }

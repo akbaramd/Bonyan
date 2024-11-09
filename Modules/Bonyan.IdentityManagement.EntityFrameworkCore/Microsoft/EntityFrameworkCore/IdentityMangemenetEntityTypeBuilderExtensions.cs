@@ -6,19 +6,24 @@ namespace Microsoft.EntityFrameworkCore;
 
 public static class BonIdentityManagementEntityTypeBuilderExtensions
 {
-    public static ModelBuilder ConfigureBonIdentityManagementByConvention<TUser,TRole>(this ModelBuilder modelBuilder) where TUser: BonUser where TRole : BonRole
+    public static ModelBuilder ConfigureBonIdentityManagementByConvention<TUser>(this ModelBuilder modelBuilder) where TUser: BonIdentityUser 
     {
         modelBuilder.ConfigureBonUserManagementByConvention<TUser>();
-        modelBuilder.Entity<TRole>().ConfigureByConvention();
-        modelBuilder.Entity<BonPermission>().ConfigureByConvention();
-        modelBuilder.Entity<BonPermission>().HasKey(x=>x.Key);
-        modelBuilder.Entity<TRole>().HasMany(x=>x.Permissions).WithMany().UsingEntity("RolePermissions");
-        
-        modelBuilder.Entity<BonUserRole<TUser,TRole>>().ToTable("UserRole");
-        modelBuilder.Entity<BonUserRole<TUser, TRole>>().HasKey(x => x.BonUserId);
-        modelBuilder.Entity<BonUserRole<TUser, TRole>>().HasKey(x => x.BonRoleId);
-        modelBuilder.Entity<BonUserRole<TUser,TRole>>().HasOne(x=>x.User).WithMany().HasForeignKey(x=>x.BonUserId);
-        modelBuilder.Entity<BonUserRole<TUser,TRole>>().HasOne(x=>x.Role).WithMany().HasForeignKey(x=>x.BonRoleId);
+        modelBuilder.Entity<BonIdentityRole>().ConfigureByConvention();
+        modelBuilder.Entity<BonIdentityPermission>().ConfigureByConvention();
+        modelBuilder.Entity<BonIdentityPermission>().HasKey(x=>x.Key);
+        modelBuilder.Entity<BonIdentityRole>().HasMany(x=>x.Permissions).WithMany().UsingEntity("RolePermissions");
+               
+        modelBuilder.Entity<TUser>()
+            .HasMany(u => u.Roles)
+            .WithMany()
+            .UsingEntity("UserRoles");
+        return modelBuilder;
+    }
+    
+    public static ModelBuilder ConfigureBonIdentityManagementByConvention(this ModelBuilder modelBuilder)
+    {
+        modelBuilder.ConfigureBonIdentityManagementByConvention<BonIdentityUser>();
         return modelBuilder;
     }
 }

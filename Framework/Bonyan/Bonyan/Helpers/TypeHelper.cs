@@ -9,15 +9,15 @@ namespace Bonyan.Helpers;
 
 public static class TypeHelper
 {
-    private static readonly HashSet<Type> FloatingTypes = new HashSet<Type>
-        {
+    private static readonly HashSet<Type> FloatingTypes = new()
+    {
             typeof(float),
             typeof(double),
             typeof(decimal)
         };
 
-    private static readonly HashSet<Type> NonNullablePrimitiveTypes = new HashSet<Type>
-        {
+    private static readonly HashSet<Type> NonNullablePrimitiveTypes = new()
+    {
             typeof(byte),
             typeof(short),
             typeof(int),

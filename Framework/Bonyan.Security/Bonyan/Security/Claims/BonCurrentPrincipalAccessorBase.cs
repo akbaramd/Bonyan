@@ -7,7 +7,7 @@ public abstract class BonCurrentPrincipalAccessorBase : IBonCurrentPrincipalAcce
 {
     public ClaimsPrincipal Principal => _currentPrincipal.Value ?? GetClaimsPrincipal();
 
-    private readonly AsyncLocal<ClaimsPrincipal> _currentPrincipal = new AsyncLocal<ClaimsPrincipal>();
+    private readonly AsyncLocal<ClaimsPrincipal> _currentPrincipal = new();
 
     protected abstract ClaimsPrincipal GetClaimsPrincipal();
 

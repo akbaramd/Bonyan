@@ -25,3 +25,25 @@ public class BonUserManagementDbContext<TUser> : BonDbContext<BonUserManagementD
     base.OnConfiguring(optionsBuilder);
   }
 }
+
+public class BonUserManagementDbContext : BonDbContext<BonUserManagementDbContext>,IBonUserManagementDbContext
+{
+  protected override void OnModelCreating(ModelBuilder modelBuilder)
+  {
+    base.OnModelCreating(modelBuilder);
+    modelBuilder.ConfigureBonUserManagementByConvention<BonUser>();
+  }
+
+  public DbSet<BonUser> Users { get; set; }
+
+  public BonUserManagementDbContext(DbContextOptions<BonUserManagementDbContext> options) : base(options)
+  {
+    
+  }
+
+  protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+  {
+    optionsBuilder.EnableSensitiveDataLogging();
+    base.OnConfiguring(optionsBuilder);
+  }
+}

@@ -35,6 +35,7 @@ public class BonAspNetCoreModule : BonWebModule
     /// <param name="context">The configuration context for services.</param>
     public override Task OnConfigureAsync(BonConfigurationContext context)
     {
+        context.Services.AddLogging();
         ConfigureMiddlewares(context);
         ConfigureCoreServices(context);
         return base.OnConfigureAsync(context);

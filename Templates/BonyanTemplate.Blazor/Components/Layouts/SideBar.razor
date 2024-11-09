@@ -9,8 +9,8 @@
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <NavLink href="/dashboard" class="brand-link">
-        <img src="_content/Bonyan.AspNetCore.Components.Admin/dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-        <span class="brand-text font-weight-light">AdminLTE 3</span>
+        <img src="/dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+        <span class="brand-text font-weight-light">سیستم ماژولار بنیان</span>
     </NavLink>
 
     <!-- Sidebar -->
@@ -18,7 +18,7 @@
         <!-- Sidebar user panel (optional) -->
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
             <div class="image">
-                <img src="_content/Bonyan.AspNetCore.Components.Admin/dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
+                <img src="/dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
             </div>
             <div class="info">
                 <NavLink href="/profile" class="d-block">@CurrentUser.UserName</NavLink>
@@ -38,13 +38,13 @@
         </div>
 
         <!-- Sidebar Menu -->
-        @if (Menus != null)
+        @if (Menus != null && Menus.Any())
         {
             <nav class="mt-2">
                 <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                     @foreach (var item in Menus)
                     {
-                        @RenderMenuItem(item)
+                        <SidebarMenuItem MenuItem="item" />
                     }
                 </ul>
             </nav>
@@ -54,12 +54,10 @@
 </aside>
 
 @code {
-    private List<MenuItem> Menus;
+    private List<MenuItem> Menus = new();
 
     protected override void OnInitialized()
     {
-        Menus = new List<MenuItem>();
-
         foreach (var provider in MenuProviders)
         {
             var items = provider.GetMenuItems(AdminLteMenuConst.SidebarMenu);
@@ -69,10 +67,10 @@
             }
         }
 
-// Sort the menus based on the Order property
+        // Sort the menus based on the Order property
         Menus = Menus.OrderBy(m => m.Order).ToList();
 
-// Optionally, sort child menu items
+        // Optionally, sort child menu items
         foreach (var menuItem in Menus)
         {
             if (menuItem.Children != null && menuItem.Children.Any())
@@ -81,59 +79,4 @@
             }
         }
     }
-
-    RenderFragment RenderMenuItem(MenuItem item) => builder =>
-    {
-        int seq = 0;
-        if (item.Children != null && item.Children.Any())
-        {
-            builder.OpenElement(seq++, "li");
-            builder.AddAttribute(seq++, "class", "nav-item has-treeview");
-
-            builder.OpenElement(seq++, "a");
-            builder.AddAttribute(seq++, "href", item.Url ?? "#");
-            builder.AddAttribute(seq++, "class", "nav-link");
-            builder.OpenElement(seq++, "i");
-            builder.AddAttribute(seq++, "class", item.Icon);
-            builder.CloseElement(); // Close <i>
-            builder.AddContent(seq++, $" {item.Title}");
-            builder.OpenElement(seq++, "i");
-            builder.AddAttribute(seq++, "class", "right fas fa-angle-left");
-            builder.CloseElement(); // Close <i>
-            builder.CloseElement(); // Close <a>
-
-            builder.OpenElement(seq++, "ul");
-            builder.AddAttribute(seq++, "class", "nav nav-treeview");
-
-// Render sorted child menu items
-            foreach (var child in item.Children)
-            {
-                builder.AddContent(seq++, RenderMenuItem(child));
-            }
-
-            builder.CloseElement(); // Close <ul>
-
-            builder.CloseElement(); // Close <li>
-        }
-        else
-        {
-// Render single menu item
-            builder.OpenElement(seq++, "li");
-            builder.AddAttribute(seq++, "class", "nav-item");
-            builder.OpenComponent<NavLink>(seq++);
-            builder.AddAttribute(seq++, "class", "nav-link");
-            builder.AddAttribute(seq++, "href", item.Url);
-            builder.AddAttribute(seq++, "ChildContent", (RenderFragment)(childBuilder =>
-            {
-                int childSeq = 0;
-                childBuilder.OpenElement(childSeq++, "i");
-                childBuilder.AddAttribute(childSeq++, "class", item.Icon);
-                childBuilder.CloseElement(); // Close <i>
-                childBuilder.AddContent(childSeq++, $" {item.Title}");
-            }));
-            builder.CloseComponent();
-            builder.CloseElement(); // Close <li>
-        }
-    };
-
 }

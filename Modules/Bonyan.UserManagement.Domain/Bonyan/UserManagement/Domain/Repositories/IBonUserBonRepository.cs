@@ -23,4 +23,14 @@ namespace Bonyan.UserManagement.Domain.Repositories
 
         Task<TUser?> GetUserByPhoneNumberAsync(PhoneNumber phoneNumber);
     }
+    
+    
+    public interface IBonUserRepository : IBonUserRepository<BonUser> 
+    {
+
+    }
+    public interface IBonUserReadOnlyRepository : IBonUserReadOnlyRepository<BonUser> 
+    {
+     
+    }
 }

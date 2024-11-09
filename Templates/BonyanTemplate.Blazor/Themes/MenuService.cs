@@ -4,8 +4,8 @@ namespace BonyanTemplate.Blazor.Themes
 {
     public class MenuService
     {
-        public List<MenuItem> SidebarMenuItems { get; } = new List<MenuItem>();
-        public List<MenuItem> NavbarMenuItems { get; } = new List<MenuItem>();
+        public List<MenuItem> SidebarMenuItems { get; } = new();
+        public List<MenuItem> NavbarMenuItems { get; } = new();
 
         // Add a menu item to the sidebar
         public void AddSidebarMenuItem(MenuItem menuItem)

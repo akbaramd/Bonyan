@@ -11,7 +11,7 @@ namespace BonyanTemplate.Blazor.Menus
             {
                 return new List<MenuItem>
                 {
-                    new MenuItem
+                    new()
                     {
                         Title = "صفحه نخست",
                         Url = "/dashboard",
@@ -21,7 +21,7 @@ namespace BonyanTemplate.Blazor.Menus
                             { "align", "left" }
                         }
                     },
-                    new MenuItem
+                    new()
                     {
                         Title = "تماس با ما",
                         Url = "/contact",
@@ -39,7 +39,7 @@ namespace BonyanTemplate.Blazor.Menus
             {
                 return new List<MenuItem>
                 {
-                    new MenuItem
+                    new()
                     {
                         Title = "صفحه نخست",
                         Url = "/dashboard",

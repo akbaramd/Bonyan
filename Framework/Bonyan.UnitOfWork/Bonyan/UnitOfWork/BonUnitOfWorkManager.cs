@@ -7,7 +7,7 @@ namespace Bonyan.UnitOfWork;
 public class BonUnitOfWorkManager : IBonUnitOfWorkManager
 {
     [Obsolete("This will be removed in next versions.")]
-    public static AsyncLocal<bool> DisableObsoleteDbContextCreationWarning { get; } = new AsyncLocal<bool>();
+    public static AsyncLocal<bool> DisableObsoleteDbContextCreationWarning { get; } = new();
 
     public IBonUnitOfWork? Current => _bonAmbientBonUnitOfWork.GetCurrentByChecking();
 

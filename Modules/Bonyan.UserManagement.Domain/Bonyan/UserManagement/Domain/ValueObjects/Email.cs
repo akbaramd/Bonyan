@@ -8,7 +8,7 @@ namespace Bonyan.UserManagement.Domain.ValueObjects
     /// </summary>
     public class Email : BonValueObject
     {
-        private static readonly Regex EmailRegex = new Regex(@"^[^@\s]+@[^@\s]+\.[^@\s]+$", RegexOptions.Compiled);
+        private static readonly Regex EmailRegex = new(@"^[^@\s]+@[^@\s]+\.[^@\s]+$", RegexOptions.Compiled);
 
         public string Address { get; }
         public bool IsVerified { get; private set; }

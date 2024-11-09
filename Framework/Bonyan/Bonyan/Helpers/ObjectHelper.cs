@@ -6,8 +6,7 @@ namespace Bonyan.Helpers;
 
 public static class ObjectHelper
 {
-    private static readonly ConcurrentDictionary<string, PropertyInfo?> CachedObjectProperties =
-        new ConcurrentDictionary<string, PropertyInfo?>();
+    private static readonly ConcurrentDictionary<string, PropertyInfo?> CachedObjectProperties = new();
 
     public static void TrySetProperty<TObject, TValue>(
         TObject obj,

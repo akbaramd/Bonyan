@@ -1,0 +1,40 @@
+﻿@inherits InputText
+
+<div class="mb-3">
+    @if (!string.IsNullOrEmpty(Label))
+    {
+        <label class="form-label">@Label</label>
+    }
+
+    <div class="input-group @(Icon != null ? "input-group" : "")">
+        <InputText class="@CssClass"
+                   type="@Type"
+                   placeholder="@Placeholder"
+                   Value=@Value
+                   ValueChanged="@ValueChanged"
+                   ValueExpression="@ValueExpression"/>
+
+        @if (!string.IsNullOrEmpty(Icon))
+        {
+            <div class="input-group-append">
+                <div class="input-group-text brClass">
+                    <span class="@Icon"></span>
+                </div>
+            </div>
+        }
+    </div>
+
+    @if (!string.IsNullOrEmpty(Description))
+    {
+        <small class="form-text text-muted">@Description</small>
+    }
+</div>
+
+@code {
+    [Parameter] public string Type { get; set; } = "text";
+    [Parameter] public string Icon { get; set; }
+    [Parameter] public string Placeholder { get; set; }
+    [Parameter] public string CssClass { get; set; } = "form-control inputBrClass";
+    [Parameter] public string Description { get; set; }
+    [Parameter] public string Label { get; set; }
+}

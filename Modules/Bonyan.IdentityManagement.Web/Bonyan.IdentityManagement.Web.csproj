@@ -10,6 +10,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\..\Framework\Bonyan.AspNetCore\Bonyan.AspNetCore.csproj"/>
+        <ProjectReference Include="..\Bonyan.IdentityManagement.Application\Bonyan.IdentityManagement.Application.csproj" />
         <ProjectReference Include="..\Bonyan.UserManagement.Web\Bonyan.UserManagement.Web.csproj"/>
     </ItemGroup>
 
