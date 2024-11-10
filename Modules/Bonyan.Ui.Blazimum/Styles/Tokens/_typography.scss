@@ -1,0 +1,38 @@
+﻿// _typography.scss
+
+$blz-font-family-base: 'Helvetica Neue', Arial, sans-serif;
+$blz-font-family-heading: 'Roboto', sans-serif;
+
+$blz-font-size-base: 16px;
+
+$blz-font-size-xs: $blz-font-size-base * 0.75;
+$blz-font-size-sm: $blz-font-size-base * 0.875;
+$blz-font-size-md: $blz-font-size-base; // Base size
+$blz-font-size-lg: $blz-font-size-base * 1.25;
+$blz-font-size-xl: $blz-font-size-base * 1.5;
+$blz-font-size-xxl: $blz-font-size-base * 2;
+
+$blz-font-weight-light: 300;
+$blz-font-weight-normal: 400;
+$blz-font-weight-bold: 700;
+
+$blz-line-height-base: 1.5;
+$blz-line-height-heading: 1.2;
+
+@mixin typography-tokens {
+  :root {
+    --blz-font-family-base: #{$blz-font-family-base};
+    --blz-font-family-heading: #{$blz-font-family-heading};
+    --blz-font-size-xs: #{$blz-font-size-xs};
+    --blz-font-size-sm: #{$blz-font-size-sm};
+    --blz-font-size-md: #{$blz-font-size-md};
+    --blz-font-size-lg: #{$blz-font-size-lg};
+    --blz-font-size-xl: #{$blz-font-size-xl};
+    --blz-font-size-xxl: #{$blz-font-size-xxl};
+    --blz-font-weight-light: #{$blz-font-weight-light};
+    --blz-font-weight-normal: #{$blz-font-weight-normal};
+    --blz-font-weight-bold: #{$blz-font-weight-bold};
+    --blz-line-height-base: #{$blz-line-height-base};
+    --blz-line-height-heading: #{$blz-line-height-heading};
+  }
+}

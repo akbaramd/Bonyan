@@ -1,3 +1,4 @@
+using Bonyan.AdminLte;
 using Bonyan.AdminLte.Blazor.IdentityManagement;
 using Bonyan.AspNetCore.Components;
 using Bonyan.AspNetCore.Components.Menus;
@@ -23,6 +24,7 @@ public class BonyanTemplateBlazorModule : BonWebModule
         DependOn<BonyanTemplateApplicationModule>();
         DependOn<BonaynTempalteInfrastructureModule>();
         DependOn<BonAspNetCoreComponentsModule>();
+        DependOn<BonUiBlazimumModule>();
         DependOn<BonyanAdminLteBlazorIdentityManagementModule<User>>();
     }
 

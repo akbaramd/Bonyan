@@ -1073,7 +1073,7 @@ $.fn.position = function( options ) {
 					feedback.important = "vertical";
 				}
 				options.using.call( this, props, feedback );
-			};
+			}
 		}
 
 		elem.offset( $.extend( position, { using: using } ) );
@@ -4152,7 +4152,7 @@ if ( !$.fn.even || !$.fn.odd ) {
 	} );
 }
 
-;
+
 /*!
  * jQuery UI Keycode 1.13.1
  * http://jqueryui.com

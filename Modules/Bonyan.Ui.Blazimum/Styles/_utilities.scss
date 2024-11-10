@@ -1,0 +1,34 @@
+﻿// _utilities.scss
+
+// Import the color module
+@use 'sass:color';
+
+// Custom darken function using color.mix()
+@function custom-darken($color, $amount) {
+  @return color.mix(black, $color, $amount);
+}
+
+// Custom lighten function using color.mix()
+@function custom-lighten($color, $amount) {
+  @return color.mix(white, $color, $amount);
+}
+
+// Function to generate a dark or light variant based on mode
+@function color-variant($color, $mode, $amount) {
+  @if $mode == light {
+    @return custom-darken($color, $amount);
+  } @else if $mode == dark {
+    @return custom-lighten($color, $amount);
+  }
+}
+
+// Mixin to define color variants within a specified selector
+// Automatically creates hover, active, and focus colors
+@mixin generate-color-variants($selector, $name, $color, $mode: light) {
+  #{$selector} {
+    --#{$name}: #{$color}; // Base color
+    --#{$name}-hover: #{color-variant($color, $mode, 10%)};
+    --#{$name}-active: #{color-variant($color, $mode, 15%)};
+    --#{$name}-focus: #{color-variant($color, $mode, 20%)};
+  }
+}

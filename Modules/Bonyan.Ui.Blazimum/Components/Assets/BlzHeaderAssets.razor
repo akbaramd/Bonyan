@@ -1,0 +1,19 @@
+﻿@namespace Bonyan.Ui.Blazimum
+@inherits ComponentBase
+
+@code {
+    [Parameter]
+    public bool IsMinified { get; set; } = false;
+
+    [Parameter]
+    public bool IsRtl { get; set; } = false;
+
+    // Define paths for CSS and JS files based on IsMinified and IsRtl
+    private string CssFile => IsMinified 
+        ? (IsRtl ? "_content/Bonyan.Ui.Blazimum/css/blazimum-rtl.min.css" : "_content/Bonyan.Ui.Blazimum/css/blazimum.min.css")
+        : (IsRtl ? "_content/Bonyan.Ui.Blazimum/css/blazimum-rtl.css" : "_content/Bonyan.Ui.Blazimum/css/blazimum.css");
+
+}
+
+<!-- Render CSS and JS links for the header -->
+<link rel="stylesheet" href="@CssFile" />

@@ -1,0 +1,139 @@
+﻿/* Base Button Styles */
+.blz-button {
+    /* Button Component Variables */
+    --blz-button-padding-vertical-small: var(--blz-spacing-xs);
+    --blz-button-padding-horizontal-small: var(--blz-spacing-sm);
+    --blz-button-padding-vertical-default: var(--blz-spacing-sm);
+    --blz-button-padding-horizontal-default: var(--blz-spacing-lg);
+    --blz-button-padding-vertical-large: var(--blz-spacing-md);
+    --blz-button-padding-horizontal-large: var(--blz-spacing-xl);
+
+    /* Font Sizes */
+    --blz-button-font-size-small: var(--blz-font-size-sm);
+    --blz-button-font-size-default: var(--blz-font-size-md);
+    --blz-button-font-size-large: var(--blz-font-size-lg);
+
+    /* Line Height and Border Radius */
+    --blz-button-line-height: var(--blz-line-height-base);
+    --blz-button-border-radius: var(--blz-border-radius-small);
+
+    /* Colors */
+    --blz-button-color-primary-bg: var(--blz-primary-color);
+    --blz-button-color-primary-text: #ffffff;
+    --blz-button-color-secondary-bg: var(--blz-secondary-color);
+    --blz-button-color-secondary-text: #ffffff;
+    --blz-button-color-neutral-bg: var(--blz-neutral-color);
+    --blz-button-color-neutral-text: #333333;
+
+    /* Hover Colors */
+    --blz-button-color-primary-hover-bg: var(--blz-primary-hover-color);
+    --blz-button-color-secondary-hover-bg: var(--blz-secondary-hover-color);
+    --blz-button-color-neutral-hover-bg: var(--blz-neutral-hover-color);
+
+    /* Active Colors */
+    --blz-button-color-primary-active-bg: var(--blz-primary-active-color);
+    --blz-button-color-secondary-active-bg: var(--blz-secondary-active-color);
+    --blz-button-color-neutral-active-bg: var(--blz-neutral-active-color);
+
+    padding: var(--blz-button-padding-vertical-default) var(--blz-button-padding-horizontal-default);
+    border: none;
+    border-radius: var(--blz-button-border-radius);
+    font-size: var(--blz-button-font-size-default);
+    line-height: var(--blz-button-line-height);
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s, box-shadow 0.2s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Size Variants */
+.blz-button-small {
+    padding: var(--blz-button-padding-vertical-small) var(--blz-button-padding-horizontal-small);
+    font-size: var(--blz-button-font-size-small);
+}
+
+.blz-button-default {
+    padding: var(--blz-button-padding-vertical-default) var(--blz-button-padding-horizontal-default);
+    font-size: var(--blz-button-font-size-default);
+}
+
+.blz-button-large {
+    padding: var(--blz-button-padding-vertical-large) var(--blz-button-padding-horizontal-large);
+    font-size: var(--blz-button-font-size-large);
+}
+
+/* Color Variants */
+.blz-button-primary {
+    background-color: var(--blz-button-color-primary-bg);
+    color: var(--blz-button-color-primary-text);
+}
+
+.blz-button-neutral {
+    background-color: var(--blz-button-color-neutral-bg);
+    color: var(--blz-button-color-neutral-text);
+}
+
+.blz-button-secondary {
+    background-color: var(--blz-button-color-secondary-bg);
+    color: var(--blz-button-color-secondary-text);
+}
+
+/* Hover Effects */
+.blz-button-primary:hover {
+    background-color: var(--blz-button-color-primary-hover-bg);
+    transform: scale(1.02);
+}
+
+.blz-button-neutral:hover {
+    background-color: var(--blz-button-color-neutral-hover-bg);
+    transform: scale(1.02);
+}
+
+.blz-button-secondary:hover {
+    background-color: var(--blz-button-color-secondary-hover-bg);
+    transform: scale(1.02);
+}
+
+/* Active (Click) Effects */
+.blz-button-primary:active {
+    background-color: var(--blz-button-color-primary-active-bg);
+    transform: scale(0.98);
+}
+
+.blz-button-neutral:active {
+    background-color: var(--blz-button-color-neutral-active-bg);
+    transform: scale(0.98);
+}
+
+.blz-button-secondary:active {
+    background-color: var(--blz-button-color-secondary-active-bg);
+    transform: scale(0.98);
+}
+
+/* Focus Effects */
+.blz-button:focus-visible {
+    outline: none;
+}
+
+/* Disabled State for Each Variant */
+.blz-button-primary:disabled {
+    background-color: var(--blz-primary-disabled-bg);
+    color: var(--blz-primary-disabled-text);
+    cursor: not-allowed;
+    opacity: 1;
+}
+
+.blz-button-neutral:disabled {
+    background-color: var(--blz-neutral-disabled-bg);
+    color: var(--blz-neutral-disabled-text);
+    cursor: not-allowed;
+    opacity: 1;
+}
+
+.blz-button-secondary:disabled {
+    background-color: var(--blz-secondary-disabled-bg);
+    color: var(--blz-secondary-disabled-text);
+    cursor: not-allowed;
+    opacity: 1;
+}

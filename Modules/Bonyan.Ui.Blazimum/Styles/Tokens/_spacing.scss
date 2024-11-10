@@ -1,0 +1,23 @@
+﻿// _spacing.scss
+
+$blz-spacing-base: 4px;
+
+$blz-spacing-xxs: $blz-spacing-base * 1;
+$blz-spacing-xs: $blz-spacing-base * 2;
+$blz-spacing-sm: $blz-spacing-base * 3;
+$blz-spacing-md: $blz-spacing-base * 4;
+$blz-spacing-lg: $blz-spacing-base * 6;
+$blz-spacing-xl: $blz-spacing-base * 8;
+$blz-spacing-xxl: $blz-spacing-base * 12;
+
+@mixin spacing-tokens {
+  :root {
+    --blz-spacing-xxs: #{$blz-spacing-xxs};
+    --blz-spacing-xs: #{$blz-spacing-xs};
+    --blz-spacing-sm: #{$blz-spacing-sm};
+    --blz-spacing-md: #{$blz-spacing-md};
+    --blz-spacing-lg: #{$blz-spacing-lg};
+    --blz-spacing-xl: #{$blz-spacing-xl};
+    --blz-spacing-xxl: #{$blz-spacing-xxl};
+  }
+}

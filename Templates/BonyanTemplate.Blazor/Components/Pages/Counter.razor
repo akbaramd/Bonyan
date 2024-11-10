@@ -1,19 +1,32 @@
 ﻿@page "/counter"
+
 @rendermode InteractiveServer
 
 <PageTitle>Counter</PageTitle>
-<h1>Counter</h1>
 
-<p role="status">Current count: @currentCount</p>
+<BlzCard>
+    <Body>
+    <h1>Counter</h1>
 
-<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+    <!-- Display Counter with BlzCollapsible -->
+    <BlzCollapsible IsOpen="_isCountVisible">
+        <p role="status">Current count is visible: @_isCountVisible</p>
+    </BlzCollapsible>
+    <BlzButton Variant="ButtonVariant.Primary" OnClick="ToggleCountVisibility">Toggle Counter Visibility</BlzButton>
+    </Body>
+</BlzCard>
+
+
 
 @code {
-    private int currentCount = 0;
+    private bool _isCountVisible = false; // Control visibility of the counter
 
-    private void IncrementCount()
+    // Toggle Counter Visibility
+    private void ToggleCountVisibility()
     {
-        currentCount++;
+        _isCountVisible = !_isCountVisible;
     }
 
+    // Sample data for BlzNestedList
+   
 }

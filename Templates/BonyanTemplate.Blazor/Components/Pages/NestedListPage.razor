@@ -1,0 +1,47 @@
+﻿@page "/nested-list"
+@rendermode InteractiveServer
+
+<BlzCard>
+    <Body>
+        <BlzNestedList Items="ListItems" ActiveCondition="EvaluateActiveCondition" />
+    </Body>
+</BlzCard>
+
+@code {
+    private List<ListItemModel> ListItems = new()
+    {
+        new ListItemModel
+        {
+            Key = "Item 1",
+            Title = "Item 1",
+            Meta = new Dictionary<string, object> { { "IsActive", true } },
+            Children = new List<ListItemModel>
+            {
+                new ListItemModel
+                {
+                    Title = "Child 1.1",
+                    Key = "Child 1.1",
+                    Meta = new Dictionary<string, object> { { "IsActive", false } }
+                },
+                new ListItemModel
+                {
+                    Title = "Child 1.2",
+                    Key = "Child 1.2",
+                    Meta = new Dictionary<string, object> { { "IsActive", true } },
+                    Children = new List<ListItemModel>
+                    {
+                        new ListItemModel { Key = "1.2.1",Title = "Sub-child 1.2.1", Meta = new Dictionary<string, object> { { "IsActive", false } } }
+                    }
+                }
+            }
+        },
+        new ListItemModel { Key = "Item 2",Title = "Item 2", Meta = new Dictionary<string, object> { { "IsActive", false } } },
+        new ListItemModel { Key = "Item 3",Title = "Item 3", Meta = new Dictionary<string, object> { { "IsActive", true } } }
+    };
+
+    private bool EvaluateActiveCondition(Dictionary<string, object> meta)
+    {
+        return meta.ContainsKey("IsActive") && meta["IsActive"] is bool isActive && isActive;
+    }
+}
+

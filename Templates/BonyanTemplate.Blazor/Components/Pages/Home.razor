@@ -1,9 +1,30 @@
 ﻿@page "/"
-@using Microsoft.AspNetCore.Authorization
-@attribute [Authorize]
 
-<PageTitle>Home</PageTitle>
 
-<h1>Hello, world!</h1>
 
-Welcome to your new app.
+<PageTitle>Counter</PageTitle>
+
+<BlzCard>
+    <Body>
+    <h1>Counter</h1>
+
+    <!-- Display Counter with BlzCollapsible -->
+    <BlzCollapsible IsOpen="_isCountVisible">
+        <p role="status">Current count is visible: @_isCountVisible</p>
+    </BlzCollapsible>
+    <BlzButton Variant="ButtonVariant.Primary" OnClick="ToggleCountVisibility">Toggle Counter Visibility</BlzButton>
+    </Body>
+</BlzCard>
+
+
+@code {
+    private bool _isCountVisible = false; // Control visibility of the counter
+
+    // Toggle Counter Visibility
+    private void ToggleCountVisibility()
+    {
+        _isCountVisible = !_isCountVisible;
+    }
+
+
+}
