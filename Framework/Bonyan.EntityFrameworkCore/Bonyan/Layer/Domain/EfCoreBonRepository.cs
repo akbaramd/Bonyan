@@ -1,5 +1,7 @@
 ﻿using Bonyan.EntityFrameworkCore;
+using Bonyan.Layer.Domain;
 using Bonyan.Layer.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Bonyan.Layer.Domain
 {
@@ -13,7 +15,7 @@ namespace Bonyan.Layer.Domain
         {
         }
 
-        public async Task<TEntity> AddAsync(TEntity entity,bool autoSave=  false)
+        public async Task<TEntity> AddAsync(TEntity entity, bool autoSave = false)
         {
             BonEntityHelper.TrySetTenantId(entity, CurrentTenant?.Id);
             var dbContext = await GetDbContextAsync();
@@ -24,10 +26,11 @@ namespace Bonyan.Layer.Domain
             {
                 await dbContext.SaveChangesAsync();
             }
+
             return savedEntity;
         }
 
-        public async Task UpdateAsync(TEntity entity,bool autoSave=  false)
+        public async Task UpdateAsync(TEntity entity, bool autoSave = false)
         {
             var dbContext = await GetDbContextAsync();
 
@@ -36,18 +39,72 @@ namespace Bonyan.Layer.Domain
                 dbContext.Set<TEntity>().Attach(entity);
                 dbContext.Update(entity);
             }
+
             if (autoSave)
             {
                 await dbContext.SaveChangesAsync();
             }
         }
 
-        public async Task DeleteAsync(TEntity entity,bool autoSave=  false)
+        public async Task DeleteAsync(TEntity entity, bool autoSave = false)
         {
             var dbContext = await GetDbContextAsync();
 
             dbContext.Set<TEntity>().Remove(entity);
-            
+
+            if (autoSave)
+            {
+                await dbContext.SaveChangesAsync();
+            }
+        }
+
+
+        // Bulk Add
+        public async Task AddRangeAsync(IEnumerable<TEntity> entities, bool autoSave = false)
+        {
+            var dbContext = await GetDbContextAsync();
+
+            foreach (var entity in entities)
+            {
+                BonEntityHelper.TrySetTenantId(entity, CurrentTenant?.Id);
+            }
+
+            await dbContext.Set<TEntity>().AddRangeAsync(entities);
+
+            if (autoSave)
+            {
+                await dbContext.SaveChangesAsync();
+            }
+        }
+
+        // Bulk Update
+        public async Task UpdateRangeAsync(IEnumerable<TEntity> entities, bool autoSave = false)
+        {
+            var dbContext = await GetDbContextAsync();
+
+            foreach (var entity in entities)
+            {
+                if (dbContext.Set<TEntity>().Local.All(e => e != entity))
+                {
+                    dbContext.Set<TEntity>().Attach(entity);
+                }
+
+                dbContext.Entry(entity).State = EntityState.Modified;
+            }
+
+            if (autoSave)
+            {
+                await dbContext.SaveChangesAsync();
+            }
+        }
+
+        // Bulk Delete by Entities
+        public async Task DeleteRangeAsync(IEnumerable<TEntity> entities, bool autoSave = false)
+        {
+            var dbContext = await GetDbContextAsync();
+
+            dbContext.Set<TEntity>().RemoveRange(entities);
+
             if (autoSave)
             {
                 await dbContext.SaveChangesAsync();
@@ -66,7 +123,7 @@ namespace Bonyan.Layer.Domain
         {
         }
 
-        public async Task DeleteByIdAsync(TKey id,bool autoSave=  false)
+        public async Task DeleteByIdAsync(TKey id, bool autoSave = false)
         {
             var dbContext = await GetDbContextAsync();
 
@@ -74,14 +131,14 @@ namespace Bonyan.Layer.Domain
             if (entity == null) throw new KeyNotFoundException("Entity not found for deletion.");
 
             dbContext.Set<TEntity>().Remove(entity);
-            
+
             if (autoSave)
             {
                 await dbContext.SaveChangesAsync();
             }
         }
 
-        public async Task<TEntity> AddAsync(TEntity entity,bool autoSave=  false)
+        public async Task<TEntity> AddAsync(TEntity entity, bool autoSave = false)
         {
             BonEntityHelper.TrySetTenantId(entity, CurrentTenant?.Id);
             var dbContext = await GetDbContextAsync();
@@ -92,10 +149,11 @@ namespace Bonyan.Layer.Domain
             {
                 await dbContext.SaveChangesAsync();
             }
+
             return savedEntity;
         }
 
-        public async Task UpdateAsync(TEntity entity,bool autoSave=  false)
+        public async Task UpdateAsync(TEntity entity, bool autoSave = false)
         {
             var dbContext = await GetDbContextAsync();
 
@@ -104,18 +162,71 @@ namespace Bonyan.Layer.Domain
                 dbContext.Set<TEntity>().Attach(entity);
                 dbContext.Update(entity);
             }
+
             if (autoSave)
             {
                 await dbContext.SaveChangesAsync();
             }
         }
 
-        public async Task DeleteAsync(TEntity entity,bool autoSave=  false)
+        public async Task DeleteAsync(TEntity entity, bool autoSave = false)
         {
             var dbContext = await GetDbContextAsync();
 
             dbContext.Set<TEntity>().Remove(entity);
-            
+
+            if (autoSave)
+            {
+                await dbContext.SaveChangesAsync();
+            }
+        }
+
+        // Bulk Add
+        public async Task AddRangeAsync(IEnumerable<TEntity> entities, bool autoSave = false)
+        {
+            var dbContext = await GetDbContextAsync();
+
+            foreach (var entity in entities)
+            {
+                BonEntityHelper.TrySetTenantId(entity, CurrentTenant?.Id);
+            }
+
+            await dbContext.Set<TEntity>().AddRangeAsync(entities);
+
+            if (autoSave)
+            {
+                await dbContext.SaveChangesAsync();
+            }
+        }
+
+        // Bulk Update
+        public async Task UpdateRangeAsync(IEnumerable<TEntity> entities, bool autoSave = false)
+        {
+            var dbContext = await GetDbContextAsync();
+
+            foreach (var entity in entities)
+            {
+                if (dbContext.Set<TEntity>().Local.All(e => e != entity))
+                {
+                    dbContext.Set<TEntity>().Attach(entity);
+                }
+
+                dbContext.Entry(entity).State = EntityState.Modified;
+            }
+
+            if (autoSave)
+            {
+                await dbContext.SaveChangesAsync();
+            }
+        }
+
+        // Bulk Delete by Entities
+        public async Task DeleteRangeAsync(IEnumerable<TEntity> entities, bool autoSave = false)
+        {
+            var dbContext = await GetDbContextAsync();
+
+            dbContext.Set<TEntity>().RemoveRange(entities);
+
             if (autoSave)
             {
                 await dbContext.SaveChangesAsync();
