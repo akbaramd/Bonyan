@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Bonyan.Layer.Domain.Aggregates;
+using Bonyan.Layer.Domain.Aggregate;
 using Bonyan.UserManagement.Domain.Enumerations;
 using Bonyan.UserManagement.Domain.Events;
 using Bonyan.UserManagement.Domain.ValueObjects;
@@ -10,7 +10,7 @@ namespace Bonyan.UserManagement.Domain
     /// Represents a user entity in the domain with properties and methods
     /// for managing a user's profile, contact information, verification status, and overall status.
     /// </summary>
-    public class BonUser : BonFullAuditableAggregateRoot<BonUserId>, IBonUser
+    public class BonUser : BonFullAggregateRoot<BonUserId>, IBonUser
     {
         /// <summary>
         /// Gets or sets the user's unique username.
@@ -55,7 +55,7 @@ namespace Bonyan.UserManagement.Domain
             Id = id;
             UserName = userName;
             Status = UserStatus.Active; // Default status
-            AddDomainEvent(new UserCreatedEvent(this));
+            AddDomainEvent(new UserCreatedDomainEvent(this));
         }
 
         /// <summary>
@@ -82,7 +82,7 @@ namespace Bonyan.UserManagement.Domain
         {
             Email = email;
             PhoneNumber = phoneNumber;
-            AddDomainEvent(new UserProfileUpdatedEvent(this));
+            AddDomainEvent(new UserProfileUpdatedDomainEvent(this));
         }
 
         /// <summary>
@@ -92,7 +92,7 @@ namespace Bonyan.UserManagement.Domain
         public void SetPassword(string newPassword)
         {
             Password = new Password(newPassword);
-            AddDomainEvent(new PasswordChangedEvent(this));
+            AddDomainEvent(new PasswordChangedDomainEvent(this));
         }
 
         /// <summary>
@@ -106,7 +106,7 @@ namespace Bonyan.UserManagement.Domain
             UserName = userName;
             Email = email;
             PhoneNumber = phoneNumber;
-            AddDomainEvent(new UserProfileUpdatedEvent(this));
+            AddDomainEvent(new UserProfileUpdatedDomainEvent(this));
         }
 
         /// <summary>
@@ -116,7 +116,7 @@ namespace Bonyan.UserManagement.Domain
         public void SetPhoneNumber(PhoneNumber phoneNumber)
         {
             PhoneNumber = phoneNumber;
-            AddDomainEvent(new UserProfileUpdatedEvent(this));
+            AddDomainEvent(new UserProfileUpdatedDomainEvent(this));
         }
 
         /// <summary>
@@ -126,7 +126,7 @@ namespace Bonyan.UserManagement.Domain
         public void SetEmail(Email email)
         {
             Email = email;
-            AddDomainEvent(new UserProfileUpdatedEvent(this));
+            AddDomainEvent(new UserProfileUpdatedDomainEvent(this));
         }
 
         /// <summary>
@@ -147,7 +147,7 @@ namespace Bonyan.UserManagement.Domain
             if (Email != null && !Email.IsVerified)
             {
                 Email.Verify();
-                AddDomainEvent(new EmailVerifiedEvent(this));
+                AddDomainEvent(new EmailVerifiedDomainEvent(this));
             }
         }
 
@@ -159,7 +159,7 @@ namespace Bonyan.UserManagement.Domain
             if (PhoneNumber != null && !PhoneNumber.IsVerified)
             {
                 PhoneNumber.Verify();
-                AddDomainEvent(new PhoneNumberVerifiedEvent(this));
+                AddDomainEvent(new PhoneNumberVerifiedDomainEvent(this));
             }
         }
 
@@ -172,7 +172,7 @@ namespace Bonyan.UserManagement.Domain
             if (Status != newStatus)
             {
                 Status = newStatus;
-                AddDomainEvent(new UserStatusChangedEvent(this, newStatus));
+                AddDomainEvent(new UserStatusChangedDomainEvent(this, newStatus));
             }
         }
     }

@@ -11,7 +11,7 @@ namespace Microsoft.AspNetCore.Builder;
 public class BonyanApplication
 {
     public WebApplication Application { get; }
-    public BonyanServiceInfo ServiceInfo { get; init; }
+    public BonyanServiceInfo ServiceInfo { get; private set;}
 
     /// <summary>
     /// Initializes a new instance of <see cref="BonyanApplication"/>.

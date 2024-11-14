@@ -1,6 +1,6 @@
 using System.Net;
-using Bonyan.Layer.Application.Exceptions;
 using Bonyan.TenantManagement.Domain;
+using Exceptions;
 
 namespace Bonyan.TenantManagement.Application.Exceptions;
 

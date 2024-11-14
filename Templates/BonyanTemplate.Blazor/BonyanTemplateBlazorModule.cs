@@ -4,6 +4,7 @@ using Bonyan.AspNetCore.Components;
 using Bonyan.AspNetCore.Components.Menus;
 using Bonyan.Modularity;
 using Bonyan.TenantManagement.Web;
+using Bonyan.Ui.Blazimum;
 using BonyanTemplate.Application;
 using BonyanTemplate.Blazor.Components;
 using BonyanTemplate.Blazor.Menus;

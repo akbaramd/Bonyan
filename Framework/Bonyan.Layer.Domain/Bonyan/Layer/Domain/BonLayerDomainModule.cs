@@ -1,21 +1,25 @@
-using Bonyan.Layer.Domain.Abstractions;
+using Bonyan.Layer.Domain.DomainEvent.Abstractions;
 using Bonyan.Layer.Domain.Events;
+using Bonyan.Messaging;
 using Bonyan.Modularity;
 using Bonyan.Modularity.Abstractions;
+using Microsoft;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Bonyan.Layer.Domain
 {
     public class BonLayerDomainModule : BonModule
     {
-        public override Task OnConfigureAsync(BonConfigurationContext context)
+        public BonLayerDomainModule()
         {
-            var services = context.Services;
-            
-            // Register the InMemoryDomainEventDispatcher as a singleton
-            services.AddSingleton<IBonDomainEventDispatcher, BonInMemoryBonDomainEventDispatcher>();
+            DependOn<BonMessagingModule>();
+        }
 
-            return base.OnConfigureAsync(context);
+
+        public override Task OnPostConfigureAsync(BonConfigurationContext context)
+        {
+            context.Services.AddBonDomainLayer();
+            return base.OnPostConfigureAsync(context);
         }
     }
 }

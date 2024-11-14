@@ -1,7 +1,6 @@
 ﻿// ListItemModel.cs
-namespace Bonyan.Ui.Blazimum;
 
-using System.Collections.Generic;
+namespace Bonyan.Ui.Blazimum.Components.List;
 
 public class ListItemModel
 {

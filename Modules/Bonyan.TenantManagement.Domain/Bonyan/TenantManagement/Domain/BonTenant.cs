@@ -1,9 +1,9 @@
-using Bonyan.Layer.Domain.Aggregates;
+using Bonyan.Layer.Domain.Aggregate;
 using Bonyan.TenantManagement.Domain.Events;
 
 namespace Bonyan.TenantManagement.Domain;
 
-public class BonTenant : BonFullAuditableAggregateRoot<BonTenantId>
+public class BonTenant : BonFullAggregateRoot<BonTenantId>
 {
   public string Key { get; set; }
 

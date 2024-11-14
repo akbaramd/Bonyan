@@ -98,6 +98,7 @@ public abstract class BonValueObject : IEquatable<BonValueObject>
         return $"{type.Name} ({string.Join(", ", values)})";
     }
 
+
     /// <summary>
     /// Creates a shallow copy of the current value object.
     /// </summary>

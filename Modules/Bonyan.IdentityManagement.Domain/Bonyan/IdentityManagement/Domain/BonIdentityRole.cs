@@ -1,7 +1,7 @@
 ﻿using Bonyan.Layer.Domain.Entities;
 using System.Collections.Generic;
 using System.Linq;
-using Bonyan.Layer.Domain.Aggregates;
+using Bonyan.Layer.Domain.Aggregate;
 using Bonyan.Layer.Domain.Events;
 
 namespace Bonyan.IdentityManagement.Domain
@@ -37,7 +37,7 @@ namespace Bonyan.IdentityManagement.Domain
         {
             if (_permissions.Any(p => p.Equals(identityPermission))) return;
             _permissions.Add(identityPermission);
-            AddDomainEvent(new PermissionAddedEvent(Id, identityPermission));
+            AddDomainEvent(new PermissionAddedDomainEvent(Id, identityPermission));
         }
 
         // Method to remove a permission by entity instance
@@ -45,7 +45,7 @@ namespace Bonyan.IdentityManagement.Domain
         {
             if (_permissions.Remove(identityPermission))
             {
-                AddDomainEvent(new PermissionRemovedEvent(Id, identityPermission));
+                AddDomainEvent(new PermissionRemovedDomainEvent(Id, identityPermission));
             }
         }
 
@@ -53,22 +53,22 @@ namespace Bonyan.IdentityManagement.Domain
         public void ClearPermissions()
         {
             _permissions.Clear();
-            AddDomainEvent(new PermissionsClearedEvent(Id));
+            AddDomainEvent(new PermissionsClearedDomainEvent(Id));
         }
 
         // Additional methods (if any) to enforce business logic can be added here
     }
 
     // Domain Events
-    public class PermissionAddedEvent(BonRoleId bonRoleId, BonIdentityPermission identityPermission) : BonDomainEventBase
+    public class PermissionAddedDomainEvent(BonRoleId bonRoleId, BonIdentityPermission identityPermission) : BonDomainEventBase
     {
     }
 
-    public class PermissionRemovedEvent(BonRoleId bonRoleId, BonIdentityPermission identityPermission) : BonDomainEventBase
+    public class PermissionRemovedDomainEvent(BonRoleId bonRoleId, BonIdentityPermission identityPermission) : BonDomainEventBase
     {
     };
 
-    public class PermissionsClearedEvent(BonRoleId bonRoleId) : BonDomainEventBase
+    public class PermissionsClearedDomainEvent(BonRoleId bonRoleId) : BonDomainEventBase
     {
     }
 }

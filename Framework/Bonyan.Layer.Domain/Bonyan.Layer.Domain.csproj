@@ -13,13 +13,10 @@
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\Bonyan.Layer.Domain.Abstractions\Bonyan.Layer.Domain.Abstractions.csproj" />
+        <ProjectReference Include="..\Bonyan.Messaging\Bonyan.Messaging.csproj" />
         <ProjectReference Include="..\Bonyan.MultiTenant\Bonyan.MultiTenant.csproj"/>
         <ProjectReference Include="..\Bonyan.UnitOfWork\Bonyan.UnitOfWork.csproj"/>
         <ProjectReference Include="..\Bonyan.Validation\Bonyan.Validation.csproj"/>
         <ProjectReference Include="..\Bonyan\Bonyan.csproj"/>
-    </ItemGroup>
-    <ItemGroup>
-      <Folder Include="Bonyan\Layer\Domain\Abstractions\" />
-      <Folder Include="Bonyan\Layer\Domain\Model\" />
     </ItemGroup>
 </Project>

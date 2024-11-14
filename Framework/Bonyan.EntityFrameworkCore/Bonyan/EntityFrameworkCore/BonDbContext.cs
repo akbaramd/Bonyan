@@ -2,10 +2,13 @@ using System.Linq.Expressions;
 using System.Reflection;
 using Bonyan.DependencyInjection;
 using Bonyan.EntityFrameworkCore.Abstractions;
-using Bonyan.Layer.Domain.Abstractions;
-using Bonyan.Layer.Domain.Aggregates;
+using Bonyan.Layer.Domain.Aggregate.Abstractions;
+using Bonyan.Layer.Domain.Audit.Abstractions;
+using Bonyan.Layer.Domain.DomainEvent.Abstractions;
 using Bonyan.Layer.Domain.Entities;
+using Bonyan.Layer.Domain.Entity;
 using Bonyan.Layer.Domain.Events;
+using Bonyan.Messaging;
 using Bonyan.MultiTenant;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
@@ -27,7 +30,7 @@ public class BonDbContext<TDbContext> : DbContext , IBonDbContext<TDbContext> wh
   
   public IBonCurrentTenant? CurrentTenant => ServiceProvider?.GetService<IBonCurrentTenant>();
   private IOptions<BonMultiTenancyOptions>? TenancyOptions => ServiceProvider?.GetService<IOptions<BonMultiTenancyOptions>>();
-  private IBonDomainEventDispatcher? DomainEventDispatcher => ServiceProvider?.GetService<IBonDomainEventDispatcher>();
+  private IMessageDispatcher? DomainEventDispatcher => ServiceProvider?.GetService<IMessageDispatcher>();
   protected virtual Guid? CurrentTenantId => CurrentTenant?.Id;
 
 
@@ -60,7 +63,7 @@ public class BonDbContext<TDbContext> : DbContext , IBonDbContext<TDbContext> wh
     {
       if (entry.State == EntityState.Added && entry.Entity is IBonCreationAuditable creationAuditableEntity)
       {
-        creationAuditableEntity.CreatedDate = DateTime.UtcNow;
+        creationAuditableEntity.CreatedDate  = DateTime.UtcNow;;
       }
 
       if (entry.State == EntityState.Modified)
@@ -88,7 +91,7 @@ public class BonDbContext<TDbContext> : DbContext , IBonDbContext<TDbContext> wh
       
       foreach (var @event in agge.DomainEvents)
       {
-        await DomainEventDispatcher.DispatchAsync(@event);
+        await DomainEventDispatcher.PublishAsync(@event, cancellationToken);
       }
     }
 

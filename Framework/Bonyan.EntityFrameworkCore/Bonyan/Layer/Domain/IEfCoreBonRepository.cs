@@ -1,5 +1,7 @@
-using Bonyan.Layer.Domain.Abstractions;
 using Bonyan.Layer.Domain.Entities;
+using Bonyan.Layer.Domain.Entity;
+using Bonyan.Layer.Domain.Repository;
+using Bonyan.Layer.Domain.Repository.Abstractions;
 
 namespace Bonyan.Layer.Domain
 {

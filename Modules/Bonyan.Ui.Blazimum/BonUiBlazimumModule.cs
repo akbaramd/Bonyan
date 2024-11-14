@@ -1,7 +1,7 @@
 ﻿using Bonyan.AspNetCore.Components;
 using Bonyan.Modularity;
 
-namespace Bonyan.AdminLte;
+namespace Bonyan.Ui.Blazimum;
 
 public class BonUiBlazimumModule : BonWebModule 
 {

@@ -1,4 +1,4 @@
-using Bonyan.Layer.Domain.Abstractions;
+using Bonyan.Layer.Domain.DomainEvent.Abstractions;
 
 namespace Bonyan.Layer.Domain.Events;
 

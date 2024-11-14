@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
-using System;
 
-namespace Bonyan.Ui.Blazimum
+namespace Bonyan.Ui.Blazimum.Bases
 {
     public class BlzBaseComponent : ComponentBase
     {

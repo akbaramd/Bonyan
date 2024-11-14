@@ -1,5 +1,6 @@
 using Bonyan.DependencyInjection;
-using Bonyan.Layer.Domain.Abstractions;
+using Bonyan.Layer.Domain.DomainEvent.Abstractions;
+using Bonyan.Layer.Domain.DomainService;
 using Bonyan.Layer.Domain.Events;
 using Bonyan.MultiTenant;
 using Microsoft.Extensions.Logging;
@@ -13,5 +14,4 @@ public abstract class BonDomainService : BonLayServiceProviderConfigurator, IBon
     protected ILoggerFactory LoggerFactory => LazyServiceProvider.LazyGetRequiredService<ILoggerFactory>();
     protected IBonCurrentTenant BonCurrentTenant => LazyServiceProvider.LazyGetRequiredService<IBonCurrentTenant>();
     protected IBonDomainEventDispatcher? DomainEventDispatcher => LazyServiceProvider.LazyGetService<IBonDomainEventDispatcher>();
-    protected ILogger Logger => LazyServiceProvider.LazyGetService<ILogger>(provider => LoggerFactory?.CreateLogger(GetType().FullName!) ?? NullLogger.Instance);
-}
+    protected ILogger Logger => LazyServiceProvider.LazyGetService<ILogger>(provider => LoggerFactory?.CreateLogger(GetType().FullName!) ?? NullLogger.Instance); }

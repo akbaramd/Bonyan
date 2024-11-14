@@ -102,6 +102,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.Layer.Domain.Abstrac
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Abstractions", "Abstractions", "{B99B749A-53D0-4D38-916F-D70295BDB556}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.Messaging", "Framework\Bonyan.Messaging\Bonyan.Messaging.csproj", "{1F876AD8-A6A0-4802-962A-7D0153231872}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.Messaging.Abstractions", "Framework\Bonyan.Messaging.Abstractions\Bonyan.Messaging.Abstractions.csproj", "{1E308516-CD0C-478D-B964-BFE11EFFADF3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -260,6 +264,14 @@ Global
 		{2EBB1D52-CC2D-4DE3-B9C6-6AA71FF2B93C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2EBB1D52-CC2D-4DE3-B9C6-6AA71FF2B93C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2EBB1D52-CC2D-4DE3-B9C6-6AA71FF2B93C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1F876AD8-A6A0-4802-962A-7D0153231872}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1F876AD8-A6A0-4802-962A-7D0153231872}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1F876AD8-A6A0-4802-962A-7D0153231872}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1F876AD8-A6A0-4802-962A-7D0153231872}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1E308516-CD0C-478D-B964-BFE11EFFADF3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1E308516-CD0C-478D-B964-BFE11EFFADF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1E308516-CD0C-478D-B964-BFE11EFFADF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1E308516-CD0C-478D-B964-BFE11EFFADF3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -309,6 +321,8 @@ Global
 		{B99B749A-53D0-4D38-916F-D70295BDB556} = {F865B8FC-9BE7-4251-B8D7-519F85EF20B2}
 		{32A88CA9-0C39-4986-AC22-E3B569317A30} = {B99B749A-53D0-4D38-916F-D70295BDB556}
 		{2EBB1D52-CC2D-4DE3-B9C6-6AA71FF2B93C} = {B99B749A-53D0-4D38-916F-D70295BDB556}
+		{1F876AD8-A6A0-4802-962A-7D0153231872} = {F865B8FC-9BE7-4251-B8D7-519F85EF20B2}
+		{1E308516-CD0C-478D-B964-BFE11EFFADF3} = {B99B749A-53D0-4D38-916F-D70295BDB556}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CACE9943-7714-471F-BCCD-CC6CA1DA43C5}

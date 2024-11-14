@@ -1,5 +1,5 @@
-using Bonyan.Layer.Application.Dto;
 using Bonyan.TenantManagement.Domain;
+using Dto;
 
 namespace Bonyan.TenantManagement.Application.Dto;
 

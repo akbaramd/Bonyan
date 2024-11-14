@@ -1,6 +1,6 @@
+using Bonyan.Layer.Domain.Audit.Abstractions;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Bonyan.Layer.Domain.Abstractions;
 using Bonyan.Layer.Domain.ValueObjects;
 using Bonyan.MultiTenant;
 

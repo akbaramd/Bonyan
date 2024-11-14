@@ -1,4 +1,4 @@
-using Bonyan.Layer.Domain.Abstractions;
+using Bonyan.Layer.Domain.Specification.Abstractions;
 using Microsoft.EntityFrameworkCore.Query;
 
 namespace Bonyan.Layer.Domain.Specifications;

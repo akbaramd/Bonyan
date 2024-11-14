@@ -1,8 +1,7 @@
 using Bonyan.EntityFrameworkCore.Abstractions;
 using Bonyan.EntityFrameworkCore.Helpers;
 using Bonyan.Layer.Domain;
-using Bonyan.Layer.Domain.Abstractions;
-using Bonyan.Layer.Domain.Aggregates;
+using Bonyan.Layer.Domain.Aggregate.Abstractions;
 using Bonyan.Layer.Domain.Entities;
 using Microsoft.Extensions.DependencyInjection;
 

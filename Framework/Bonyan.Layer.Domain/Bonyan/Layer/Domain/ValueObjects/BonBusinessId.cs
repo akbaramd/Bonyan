@@ -1,73 +1,75 @@
 namespace Bonyan.Layer.Domain.ValueObjects
-  {
-      public abstract class BonBusinessId<T> : BonValueObject where T : BonBusinessId<T>, new()
-      {
-          // The underlying value of the business ID
-          public Guid Value { get; private set; }
-          protected BonBusinessId()
-          {
+{
+    public abstract class BonBusinessId<T> : BonValueObject where T : BonBusinessId<T>, new()
+    {
+        // The underlying value of the business ID
+        public Guid Value { get; private set; }
+
+        protected BonBusinessId()
+        {
             Value = Guid.NewGuid();
-          }
-          // Protected constructor to allow subclassing
-          protected BonBusinessId(Guid value)
-          {
-              if (value == Guid.Empty)
-                  throw new ArgumentException("Business ID cannot be an empty GUID.", nameof(value));
+        }
 
-              Value = value;
-          }
+        // Protected constructor to allow subclassing
+        protected BonBusinessId(Guid value)
+        {
+            if (value == Guid.Empty)
+                throw new ArgumentException("Business ID cannot be an empty GUID.", nameof(value));
 
-          // Static factory method to create a new BusinessId with a new GUID
-          public static T CreateNew()
-          {
-              return Create(Guid.NewGuid());
-          }
+            Value = value;
+        }
 
-          // Static method to create a BusinessId from an existing GUID
-          public static T FromGuid(Guid guid)
-          {
-              return Create(guid);
-          }
+        // Static factory method to create a new BusinessId with a new GUID
+        public static T CreateNew()
+        {
+            return Create(Guid.NewGuid());
+        }
 
-          // Static method to create a BusinessId from a string representation of a GUID
-          public static T FromString(string value)
-          {
-              if (string.IsNullOrWhiteSpace(value))
-                  throw new ArgumentException("Business ID cannot be empty or whitespace.", nameof(value));
+        // Static method to create a BusinessId from an existing GUID
+        public static T FromGuid(Guid guid)
+        {
+            return Create(guid);
+        }
 
-              if (!Guid.TryParse(value, out var parsedGuid))
-                  throw new ArgumentException("Invalid GUID format.", nameof(value));
+        // Static method to create a BusinessId from a string representation of a GUID
+        public static T FromString(string value)
+        {
+            if (string.IsNullOrWhiteSpace(value))
+                throw new ArgumentException("Business ID cannot be empty or whitespace.", nameof(value));
 
-              return Create(parsedGuid);
-          }
+            if (!Guid.TryParse(value, out var parsedGuid))
+                throw new ArgumentException("Invalid GUID format.", nameof(value));
 
-          // Helper method to create an instance of the derived class
-          private static T Create(Guid value)
-          {
-              // Use reflection to create an instance of the derived class
-              var instance = new T();
-              instance.Initialize(value);
-              return instance;
-          }
+            return Create(parsedGuid);
+        }
 
-          // Protected initialization method to set the value after creation
-          protected void Initialize(Guid value)
-          {
-              // This is called only once during the creation process
-              var obj = (T)(object)this;
-              obj.Value = value;
-          }
+        // Helper method to create an instance of the derived class
+        private static T Create(Guid value)
+        {
+            // Use reflection to create an instance of the derived class
+            var instance = new T();
+            instance.Initialize(value);
+            return instance;
+        }
 
-          // Overrides ToString for easier debugging and display purposes
-          public override string ToString()
-          {
-              return Value.ToString();
-          }
+        // Protected initialization method to set the value after creation
+        protected void Initialize(Guid value)
+        {
+            // This is called only once during the creation process
+            var obj = (T)(object)this;
+            obj.Value = value;
+        }
 
-          // Overrides equality components for comparing value objects
-          protected override IEnumerable<object?> GetEqualityComponents()
-          {
-              yield return Value;
-          }
-      }
-  }
+        // Overrides ToString for easier debugging and display purposes
+        public override string ToString()
+        {
+            return Value.ToString();
+        }
+
+        // Overrides equality components for comparing value objects
+        protected override IEnumerable<object?> GetEqualityComponents()
+        {
+            yield return Value;
+        }
+    }
+}

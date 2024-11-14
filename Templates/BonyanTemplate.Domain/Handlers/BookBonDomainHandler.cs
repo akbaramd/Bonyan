@@ -1,12 +1,13 @@
-using Bonyan.Layer.Domain.Abstractions;
+using Bonyan.Layer.Domain.DomainEvent.Abstractions;
 using Bonyan.Layer.Domain.Events;
+using Bonyan.Messaging.Abstractions;
 using BonyanTemplate.Domain.DomainEvents;
 
 namespace BonyanTemplate.Domain.Handlers;
 
-public class BookBonDomainHandler : IBonDomainEventHandler<BookCreated>
+public class BookBonDomainHandler : IBonMessageConsumer<BookCreated>
 {
-    public Task HandleAsync(BookCreated domainEvent , CancellationToken? cancellationToken )
+    public Task ConsumeAsync(BookCreated domainEvent , CancellationToken? cancellationToken )
     {
         throw new NotImplementedException();
     }

@@ -1,4 +1,5 @@
 using Bonyan.IdentityManagement.Domain;
+using Bonyan.Messaging;
 using Bonyan.Modularity;
 using Bonyan.Modularity.Abstractions;
 using Bonyan.TenantManagement.Domain;
@@ -9,19 +10,19 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace BonyanTemplate.Domain
 {
+    public class BonyanTemplateDomainModule : BonModule
+    {
+        public BonyanTemplateDomainModule()
+        {
+            DependOn<BonTenantManagementDomainModule>();
+            DependOn<BonIdentityManagementDomainModule<User>>();
+        }
 
-  public class BonyanTemplateDomainModule : BonModule
-  {
-    public BonyanTemplateDomainModule()
-    {
-      DependOn<BonTenantManagementDomainModule>();
-      DependOn<BonIdentityManagementDomainModule<User>>();
+        public override Task OnConfigureAsync(BonConfigurationContext context)
+        {
+            PreConfigure<BonMessagingOptions>(c => { c.RegisterConsumer<BookBonDomainHandler>(); });
+
+            return base.OnConfigureAsync(context);
+        }
     }
-    public override Task OnConfigureAsync(BonConfigurationContext context)
-    {
-      context.AddDomainHandler(typeof(BookBonDomainHandler));
-    
-      return base.OnConfigureAsync(context);
-    }
-  }
 }

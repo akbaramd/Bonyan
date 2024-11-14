@@ -1,4 +1,4 @@
-﻿using Bonyan.Layer.Domain.Abstractions.Results;
+﻿using Bonyan.Layer.Domain.Repository.Abstractions;
 using Bonyan.TenantManagement.Application.Dto;
 using Bonyan.TenantManagement.Application.Services;
 using Bonyan.TenantManagement.Domain;

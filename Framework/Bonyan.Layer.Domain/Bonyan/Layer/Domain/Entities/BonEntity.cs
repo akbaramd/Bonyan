@@ -1,4 +1,4 @@
-﻿using Bonyan.Layer.Domain.Abstractions;
+﻿using Bonyan.Layer.Domain.Entity;
 
 namespace Bonyan.Layer.Domain.Entities;
 

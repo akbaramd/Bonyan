@@ -1,4 +1,4 @@
-﻿namespace Bonyan.Ui.Blazimum;
+﻿namespace Bonyan.Ui.Blazimum.Components.Buttons;
 
 public enum ButtonType
 {

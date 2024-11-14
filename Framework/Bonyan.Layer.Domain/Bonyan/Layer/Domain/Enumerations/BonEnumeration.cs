@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using Bonyan.Core;
+using Bonyan.Layer.Domain.ValueObjects;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace Bonyan.Layer.Domain.Enumerations;
@@ -7,7 +8,7 @@ namespace Bonyan.Layer.Domain.Enumerations;
 /// <summary>
 ///     Base class for implementing strongly-typed enums with additional utility methods.
 /// </summary>
-public abstract class BonEnumeration : IComparable
+public abstract class BonEnumeration : BonValueObject, IComparable
 {
     /// <summary>
     ///     Initializes a new instance of the <see cref="BonEnumeration" /> class.
@@ -42,6 +43,12 @@ public abstract class BonEnumeration : IComparable
             throw new ArgumentException($"Object must be of type {nameof(BonEnumeration)}", nameof(other));
 
         return Id.CompareTo(otherEnumeration.Id);
+    }
+
+    protected override IEnumerable<object?> GetEqualityComponents()
+    {
+        yield return Name;
+        yield return Id;
     }
 
     /// <summary>

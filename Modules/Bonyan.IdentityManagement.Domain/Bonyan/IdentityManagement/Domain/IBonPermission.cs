@@ -1,5 +1,5 @@
-﻿using Bonyan.Layer.Domain.Abstractions;
-using Bonyan.Layer.Domain.Entities;
+﻿using Bonyan.Layer.Domain.Entities;
+using Bonyan.Layer.Domain.Entity;
 
 namespace Bonyan.IdentityManagement.Domain;
 

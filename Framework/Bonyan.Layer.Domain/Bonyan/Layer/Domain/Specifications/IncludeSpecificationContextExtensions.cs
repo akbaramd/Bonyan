@@ -1,6 +1,7 @@
 using System.Linq.Expressions;
-using Bonyan.Layer.Domain.Abstractions;
 using Bonyan.Layer.Domain.Entities;
+using Bonyan.Layer.Domain.Entity;
+using Bonyan.Layer.Domain.Specification.Abstractions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 

@@ -5,7 +5,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <RootNamespace/>
-        <PackageId>Bonyan.Layer.Application.Abstractions</PackageId>
+        <PackageId>Bonyan.Layer.Domain.Abstractions</PackageId>
     </PropertyGroup>
 
     <ItemGroup>
@@ -13,8 +13,10 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Bonyan.Messaging.Abstractions\Bonyan.Messaging.Abstractions.csproj" />
       <ProjectReference Include="..\Bonyan.MultiTenant\Bonyan.MultiTenant.csproj" />
       <ProjectReference Include="..\Bonyan.UnitOfWork\Bonyan.UnitOfWork.csproj" />
+      <ProjectReference Include="..\Bonyan.Validation\Bonyan.Validation.csproj" />
     </ItemGroup>
 
  
