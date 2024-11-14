@@ -1,5 +1,6 @@
 ﻿using Bonyan.EntityFrameworkCore;
 using Bonyan.Layer.Domain;
+using Bonyan.Layer.Domain.Abstractions;
 using Bonyan.Layer.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 

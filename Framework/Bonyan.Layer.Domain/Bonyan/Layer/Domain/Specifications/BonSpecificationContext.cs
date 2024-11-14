@@ -1,14 +1,15 @@
 using System.Linq.Expressions;
+using Bonyan.Layer.Domain.Abstractions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 
 namespace Bonyan.Layer.Domain.Specifications;
 
-public class SpecificationContext<T> : ISpecificationContext<T> where T : class
+public class BonSpecificationContext<T> : IBonSpecificationContext<T> where T : class
 {
   public IQueryable<T> Query { get; set; }
 
-  public SpecificationContext(IQueryable<T> query)
+  public BonSpecificationContext(IQueryable<T> query)
   {
     Query = query;
   }
@@ -30,13 +31,13 @@ public class SpecificationContext<T> : ISpecificationContext<T> where T : class
 
 
 
-  public IIncludeSpecificationContext<T, TProperty> AddInclude<TProperty>(Expression<Func<T, TProperty>> include)
+  public IBonIncludeBonSpecificationContext<T, TProperty> AddInclude<TProperty>(Expression<Func<T, TProperty>> include)
   {
     // Correctly update the Query by applying the Include
     Query = Query.Include(include);
 
-    // Return a new IncludeSpecificationContext to allow ThenInclude calls if needed
-    return new IncludeSpecificationContext<T, TProperty>((IIncludableQueryable<T, TProperty>)Query);
+    // Return a new BonIncludeBonSpecificationContext to allow ThenInclude calls if needed
+    return new BonIncludeBonSpecificationContext<T, TProperty>((IIncludableQueryable<T, TProperty>)Query);
   }
 
   // Apply filtering based on a list of values (similar to SQL IN clause)

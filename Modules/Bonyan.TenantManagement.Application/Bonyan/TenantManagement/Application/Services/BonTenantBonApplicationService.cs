@@ -1,5 +1,5 @@
 using Bonyan.Layer.Application.Services;
-using Bonyan.Layer.Domain.Model;
+using Bonyan.Layer.Domain.Abstractions.Results;
 using Bonyan.TenantManagement.Application.Dto;
 using Bonyan.TenantManagement.Application.Exceptions;
 using Bonyan.TenantManagement.Application.Specs;
@@ -13,7 +13,7 @@ public class BonTenantBonApplicationService : BonApplicationService, IBonTenantB
 
   public async Task<BonPaginatedResult<BonTenantDto>> PaginateAsync(BonTenantFilterDto paginateDto, CancellationToken? cancellationToken = default)
   {
-    var paginated = await BonTenantRepository.PaginatedAsync(new BonTenantPaginateSpec(paginateDto));
+    var paginated = await BonTenantRepository.PaginatedAsync(new TenantPaginateSpec(paginateDto));
     return Mapper.Map<BonPaginatedResult<BonTenant>, BonPaginatedResult<BonTenantDto>>(paginated);
   }
 

@@ -1,3 +1,4 @@
+using Bonyan.Layer.Domain.Abstractions;
 using Bonyan.Layer.Domain.Events;
 using Bonyan.Modularity;
 using Bonyan.Modularity.Abstractions;

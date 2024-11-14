@@ -1,3 +1,4 @@
+using Bonyan.Layer.Domain.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Bonyan.Layer.Domain.Events;
@@ -23,11 +24,12 @@ public class BonInMemoryBonDomainEventDispatcher : IBonDomainEventDispatcher
     ///     Dispatches a domain event to the appropriate handlers.
     /// </summary>
     /// <param name="domainEvent">The domain event to dispatch.</param>
+    /// <param name="cancellationToken"></param>
     /// <returns>A task that represents the asynchronous operation.</returns>
-    public async Task DispatchAsync<TEvent>(TEvent domainEvent) where TEvent : IDomainEvent
+    public async Task DispatchAsync<TEvent>(TEvent domainEvent,CancellationToken? cancellationToken= default) where TEvent : IBonDomainEvent
 
     {
         var handler = _serviceProvider.GetService<IBonDomainEventHandler<TEvent>>();
-        if (handler != null) await handler.Handle(domainEvent);
+        if (handler != null) await handler.HandleAsync(domainEvent,cancellationToken);
     }
 }

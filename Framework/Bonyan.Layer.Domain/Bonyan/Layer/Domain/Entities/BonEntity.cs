@@ -1,4 +1,6 @@
-﻿namespace Bonyan.Layer.Domain.Entities;
+﻿using Bonyan.Layer.Domain.Abstractions;
+
+namespace Bonyan.Layer.Domain.Entities;
 
 /// <summary>
 ///     Base class for all entities in the domain, providing a method to retrieve the entity's keys.

@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <ItemGroup>
         <ProjectReference Include="..\Bonyan.AutoMapper\Bonyan.AutoMapper.csproj"/>
+        <ProjectReference Include="..\Bonyan.Layer.Application.Abstractions\Bonyan.Layer.Application.Abstractions.csproj" />
         <ProjectReference Include="..\Bonyan.Layer.Domain\Bonyan.Layer.Domain.csproj"/>
         <ProjectReference Include="..\Bonyan.UnitOfWork\Bonyan.UnitOfWork.csproj"/>
         <ProjectReference Include="..\Bonyan.Validation\Bonyan.Validation.csproj"/>

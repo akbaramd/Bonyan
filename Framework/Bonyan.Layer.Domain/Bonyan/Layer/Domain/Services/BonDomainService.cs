@@ -1,4 +1,5 @@
 using Bonyan.DependencyInjection;
+using Bonyan.Layer.Domain.Abstractions;
 using Bonyan.Layer.Domain.Events;
 using Bonyan.MultiTenant;
 using Microsoft.Extensions.Logging;

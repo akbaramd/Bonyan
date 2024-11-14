@@ -3,6 +3,7 @@ using System.Reflection;
 using Bonyan.Core;
 using Bonyan.Exceptions;
 using Bonyan.Helpers;
+using Bonyan.Layer.Domain.Abstractions;
 using Bonyan.Layer.Domain.ValueObjects;
 using Bonyan.MultiTenant;
 using JetBrains.Annotations;

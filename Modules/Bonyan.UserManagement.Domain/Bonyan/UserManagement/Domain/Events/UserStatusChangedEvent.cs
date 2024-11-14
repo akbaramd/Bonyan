@@ -1,4 +1,5 @@
-﻿using Bonyan.Layer.Domain.Events;
+﻿using Bonyan.Layer.Domain.Abstractions;
+using Bonyan.Layer.Domain.Events;
 using Bonyan.UserManagement.Domain.Enumerations;
 
 namespace Bonyan.UserManagement.Domain.Events
@@ -6,7 +7,7 @@ namespace Bonyan.UserManagement.Domain.Events
     /// <summary>
     /// Domain event that is raised when a user's status changes.
     /// </summary>
-    public class UserStatusChangedEvent : IDomainEvent
+    public class UserStatusChangedEvent : IBonDomainEvent
     {
         /// <summary>
         /// Gets the user whose status changed.

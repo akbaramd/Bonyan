@@ -1,7 +1,5 @@
 ﻿using System.Linq.Expressions;
-using Bonyan.Layer.Domain.Entities;
-using Bonyan.Layer.Domain.Model;
-using Bonyan.Layer.Domain.Specifications;
+using Bonyan.Layer.Domain.Abstractions.Results;
 using Bonyan.MultiTenant;
 using Bonyan.UnitOfWork;
 
@@ -28,14 +26,14 @@ public interface IBonReadOnlyRepository<TEntity> : IBonRepository where TEntity 
     Task<IEnumerable<TEntity>> FindAsync(Expression<Func<TEntity, bool>> predicate);
     Task<TEntity?> FindOneAsync(Expression<Func<TEntity, bool>> predicate);
     Task<TEntity> GetOneAsync(Expression<Func<TEntity, bool>> predicate);
-    Task<IEnumerable<TEntity>> FindAsync(ISpecification<TEntity> specification);
-    Task<TEntity?> FindOneAsync(ISpecification<TEntity> specification);
-    Task<TEntity> GetOneAsync(ISpecification<TEntity> specification);
+    Task<IEnumerable<TEntity>> FindAsync(IBonSpecification<TEntity> bonSpecification);
+    Task<TEntity?> FindOneAsync(IBonSpecification<TEntity> bonSpecification);
+    Task<TEntity> GetOneAsync(IBonSpecification<TEntity> bonSpecification);
     Task<int> CountAsync(Expression<Func<TEntity, bool>> predicate);
     Task<bool> ExistsAsync(Expression<Func<TEntity, bool>> predicate);
     
-    Task<BonPaginatedResult<TEntity>> PaginatedAsync(PaginatedSpecification<TEntity> paginateSpecification);
-    Task<BonPaginatedResult<TEntity>> PaginatedAsync(PaginatedAndSortableSpecification<TEntity> paginateSpecification);
+    Task<BonPaginatedResult<TEntity>> PaginatedAsync(BonPaginatedSpecification<TEntity> paginateSpecification);
+    Task<BonPaginatedResult<TEntity>> PaginatedAsync(BonPaginatedAndSortableSpecification<TEntity> paginateSpecification);
     Task<BonPaginatedResult<TEntity>> PaginatedAsync(Expression<Func<TEntity, bool>> predicate, int take, int skip);
 }
 

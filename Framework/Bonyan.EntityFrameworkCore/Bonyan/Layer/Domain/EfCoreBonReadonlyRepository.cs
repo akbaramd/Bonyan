@@ -4,8 +4,9 @@ using Bonyan.DependencyInjection;
 using Bonyan.EntityFrameworkCore;
 using Bonyan.EntityFrameworkCore.Abstractions;
 using Bonyan.Exceptions;
+using Bonyan.Layer.Domain.Abstractions;
+using Bonyan.Layer.Domain.Abstractions.Results;
 using Bonyan.Layer.Domain.Entities;
-using Bonyan.Layer.Domain.Model;
 using Bonyan.Layer.Domain.Specifications;
 using Bonyan.MultiTenant;
 using Microsoft.EntityFrameworkCore;
@@ -69,16 +70,16 @@ namespace Bonyan.Layer.Domain
             return await query.AnyAsync(predicate);
         }
 
-        public async Task<IEnumerable<TEntity>> FindAsync(ISpecification<TEntity> specification)
+        public async Task<IEnumerable<TEntity>> FindAsync(IBonSpecification<TEntity> bonSpecification)
         {
             var query = await GetQueryAsync();
-            query = ApplySpecification(query, specification);
+            query = ApplySpecification(query, bonSpecification);
             return await query.ToListAsync();
         }
 
-        public async Task<TEntity?> FindOneAsync(ISpecification<TEntity> specification)
+        public async Task<TEntity?> FindOneAsync(IBonSpecification<TEntity> bonSpecification)
         {
-            var query = ApplySpecification(await GetQueryAsync(), specification);
+            var query = ApplySpecification(await GetQueryAsync(), bonSpecification);
             return await query.FirstOrDefaultAsync();
         }
 
@@ -88,13 +89,13 @@ namespace Bonyan.Layer.Domain
                 ?? throw new BonException($"Entity with predicate {predicate} not found");
         }
 
-        public async Task<TEntity> GetOneAsync(ISpecification<TEntity> specification)
+        public async Task<TEntity> GetOneAsync(IBonSpecification<TEntity> bonSpecification)
         {
-            return await FindOneAsync(specification) 
-                ?? throw new BonException($"Entity with specification {specification} not found");
+            return await FindOneAsync(bonSpecification) 
+                ?? throw new BonException($"Entity with specification {bonSpecification} not found");
         }
 
-        public async Task<BonPaginatedResult<TEntity>> PaginatedAsync(PaginatedSpecification<TEntity> paginateSpecification)
+        public async Task<BonPaginatedResult<TEntity>> PaginatedAsync(BonPaginatedSpecification<TEntity> paginateSpecification)
         {
             var query = ApplySpecification(await GetQueryAsync(), paginateSpecification);
             var totalCount = await query.CountAsync();
@@ -103,7 +104,7 @@ namespace Bonyan.Layer.Domain
             return new BonPaginatedResult<TEntity>(results, paginateSpecification.Skip, paginateSpecification.Take, totalCount);
         }
 
-        public async Task<BonPaginatedResult<TEntity>> PaginatedAsync(PaginatedAndSortableSpecification<TEntity> paginateSpecification)
+        public async Task<BonPaginatedResult<TEntity>> PaginatedAsync(BonPaginatedAndSortableSpecification<TEntity> paginateSpecification)
         {
             var query = ApplySpecification(await GetQueryAsync(), paginateSpecification);
             var totalCount = await query.CountAsync();
@@ -127,14 +128,14 @@ namespace Bonyan.Layer.Domain
             return new BonPaginatedResult<TEntity>(results, skip, take, totalCount);
         }
 
-        private static IQueryable<TEntity> ApplySpecification(IQueryable<TEntity> query, ISpecification<TEntity> specification)
+        private static IQueryable<TEntity> ApplySpecification(IQueryable<TEntity> query, IBonSpecification<TEntity> bonSpecification)
         {
-            var context = new SpecificationContext<TEntity>(query);
-            specification.Handle(context);
+            var context = new BonSpecificationContext<TEntity>(query);
+            bonSpecification.Handle(context);
             return context.Query;
         }
 
-        private static IQueryable<TEntity> ApplyPagination(IQueryable<TEntity> query, PaginatedSpecification<TEntity> specification)
+        private static IQueryable<TEntity> ApplyPagination(IQueryable<TEntity> query, BonPaginatedSpecification<TEntity> specification)
         {
             return ApplySpecification(query, specification).Skip(specification.Skip).Take(specification.Take);
         }

@@ -1,4 +1,4 @@
-﻿namespace Bonyan.Layer.Domain.Entities;
+﻿namespace Bonyan.Layer.Domain.Abstractions;
 
 public interface IBonEntity
 {

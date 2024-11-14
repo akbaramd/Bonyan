@@ -1,4 +1,4 @@
-namespace Bonyan.Layer.Domain.Model;
+namespace Bonyan.Layer.Domain.Abstractions.Results;
 
 public class BonPaginatedResult<T> where T : class
 {

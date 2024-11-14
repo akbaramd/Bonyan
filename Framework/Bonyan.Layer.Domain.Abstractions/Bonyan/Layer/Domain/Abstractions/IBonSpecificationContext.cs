@@ -1,9 +1,8 @@
 using System.Linq.Expressions;
-using Microsoft.EntityFrameworkCore.Query;
 
-namespace Bonyan.Layer.Domain.Specifications;
+namespace Bonyan.Layer.Domain.Abstractions;
 
-public interface ISpecificationContext<T> where T : class
+public interface IBonSpecificationContext<T> where T : class
 {
   IQueryable<T> Query { get; }
 
@@ -18,7 +17,7 @@ public interface ISpecificationContext<T> where T : class
 
   
   // Method to apply includes (eager loading)
-  IIncludeSpecificationContext<T, TProperty> AddInclude<TProperty>(Expression<Func<T, TProperty>> include);
+  IBonIncludeBonSpecificationContext<T, TProperty> AddInclude<TProperty>(Expression<Func<T, TProperty>> include);
 
   // New methods
   // Apply where entity property matches any value from a list
@@ -35,10 +34,4 @@ public interface ISpecificationContext<T> where T : class
 
   // Get min value
   TKey? ApplyMin<TKey>(Expression<Func<T, TKey>> keySelector);
-}
-
-
-public interface IIncludeSpecificationContext<T, TProperty> : ISpecificationContext<T> where T : class
-{
-  new IIncludableQueryable<T,TProperty> Query { get; }
 }
