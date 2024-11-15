@@ -1,5 +1,4 @@
 using Bonyan.Layer.Domain.DomainService;
-using Bonyan.Layer.Domain.Services;
 using JetBrains.Annotations;
 
 namespace Bonyan.TenantManagement.Domain;

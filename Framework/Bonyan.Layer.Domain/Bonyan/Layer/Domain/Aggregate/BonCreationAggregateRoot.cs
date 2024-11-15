@@ -1,5 +1,4 @@
 ﻿using Bonyan.Layer.Domain.Aggregate.Abstractions;
-using Bonyan.Layer.Domain.Audit.Abstractions;
 
 namespace Bonyan.Layer.Domain.Aggregate;
 

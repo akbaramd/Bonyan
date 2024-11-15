@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Bonyan.DependencyInjection;
 using Bonyan.Layer.Application.Abstractions;
-using Bonyan.Messaging;
 using Bonyan.Messaging.Abstractions;
 using Bonyan.MultiTenant;
 using Bonyan.UnitOfWork;

@@ -1,5 +1,4 @@
-﻿using Bonyan.Layer.Domain.Repository;
-using Bonyan.Layer.Domain.Repository.Abstractions;
+﻿using Bonyan.Layer.Domain.Repository.Abstractions;
 using Bonyan.UserManagement.Domain.ValueObjects;
 
 namespace Bonyan.UserManagement.Domain.Repositories

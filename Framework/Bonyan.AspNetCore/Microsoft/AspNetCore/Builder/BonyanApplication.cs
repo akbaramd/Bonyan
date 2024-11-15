@@ -39,7 +39,7 @@ public class BonyanApplication
         applicationBuilder.Host.UseBonAutofac();
         
         // Store the service name in a shared configuration
-        applicationBuilder.Services.AddObjectAccessor<BonyanServiceOptions>(new BonyanServiceOptions()
+        applicationBuilder.Services.AddObjectAccessor<BonServiceOptions>(new BonServiceOptions()
         {
             ServiceName = serviceName
         });
@@ -48,7 +48,7 @@ public class BonyanApplication
         var modularApp = InitializeModularApplication<TModule>(applicationBuilder.Services);
 
         // Register core services for the modular application
-        applicationBuilder.Services.AddSingleton<IBonModularityApplication>(modularApp);
+        
         applicationBuilder.Services.AddSingleton<IWebBonModularityApplication>(modularApp);
 
       

@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <RootNamespace />
+        <PackageId>Bonyan.Layer.Messaging.OutBox</PackageId>
+    </PropertyGroup>
+
+    <Import Project="..\..\package.props" />
+
+    <ItemGroup>
+      <ProjectReference Include="..\Bonyan.Messaging\Bonyan.Messaging.csproj" />
+      <ProjectReference Include="..\Bonyan.Worker.Abstraction\Bonyan.Worker.Abstraction.csproj" />
+      <ProjectReference Include="..\Bonyan.Worker\Bonyan.Worker.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="RabbitMQ.Client" Version="6.8.1" />
+    </ItemGroup>
+</Project>

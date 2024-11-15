@@ -1,6 +1,5 @@
 using System.Reflection;
 using Bonyan.Helpers;
-using Bonyan.Layer.Domain.Entities;
 using Bonyan.Layer.Domain.Entity;
 using Microsoft.EntityFrameworkCore;
 

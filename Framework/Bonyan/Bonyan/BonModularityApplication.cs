@@ -21,7 +21,7 @@ public class BonModularityApplication<TModule> : IBonModularityApplication where
     public BonModularityApplication(IServiceCollection serviceCollection)
     {
         _serviceCollection = serviceCollection ?? throw new ArgumentNullException(nameof(serviceCollection));
-        
+
         _bonModuleAccessor = new BonModuleAccessor();
         var moduleManager = new ModuleManager(_bonModuleAccessor);
 
@@ -31,10 +31,10 @@ public class BonModularityApplication<TModule> : IBonModularityApplication where
         _serviceCollection.AddSingleton<IModuleLoader>(moduleManager);
         _serviceCollection.AddSingleton<IBonModuleConfigurator>(this);
         _serviceCollection.AddSingleton<IBonModuleInitializer>(this);
+        _serviceCollection.AddSingleton<IBonModularityApplication>(this);
 
         _bonModuleAccessor.AddModule(new ModuleInfo(typeof(BonMasterModule)));
         moduleManager.LoadModules(typeof(TModule));
-        
         ServiceProvider = _serviceCollection.BuildServiceProvider();
     }
 
@@ -51,21 +51,22 @@ public class BonModularityApplication<TModule> : IBonModularityApplication where
     /// <summary>
     /// Configures all modules by invoking pre-configuration, configuration, and post-configuration phases.
     /// </summary>
-    public async Task ConfigureModulesAsync()
+    public Task ConfigureModulesAsync()
     {
-        using var serviceProvider = _serviceCollection.BuildServiceProvider();
-        var configuration = serviceProvider.GetRequiredService<IConfiguration>();
-        var context = new BonConfigurationContext(_serviceCollection, configuration);
-
-        foreach (var module in Modules)
+        _serviceCollection.AddBonyan((context) =>
         {
-            if (module.Instance != null) module.Instance.Services = _serviceCollection;
-        }
-        
-        // Execute configuration phases in order
-        await ExecuteModulePhaseAsync(context, (module, ctx) => module.OnPreConfigureAsync(ctx));
-        await ExecuteModulePhaseAsync(context, (module, ctx) => module.OnConfigureAsync(ctx));
-        await ExecuteModulePhaseAsync(context, (module, ctx) => module.OnPostConfigureAsync(ctx));
+            foreach (var module in Modules)
+            {
+                if (module.Instance != null) module.Instance.Services = _serviceCollection;
+            }
+
+            ExecuteModulePhaseAsync(context, (module, ctx) => module.OnPreConfigureAsync(ctx)).GetAwaiter().GetResult();
+            ExecuteModulePhaseAsync(context, (module, ctx) => module.OnConfigureAsync(ctx)).GetAwaiter().GetResult();
+            ExecuteModulePhaseAsync(context, (module, ctx) => module.OnPostConfigureAsync(ctx)).GetAwaiter()
+                .GetResult();
+        });
+
+        return Task.CompletedTask;
     }
 
     /// <summary>
@@ -76,13 +77,14 @@ public class BonModularityApplication<TModule> : IBonModularityApplication where
     {
         if (serviceProvider == null) throw new ArgumentNullException(nameof(serviceProvider));
 
-        var configuration = serviceProvider.GetRequiredService<IConfiguration>();
-        var context = new ServiceInitializationContext(serviceProvider, configuration);
-
-        // Execute initialization phases in order
-        await ExecuteModulePhaseAsync(context, (module, ctx) => module.OnPreInitializeAsync(ctx));
-        await ExecuteModulePhaseAsync(context, (module, ctx) => module.OnInitializeAsync(ctx));
-        await ExecuteModulePhaseAsync(context, (module, ctx) => module.OnPostInitializeAsync(ctx));
+        serviceProvider.InitializeBonyan(context =>
+        {
+            ExecuteModulePhaseAsync(context, (module, ctx) => module.OnPreInitializeAsync(ctx)).GetAwaiter()
+                .GetResult();
+            ExecuteModulePhaseAsync(context, (module, ctx) => module.OnInitializeAsync(ctx)).GetAwaiter().GetResult();
+            ExecuteModulePhaseAsync(context, (module, ctx) => module.OnPostInitializeAsync(ctx)).GetAwaiter()
+                .GetResult();
+        });
     }
 
     /// <summary>
@@ -92,8 +94,8 @@ public class BonModularityApplication<TModule> : IBonModularityApplication where
     /// <param name="context">The context to pass to each module phase.</param>
     /// <param name="phaseAction">The action to execute for each module phase.</param>
     private async Task ExecuteModulePhaseAsync<TContext>(
-        TContext context, 
-        Func<IBonModule, TContext, Task> phaseAction) 
+        TContext context,
+        Func<IBonModule, TContext, Task> phaseAction)
         where TContext : class
     {
         foreach (var moduleInfo in Modules)
@@ -109,7 +111,8 @@ public class BonModularityApplication<TModule> : IBonModularityApplication where
                     // Log or handle specific module errors as needed
                     // For example: logger.LogError(ex, $"Error during module {moduleInfo.Instance.GetType().Name} execution.");
                     throw new InvalidOperationException(
-                        $"An error occurred while executing a module phase for {moduleInfo.Instance.GetType().Name}.", ex);
+                        $"An error occurred while executing a module phase for {moduleInfo.Instance.GetType().Name}.",
+                        ex);
                 }
             }
         }

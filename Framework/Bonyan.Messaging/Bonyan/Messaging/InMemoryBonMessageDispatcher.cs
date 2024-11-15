@@ -6,19 +6,19 @@ namespace Bonyan.Messaging;
 public class InMemoryBonMessageDispatcher : IBonMessageDispatcher
 {
     private readonly IServiceProvider _serviceProvider;
-    private readonly BonMessagingOptions _options;
+    private readonly BonMessagingConfiguration _configuration;
 
     public InMemoryBonMessageDispatcher(IServiceProvider serviceProvider)
     {
         _serviceProvider = serviceProvider;
-        _options = _serviceProvider.GetRequiredService<BonMessagingOptions>();
+        _configuration = _serviceProvider.GetRequiredService<BonMessagingConfiguration>();
     }
 
     public async Task SendAsync<TMessage>(string serviceName, TMessage message,
         CancellationToken cancellationToken = default)
         where TMessage : IBonMessage
     {
-        var consumerRegistration = _options.GetConsumerRegistrations()
+        var consumerRegistration = _configuration.GetConsumerRegistrations()
             .FirstOrDefault(cr =>
                 cr.ServiceType == typeof(IBonMessageConsumer<TMessage>) && cr.ServiceName == serviceName);
 
@@ -34,7 +34,7 @@ public class InMemoryBonMessageDispatcher : IBonMessageDispatcher
     public async Task PublishAsync<TMessage>(TMessage message, CancellationToken cancellationToken = default)
         where TMessage : IBonMessage
     {
-        var consumerRegistrations = _options.GetConsumerRegistrations()
+        var consumerRegistrations = _configuration.GetConsumerRegistrations()
             .Where(cr => cr.ServiceType == typeof(IBonMessageConsumer<TMessage>));
 
         var tasks = new List<Task>();

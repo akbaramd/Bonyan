@@ -10,7 +10,7 @@
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\..\Framework\Bonyan.AspNetCore.Components\Bonyan.AspNetCore.Components.csproj" />
-        <ProjectReference Include="..\..\Framework\Bonyan.AspNetCore.Workers.Hangfire\Bonyan.AspNetCore.Workers.Hangfire.csproj" />
+        <ProjectReference Include="..\..\Framework\Bonyan.Workers.Hangfire\Bonyan.Workers.Hangfire.csproj" />
         <ProjectReference Include="..\..\Framework\Bonyan.EntityFrameworkCore\Bonyan.EntityFrameworkCore.csproj"/>
         <ProjectReference Include="..\..\Framework\Bonyan.AspNetCore\Bonyan.AspNetCore.csproj"/>
         <ProjectReference Include="..\..\Framework\Bonyan.EntityFrameworkCore.SqlServer\Bonyan.EntityFrameworkCore.SqlServer.csproj"/>

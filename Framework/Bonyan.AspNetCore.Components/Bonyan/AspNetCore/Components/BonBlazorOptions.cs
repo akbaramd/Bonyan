@@ -1,5 +1,4 @@
 ﻿using System.Reflection;
-using System.Security.Principal;
 
 namespace Bonyan.AspNetCore.Components;
 

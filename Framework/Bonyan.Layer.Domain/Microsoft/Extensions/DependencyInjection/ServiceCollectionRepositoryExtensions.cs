@@ -1,6 +1,5 @@
 using Bonyan.Helpers;
 using Bonyan.Layer.Domain.Entities;
-using Bonyan.Layer.Domain.Repository;
 using Bonyan.Layer.Domain.Repository.Abstractions;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 

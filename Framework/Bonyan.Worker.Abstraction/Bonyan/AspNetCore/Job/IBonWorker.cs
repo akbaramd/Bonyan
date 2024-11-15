@@ -1,6 +1,4 @@
-﻿using Bonyan.UnitOfWork;
-
-namespace Bonyan.AspNetCore.Job;
+﻿namespace Bonyan.AspNetCore.Job;
 
 public interface IBonWorker 
 {

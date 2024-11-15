@@ -1,5 +1,4 @@
 ﻿using Bonyan.Layer.Domain.DomainEvent.Abstractions;
-using Bonyan.Layer.Domain.Events;
 using Bonyan.UserManagement.Domain.Enumerations;
 
 namespace Bonyan.UserManagement.Domain.Events

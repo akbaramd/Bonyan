@@ -6,8 +6,6 @@ using Bonyan.Modularity;
 using Bonyan.Modularity.Abstractions;
 using Bonyan.MultiTenant;
 using Bonyan.TenantManagement.EntityFrameworkCore;
-using Bonyan.UserManagement.Domain;
-using Bonyan.UserManagement.Domain.Repositories;
 using Bonyan.UserManagement.Domain.ValueObjects;
 using BonyanTemplate.Domain;
 using BonyanTemplate.Domain.Entities;
@@ -52,7 +50,7 @@ public class BonaynTempalteInfrastructureModule : BonModule
     return base.OnConfigureAsync(context);
   }
 
-  public override async Task OnPostInitializeAsync(ServiceInitializationContext context)
+  public override async Task OnPostInitializeAsync(BonInitializedContext context)
   {
     var userRepo = context.RequireService<BonUserManager<User>>();
     if (await userRepo.FindByUserNameAsync("admin") == null)

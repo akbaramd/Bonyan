@@ -1,6 +1,4 @@
-﻿
-using Autofac;
-using Bonyan.Castle.DynamicProxy;
+﻿using Bonyan.Castle.DynamicProxy;
 using Bonyan.DependencyInjection;
 using Bonyan.Modularity;
 using Bonyan.Modularity.Abstractions;

@@ -1,7 +1,4 @@
-﻿using Bonyan.Layer.Domain.Entities;
-using System.Collections.Generic;
-using System.Linq;
-using Bonyan.Layer.Domain.Aggregate;
+﻿using Bonyan.Layer.Domain.Aggregate;
 using Bonyan.Layer.Domain.Events;
 
 namespace Bonyan.IdentityManagement.Domain

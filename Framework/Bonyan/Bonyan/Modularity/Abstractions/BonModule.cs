@@ -2,7 +2,6 @@ using System.Reflection;
 using Microsoft;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Module = Autofac.Module;
 
 namespace Bonyan.Modularity.Abstractions
 {
@@ -20,11 +19,11 @@ namespace Bonyan.Modularity.Abstractions
 
         public virtual Task OnPostConfigureAsync(BonConfigurationContext context) => Task.CompletedTask;
 
-        public virtual Task OnPreInitializeAsync(ServiceInitializationContext context) => Task.CompletedTask;
+        public virtual Task OnPreInitializeAsync(BonInitializedContext context) => Task.CompletedTask;
 
-        public virtual Task OnInitializeAsync(ServiceInitializationContext context) => Task.CompletedTask;
+        public virtual Task OnInitializeAsync(BonInitializedContext context) => Task.CompletedTask;
 
-        public virtual Task OnPostInitializeAsync(ServiceInitializationContext context) => Task.CompletedTask;
+        public virtual Task OnPostInitializeAsync(BonInitializedContext context) => Task.CompletedTask;
 
         /// <summary>
         /// Checks if the provided type is a valid Bonyan module type.

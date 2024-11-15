@@ -1,6 +1,4 @@
 ﻿using Bonyan.Modularity;
-using Bonyan.Validation;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Bonyan.AspNetCore.Components;
 

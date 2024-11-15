@@ -1,11 +1,8 @@
 using Bonyan.DependencyInjection;
-using Bonyan.EntityFrameworkCore;
 using Bonyan.IdentityManagement.Domain;
 using Bonyan.IdentityManagement.EntityFrameworkCore.Repositories;
 using Bonyan.Modularity;
 using Bonyan.Modularity.Abstractions;
-using Bonyan.UserManagement.Domain;
-using Bonyan.UserManagement.Domain.Repositories;
 using Bonyan.UserManagement.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 

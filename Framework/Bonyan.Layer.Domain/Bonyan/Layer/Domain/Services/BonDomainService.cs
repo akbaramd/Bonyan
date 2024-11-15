@@ -1,7 +1,6 @@
 using Bonyan.DependencyInjection;
 using Bonyan.Layer.Domain.DomainEvent.Abstractions;
 using Bonyan.Layer.Domain.DomainService;
-using Bonyan.Layer.Domain.Events;
 using Bonyan.MultiTenant;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;

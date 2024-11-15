@@ -1,5 +1,4 @@
-﻿using Bonyan.Layer.Domain.Entities;
-using Bonyan.Layer.Domain.Entity;
+﻿using Bonyan.Layer.Domain.Entity;
 
 namespace Bonyan.IdentityManagement.Domain;
 

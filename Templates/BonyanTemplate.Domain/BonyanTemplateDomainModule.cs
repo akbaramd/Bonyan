@@ -5,7 +5,6 @@ using Bonyan.Modularity.Abstractions;
 using Bonyan.TenantManagement.Domain;
 using BonyanTemplate.Domain.Entities;
 using BonyanTemplate.Domain.Handlers;
-using Microsoft.Extensions.DependencyInjection;
 
 
 namespace BonyanTemplate.Domain
@@ -20,7 +19,7 @@ namespace BonyanTemplate.Domain
 
         public override Task OnConfigureAsync(BonConfigurationContext context)
         {
-            PreConfigure<BonMessagingOptions>(c =>
+            PreConfigure<BonMessagingConfiguration>(c =>
             {
                 c.RegisterConsumer<BookBonDomainHandler>();
             });

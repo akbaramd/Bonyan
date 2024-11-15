@@ -1,4 +1,3 @@
-using Autofac.Core;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Bonyan.Modularity.Abstractions;

@@ -1,5 +1,4 @@
 ﻿@using Bonyan.AspNetCore.Components.Menus
-@using Microsoft.AspNetCore.Components.Routing
 
 <li class="nav-item @(HasChildren ? "has-treeview" : "")">
     <NavLink href="@(!HasChildren ? MenuItem.Url : "#")" class="nav-link" Match="NavLinkMatch.All" @onclick="(e) => OnClick(e)">

@@ -1,6 +1,5 @@
 ﻿using Bonyan.Layer.Domain.Aggregate;
 using Bonyan.Layer.Domain.ValueObjects;
-using Bonyan.MultiTenant;
 using BonyanTemplate.Domain.DomainEvents;
 
 namespace BonyanTemplate.Domain.Entities;

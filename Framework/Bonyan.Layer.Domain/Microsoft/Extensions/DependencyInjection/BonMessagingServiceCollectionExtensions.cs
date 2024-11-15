@@ -1,8 +1,6 @@
-﻿using System;
-using Bonyan.Layer.Domain.DomainEvent.Abstractions;
+﻿using Bonyan.Layer.Domain.DomainEvent.Abstractions;
 using Bonyan.Layer.Domain.Events;
 using Bonyan.Messaging.Abstractions;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Microsoft.Extensions.DependencyInjection
 {

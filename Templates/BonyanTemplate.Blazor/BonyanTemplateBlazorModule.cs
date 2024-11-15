@@ -1,9 +1,7 @@
-using Bonyan.AdminLte;
 using Bonyan.AdminLte.Blazor.IdentityManagement;
 using Bonyan.AspNetCore.Components;
 using Bonyan.AspNetCore.Components.Menus;
 using Bonyan.Modularity;
-using Bonyan.TenantManagement.Web;
 using Bonyan.Ui.Blazimum;
 using BonyanTemplate.Application;
 using BonyanTemplate.Blazor.Components;
@@ -11,9 +9,7 @@ using BonyanTemplate.Blazor.Menus;
 using BonyanTemplate.Blazor.Themes;
 using BonyanTemplate.Domain.Entities;
 using BonyanTemplate.Infrastructure;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.CodeAnalysis.Options;
 using Microsoft.Extensions.Options;
 
 namespace BonyanTemplate.Blazor;

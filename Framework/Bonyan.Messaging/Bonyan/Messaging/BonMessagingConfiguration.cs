@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
+﻿using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 using Bonyan.Messaging.Abstractions;
 using Bonyan.Messaging.Attributes;
@@ -11,8 +8,17 @@ namespace Bonyan.Messaging
     /// <summary>
     /// Provides configuration options for registering message consumers and dispatchers in the messaging system.
     /// </summary>
-    public class BonMessagingOptions
+    public class BonMessagingConfiguration
     {
+        public BonMessagingConfiguration(IServiceCollection services, string serviceName, ServiceLifetime consumerLifetime = ServiceLifetime.Transient)
+        {
+            Services = services;
+            ConsumerLifetime = consumerLifetime;
+            ServiceName = serviceName;
+        }
+
+        public IServiceCollection Services { get; set; }
+        
         private readonly List<Assembly> _assemblies = new();
         private readonly List<Type> _consumerTypes = new();
         private readonly List<ConsumerRegistration> _consumerRegistrations = new();
@@ -21,7 +27,7 @@ namespace Bonyan.Messaging
         /// Gets or sets the default <see cref="ServiceLifetime"/> for registered consumers.
         /// The default is <see cref="ServiceLifetime.Transient"/>.
         /// </summary>
-        public ServiceLifetime ConsumerLifetime { get; set; } = ServiceLifetime.Transient;
+        public ServiceLifetime ConsumerLifetime { get; set; }
 
         /// <summary>
         /// Gets or sets a type filter predicate to include or exclude certain consumer types.
@@ -37,14 +43,14 @@ namespace Bonyan.Messaging
         /// <summary>
         /// Gets the type of the message dispatcher to use.
         /// </summary>
-        internal Type DispatcherType { get; private set; } = typeof(InMemoryBonMessageDispatcher);
+        public Type DispatcherType { get; private set; } = typeof(InMemoryBonMessageDispatcher);
 
         /// <summary>
         /// Sets the message dispatcher to use.
         /// </summary>
         /// <typeparam name="TDispatcher">The type of the message dispatcher.</typeparam>
-        /// <returns>The current <see cref="BonMessagingOptions"/> instance for chaining.</returns>
-        public BonMessagingOptions UseDispatcher<TDispatcher>() where TDispatcher : class, IBonMessageDispatcher
+        /// <returns>The current <see cref="BonMessagingConfiguration"/> instance for chaining.</returns>
+        public BonMessagingConfiguration UseDispatcher<TDispatcher>() where TDispatcher : class, IBonMessageDispatcher
         {
             DispatcherType = typeof(TDispatcher);
             return this;
@@ -54,8 +60,8 @@ namespace Bonyan.Messaging
         /// Registers all consumers that implement <see cref="IBonMessageConsumer{TMessage}"/> from the specified assemblies.
         /// </summary>
         /// <param name="assemblies">The assemblies to scan for consumer types.</param>
-        /// <returns>The current <see cref="BonMessagingOptions"/> instance for chaining.</returns>
-        public BonMessagingOptions RegisterConsumersFromAssemblies(params Assembly[] assemblies)
+        /// <returns>The current <see cref="BonMessagingConfiguration"/> instance for chaining.</returns>
+        public BonMessagingConfiguration RegisterConsumersFromAssemblies(params Assembly[] assemblies)
         {
             _assemblies.AddRange(assemblies);
             return this;
@@ -65,8 +71,8 @@ namespace Bonyan.Messaging
         /// Registers specific consumer types directly.
         /// </summary>
         /// <param name="types">The consumer types to register.</param>
-        /// <returns>The current <see cref="BonMessagingOptions"/> instance for chaining.</returns>
-        public BonMessagingOptions RegisterConsumersFromTypes(params Type[] types)
+        /// <returns>The current <see cref="BonMessagingConfiguration"/> instance for chaining.</returns>
+        public BonMessagingConfiguration RegisterConsumersFromTypes(params Type[] types)
         {
             _consumerTypes.AddRange(types);
             return this;
@@ -82,8 +88,8 @@ namespace Bonyan.Messaging
         /// <param name="serviceName">
         /// Optional service name for this consumer. If not specified, the default <see cref="ServiceName"/> is used.
         /// </param>
-        /// <returns>The current <see cref="BonMessagingOptions"/> instance for chaining.</returns>
-        public BonMessagingOptions RegisterConsumer<TConsumer>(ServiceLifetime? lifetime = null, string serviceName = null)
+        /// <returns>The current <see cref="BonMessagingConfiguration"/> instance for chaining.</returns>
+        public BonMessagingConfiguration RegisterConsumer<TConsumer>(ServiceLifetime? lifetime = null, string serviceName = null)
             where TConsumer : class
         {
             var consumerType = typeof(TConsumer);
@@ -103,7 +109,7 @@ namespace Bonyan.Messaging
         /// Registers all discovered consumers into the provided <see cref="IServiceCollection"/>.
         /// </summary>
         /// <param name="services">The service collection to register consumers into.</param>
-        internal void RegisterConsumers(IServiceCollection services)
+        internal void RegisterConsumers()
         {
             // Collect all consumer types from assemblies
             var assemblyConsumerTypes = _assemblies
@@ -127,7 +133,7 @@ namespace Bonyan.Messaging
             foreach (var registration in _consumerRegistrations)
             {
                 var descriptor = new ServiceDescriptor(registration.ServiceType, registration.ImplementationType, registration.Lifetime);
-                services.Add(descriptor);
+                Services.Add(descriptor);
             }
         }
 
@@ -135,12 +141,12 @@ namespace Bonyan.Messaging
         /// Registers the message dispatcher into the provided <see cref="IServiceCollection"/>.
         /// </summary>
         /// <param name="services">The service collection to register the dispatcher into.</param>
-        internal void RegisterDispatcher(IServiceCollection services)
+        internal void RegisterDispatcher()
         {
             // Check if IMessageDispatcher is already registered
-            if (!services.Any(service => service.ServiceType == typeof(IBonMessageDispatcher)))
+            if (Services.All(service => service.ServiceType != typeof(IBonMessageDispatcher)))
             {
-                services.AddSingleton(typeof(IBonMessageDispatcher), DispatcherType);
+                Services.AddSingleton(typeof(IBonMessageDispatcher), DispatcherType);
             }
         }
 

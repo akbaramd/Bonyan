@@ -6,24 +6,23 @@ public static class BonMessagingServiceCollectionExtensions
 {
     public static IServiceCollection AddBonMessaging(
         this IServiceCollection services,
-        string serviceName ,
-        Action<BonMessagingOptions> configureOptions)
+        string serviceName,
+        Action<BonMessagingConfiguration> configureOptions)
     {
-        var options = new BonMessagingOptions
-        {
-            ServiceName = serviceName,
-        };
+        var options = new BonMessagingConfiguration(services, serviceName);
 
+        options.UseDispatcher<InMemoryBonMessageDispatcher>();
+        
         configureOptions(options);
 
-        // Register BonMessagingOptions in the service collection
+        // Register BonMessagingConfiguration in the service collection
         services.AddSingleton(options);
 
         // Register the dispatcher
-        options.RegisterDispatcher(services);
+        options.RegisterDispatcher();
 
         // Register consumers
-        options.RegisterConsumers(services);
+        options.RegisterConsumers();
 
         return services;
     }

@@ -7,9 +7,9 @@ namespace Bonyan.Modularity
     /// <summary>
     /// Context for initializing services with configuration and dependency resolution capabilities.
     /// </summary>
-    public class ServiceInitializationContext : BonContextBase
+    public class BonInitializedContext : BonContextBase
     {
-        public ServiceInitializationContext(IServiceProvider services, IConfiguration configuration)
+        public BonInitializedContext(IServiceProvider services, IConfiguration configuration)
             : base(services, configuration)
         {
         }
@@ -31,8 +31,10 @@ namespace Bonyan.Modularity
             var option = RequiredOption<T>();
             if (!validate(option))
             {
-                throw new ConfigurationValidationException(typeof(T), "Validation failed for required configuration option.");
+                throw new ConfigurationValidationException(typeof(T),
+                    "Validation failed for required configuration option.");
             }
+
             return option;
         }
     }

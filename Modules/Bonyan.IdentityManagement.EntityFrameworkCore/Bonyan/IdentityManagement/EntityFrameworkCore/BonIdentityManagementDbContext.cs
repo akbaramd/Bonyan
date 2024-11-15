@@ -1,6 +1,5 @@
 using Bonyan.EntityFrameworkCore;
 using Bonyan.IdentityManagement.Domain;
-using Bonyan.UserManagement.Domain;
 using Microsoft.EntityFrameworkCore;
 
 namespace Bonyan.IdentityManagement.EntityFrameworkCore;

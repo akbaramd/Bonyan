@@ -1,4 +1,3 @@
-using Bonyan.Layer.Domain.Repository;
 using Bonyan.Layer.Domain.Repository.Abstractions;
 
 namespace Bonyan.TenantManagement.Domain;

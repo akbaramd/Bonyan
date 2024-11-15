@@ -1,8 +1,6 @@
 ﻿using Bonyan.IdentityManagement.Application;
 using Bonyan.IdentityManagement.Domain;
 using Bonyan.Modularity;
-using Bonyan.UserManagement.Application;
-using Bonyan.UserManagement.Domain;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;

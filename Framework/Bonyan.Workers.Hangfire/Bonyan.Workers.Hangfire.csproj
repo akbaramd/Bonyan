@@ -1,11 +1,11 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <RootNamespace/>
         <OutputType>Library</OutputType>
-        <PackageId>Bonyan.AspNetCore.Workers.Hangfire</PackageId>
+        <PackageId>Bonyan.Workers.Hangfire</PackageId>
     </PropertyGroup>
 
     <Import Project="..\..\package.props"/>
@@ -15,8 +15,9 @@
         <PackageReference Include="Hangfire.InMemory" Version="0.10.3"/>
     </ItemGroup>
     <ItemGroup>
-        <ProjectReference Include="..\Bonyan.AspNetCore\Bonyan.AspNetCore.csproj"/>
+        <ProjectReference Include="..\Bonyan\Bonyan.csproj"/>
         <ProjectReference Include="..\Bonyan.Worker.Abstraction\Bonyan.Worker.Abstraction.csproj" />
+        <ProjectReference Include="..\Bonyan.Worker\Bonyan.Worker.csproj" />
     </ItemGroup>
 
 </Project>

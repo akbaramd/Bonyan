@@ -4,7 +4,6 @@ using Bonyan.DependencyInjection;
 using Bonyan.EntityFrameworkCore;
 using Bonyan.EntityFrameworkCore.Abstractions;
 using Bonyan.Exceptions;
-using Bonyan.Layer.Domain.Entities;
 using Bonyan.Layer.Domain.Entity;
 using Bonyan.Layer.Domain.Repository.Abstractions;
 using Bonyan.Layer.Domain.Specification.Abstractions;

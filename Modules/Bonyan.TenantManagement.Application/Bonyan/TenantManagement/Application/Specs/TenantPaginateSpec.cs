@@ -1,5 +1,4 @@
 using Bonyan.Layer.Domain.Specification.Abstractions;
-using Bonyan.Layer.Domain.Specifications;
 using Bonyan.TenantManagement.Application.Dto;
 using Bonyan.TenantManagement.Domain;
 

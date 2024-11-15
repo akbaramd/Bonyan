@@ -1,10 +1,4 @@
-﻿using Bonyan.Layer.Domain.Entities;
-using System.Collections.Generic;
-using System.Linq;
-using Bonyan.Layer.Domain.Events;
-using Bonyan.UserManagement.Domain;
-using Bonyan.UserManagement.Domain.Enumerations;
-using Bonyan.UserManagement.Domain.Events;
+﻿using Bonyan.UserManagement.Domain;
 using Bonyan.UserManagement.Domain.ValueObjects;
 
 namespace Bonyan.IdentityManagement.Domain

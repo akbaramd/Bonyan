@@ -1,6 +1,6 @@
 ﻿namespace Bonyan;
 
-public class BonyanServiceOptions
+public class BonServiceOptions
 {
     public string ServiceName { get; set; }
 }
