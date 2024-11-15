@@ -1,6 +1,6 @@
 using System.Net;
 
-namespace Exceptions;
+namespace Bonyan.Layer.Application.Exceptions;
 
 public class BonApplicationException(
   HttpStatusCode status,

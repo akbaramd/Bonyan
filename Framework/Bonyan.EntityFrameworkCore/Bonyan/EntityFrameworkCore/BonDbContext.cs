@@ -9,6 +9,7 @@ using Bonyan.Layer.Domain.Entities;
 using Bonyan.Layer.Domain.Entity;
 using Bonyan.Layer.Domain.Events;
 using Bonyan.Messaging;
+using Bonyan.Messaging.Abstractions;
 using Bonyan.MultiTenant;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
@@ -30,7 +31,7 @@ public class BonDbContext<TDbContext> : DbContext , IBonDbContext<TDbContext> wh
   
   public IBonCurrentTenant? CurrentTenant => ServiceProvider?.GetService<IBonCurrentTenant>();
   private IOptions<BonMultiTenancyOptions>? TenancyOptions => ServiceProvider?.GetService<IOptions<BonMultiTenancyOptions>>();
-  private IMessageDispatcher? DomainEventDispatcher => ServiceProvider?.GetService<IMessageDispatcher>();
+  private IBonMessageDispatcher? DomainEventDispatcher => ServiceProvider?.GetService<IBonMessageDispatcher>();
   protected virtual Guid? CurrentTenantId => CurrentTenant?.Id;
 
 

@@ -1,72 +1,30 @@
-﻿using System;
-using System.Linq;
-using System.Reflection;
-using Bonyan.Messaging;
-using Bonyan.Messaging.Abstractions;
+﻿using Bonyan.Messaging;
 
-namespace Microsoft.Extensions.DependencyInjection
+namespace Microsoft.Extensions.DependencyInjection;
+
+public static class BonMessagingServiceCollectionExtensions
 {
-    public static class BonMessagingServiceCollectionExtensions
+    public static IServiceCollection AddBonMessaging(
+        this IServiceCollection services,
+        string serviceName ,
+        Action<BonMessagingOptions> configureOptions)
     {
-        /// <summary>
-        /// Adds and configures message consumers to the service collection based on the specified options action.
-        /// </summary>
-        /// <param name="services">The service collection to add consumers to.</param>
-        /// <param name="configureOptions">An action to configure MessagingOptions.</param>
-        /// <returns>The updated service collection.</returns>
-        public static IServiceCollection AddBonMessaging(
-            this IServiceCollection services,
-            Action<BonMessagingOptions> configureOptions)
+        var options = new BonMessagingOptions
         {
-            var options = new BonMessagingOptions();
-            configureOptions(options);
-            return services.AddBonMessaging(options);
-        }
+            ServiceName = serviceName,
+        };
 
-        /// <summary>
-        /// Adds and configures message consumers to the service collection based on the specified options.
-        /// </summary>
-        /// <param name="services">The service collection to add consumers to.</param>
-        /// <param name="configureOptions">An action to configure MessagingOptions.</param>
-        /// <returns>The updated service collection.</returns>
-        public static IServiceCollection AddBonMessaging(
-            this IServiceCollection services,
-            BonMessagingOptions options)
-        {
+        configureOptions(options);
 
-            services.AddSingleton<IMessageDispatcher, InMemoryMessageDispatcher>();
+        // Register BonMessagingOptions in the service collection
+        services.AddSingleton(options);
 
-            options.RegisterConsumers(services);
-            
-            return services;
-        }
+        // Register the dispatcher
+        options.RegisterDispatcher(services);
 
-        /// <summary>
-        /// Registers all IMessageConsumer implementations from a given assembly.
-        /// </summary>
-        private static void RegisterConsumersFromAssembly(IServiceCollection services, Assembly assembly)
-        {
-            var consumerTypes = assembly.GetTypes()
-                .Where(t => typeof(IBonMessageConsumer).IsAssignableFrom(t) && t.IsClass && !t.IsAbstract)
-                .ToList();
+        // Register consumers
+        options.RegisterConsumers(services);
 
-            foreach (var consumerType in consumerTypes)
-            {
-                services.AddTransient(typeof(IBonMessageConsumer), consumerType);
-            }
-        }
-
-        /// <summary>
-        /// Registers a specific IMessageConsumer type directly.
-        /// </summary>
-        private static void RegisterConsumer(IServiceCollection services, Type consumerType)
-        {
-            if (!typeof(IBonMessageConsumer).IsAssignableFrom(consumerType))
-            {
-                throw new ArgumentException($"Type {consumerType.Name} does not implement IMessageConsumer.");
-            }
-
-            services.AddTransient(consumerType);
-        }
+        return services;
     }
 }

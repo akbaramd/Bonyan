@@ -1,4 +1,4 @@
-﻿namespace Dto;
+﻿namespace Bonyan.Layer.Application.Dto;
 
 /// <summary>
 /// Represents the base class for aggregate roots in the domain.

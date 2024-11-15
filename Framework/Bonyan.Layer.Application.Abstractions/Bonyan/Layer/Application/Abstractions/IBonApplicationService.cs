@@ -4,7 +4,7 @@ using Bonyan.UnitOfWork;
 using Bonyan.User;
 using Bonyan.Validation;
 
-namespace Bonyan.Layer.Application.Services;
+namespace Bonyan.Layer.Application.Abstractions;
 
 public interface IBonApplicationService : IBonValidationEnabled,IBonUnitOfWorkEnabled,IBonLayServiceProviderConfigurator
 {

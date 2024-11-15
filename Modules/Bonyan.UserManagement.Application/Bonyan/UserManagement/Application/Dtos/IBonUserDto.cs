@@ -1,6 +1,6 @@
-﻿using Bonyan.UserManagement.Domain.Enumerations;
+﻿using Bonyan.Layer.Application.Dto;
+using Bonyan.UserManagement.Domain.Enumerations;
 using Bonyan.UserManagement.Domain.ValueObjects;
-using Dto;
 
 namespace Bonyan.UserManagement.Application.Dtos;
 

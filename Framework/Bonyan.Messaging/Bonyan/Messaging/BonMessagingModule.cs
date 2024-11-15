@@ -10,8 +10,10 @@ namespace Bonyan.Messaging
         public override Task OnPostConfigureAsync(BonConfigurationContext context)
         {
             var preActions = context.Services.GetPreConfigureActions<BonMessagingOptions>();
-            
-            context.Services.AddBonMessaging(c => { preActions.Configure(c); });
+
+            var service = context.Services.GetObject<BonyanServiceOptions>();
+
+            context.Services.AddBonMessaging(service.ServiceName, c => { preActions.Configure(c); });
 
             return base.OnPostConfigureAsync(context);
         }

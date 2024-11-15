@@ -1,6 +1,6 @@
 using System.Net;
+using Bonyan.Layer.Application.Exceptions;
 using Bonyan.Layer.Domain.Exceptions;
-using Exceptions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 

@@ -1,6 +1,6 @@
 ﻿using Bonyan.Layer.Domain.Audit.Abstractions;
 
-namespace Dto;
+namespace Bonyan.Layer.Application.Dto;
 
 public abstract class BonModificationAuditableAggregateRootDto : BonCreationAuditableAggregateRootDto, IBonModificationAuditable
 {

@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using Bonyan.DependencyInjection;
+using Bonyan.Layer.Application.Abstractions;
 using Bonyan.Messaging;
+using Bonyan.Messaging.Abstractions;
 using Bonyan.MultiTenant;
 using Bonyan.UnitOfWork;
 using Bonyan.User;
@@ -14,7 +16,7 @@ public class BonApplicationService : BonLayServiceProviderConfigurator, IBonAppl
     public IBonCurrentUser BonCurrentUser => LazyServiceProvider.LazyGetRequiredService<IBonCurrentUser>();
     public IBonCurrentTenant BonCurrentTenant => LazyServiceProvider.LazyGetRequiredService<IBonCurrentTenant>();
     public IMapper Mapper => LazyServiceProvider.LazyGetRequiredService<IMapper>();
-    public IMessageDispatcher MessageDispatcher => LazyServiceProvider.LazyGetRequiredService<IMessageDispatcher>();
+    public IBonMessageDispatcher BonMessageDispatcher => LazyServiceProvider.LazyGetRequiredService<IBonMessageDispatcher>();
 
     protected IBonUnitOfWorkManager BonUnitOfWorkManager =>
         LazyServiceProvider.LazyGetRequiredService<IBonUnitOfWorkManager>();

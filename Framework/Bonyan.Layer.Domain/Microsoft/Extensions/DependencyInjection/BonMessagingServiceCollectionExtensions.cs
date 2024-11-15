@@ -1,29 +1,38 @@
 ﻿using System;
-using System.Linq;
-using System.Reflection;
-using Bonyan.Layer.Domain;
 using Bonyan.Layer.Domain.DomainEvent.Abstractions;
 using Bonyan.Layer.Domain.Events;
-using Bonyan.Messaging;
 using Bonyan.Messaging.Abstractions;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
     public static class BonDomainServiceCollectionExtensions
     {
-        /// <summary>
-        /// Adds and configures message consumers to the service collection based on the specified options action.
-        /// </summary>
-        /// <param name="services">The service collection to add consumers to.</param>
-        /// <param name="configureOptions">An action to configure MessagingOptions.</param>
-        /// <returns>The updated service collection.</returns>
-        public static IServiceCollection AddBonDomainLayer(
-            this IServiceCollection services
-            )
+        public static IServiceCollection AddBonDomainLayer(this IServiceCollection services)
         {
+            // Check if the messaging layer has been added
+            if (!IsMessagingLayerRegistered(services))
+            {
+                // Print a message to the console to guide the user to configure the messaging layer
+                Console.WriteLine(
+                    "Warning: The messaging layer is not configured. To handle domain events, please configure messaging.");
+                Console.WriteLine(
+                    "You can add messaging by calling services.AddBonMessaging(serviceName,messigingOPtions=>{}) in your ConfigureServices method.");
+
+                return services;
+            }
+
+            // Register the in-memory domain event dispatcher by default
             services.AddSingleton<IBonDomainEventDispatcher, BonDomainEventDispatcher>();
+
             return services;
         }
 
+        private static bool IsMessagingLayerRegistered(IServiceCollection services)
+        {
+            // Check if any service related to the messaging layer has been registered
+            // In this case, we check for the dispatcher service to verify if messaging is set up
+            return services.Any(service => service.ServiceType == typeof(IBonMessageDispatcher));
+        }
     }
 }

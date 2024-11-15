@@ -30,10 +30,20 @@ public class BonyanApplication
     /// <typeparam name="TModule">The root module type.</typeparam>
     /// <param name="args">Application arguments.</param>
     /// <returns>An instance of <see cref="IBonyanApplicationBuilder"/> configured with the root module.</returns>
-    public static IBonyanApplicationBuilder CreateModularApplication<TModule>(string[] args) where TModule : IBonModule
+    public static IBonyanApplicationBuilder CreateModularApplication<TModule>(string serviceName ,params string[] args) where TModule : IBonModule
     {
+        
+        
+        
         var applicationBuilder = WebApplication.CreateBuilder(args);
         applicationBuilder.Host.UseBonAutofac();
+        
+        // Store the service name in a shared configuration
+        applicationBuilder.Services.AddObjectAccessor<BonyanServiceOptions>(new BonyanServiceOptions()
+        {
+            ServiceName = serviceName
+        });
+        
         // Initialize the modular application and configure modules
         var modularApp = InitializeModularApplication<TModule>(applicationBuilder.Services);
 

@@ -1,4 +1,4 @@
-﻿namespace Dto;
+﻿namespace Bonyan.Layer.Application.Dto;
 
 [Serializable]
 public abstract class BonEntityDto : IBonEntityDto
