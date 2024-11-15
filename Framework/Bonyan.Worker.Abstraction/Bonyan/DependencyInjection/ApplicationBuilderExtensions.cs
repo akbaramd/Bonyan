@@ -1,6 +1,6 @@
-﻿using Bonyan.AspNetCore.Job;
-using Bonyan.Core;
+﻿using Bonyan.Core;
 using Bonyan.Modularity;
+using Bonyan.Workers;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;

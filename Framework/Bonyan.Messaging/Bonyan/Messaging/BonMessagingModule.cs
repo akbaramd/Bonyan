@@ -13,7 +13,7 @@ namespace Bonyan.Messaging
 
             var service = context.Services.GetObject<BonServiceOptions>();
 
-            context.Services.AddBonMessaging(service.ServiceName, c => { preActions.Configure(c); });
+            context.AddMessaging(service.ServiceName, c => { preActions.Configure(c); });
 
             return base.OnPostConfigureAsync(context);
         }

@@ -1,4 +1,4 @@
-namespace Bonyan.AspNetCore.Job;
+namespace Bonyan.Workers;
 
 [AttributeUsage(AttributeTargets.Class, Inherited = false)]
 public class CronJobAttribute : Attribute

@@ -4,7 +4,7 @@ using Bonyan.Messaging.RabbitMQ;
 using Bonyan.Modularity;
 using Bonyan.Modularity.Abstractions;
 using Bonyan.TenantManagement.Application;
-using Bonyan.Worker;
+using Bonyan.Workers;
 using Bonyan.Workers.Hangfire;
 using BonyanTemplate.Application.Dtos;
 using BonyanTemplate.Application.Jobs;
@@ -21,9 +21,9 @@ namespace BonyanTemplate.Application
         {
             DependOn<BonTenantManagementApplicationModule>();
             DependOn<BonyanTemplateDomainModule>();
-            DependOn<BonWorkersModule>();
+            DependOn<BonWorkersHangfireModule>();
             DependOn<BonMessagingModule>();
-            DependOn<BonMessagingRabbitMQModule>();
+            // DependOn<BonMessagingRabbitMQModule>();
         }
 
         public override Task OnPreConfigureAsync(BonConfigurationContext context)

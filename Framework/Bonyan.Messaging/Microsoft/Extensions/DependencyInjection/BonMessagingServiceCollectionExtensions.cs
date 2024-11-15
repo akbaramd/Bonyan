@@ -1,29 +1,22 @@
 ﻿using Bonyan.Messaging;
+using Bonyan.Messaging.Abstractions;
+using Bonyan.Modularity;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
 public static class BonMessagingServiceCollectionExtensions
 {
-    public static IServiceCollection AddBonMessaging(
-        this IServiceCollection services,
+    public static BonConfigurationContext AddMessaging(
+        this BonConfigurationContext context,
         string serviceName,
         Action<BonMessagingConfiguration> configureOptions)
     {
-        var options = new BonMessagingConfiguration(services, serviceName);
+        context.Services.AddTransient<IBonMessageDispatcher, InMemoryBonMessageDispatcher>();
 
-        options.UseDispatcher<InMemoryBonMessageDispatcher>();
-        
+        var options = new BonMessagingConfiguration(context, serviceName);
+
         configureOptions(options);
 
-        // Register BonMessagingConfiguration in the service collection
-        services.AddSingleton(options);
-
-        // Register the dispatcher
-        options.RegisterDispatcher();
-
-        // Register consumers
-        options.RegisterConsumers();
-
-        return services;
+        return context;
     }
 }

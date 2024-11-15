@@ -1,5 +1,6 @@
 using Bonyan.Exceptions;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
 namespace Bonyan.Modularity
@@ -9,8 +10,8 @@ namespace Bonyan.Modularity
     /// </summary>
     public class BonInitializedContext : BonContextBase
     {
-        public BonInitializedContext(IServiceProvider services, IConfiguration configuration)
-            : base(services, configuration)
+        public BonInitializedContext(IServiceProvider services)
+            : base(services)
         {
         }
 

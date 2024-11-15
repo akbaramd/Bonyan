@@ -15,7 +15,7 @@ namespace Bonyan.Layer.Domain
 
         public override Task OnPostConfigureAsync(BonConfigurationContext context)
         {
-            context.Services.AddBonDomainLayer();
+            context.AddDomainLayer();
             return base.OnPostConfigureAsync(context);
         }
     }

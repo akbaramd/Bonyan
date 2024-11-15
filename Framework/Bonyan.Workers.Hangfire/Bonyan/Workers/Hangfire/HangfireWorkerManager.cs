@@ -1,5 +1,4 @@
 ﻿using System.Reflection;
-using Bonyan.AspNetCore.Job;
 using Hangfire;
 using Hangfire.States;
 using Microsoft.Extensions.Logging;

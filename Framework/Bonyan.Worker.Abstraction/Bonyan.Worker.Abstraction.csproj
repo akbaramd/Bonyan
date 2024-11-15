@@ -16,7 +16,4 @@
     <ItemGroup>
         <ProjectReference Include="..\Bonyan.AspNetCore\Bonyan.AspNetCore.csproj"/>
     </ItemGroup>
-    <ItemGroup>
-        <Folder Include="Bonyan\AspNetCore\"/>
-    </ItemGroup>
 </Project>

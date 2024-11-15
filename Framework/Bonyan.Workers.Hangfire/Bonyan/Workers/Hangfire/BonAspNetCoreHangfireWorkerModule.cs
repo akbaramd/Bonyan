@@ -1,7 +1,5 @@
 using Autofac;
-using Bonyan.AspNetCore.Job;
 using Bonyan.Modularity;
-using Bonyan.Worker;
 using Hangfire;
 using Microsoft;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,12 +15,15 @@ public class BonWorkersHangfireModule : BonWebModule
 
     public override Task OnConfigureAsync(BonConfigurationContext context)
     {
-        PreConfigure<BonWorkerConfiguration>(c => { c.AddHangfire(); });
+        PreConfigure<BonWorkerConfiguration>(c =>
+        {
+            c.AddHangfire();
+        });
         return base.OnConfigureAsync(context);
     }
 
-    public override Task OnPreApplicationAsync(BonContext context)
+    public override Task OnPreApplicationAsync(BonWebApplicationContext webApplicationContext)
     {
-        return base.OnPreApplicationAsync(context);
+        return base.OnPreApplicationAsync(webApplicationContext);
     }
 }

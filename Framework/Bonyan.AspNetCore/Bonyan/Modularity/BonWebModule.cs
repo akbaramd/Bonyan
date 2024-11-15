@@ -4,17 +4,17 @@ namespace Bonyan.Modularity;
 
 public abstract class BonWebModule : BonModule, IWebModule
 {
-    public virtual Task OnPreApplicationAsync(BonContext context)
+    public virtual Task OnPreApplicationAsync(BonWebApplicationContext webApplicationContext)
     {
         return Task.CompletedTask;
     }
 
-    public virtual Task OnApplicationAsync(BonContext context)
+    public virtual Task OnApplicationAsync(BonWebApplicationContext webApplicationContext)
     {
         return Task.CompletedTask;
     }
 
-    public virtual Task OnPostApplicationAsync(BonContext context)
+    public virtual Task OnPostApplicationAsync(BonWebApplicationContext webApplicationContext)
     {
         return Task.CompletedTask;
     }

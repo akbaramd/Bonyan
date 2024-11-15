@@ -6,6 +6,12 @@ public class BonModuleAccessor : IBonModuleAccessor
 {
     private readonly Dictionary<Type, ModuleInfo> _modules = new();
 
+
+    public BonModuleAccessor()
+    {
+        _modules.Add(typeof(BonMasterModule),new ModuleInfo(typeof(BonMasterModule)));
+    }
+    
     public void AddModule(ModuleInfo moduleInfo)
     {
         _modules[moduleInfo.ModuleType] = moduleInfo;

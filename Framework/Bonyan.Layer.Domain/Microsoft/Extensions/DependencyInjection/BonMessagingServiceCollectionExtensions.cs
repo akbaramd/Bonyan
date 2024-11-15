@@ -1,29 +1,25 @@
-﻿using Bonyan.Layer.Domain.DomainEvent.Abstractions;
+﻿using Bonyan.Exceptions;
+using Bonyan.Layer.Domain.DomainEvent.Abstractions;
 using Bonyan.Layer.Domain.Events;
 using Bonyan.Messaging.Abstractions;
+using Bonyan.Modularity;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
     public static class BonDomainServiceCollectionExtensions
     {
-        public static IServiceCollection AddBonDomainLayer(this IServiceCollection services)
+        public static BonConfigurationContext AddDomainLayer(this BonConfigurationContext context)
         {
             // Check if the messaging layer has been added
-            if (!IsMessagingLayerRegistered(services))
+            if (!IsMessagingLayerRegistered(context.Services))
             {
-                // Print a message to the console to guide the user to configure the messaging layer
-                Console.WriteLine(
-                    "Warning: The messaging layer is not configured. To handle domain events, please configure messaging.");
-                Console.WriteLine(
-                    "You can add messaging by calling services.AddBonMessaging(serviceName,messigingOPtions=>{}) in your ConfigureServices method.");
-
-                return services;
+                throw new MessagingNotConfiguredException();
             }
 
             // Register the in-memory domain event dispatcher by default
-            services.AddSingleton<IBonDomainEventDispatcher, BonDomainEventDispatcher>();
+            context.Services.AddSingleton<IBonDomainEventDispatcher, BonDomainEventDispatcher>();
 
-            return services;
+            return context;
         }
 
         private static bool IsMessagingLayerRegistered(IServiceCollection services)

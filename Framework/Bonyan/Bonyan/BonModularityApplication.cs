@@ -22,6 +22,8 @@ public class BonModularityApplication<TModule> : IBonModularityApplication where
     {
         _serviceCollection = serviceCollection ?? throw new ArgumentNullException(nameof(serviceCollection));
 
+      
+        
         _bonModuleAccessor = new BonModuleAccessor();
         var moduleManager = new ModuleManager(_bonModuleAccessor);
 
@@ -33,7 +35,7 @@ public class BonModularityApplication<TModule> : IBonModularityApplication where
         _serviceCollection.AddSingleton<IBonModuleInitializer>(this);
         _serviceCollection.AddSingleton<IBonModularityApplication>(this);
 
-        _bonModuleAccessor.AddModule(new ModuleInfo(typeof(BonMasterModule)));
+        
         moduleManager.LoadModules(typeof(TModule));
         ServiceProvider = _serviceCollection.BuildServiceProvider();
     }

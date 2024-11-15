@@ -1,3 +1,4 @@
+using Microsoft;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -11,8 +12,8 @@ namespace Bonyan.Modularity
     {
         public IServiceCollection Services { get; }
 
-        public BonConfigurationContext(IServiceCollection services, IConfiguration configuration)
-            : base(services.BuildServiceProvider(), configuration)
+        public BonConfigurationContext(IServiceCollection services)
+            : base(services.BuildServiceProvider())
         {
             Services = services;
         }

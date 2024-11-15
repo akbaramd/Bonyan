@@ -3,7 +3,7 @@ using Bonyan.Modularity.Abstractions;
 using Microsoft;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Bonyan.Worker;
+namespace Bonyan.Workers;
 
 public class BonWorkersModule : BonModule
 {
@@ -16,7 +16,8 @@ public class BonWorkersModule : BonModule
     public override Task OnPostConfigureAsync(BonConfigurationContext context)
     {
         var preConfigure = context.Services.GetPreConfigureActions<BonWorkerConfiguration>();
-        context.Services.AddBonWorkers(c =>
+
+        context.AddWorkers(c =>
         {
             preConfigure.Configure(c);
         });

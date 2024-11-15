@@ -1,11 +1,8 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using Bonyan.AspNetCore.Job;
+﻿using System.Reflection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace Bonyan.Worker
+namespace Bonyan.Workers
 {
     public class BonWorkerHostedService : IHostedService
     {
@@ -23,43 +20,50 @@ namespace Bonyan.Worker
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public Task StartAsync(CancellationToken cancellationToken)
+        public async Task StartAsync(CancellationToken cancellationToken)
         {
             _logger.LogInformation("Starting BonWorkerHostedService.");
 
             try
             {
-                // Schedule cron jobs and enqueue background jobs
-                foreach (var registration in _configuration.GetWorkerRegistrations())
+                var workerTypes = _configuration.GetRegisteredWorkerTypes();
+
+                if (workerTypes == null || !workerTypes.Any())
+                {
+                    _logger.LogWarning("No workers implementing IBonWorker were found in the configuration.");
+                    return;
+                }
+
+                foreach (var workerType in workerTypes)
                 {
                     cancellationToken.ThrowIfCancellationRequested();
 
-                    var jobType = registration.ImplementationType;
+                    // Check for CronJobAttribute
+                    var cronAttribute = workerType.GetCustomAttribute<CronJobAttribute>();
+                    var cronExpression = cronAttribute?.CronExpression;
 
-                    if (!string.IsNullOrEmpty(registration.CronExpression))
+                    if (!string.IsNullOrEmpty(cronExpression))
                     {
-                        var cronExpression = registration.CronExpression;
-
                         try
                         {
-                            _workerManager.ScheduleRecurring(jobType, cronExpression);
-                            _logger.LogInformation("Scheduled recurring job {JobType} with cron expression '{CronExpression}'", jobType.FullName, cronExpression);
+                            _workerManager.ScheduleRecurring(workerType, cronExpression);
+                            _logger.LogInformation("Scheduled recurring job {JobType} with cron expression '{CronExpression}'", workerType.FullName, cronExpression);
                         }
                         catch (Exception ex)
                         {
-                            _logger.LogError(ex, "Error scheduling recurring job {JobType}", jobType.FullName);
+                            _logger.LogError(ex, "Error scheduling recurring job {JobType}", workerType.FullName);
                         }
                     }
                     else
                     {
                         try
                         {
-                            _workerManager.Enqueue(jobType);
-                            _logger.LogInformation("Enqueued background job {JobType}", jobType.FullName);
+                            _workerManager.Enqueue(workerType);
+                            _logger.LogInformation("Enqueued background job {JobType}", workerType.FullName);
                         }
                         catch (Exception ex)
                         {
-                            _logger.LogError(ex, "Error enqueuing background job {JobType}", jobType.FullName);
+                            _logger.LogError(ex, "Error enqueuing background job {JobType}", workerType.FullName);
                         }
                     }
                 }
@@ -73,13 +77,13 @@ namespace Bonyan.Worker
                 _logger.LogError(ex, "An error occurred while starting BonWorkerHostedService.");
             }
 
-            return Task.CompletedTask;
+            await Task.CompletedTask;
         }
 
         public Task StopAsync(CancellationToken cancellationToken)
         {
             _logger.LogInformation("Stopping BonWorkerHostedService.");
-            // No additional cleanup required for Hangfire
+            // No additional cleanup required for this implementation
             return Task.CompletedTask;
         }
     }

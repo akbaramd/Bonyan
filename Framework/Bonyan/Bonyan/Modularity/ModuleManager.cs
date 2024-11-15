@@ -13,6 +13,8 @@ namespace Bonyan.Modularity
 
         public void LoadModules(Type mainModuleType)
         {
+            
+            
             ValidateMainModuleType(mainModuleType);
             LoadModuleRecursive(mainModuleType);
 

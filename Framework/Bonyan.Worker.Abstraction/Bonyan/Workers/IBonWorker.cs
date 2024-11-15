@@ -1,4 +1,4 @@
-﻿namespace Bonyan.AspNetCore.Job;
+﻿namespace Bonyan.Workers;
 
 public interface IBonWorker 
 {

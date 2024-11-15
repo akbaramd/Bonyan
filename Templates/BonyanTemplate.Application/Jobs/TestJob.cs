@@ -1,6 +1,6 @@
-﻿using Bonyan.AspNetCore.Job;
-using Bonyan.Messaging.Abstractions;
+﻿using Bonyan.Messaging.Abstractions;
 using Bonyan.UnitOfWork;
+using Bonyan.Workers;
 using BonyanTemplate.Domain.DomainEvents;
 using BonyanTemplate.Domain.Entities;
 using BonyanTemplate.Domain.Enums;

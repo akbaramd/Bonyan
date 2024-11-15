@@ -50,26 +50,26 @@ public class BonyanTemplateBlazorModule : BonWebModule
         return base.OnConfigureAsync(context);
     }
 
-    public override Task OnApplicationAsync(BonContext context)
+    public override Task OnApplicationAsync(BonWebApplicationContext webApplicationContext)
     {
         // Middleware
-        context.Application.UseAuthentication();
-        context.Application.UseAuthorization();
+        webApplicationContext.Application.UseAuthentication();
+        webApplicationContext.Application.UseAuthorization();
 
-        return base.OnApplicationAsync(context);
+        return base.OnApplicationAsync(webApplicationContext);
     }
 
-    public override Task OnPostApplicationAsync(BonContext context)
+    public override Task OnPostApplicationAsync(BonWebApplicationContext webApplicationContext)
     {
-        context.Application.UseStaticFiles();
-        context.Application.UseAntiforgery();
+        webApplicationContext.Application.UseStaticFiles();
+        webApplicationContext.Application.UseAntiforgery();
 
-        var otins = context.RequireService<IOptions<BonBlazorOptions>>();
+        var otins = webApplicationContext.RequireService<IOptions<BonBlazorOptions>>();
 
-        context.Application.MapRazorComponents<App>()
+        webApplicationContext.Application.MapRazorComponents<App>()
             .AddInteractiveServerRenderMode()
             .AddAdditionalAssemblies(otins.Value.AdditionalAssembly.ToArray());
 
-        return base.OnPostApplicationAsync(context);
+        return base.OnPostApplicationAsync(webApplicationContext);
     }
 }

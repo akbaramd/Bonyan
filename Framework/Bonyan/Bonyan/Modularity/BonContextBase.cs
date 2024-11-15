@@ -20,10 +20,10 @@ namespace Bonyan.Modularity
         /// </summary>
         protected internal IConfiguration Configuration { get; }
 
-        protected BonContextBase(IServiceProvider services, IConfiguration configuration)
+        protected BonContextBase(IServiceProvider services)
         {
             Services = services;
-            Configuration = configuration;
+            Configuration = Services.GetService<IConfiguration>() ?? new ConfigurationBuilder().Build();
         }
 
         /// <summary>

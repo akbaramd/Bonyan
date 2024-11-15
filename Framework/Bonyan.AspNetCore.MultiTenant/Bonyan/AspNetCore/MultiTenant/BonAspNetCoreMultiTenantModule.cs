@@ -28,8 +28,8 @@ public class BonAspNetCoreMultiTenantModule : BonWebModule
     return base.OnConfigureAsync(context);
   }
 
-  public override Task OnPreApplicationAsync(BonContext context)
+  public override Task OnPreApplicationAsync(BonWebApplicationContext webApplicationContext)
   {
-    return base.OnPreApplicationAsync(context);
+    return base.OnPreApplicationAsync(webApplicationContext);
   }
 }

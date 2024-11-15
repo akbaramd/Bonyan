@@ -1,7 +1,11 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 using Bonyan.Messaging.Abstractions;
 using Bonyan.Messaging.Attributes;
+using Bonyan.Modularity;
 
 namespace Bonyan.Messaging
 {
@@ -10,18 +14,17 @@ namespace Bonyan.Messaging
     /// </summary>
     public class BonMessagingConfiguration
     {
-        public BonMessagingConfiguration(IServiceCollection services, string serviceName, ServiceLifetime consumerLifetime = ServiceLifetime.Transient)
+        public BonMessagingConfiguration(BonConfigurationContext services, string serviceName, ServiceLifetime consumerLifetime = ServiceLifetime.Transient)
         {
-            Services = services;
+            Context = services ?? throw new ArgumentNullException(nameof(services));
             ConsumerLifetime = consumerLifetime;
-            ServiceName = serviceName;
+            ServiceName = serviceName ?? throw new ArgumentNullException(nameof(serviceName));
+
+            // Register the configuration instance
+            Context.Services.AddSingleton(this);
         }
 
-        public IServiceCollection Services { get; set; }
-        
-        private readonly List<Assembly> _assemblies = new();
-        private readonly List<Type> _consumerTypes = new();
-        private readonly List<ConsumerRegistration> _consumerRegistrations = new();
+        public BonConfigurationContext Context { get; set; }
 
         /// <summary>
         /// Gets or sets the default <see cref="ServiceLifetime"/> for registered consumers.
@@ -40,123 +43,63 @@ namespace Bonyan.Messaging
         /// </summary>
         public string ServiceName { get; set; }
 
-        /// <summary>
-        /// Gets the type of the message dispatcher to use.
-        /// </summary>
-        public Type DispatcherType { get; private set; } = typeof(InMemoryBonMessageDispatcher);
 
-        /// <summary>
-        /// Sets the message dispatcher to use.
-        /// </summary>
-        /// <typeparam name="TDispatcher">The type of the message dispatcher.</typeparam>
-        /// <returns>The current <see cref="BonMessagingConfiguration"/> instance for chaining.</returns>
-        public BonMessagingConfiguration UseDispatcher<TDispatcher>() where TDispatcher : class, IBonMessageDispatcher
-        {
-            DispatcherType = typeof(TDispatcher);
-            return this;
-        }
+        private readonly List<ConsumerRegistration> _consumerRegistrations = new List<ConsumerRegistration>();
 
         /// <summary>
         /// Registers all consumers that implement <see cref="IBonMessageConsumer{TMessage}"/> from the specified assemblies.
         /// </summary>
-        /// <param name="assemblies">The assemblies to scan for consumer types.</param>
-        /// <returns>The current <see cref="BonMessagingConfiguration"/> instance for chaining.</returns>
         public BonMessagingConfiguration RegisterConsumersFromAssemblies(params Assembly[] assemblies)
         {
-            _assemblies.AddRange(assemblies);
+            if (assemblies == null) throw new ArgumentNullException(nameof(assemblies));
+
+            // Collect all consumer types from assemblies and register them immediately
+            var consumerTypes = assemblies
+                .SelectMany(assembly => assembly.GetTypes())
+                .Where(type => type.IsClass && !type.IsAbstract && ImplementsConsumerInterface(type))
+                .Where(TypeFilter);
+
+            foreach (var consumerType in consumerTypes)
+            {
+                RegisterConsumerType(consumerType, ConsumerLifetime, null);
+            }
+
             return this;
         }
 
         /// <summary>
         /// Registers specific consumer types directly.
         /// </summary>
-        /// <param name="types">The consumer types to register.</param>
-        /// <returns>The current <see cref="BonMessagingConfiguration"/> instance for chaining.</returns>
         public BonMessagingConfiguration RegisterConsumersFromTypes(params Type[] types)
         {
-            _consumerTypes.AddRange(types);
+            if (types == null) throw new ArgumentNullException(nameof(types));
+
+            foreach (var consumerType in types.Where(TypeFilter))
+            {
+                RegisterConsumerType(consumerType, ConsumerLifetime, null);
+            }
+
             return this;
         }
 
         /// <summary>
         /// Registers a specific consumer type using a generic method.
         /// </summary>
-        /// <typeparam name="TConsumer">The consumer type to register.</typeparam>
-        /// <param name="lifetime">
-        /// Optional service lifetime for this consumer. If not specified, the default <see cref="ConsumerLifetime"/> is used.
-        /// </param>
-        /// <param name="serviceName">
-        /// Optional service name for this consumer. If not specified, the default <see cref="ServiceName"/> is used.
-        /// </param>
-        /// <returns>The current <see cref="BonMessagingConfiguration"/> instance for chaining.</returns>
         public BonMessagingConfiguration RegisterConsumer<TConsumer>(ServiceLifetime? lifetime = null, string serviceName = null)
             where TConsumer : class
         {
             var consumerType = typeof(TConsumer);
 
-            if (!_consumerTypes.Contains(consumerType))
-            {
-                _consumerTypes.Add(consumerType);
-            }
-
-            // Add specific registration with custom lifetime if provided
+            // Register the consumer immediately
             RegisterConsumerType(consumerType, lifetime ?? ConsumerLifetime, serviceName);
 
             return this;
         }
 
-        /// <summary>
-        /// Registers all discovered consumers into the provided <see cref="IServiceCollection"/>.
-        /// </summary>
-        /// <param name="services">The service collection to register consumers into.</param>
-        internal void RegisterConsumers()
-        {
-            // Collect all consumer types from assemblies
-            var assemblyConsumerTypes = _assemblies
-                .SelectMany(assembly => assembly.GetTypes())
-                .Where(type => type.IsClass && !type.IsAbstract && ImplementsConsumerInterface(type))
-                .Where(TypeFilter);
-
-            // Register consumers from assemblies
-            foreach (var consumerType in assemblyConsumerTypes)
-            {
-                RegisterConsumerType(consumerType, ConsumerLifetime, null);
-            }
-
-            // Register specific consumer types
-            foreach (var consumerType in _consumerTypes.Where(TypeFilter))
-            {
-                RegisterConsumerType(consumerType, ConsumerLifetime, null);
-            }
-
-            // Register all collected consumer registrations into the IServiceCollection
-            foreach (var registration in _consumerRegistrations)
-            {
-                var descriptor = new ServiceDescriptor(registration.ServiceType, registration.ImplementationType, registration.Lifetime);
-                Services.Add(descriptor);
-            }
-        }
-
-        /// <summary>
-        /// Registers the message dispatcher into the provided <see cref="IServiceCollection"/>.
-        /// </summary>
-        /// <param name="services">The service collection to register the dispatcher into.</param>
-        internal void RegisterDispatcher()
-        {
-            // Check if IMessageDispatcher is already registered
-            if (Services.All(service => service.ServiceType != typeof(IBonMessageDispatcher)))
-            {
-                Services.AddSingleton(typeof(IBonMessageDispatcher), DispatcherType);
-            }
-        }
 
         /// <summary>
         /// Determines whether the specified type implements the <see cref="IBonMessageConsumer{TMessage}"/> interface.
         /// </summary>
-        /// <param name="type">The type to check.</param>
-        /// <returns>
-        /// <see langword="true"/> if the type implements <see cref="IBonMessageConsumer{TMessage}"/>; otherwise, <see langword="false"/>.
-        /// </returns>
         private static bool ImplementsConsumerInterface(Type type)
         {
             return type.GetInterfaces()
@@ -164,14 +107,8 @@ namespace Bonyan.Messaging
         }
 
         /// <summary>
-        /// Registers a specific consumer type into the collection of consumer registrations.
+        /// Registers a specific consumer type into the IServiceCollection and stores it in the collection.
         /// </summary>
-        /// <param name="consumerType">The consumer type to register.</param>
-        /// <param name="lifetime">The service lifetime for the consumer.</param>
-        /// <param name="serviceName">
-        /// The service name for the consumer. If null, attempts to read from the <see cref="ConsumerServiceAttribute"/>,
-        /// or uses the default <see cref="ServiceName"/>.
-        /// </param>
         private void RegisterConsumerType(Type consumerType, ServiceLifetime lifetime, string serviceName)
         {
             var interfaces = consumerType.GetInterfaces()
@@ -187,8 +124,13 @@ namespace Bonyan.Messaging
             foreach (var serviceType in interfaces)
             {
                 // Avoid duplicate registrations
-                if (!_consumerRegistrations.Any(reg => reg.ServiceType == serviceType && reg.ImplementationType == consumerType))
+                if (!Context.Services.Any(descriptor => descriptor.ServiceType == serviceType && descriptor.ImplementationType == consumerType))
                 {
+                    // Register the consumer in the DI container
+                    var descriptor = new ServiceDescriptor(serviceType, consumerType, lifetime);
+                    Context.Services.Add(descriptor);
+
+                    // Store the consumer registration
                     _consumerRegistrations.Add(new ConsumerRegistration
                     {
                         ServiceType = serviceType,
@@ -219,5 +161,4 @@ namespace Bonyan.Messaging
             return _consumerRegistrations;
         }
     }
-
 }

@@ -44,11 +44,11 @@ public class BonAspNetCoreModule : BonWebModule
     /// <summary>
     /// Applies application-wide configurations, such as enabling authorization middleware.
     /// </summary>
-    /// <param name="context">The application context used during application initialization.</param>
-    public override Task OnApplicationAsync(BonContext context)
+    /// <param name="webApplicationContext">The application context used during application initialization.</param>
+    public override Task OnApplicationAsync(BonWebApplicationContext webApplicationContext)
     {
-        context.Application.UseHttpsRedirection();
-        return base.OnApplicationAsync(context);
+        webApplicationContext.Application.UseHttpsRedirection();
+        return base.OnApplicationAsync(webApplicationContext);
     }
 
     /// <summary>

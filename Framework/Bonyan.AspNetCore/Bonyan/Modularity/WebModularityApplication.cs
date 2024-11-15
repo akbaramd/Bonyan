@@ -6,7 +6,7 @@ namespace Bonyan.Modularity;
 /// Manages the initialization of web modules for a modular application, executing each phase in sequence.
 /// </summary>
 /// <typeparam name="TModule">The root module type.</typeparam>
-public class WebBonModularityApplication<TModule> : BonModularityApplication<TModule>, IWebBonModularityApplication 
+public class WebBonModularityApplication<TModule> : BonModularityApplication<TModule>, IWebBonModularityApplication
     where TModule : IBonModule
 {
     /// <summary>
@@ -29,15 +29,20 @@ public class WebBonModularityApplication<TModule> : BonModularityApplication<TMo
             throw new ArgumentNullException(nameof(application), "Application cannot be null.");
 
         var webModules = Modules.Select(x => x.Instance)
-                                .OfType<IWebModule>()
-                                .ToList();
+            .OfType<IWebModule>()
+            .ToList();
 
-        var context = new BonContext(application);
 
         // Execute each phase with error handling
-        await ExecuteModulePhaseAsync(webModules, (module) => module.OnPreApplicationAsync(context), "Pre-Application");
-        await ExecuteModulePhaseAsync(webModules, (module) => module.OnApplicationAsync(context), "Application");
-        await ExecuteModulePhaseAsync(webModules, (module) => module.OnPostApplicationAsync(context), "Post-Application");
+        application.UseBonyan(context =>
+        {
+            ExecuteModulePhaseAsync(webModules, (module) => module.OnPreApplicationAsync(context), "Pre-Application")
+                .GetAwaiter().GetResult();
+            ExecuteModulePhaseAsync(webModules, (module) => module.OnApplicationAsync(context), "Application")
+                .GetAwaiter().GetResult();
+            ExecuteModulePhaseAsync(webModules, (module) => module.OnPostApplicationAsync(context), "Post-Application")
+                .GetAwaiter().GetResult();
+        });
     }
 
     /// <summary>

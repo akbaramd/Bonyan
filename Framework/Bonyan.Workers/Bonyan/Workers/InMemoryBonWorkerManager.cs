@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Threading;
-using System.Threading.Tasks;
-using Bonyan.AspNetCore.Job;
-using NCrontab;
+﻿using System.Collections.Concurrent;
 using Microsoft.Extensions.DependencyInjection;
+using NCrontab;
 
-namespace Bonyan.Worker
+namespace Bonyan.Workers
 {
     public class InMemoryBonWorkerManager : IBonWorkerManager, IDisposable
     {
@@ -85,7 +81,7 @@ namespace Bonyan.Worker
                     }
                     else
                     {
-                        await Task.Delay(1000, _cts.Token);
+                        await Task.Delay(100, _cts.Token);
                     }
                 }
             }, _cts.Token);

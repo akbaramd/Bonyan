@@ -17,7 +17,7 @@
     <ItemGroup>
         <ProjectReference Include="..\Bonyan\Bonyan.csproj"/>
         <ProjectReference Include="..\Bonyan.Worker.Abstraction\Bonyan.Worker.Abstraction.csproj" />
-        <ProjectReference Include="..\Bonyan.Worker\Bonyan.Worker.csproj" />
+        <ProjectReference Include="..\Bonyan.Workers\Bonyan.Workers.csproj" />
     </ItemGroup>
 
 </Project>

@@ -15,8 +15,8 @@ namespace Microsoft.Extensions.DependencyInjection
             var options = new RabbitMQOptions();
             configureOptions(options);
 
-            configuration.Services.AddSingleton(options);
-            configuration.UseDispatcher<BonRabbitMQMessageDispatcher>();
+            configuration.Context.Services.AddSingleton(options);
+            configuration.Context.Services.Replace(ServiceDescriptor.Transient<IBonMessageDispatcher,BonRabbitMQMessageDispatcher>()) ;
 
             return configuration;
         }
