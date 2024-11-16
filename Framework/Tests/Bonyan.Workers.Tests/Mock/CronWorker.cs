@@ -1,4 +1,4 @@
-using Bonyan.Workers;
+namespace Bonyan.Workers.Tests.Mock;
 
 [CronJob("* * * * *")] // Run every minute
 public class CronWorker : IBonWorker

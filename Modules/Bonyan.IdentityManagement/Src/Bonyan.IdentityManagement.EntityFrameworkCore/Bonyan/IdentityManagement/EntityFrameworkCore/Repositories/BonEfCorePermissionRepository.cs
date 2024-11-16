@@ -1,13 +1,15 @@
 ﻿using Bonyan.IdentityManagement.Domain;
+using Bonyan.IdentityManagement.Domain.Abstractions.Permissions;
+using Bonyan.IdentityManagement.Domain.Permissions;
 using Bonyan.Layer.Domain;
 
 namespace Bonyan.IdentityManagement.EntityFrameworkCore.Repositories;
 
-public class BonEfCorePermissionRepository : EfCoreBonRepository<BonIdentityPermission, BonIdentityManagementDbContext>
-    , IBonPermissionRepository
-    , IBonPermissionReadOnlyRepository
+public class BonIdentityEfCorePermissionRepository : EfCoreBonRepository<BonIdentityPermission, BonIdentityManagementDbContext>
+    , IBonIdentityPermissionRepository
+    , IBonIdentityPermissionReadOnlyRepository
 {
-    public BonEfCorePermissionRepository(BonIdentityManagementDbContext userManagementDbContext) : base(
+    public BonIdentityEfCorePermissionRepository(BonIdentityManagementDbContext userManagementDbContext) : base(
         userManagementDbContext)
     {
     }

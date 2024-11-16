@@ -1,6 +1,6 @@
 ﻿using Bonyan.Layer.Application.Dto;
-using Bonyan.UserManagement.Domain.Enumerations;
-using Bonyan.UserManagement.Domain.ValueObjects;
+using Bonyan.UserManagement.Domain.Users.Enumerations;
+using Bonyan.UserManagement.Domain.Users.ValueObjects;
 
 namespace Bonyan.UserManagement.Application.Dtos;
 
@@ -15,13 +15,13 @@ public interface IBonUserDto : IBonAggregateRootDto<BonUserId>
     /// Gets or sets the user's email address.
     /// Can be null if the user has not provided an email.
     /// </summary>
-    public Email? Email { get;  set; }
+    public BonUserEmail? Email { get;  set; }
 
     /// <summary>
     /// Gets or sets the user's phone number.
     /// Can be null if the user has not provided a phone number.
     /// </summary>
-    public PhoneNumber? PhoneNumber { get;  set; }
+    public BonUserPhoneNumber? PhoneNumber { get;  set; }
 
     /// <summary>
     /// Gets the current status of the user.

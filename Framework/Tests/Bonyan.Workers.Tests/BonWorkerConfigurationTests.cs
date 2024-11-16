@@ -1,16 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
+﻿using System.Reflection;
 using Bonyan.Modularity;
-using Bonyan.Modularity.Abstractions;
-using Bonyan.Tests.Workers.Mock;
-using Bonyan.Workers;
+using Bonyan.Workers.Tests.Mock;
 using Microsoft.Extensions.DependencyInjection;
-using Xunit;
 
-namespace Bonyan.Tests.Workers
+namespace Bonyan.Workers.Tests
 {
     public class BonWorkerConfigurationTests
     {

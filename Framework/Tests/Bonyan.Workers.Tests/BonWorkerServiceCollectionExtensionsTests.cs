@@ -1,13 +1,9 @@
-﻿using System;
-using System.Linq;
-using Bonyan.Modularity;
-using Bonyan.Tests.Workers.Mock;
-using Bonyan.Workers;
+﻿using Bonyan.Modularity;
+using Bonyan.Workers.Tests.Mock;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Xunit;
 
-namespace Bonyan.Tests.Workers
+namespace Bonyan.Workers.Tests
 {
     public class BonWorkerServiceCollectionExtensionsTests
     {

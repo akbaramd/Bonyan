@@ -1,4 +1,5 @@
 using Bonyan.IdentityManagement.Domain;
+using Bonyan.IdentityManagement.Domain.Users;
 using Bonyan.Modularity;
 using Bonyan.Modularity.Abstractions;
 using Bonyan.UserManagement.Application;
@@ -6,7 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Bonyan.IdentityManagement.Application;
 
-public class BonIdentityManagementApplicationModule<TUser> : BonModule where TUser : BonIdentityUser
+public class BonIdentityManagementApplicationModule<TUser> : BonModule where TUser : class, IBonIdentityUser
 {
     public BonIdentityManagementApplicationModule()
     {

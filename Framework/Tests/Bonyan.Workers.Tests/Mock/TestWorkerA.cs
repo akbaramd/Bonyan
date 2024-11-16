@@ -1,6 +1,4 @@
-﻿using Bonyan.Workers;
-
-namespace Bonyan.Tests.Workers.Mock;
+﻿namespace Bonyan.Workers.Tests.Mock;
 
 public class TestWorkerA : IBonWorker
 {

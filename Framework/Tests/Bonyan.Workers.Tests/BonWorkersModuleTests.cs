@@ -1,14 +1,10 @@
-﻿using System.Threading.Tasks;
-using Bonyan.Modularity;
-using Bonyan.Modularity.Abstractions;
-using Bonyan.Tests.Workers.Mock;
-using Bonyan.Workers;
+﻿using Bonyan.Modularity;
+using Bonyan.Workers.Tests.Mock;
 using Microsoft;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
-using Xunit;
 
-namespace Bonyan.Tests.Workers
+namespace Bonyan.Workers.Tests
 {
     public class BonWorkersModuleTests
     {

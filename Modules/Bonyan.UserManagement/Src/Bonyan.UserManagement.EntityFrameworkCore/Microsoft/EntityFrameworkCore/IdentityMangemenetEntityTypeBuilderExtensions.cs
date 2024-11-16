@@ -1,13 +1,15 @@
 ﻿
 using Bonyan.Layer.Domain.Enumerations;
 using Bonyan.UserManagement.Domain;
-using Bonyan.UserManagement.Domain.Enumerations;
+using Bonyan.UserManagement.Domain.Users;
+using Bonyan.UserManagement.Domain.Users.Entities;
+using Bonyan.UserManagement.Domain.Users.Enumerations;
 
 namespace Microsoft.EntityFrameworkCore;
 
 public static class BonIdentityManagementEntityTypeBuilderExtensions
 {
-    public static ModelBuilder ConfigureBonUserManagementByConvention<TUser>(this ModelBuilder modelBuilder) where TUser: BonUser
+    public static ModelBuilder ConfigureBonUserManagementByConvention<TUser>(this ModelBuilder modelBuilder) where TUser: class, IBonUser
     {
         modelBuilder.Entity<TUser>().ConfigureByConvention();
         modelBuilder.Entity<TUser>().OwnsOne(c => c.Email, v =>
@@ -18,7 +20,7 @@ public static class BonIdentityManagementEntityTypeBuilderExtensions
         
         modelBuilder.Entity<TUser>().OwnsOne(c => c.PhoneNumber, v =>
         {
-            v.Property(x => x.Number).HasColumnName("PhoneNumber");
+            v.Property(x => x.Number).HasColumnName("BonUserPhoneNumber");
             v.Property(x => x.IsVerified).HasColumnName("PhoneNumberIsVerified");
         });
         modelBuilder.Entity<TUser>().OwnsOne(c => c.Password, v =>

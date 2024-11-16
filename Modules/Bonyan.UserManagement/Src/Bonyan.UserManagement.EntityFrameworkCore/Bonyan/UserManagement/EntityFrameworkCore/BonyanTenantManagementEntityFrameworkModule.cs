@@ -2,13 +2,15 @@ using Bonyan.DependencyInjection;
 using Bonyan.EntityFrameworkCore;
 using Bonyan.Modularity;
 using Bonyan.UserManagement.Domain;
-using Bonyan.UserManagement.Domain.Repositories;
+using Bonyan.UserManagement.Domain.Users;
+using Bonyan.UserManagement.Domain.Users.Entities;
+using Bonyan.UserManagement.Domain.Users.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Bonyan.UserManagement.EntityFrameworkCore;
 
 
-public class BonUserManagementEntityFrameworkModule<TUser> : Modularity.Abstractions.BonModule where TUser : BonUser
+public class BonUserManagementEntityFrameworkModule<TUser> : Modularity.Abstractions.BonModule where TUser : class, IBonUser
 {
 
   public BonUserManagementEntityFrameworkModule()

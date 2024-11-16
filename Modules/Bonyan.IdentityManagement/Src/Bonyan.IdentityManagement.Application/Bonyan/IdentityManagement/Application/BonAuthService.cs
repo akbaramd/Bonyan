@@ -1,5 +1,6 @@
 ﻿using System.Security.Claims;
 using Bonyan.IdentityManagement.Domain;
+using Bonyan.IdentityManagement.Domain.Users;
 using Bonyan.Layer.Application.Services;
 using Bonyan.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
@@ -9,12 +10,12 @@ using Microsoft.Extensions.Logging;
 
 namespace Bonyan.IdentityManagement.Application;
 
-public class BonAuthService<TUser> : BonApplicationService, IBonAuthService where TUser : BonIdentityUser
+public class BonAuthService<TUser> : BonApplicationService, IBonAuthService where TUser : class, IBonIdentityUser
 {
     private IHttpContextAccessor HttpContextAccessor =>
         LazyServiceProvider.LazyGetRequiredService<IHttpContextAccessor>();
 
-    private BonUserManager<TUser> UserManager => LazyServiceProvider.LazyGetRequiredService<BonUserManager<TUser>>();
+    private BonIdentityUserManager<TUser> IdentityUserManager => LazyServiceProvider.LazyGetRequiredService<BonIdentityUserManager<TUser>>();
 
     private ILogger<BonAuthService<TUser>> Logger =>
         LazyServiceProvider.LazyGetRequiredService<ILogger<BonAuthService<TUser>>>();
@@ -26,15 +27,16 @@ public class BonAuthService<TUser> : BonApplicationService, IBonAuthService wher
         try
         {
             // Find the user by username
-            var user = await UserManager.FindByUserNameAsync(username);
-            if (user == null)
+            var findResult = await IdentityUserManager.FindByUserNameAsync(username);
+            if (findResult.IsFailure)
             {
                 Logger.LogWarning($"Login failed: User '{username}' not found.");
                 return false;
             }
 
+            var user = findResult.Value;
             // Verify the password
-            if (!user.VerifyPassword(password))
+            if ( !user.VerifyPassword(password))
             {
                 Logger.LogWarning($"Login failed: Invalid password for user '{username}'.");
                 return false;

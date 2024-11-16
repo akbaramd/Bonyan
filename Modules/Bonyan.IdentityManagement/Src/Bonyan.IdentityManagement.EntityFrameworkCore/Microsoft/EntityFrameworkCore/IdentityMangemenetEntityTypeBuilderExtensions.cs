@@ -1,11 +1,14 @@
 ﻿
 using Bonyan.IdentityManagement.Domain;
+using Bonyan.IdentityManagement.Domain.Permissions;
+using Bonyan.IdentityManagement.Domain.Roles;
+using Bonyan.IdentityManagement.Domain.Users;
 
 namespace Microsoft.EntityFrameworkCore;
 
 public static class BonIdentityManagementEntityTypeBuilderExtensions
 {
-    public static ModelBuilder ConfigureBonIdentityManagementByConvention<TUser>(this ModelBuilder modelBuilder) where TUser: BonIdentityUser 
+    public static ModelBuilder ConfigureBonIdentityManagementByConvention<TUser>(this ModelBuilder modelBuilder) where TUser: class, IBonIdentityUser 
     {
         modelBuilder.ConfigureBonUserManagementByConvention<TUser>();
         modelBuilder.Entity<BonIdentityRole>().ConfigureByConvention();

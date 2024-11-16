@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Linq;
+﻿using System.Collections.Concurrent;
 using System.Reflection;
-using System.Threading;
-using System.Threading.Tasks;
-using Bonyan.Tests.Workers.Mock;
-using Bonyan.Workers;
+using Bonyan.Workers.Tests.Mock;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
-using Xunit;
 
-namespace Bonyan.Tests.Workers
+namespace Bonyan.Workers.Tests
 {
     public class InMemoryBonWorkerManagerTests
     {

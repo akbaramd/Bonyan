@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Threading;
-using System.Threading.Tasks;
-using Bonyan.Workers;
+﻿using System.Collections.Concurrent;
 using Microsoft.Extensions.DependencyInjection;
+
+namespace Bonyan.Workers.Tests.Mock;
 
 public class CustomWorkerManager : IBonWorkerManager, IDisposable
 {

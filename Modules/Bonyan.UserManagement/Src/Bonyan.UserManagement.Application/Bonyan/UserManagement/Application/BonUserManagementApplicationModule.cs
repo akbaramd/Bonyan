@@ -2,11 +2,13 @@ using Bonyan.Layer.Application;
 using Bonyan.Modularity;
 using Bonyan.Modularity.Abstractions;
 using Bonyan.UserManagement.Domain;
+using Bonyan.UserManagement.Domain.Users;
+using Bonyan.UserManagement.Domain.Users.Entities;
 
 namespace Bonyan.UserManagement.Application;
 
 
-public class BonUserManagementApplicationModule<TUser> : BonModule where TUser : BonUser
+public class BonUserManagementApplicationModule<TUser> : BonModule where TUser : IBonUser
 {
   public BonUserManagementApplicationModule()
   {

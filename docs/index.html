@@ -1,74 +1,74 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Bonyan - Modular Monolithic Framework</title>
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-  <meta name="description" content="Documentation for Bonyan">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
-  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify/lib/themes/vue.css">
-  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify-darklight-theme@1.0.7/dist/style.css">
-  <link rel="icon" href="logo.jpg" type="image/jpeg">
+    <meta charset="UTF-8">
+    <title>Bonyan - Modular Monolithic Framework</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="description" content="Documentation for Bonyan">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify/lib/themes/vue.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify-darklight-theme@1.0.7/dist/style.css">
+    <link rel="icon" href="logo.jpg" type="image/jpeg">
 </head>
 <body>
 <div id="app"></div>
 <script>
-  window.docsifyConstants = {
-    netCoreVersion: '8.0',
-    libraryVersion: '1.2.0-pre3'
-  };
-  
-  window.$docsify = {
-    name: 'Bonyan',
-    repo: '', // Add your GitHub repository URL if you have one
-    loadSidebar: true,
-    loadNavbar: true,
-    subMaxLevel: 2,
-    search: 'auto',
-    darklightTheme: {
-      defaultTheme: 'light', // Set the default theme ('light' or 'dark')
-      siteFont: 'PT Sans',   // Set the font for the site
-      dark: {
-        background: '#121212', // Background color for dark mode
-        toggleBtnBg: '#34495e',
-        textColor: '#b4b4b4'
-      },
-      light: {
-        background: '#ffffff', // Background color for light mode
-        toggleBtnBg: '#34495e',
-        textColor: '#34495e'
-      }
-    },
-    plugins: [
-      function (hook) {
-        hook.beforeEach(function (content) {
-          return content
-                  .replace(/\{\{netCoreVersion\}\}/g, docsifyConstants.netCoreVersion)
-                  .replace(/\{\{libraryVersion\}\}/g, docsifyConstants.libraryVersion);
-        });
-      }
-    ],
-  }
-
-  // Dynamically update the document title based on the route
-  document.addEventListener('DOMContentLoaded', function () {
-    const updateTitle = () => {
-      const path = location.href // Extract section from hash
-      
-      if (path.indexOf('Bonyan.Layer.Domain')>0) {
-        sectionTitle = 'Bonyan.Layer.Domain';
-      } else {
-        sectionTitle = 'Bonyan - Modular Monolithic Framework';
-      }
-
-      document.title = sectionTitle;
-      window.$docsify.name = sectionTitle;
+    window.docsifyConstants = {
+        netCoreVersion: '8.0',
+        libraryVersion: '1.2.0-pre3'
     };
 
-    // Update title on hash change
-    window.addEventListener('hashchange', updateTitle);
-    updateTitle(); // Set initial title
-  });
+    window.$docsify = {
+        name: 'Bonyan',
+        repo: '', // Add your GitHub repository URL if you have one
+        loadSidebar: true,
+        loadNavbar: true,
+        subMaxLevel: 2,
+        search: 'auto',
+        darklightTheme: {
+            defaultTheme: 'light', // Set the default theme ('light' or 'dark')
+            siteFont: 'PT Sans',   // Set the font for the site
+            dark: {
+                background: '#121212', // Background color for dark mode
+                toggleBtnBg: '#34495e',
+                textColor: '#b4b4b4'
+            },
+            light: {
+                background: '#ffffff', // Background color for light mode
+                toggleBtnBg: '#34495e',
+                textColor: '#34495e'
+            }
+        },
+        plugins: [
+            function (hook) {
+                hook.beforeEach(function (content) {
+                    return content
+                        .replace(/\{\{netCoreVersion\}\}/g, docsifyConstants.netCoreVersion)
+                        .replace(/\{\{libraryVersion\}\}/g, docsifyConstants.libraryVersion);
+                });
+            }
+        ],
+    }
+
+    // Dynamically update the document title based on the route
+    document.addEventListener('DOMContentLoaded', function () {
+        const updateTitle = () => {
+            const path = location.href // Extract section from hash
+
+            if (path.indexOf('Bonyan.Layer.Domain') > 0) {
+                sectionTitle = 'Bonyan.Layer.Domain';
+            } else {
+                sectionTitle = 'Bonyan - Modular Monolithic Framework';
+            }
+
+            document.title = sectionTitle;
+            window.$docsify.name = sectionTitle;
+        };
+
+        // Update title on hash change
+        window.addEventListener('hashchange', updateTitle);
+        updateTitle(); // Set initial title
+    });
 </script>
 <!-- Docsify and Docsify Darklight Theme -->
 <script src="//cdn.jsdelivr.net/npm/docsify/lib/docsify.min.js"></script>

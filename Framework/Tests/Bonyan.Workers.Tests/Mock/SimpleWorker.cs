@@ -1,7 +1,4 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using Bonyan.Workers;
+﻿namespace Bonyan.Workers.Tests.Mock;
 
 public class SimpleWorker : IBonWorker
 {

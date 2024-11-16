@@ -1,5 +1,10 @@
 using Bonyan.DependencyInjection;
 using Bonyan.IdentityManagement.Domain;
+using Bonyan.IdentityManagement.Domain.Abstractions.Permissions;
+using Bonyan.IdentityManagement.Domain.Abstractions.Roles;
+using Bonyan.IdentityManagement.Domain.Permissions;
+using Bonyan.IdentityManagement.Domain.Roles;
+using Bonyan.IdentityManagement.Domain.Users;
 using Bonyan.IdentityManagement.EntityFrameworkCore.Repositories;
 using Bonyan.Modularity;
 using Bonyan.Modularity.Abstractions;
@@ -9,7 +14,7 @@ using Microsoft.Extensions.DependencyInjection;
 namespace Bonyan.IdentityManagement.EntityFrameworkCore;
 
 public class BonIdentityManagementEntityFrameworkCoreModule<TUser> : BonModule
-    where TUser : BonIdentityUser
+    where TUser : class, IBonIdentityUser
 {
     public BonIdentityManagementEntityFrameworkCoreModule()
     {
@@ -23,7 +28,7 @@ public class BonIdentityManagementEntityFrameworkCoreModule<TUser> : BonModule
 
         context.Services.AddTransient<IBonRoleRepository, BonEfCoreRoleRepository>();
         context.Services.AddTransient<IBonRoleReadOnlyRepository, BonEfCoreRoleRepository>();
-        context.Services.AddTransient<IBonPermissionRepository, BonEfCorePermissionRepository>();
+        context.Services.AddTransient<IBonIdentityPermissionRepository, BonIdentityEfCorePermissionRepository>();
         return base.OnConfigureAsync(context);
     }
 }
