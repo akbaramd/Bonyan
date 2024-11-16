@@ -6,7 +6,7 @@
         <Nullable>enable</Nullable>
         <PackageId>Bonyan.Workers</PackageId>
         <RootNamespace/>
-    </PropertyGroup><Import Project="..\..\..\package.props"/>
+    </PropertyGroup><Import Project="..\..\..\framework-package.props"/>
     <ItemGroup>
         <ProjectReference Include="..\Bonyan.Worker.Abstraction\Bonyan.Worker.Abstraction.csproj" />
         <ProjectReference Include="..\Bonyan\Bonyan.csproj"/>

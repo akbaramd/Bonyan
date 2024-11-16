@@ -7,7 +7,7 @@
         <OutputType>Library</OutputType>
         <PackageId>Bonyan.AspNetCore.MultiTenant</PackageId>
     </PropertyGroup>
-<Import Project="..\..\..\package.props"/>
+<Import Project="..\..\..\framework-package.props"/>
     <ItemGroup>
         <ProjectReference Include="..\Bonyan.AspNetCore\Bonyan.AspNetCore.csproj"/>
         <ProjectReference Include="..\Bonyan.MultiTenant\Bonyan.MultiTenant.csproj"/>

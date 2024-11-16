@@ -6,7 +6,7 @@
         <RootNamespace/>
         <PackageId>Bonyan.AutoMapper</PackageId>
     </PropertyGroup>
-<Import Project="..\..\..\package.props"/>
+<Import Project="..\..\..\framework-package.props"/>
     <ItemGroup>
         <ProjectReference Include="..\Bonyan\Bonyan.csproj"/>
     </ItemGroup>

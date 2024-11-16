@@ -59,26 +59,38 @@ function Publish-DotnetProject {
     Set-Location -Path $initialDirectory
 }
 
-# Function to iterate over a directory and publish projects
-function Publish-ProjectsInDirectory {
+# Function to iterate over the Modules directory and publish projects in the src folders
+function Publish-ModulesProjects {
     param (
-        [string]$directoryPath,
-        [string]$publishType
+        [string]$modulesDirectory
     )
-    Write-Host "Start Publish project iside  $($directoryPath)." -ForegroundColor Yellow
-    Set-Location -Path $directoryPath
-    $subdirectories = Get-ChildItem -Directory
 
-    foreach ($subdir in $subdirectories) {
-        $subdirPath = $subdir.FullName
-        Set-Location -Path $subdirPath
+    Write-Host "Start publishing projects in Modules directory: $($modulesDirectory)." -ForegroundColor Yellow
+    Set-Location -Path $modulesDirectory
 
-        # Check if there's a .csproj file in the directory
-        $dotnetProject = Get-ChildItem -Filter *.csproj
-        if ($dotnetProject) {
-            Publish-DotnetProject -projectPath $subdirPath -publishType $publishType
+    $moduleDirectories = Get-ChildItem -Directory
+
+    foreach ($moduleDir in $moduleDirectories) {
+        $moduleSrcPath = Join-Path -Path $moduleDir.FullName -ChildPath 'Src'
+
+        if (Test-Path $moduleSrcPath) {
+            Write-Host "Processing module: $($moduleDir.Name)" -ForegroundColor Cyan
+
+            # Iterate over projects in the src folder
+            $projectDirectories = Get-ChildItem -Path $moduleSrcPath -Directory
+            foreach ($projectDir in $projectDirectories) {
+                $projectDirPath = $projectDir.FullName
+
+                # Check if there's a .csproj file in the directory
+                $dotnetProject = Get-ChildItem -Path $projectDirPath -Filter *.csproj
+                if ($dotnetProject) {
+                    Publish-DotnetProject -projectPath $projectDirPath -publishType "Module"
+                } else {
+                    Write-Host "No Dotnet project found in $($projectDir.Name)." -ForegroundColor Yellow
+                }
+            }
         } else {
-            Write-Host "No Dotnet project found in $($subdir.Name)." -ForegroundColor Yellow
+            Write-Host "No src folder found in module $($moduleDir.Name)." -ForegroundColor Yellow
         }
     }
 }
@@ -99,14 +111,14 @@ function Main {
     } else {
         Write-Host "Framework directory not found." -ForegroundColor Yellow
     }
-#     Set-Location -Path $startingDirectory
-#     # Publish projects in the Modules directory
-#     $modulesDirectory = ".\Modules"
-#     if (Test-Path $modulesDirectory) {
-#         Publish-ProjectsInDirectory -directoryPath $modulesDirectory -publishType "Modules"
-#     } else {
-#         Write-Host "Modules directory not found." -ForegroundColor Yellow
-#     }
+
+    # Publish projects in the Modules directory
+    $modulesDirectory = ".\Modules"
+    if (Test-Path $modulesDirectory) {
+        Publish-ModulesProjects -modulesDirectory $modulesDirectory
+    } else {
+        Write-Host "Modules directory not found." -ForegroundColor Yellow
+    }
 
     # Return to the starting directory
     Set-Location -Path $startingDirectory

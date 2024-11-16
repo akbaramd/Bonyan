@@ -6,7 +6,7 @@
         <RootNamespace/>
         <PackageId>Bonyan.Layer.Domain</PackageId>
     </PropertyGroup>
-<Import Project="..\..\..\package.props"/>
+<Import Project="..\..\..\framework-package.props"/>
     <ItemGroup>
         <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.8"/>
     </ItemGroup>

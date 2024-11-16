@@ -13,5 +13,5 @@
         <RootNamespace/>
         <PackageId>Bonyan.Layer.Application</PackageId>
     </PropertyGroup>
-<Import Project="..\..\..\package.props"/>
+<Import Project="..\..\..\framework-package.props"/>
 </Project>

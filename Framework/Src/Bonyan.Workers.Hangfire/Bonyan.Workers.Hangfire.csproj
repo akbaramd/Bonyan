@@ -7,7 +7,7 @@
         <OutputType>Library</OutputType>
         <PackageId>Bonyan.Workers.Hangfire</PackageId>
     </PropertyGroup>
-<Import Project="..\..\..\package.props"/>
+<Import Project="..\..\..\framework-package.props"/>
     <ItemGroup>
         <PackageReference Include="Hangfire.AspNetCore" Version="1.8.14"/>
         <PackageReference Include="Hangfire.Autofac" Version="2.6.0"/>

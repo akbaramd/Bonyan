@@ -6,7 +6,7 @@
         <RootNamespace/>
         <PackageId>Bonyan.MultiTenant</PackageId>
     </PropertyGroup>
-<Import Project="..\..\..\package.props"/>
+<Import Project="..\..\..\framework-package.props"/>
     <ItemGroup>
         <ProjectReference Include="..\Bonyan.Security\Bonyan.Security.csproj"/>
         <ProjectReference Include="..\Bonyan\Bonyan.csproj"/>

@@ -7,7 +7,7 @@
         <PackageId>Bonyan</PackageId>
     </PropertyGroup>
 
-    <Import Project="..\..\..\package.props"/>
+    <Import Project="..\..\..\framework-package.props"/>
 
     <ItemGroup>
         <PackageReference Include="JetBrains.Annotations" Version="2024.2.0"/>

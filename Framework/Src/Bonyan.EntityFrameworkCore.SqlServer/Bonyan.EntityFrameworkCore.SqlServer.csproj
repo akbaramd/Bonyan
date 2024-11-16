@@ -12,7 +12,7 @@
     <ItemGroup>
         <ProjectReference Include="..\Bonyan.EntityFrameworkCore\Bonyan.EntityFrameworkCore.csproj"/>
     </ItemGroup>
-<Import Project="..\..\..\package.props"/>
+<Import Project="..\..\..\framework-package.props"/>
 
 
 </Project>

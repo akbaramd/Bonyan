@@ -6,7 +6,7 @@
         <Nullable>enable</Nullable>
         <PackageId>Bonyan.Security</PackageId>
         <RootNamespace/>
-    </PropertyGroup><Import Project="..\..\..\package.props"/>
+    </PropertyGroup><Import Project="..\..\..\framework-package.props"/>
     <ItemGroup>
         <ProjectReference Include="..\Bonyan\Bonyan.csproj"/>
     </ItemGroup>

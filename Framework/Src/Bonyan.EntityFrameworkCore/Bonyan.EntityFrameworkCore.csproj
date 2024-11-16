@@ -7,7 +7,7 @@
         <OutputType>Library</OutputType>
         <PackageId>Bonyan.EntityFrameworkCore</PackageId>
     </PropertyGroup>
-<Import Project="..\..\..\package.props"/>
+<Import Project="..\..\..\framework-package.props"/>
 
     <ItemGroup>
         <ProjectReference Include="..\Bonyan.Layer.Application\Bonyan.Layer.Application.csproj"/>

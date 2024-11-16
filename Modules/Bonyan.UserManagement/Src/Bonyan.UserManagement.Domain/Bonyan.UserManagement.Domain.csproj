@@ -4,13 +4,15 @@
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <PackageId>Bonyan.UserManagement.Domain</PackageId>
         <RootNamespace/>
-        <PackageId>Bonyan.Layer.Application.Abstractions</PackageId>
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Bonyan.Layer.Domain.Abstractions\Bonyan.Layer.Domain.Abstractions.csproj" />
+      <ProjectReference Include="..\..\..\..\Framework\Src\Bonyan.Layer.Domain\Bonyan.Layer.Domain.csproj" />
     </ItemGroup>
 
-    <Import Project="..\..\..\framework-package.props"/>
+    <Import Project="..\..\..\..\module-package.props"/>
+
+
 </Project>

@@ -7,7 +7,7 @@
         <RootNamespace/>
         <PackageId>Bonyan.AspNetCore</PackageId>
     </PropertyGroup>
-<Import Project="..\..\..\package.props"/>
+<Import Project="..\..\..\framework-package.props"/>
 
     <ItemGroup>
         <PackageReference Include="Figgle" Version="0.5.1"/>

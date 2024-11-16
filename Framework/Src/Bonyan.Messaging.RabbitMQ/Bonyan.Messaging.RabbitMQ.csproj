@@ -7,7 +7,7 @@
         <PackageId>Bonyan.Layer.Messaging.OutBox</PackageId>
     </PropertyGroup>
 
-    <Import Project="..\..\..\package.props" />
+    <Import Project="..\..\..\framework-package.props" />
 
     <ItemGroup>
       <ProjectReference Include="..\Bonyan.Messaging\Bonyan.Messaging.csproj" />
