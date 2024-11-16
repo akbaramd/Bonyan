@@ -4,7 +4,6 @@ function Publish-DotnetProject {
         [string]$projectPath,
         [string]$publishType
     )
-
     # Retrieve NuGet API key from the environment variable
     $nugetApiKey = $env:NugetKey 
 
@@ -59,6 +58,29 @@ function Publish-DotnetProject {
     Set-Location -Path $initialDirectory
 }
 
+# Function to publish projects in a directory (used for Framework only)
+function Publish-ProjectsInFramework {
+    param (
+        [string]$directoryPath
+    )
+
+    Write-Host "Start publishing projects in Framework directory: $($directoryPath)." -ForegroundColor Yellow
+    Set-Location -Path $directoryPath
+    $subdirectories = Get-ChildItem -Directory
+
+    foreach ($subdir in $subdirectories) {
+        $subdirPath = $subdir.FullName
+
+        # Check if there's a .csproj file in the directory
+        $dotnetProject = Get-ChildItem -Path $subdirPath -Filter *.csproj
+        if ($dotnetProject) {
+            Publish-DotnetProject -projectPath $subdirPath -publishType "Framework"
+        } else {
+            Write-Host "No Dotnet project found in $($subdir.Name)." -ForegroundColor Yellow
+        }
+    }
+}
+
 # Function to iterate over the Modules directory and publish projects in the src folders
 function Publish-ModulesProjects {
     param (
@@ -71,7 +93,7 @@ function Publish-ModulesProjects {
     $moduleDirectories = Get-ChildItem -Directory
 
     foreach ($moduleDir in $moduleDirectories) {
-        $moduleSrcPath = Join-Path -Path $moduleDir.FullName -ChildPath 'Src'
+        $moduleSrcPath = Join-Path -Path $moduleDir.FullName -ChildPath 'src'
 
         if (Test-Path $moduleSrcPath) {
             Write-Host "Processing module: $($moduleDir.Name)" -ForegroundColor Cyan
@@ -103,15 +125,15 @@ function Main {
     # Run tests
     dotnet test
     Set-Location -Path $startingDirectory
+
     # Publish projects in the Framework directory
     $frameworkDirectory = ".\Framework\Src"
- 
     if (Test-Path $frameworkDirectory) {
-        Publish-ProjectsInDirectory -directoryPath $frameworkDirectory -publishType "Framework"
+        Publish-ProjectsInFramework -directoryPath $frameworkDirectory
     } else {
         Write-Host "Framework directory not found." -ForegroundColor Yellow
     }
-
+    Set-Location -Path $startingDirectory
     # Publish projects in the Modules directory
     $modulesDirectory = ".\Modules"
     if (Test-Path $modulesDirectory) {
