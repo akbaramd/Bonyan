@@ -55,9 +55,11 @@
     const updateTitle = () => {
       const path = location.href // Extract section from hash
       
-      if (path.indexOf('Bonyan.Layer.Domain')) {
+      if (path.indexOf('Bonyan.Layer.Domain')>0) {
         sectionTitle = 'Bonyan.Layer.Domain';
-      } 
+      } else {
+        sectionTitle = 'Bonyan - Modular Monolithic Framework';
+      }
 
       document.title = sectionTitle;
       window.$docsify.name = sectionTitle;
