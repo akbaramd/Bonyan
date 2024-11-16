@@ -13,11 +13,6 @@
         <ProjectReference Include="..\..\..\Bonyan.UserManagement\Src\Bonyan.UserManagement.Domain\Bonyan.UserManagement.Domain.csproj" />
     </ItemGroup>
 
-
-    <ItemGroup>
-      <Folder Include="Bonyan\IdentityManagement\Domain\Permissions\" />
-    </ItemGroup>
-
     <Import Project="..\..\..\..\module-package.props"/>
 
 </Project>

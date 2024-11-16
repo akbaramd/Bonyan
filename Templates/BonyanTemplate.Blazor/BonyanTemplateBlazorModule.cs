@@ -1,8 +1,6 @@
-using Bonyan.AdminLte.Blazor.IdentityManagement;
 using Bonyan.AspNetCore.Components;
 using Bonyan.AspNetCore.Components.Menus;
 using Bonyan.Modularity;
-using Bonyan.Ui.Blazimum;
 using BonyanTemplate.Application;
 using BonyanTemplate.Blazor.Components;
 using BonyanTemplate.Blazor.Menus;
@@ -21,8 +19,6 @@ public class BonyanTemplateBlazorModule : BonWebModule
         DependOn<BonyanTemplateApplicationModule>();
         DependOn<BonaynTempalteInfrastructureModule>();
         DependOn<BonAspNetCoreComponentsModule>();
-        DependOn<BonUiBlazimumModule>();
-        DependOn<BonyanAdminLteBlazorIdentityManagementModule<User>>();
     }
 
     public override Task OnPreConfigureAsync(BonConfigurationContext context)
@@ -53,8 +49,8 @@ public class BonyanTemplateBlazorModule : BonWebModule
     public override Task OnApplicationAsync(BonWebApplicationContext webApplicationContext)
     {
         // Middleware
-        webApplicationContext.Application.UseAuthentication();
-        webApplicationContext.Application.UseAuthorization();
+        // webApplicationContext.Application.UseAuthentication();
+        // webApplicationContext.Application.UseAuthorization();
 
         return base.OnApplicationAsync(webApplicationContext);
     }

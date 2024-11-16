@@ -3,7 +3,7 @@ using Bonyan.UserManagement.Domain.Users.DomainServices;
 
 namespace Bonyan.IdentityManagement.Domain.Abstractions.Users;
 
-public interface IBonIdentityUserManager : IBonUserManager<BonIdentityUser>
+public interface IBonIdentityUserManager : IBonIdentityUserManager<BonIdentityUser>
 {
     
 }

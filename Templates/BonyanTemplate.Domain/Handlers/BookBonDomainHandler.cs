@@ -7,6 +7,6 @@ public class BookBonDomainHandler : IBonMessageConsumer<BookCreated>
 {
     public Task ConsumeAsync(BookCreated domainEvent , CancellationToken? cancellationToken )
     {
-        throw new NotImplementedException();
+        return Task.CompletedTask;
     }
 }

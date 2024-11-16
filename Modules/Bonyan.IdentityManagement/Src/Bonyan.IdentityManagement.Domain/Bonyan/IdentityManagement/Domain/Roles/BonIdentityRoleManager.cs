@@ -1,4 +1,5 @@
 ﻿using Bonyan.IdentityManagement.Domain.Abstractions.Roles;
+using Bonyan.IdentityManagement.Domain.Roles.ValueObjects;
 using Bonyan.Layer.Domain.DomainService;
 using Bonyan.Layer.Domain.Services;
 using Microsoft.Extensions.Logging;
@@ -7,21 +8,21 @@ namespace Bonyan.IdentityManagement.Domain.Roles
 {
     public class BonIdentityRoleManager : BonDomainService, IBonIdentityRoleManager
     {
-        public IBonRoleRepository RoleRepository => LazyServiceProvider.LazyGetRequiredService<IBonRoleRepository>();
+        public IBonIdentityRoleRepository IdentityRoleRepository => LazyServiceProvider.LazyGetRequiredService<IBonIdentityRoleRepository>();
 
         // Create a new role
         public async Task<BonDomainResult> CreateAsync(string name, string title)
         {
             try
             {
-                if (await RoleRepository.ExistsAsync(x => x.Name.Equals(name)))
+                if (await IdentityRoleRepository.ExistsAsync(x => x.Name.Equals(name)))
                 {
                     Logger.LogWarning($"Role with name {name} already exists.");
                     return BonDomainResult.Failure($"Role with name {name} already exists.");
                 }
 
                 var role = new BonIdentityRole(BonRoleId.CreateNew(), name, title);
-                await RoleRepository.AddAsync(role, true);
+                await IdentityRoleRepository.AddAsync(role, true);
                 return BonDomainResult.Success();
             }
             catch (Exception e)
@@ -36,7 +37,7 @@ namespace Bonyan.IdentityManagement.Domain.Roles
         {
             try
             {
-                await RoleRepository.UpdateAsync(entity, true);
+                await IdentityRoleRepository.UpdateAsync(entity, true);
                 return BonDomainResult.Success();
             }
             catch (Exception e)
@@ -51,7 +52,7 @@ namespace Bonyan.IdentityManagement.Domain.Roles
         {
             try
             {
-                var role = await RoleRepository.FindOneAsync(x => x.Name.Equals(name));
+                var role = await IdentityRoleRepository.FindOneAsync(x => x.Name.Equals(name));
                 if (role == null)
                 {
                     return BonDomainResult<BonIdentityRole>.Failure($"Role with name {name} not found.");
@@ -70,7 +71,7 @@ namespace Bonyan.IdentityManagement.Domain.Roles
         {
             try
             {
-                await RoleRepository.DeleteAsync(identityRole, true);
+                await IdentityRoleRepository.DeleteAsync(identityRole, true);
                 return BonDomainResult.Success();
             }
             catch (Exception e)
@@ -85,7 +86,7 @@ namespace Bonyan.IdentityManagement.Domain.Roles
         {
             try
             {
-                var exists = await RoleRepository.ExistsAsync(r => r.Name == roleName);
+                var exists = await IdentityRoleRepository.ExistsAsync(r => r.Name == roleName);
                 return BonDomainResult<bool>.Success(exists);
             }
             catch (Exception e)

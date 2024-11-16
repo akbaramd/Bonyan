@@ -9,11 +9,11 @@
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.10"/>
     </ItemGroup>
     <ItemGroup>
-        <ProjectReference Include="..\..\Framework\Bonyan.AspNetCore.Components\Bonyan.AspNetCore.Components.csproj" />
-        <ProjectReference Include="..\..\Framework\Bonyan.Workers.Hangfire\Bonyan.Workers.Hangfire.csproj" />
-        <ProjectReference Include="..\..\Framework\Bonyan.EntityFrameworkCore\Bonyan.EntityFrameworkCore.csproj"/>
-        <ProjectReference Include="..\..\Framework\Bonyan.AspNetCore\Bonyan.AspNetCore.csproj"/>
-        <ProjectReference Include="..\..\Framework\Bonyan.EntityFrameworkCore.SqlServer\Bonyan.EntityFrameworkCore.SqlServer.csproj"/>
+        <ProjectReference Include="..\..\Framework\Src\Bonyan.AspNetCore.Components\Bonyan.AspNetCore.Components.csproj" />
+        <ProjectReference Include="..\..\Framework\Src\Bonyan.Workers.Hangfire\Bonyan.Workers.Hangfire.csproj" />
+        <ProjectReference Include="..\..\Framework\Src\Bonyan.EntityFrameworkCore\Bonyan.EntityFrameworkCore.csproj"/>
+        <ProjectReference Include="..\..\Framework\Src\Bonyan.AspNetCore\Bonyan.AspNetCore.csproj"/>
+        <ProjectReference Include="..\..\Framework\Src\Bonyan.EntityFrameworkCore.SqlServer\Bonyan.EntityFrameworkCore.SqlServer.csproj"/>
         <ProjectReference Include="..\BonyanTemplate.Application\BonyanTemplate.Application.csproj"/>
         <ProjectReference Include="..\BonyanTemplate.Infrastructure\BonyanTemplate.Infrastructure.csproj"/>
     </ItemGroup>
@@ -25,10 +25,6 @@
     <ItemGroup>
       <Folder Include="Middlewares\" />
       <Folder Include="wwwroot\fonts\fonts\" />
-    </ItemGroup>
-    <ItemGroup>
-      <None Remove="BonyanTemplate.db-wal" />
-      <None Remove="BonyanTemplate.db-shm" />
     </ItemGroup>
  
 </Project>

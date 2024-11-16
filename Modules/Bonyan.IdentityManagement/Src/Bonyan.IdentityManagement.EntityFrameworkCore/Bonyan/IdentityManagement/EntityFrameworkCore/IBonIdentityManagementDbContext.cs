@@ -18,6 +18,4 @@ public interface IBonIdentityManagementDbContext<TUser> : IBonUserManagementDbCo
 
 public interface IBonIdentityManagementDbContext : IBonIdentityManagementDbContext<BonIdentityUser>
 {
-    public DbSet<BonIdentityRole> Roles { get; set; }
-    public DbSet<BonIdentityPermission> Permissions { get; set; }
 }

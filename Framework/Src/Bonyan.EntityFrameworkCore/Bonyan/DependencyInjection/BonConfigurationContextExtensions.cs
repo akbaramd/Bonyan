@@ -16,17 +16,38 @@ public static class Extensions
   {
     var option = new BonDbContextRegistrationOptionBuilder(context.Services,typeof(TDbContext));
     optionsBuilder?.Invoke(option);
-    
-    context.Services.AddTransient<TDbContext>();
 
+    context.Services.AddTransient<TDbContext>();
+    
     context.Services.TryAddTransient(sp =>
     {
-      var options = sp.GetRequiredService<IOptions<BonEntityFrameworkDbContextOptions>>();
-
       var builder = new DbContextOptionsBuilder<TDbContext>();
-      options.Value.DbContextOptionsAction.Invoke(builder);
+      option.DbContextOptionsAction.Invoke(builder);
       return builder.Options;
     });
+    
+    foreach (var additionalDbContext in option.AdditionalDbContexts)
+    {
+      context.Services.AddTransient(additionalDbContext);
+      
+      // Dynamically create DbContextOptions for the additional DbContext
+      var dbContextOptionsType = typeof(DbContextOptions<>).MakeGenericType(additionalDbContext);
+      var dbContextOptionsBuilderType = typeof(DbContextOptionsBuilder<>).MakeGenericType(additionalDbContext);
+
+      context.Services.TryAddTransient(dbContextOptionsType, sp =>
+      {
+        var builder = Activator.CreateInstance(dbContextOptionsBuilderType);
+        if (builder is DbContextOptionsBuilder optionsBuilderInstance)
+        {
+          option.DbContextOptionsAction.Invoke(optionsBuilderInstance);
+          return optionsBuilderInstance.Options;
+        }
+
+        throw new InvalidOperationException($"Failed to create DbContextOptions for {additionalDbContext.Name}");
+      });
+    }
+
+    
 
     new BonEfCoreRepositoryRegistrar(option).ConfigureRepository();
     

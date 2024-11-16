@@ -3,11 +3,11 @@ using Bonyan.Layer.Domain.Repository.Abstractions;
 
 namespace Bonyan.IdentityManagement.Domain.Abstractions.Roles;
 
-public interface IBonRoleRepository : IBonRepository<BonIdentityRole> 
+public interface IBonIdentityRoleRepository : IBonRepository<BonIdentityRole> 
 {
 }
 
-public interface IBonRoleReadOnlyRepository: IBonReadOnlyRepository<BonIdentityRole> 
+public interface IBonIdentityRoleReadOnlyRepository: IBonReadOnlyRepository<BonIdentityRole> 
 {
 }
 

@@ -1,11 +1,12 @@
 ﻿using Bonyan.IdentityManagement.Domain.Permissions;
+using Bonyan.IdentityManagement.Domain.Roles.ValueObjects;
 using Bonyan.IdentityManagement.Domain.Users;
 using Bonyan.Layer.Domain.Aggregate;
 using Bonyan.Layer.Domain.Events;
 
 namespace Bonyan.IdentityManagement.Domain.Roles
 {
-    public class BonIdentityRole : BonAggregateRoot<BonRoleId> , IBonIdentityRole
+    public class BonIdentityRole : BonAggregateRoot<BonRoleId> 
     {
         // Private constructor for ORM or factory use only.
         protected BonIdentityRole()

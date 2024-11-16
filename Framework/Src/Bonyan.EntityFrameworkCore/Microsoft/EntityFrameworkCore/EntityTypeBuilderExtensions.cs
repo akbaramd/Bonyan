@@ -1,4 +1,6 @@
+using System.Reflection;
 using Bonyan.Layer.Domain.Audit.Abstractions;
+using Bonyan.Layer.Domain.Entity;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Bonyan.Layer.Domain.ValueObjects;
@@ -17,6 +19,9 @@ namespace Microsoft.EntityFrameworkCore
             b.TryConfigureMultiTenant();
             return b;
         }
+        
+
+        
         public static void TryConfigureMultiTenant(this EntityTypeBuilder b)
         {
           if (b.Metadata.ClrType.IsAssignableTo(typeof(IBonMultiTenant)))

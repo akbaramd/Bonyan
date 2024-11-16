@@ -32,15 +32,7 @@ public class BonUserManagementEntityFrameworkModule<TUser> : Modularity.Abstract
     context.Services.AddTransient<IBonUserRepository,BonEfCoreUserRepository>();
     context.Services.AddTransient<IBonUserReadOnlyRepository,BonEfCoreUserReadOnlyRepository>();
     
-    context.AddBonDbContext<BonUserManagementDbContext<TUser>>(c =>
-    {
-      c.AddRepository<TUser, BonEfCoreUserRepository<TUser>>();
-    });
     
-    context.AddBonDbContext<BonUserManagementDbContext>(c =>
-    {
-      c.AddRepository<TUser, BonEfCoreUserRepository>();
-    });
     
     return base.OnConfigureAsync(context);
   }

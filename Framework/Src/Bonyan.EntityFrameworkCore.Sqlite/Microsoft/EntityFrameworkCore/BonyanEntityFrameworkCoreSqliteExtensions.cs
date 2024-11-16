@@ -1,10 +1,11 @@
 ﻿using Bonyan.EntityFrameworkCore;
+using Bonyan.EntityFrameworkCore.Abstractions;
 
 namespace Microsoft.EntityFrameworkCore;
 
 public static class BonyanEntityFrameworkCoreSqliteExtensions
 {
-  public static BonEntityFrameworkDbContextOptions UseSqlite(this BonEntityFrameworkDbContextOptions options,string connectionStrings)  
+  public static IBonDbContextRegistrationOptionBuilder UseSqlite(this IBonDbContextRegistrationOptionBuilder options,string connectionStrings)  
   {
     return options.Configure(c =>
     {

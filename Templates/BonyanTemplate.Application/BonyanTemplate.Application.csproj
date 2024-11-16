@@ -7,11 +7,12 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\Framework\Bonyan.Messaging.RabbitMQ\Bonyan.Messaging.RabbitMQ.csproj" />
-        <ProjectReference Include="..\..\Framework\Bonyan.Workers.Hangfire\Bonyan.Workers.Hangfire.csproj" />
-        <ProjectReference Include="..\..\Framework\Bonyan.Worker.Abstraction\Bonyan.Worker.Abstraction.csproj" />
-        <ProjectReference Include="..\..\Framework\Bonyan.AspNetCore\Bonyan.AspNetCore.csproj"/>
-        <ProjectReference Include="..\..\Framework\Bonyan.AutoMapper\Bonyan.AutoMapper.csproj"/>
+        <ProjectReference Include="..\..\Framework\Src\Bonyan.Messaging.RabbitMQ\Bonyan.Messaging.RabbitMQ.csproj" />
+        <ProjectReference Include="..\..\Framework\Src\Bonyan.Workers.Hangfire\Bonyan.Workers.Hangfire.csproj" />
+        <ProjectReference Include="..\..\Framework\Src\Bonyan.Worker.Abstraction\Bonyan.Worker.Abstraction.csproj" />
+        <ProjectReference Include="..\..\Framework\Src\Bonyan.AspNetCore\Bonyan.AspNetCore.csproj"/>
+        <ProjectReference Include="..\..\Framework\Src\Bonyan.AutoMapper\Bonyan.AutoMapper.csproj"/>
+        <ProjectReference Include="..\..\Modules\Bonyan.TenantManagement\Src\Bonyan.TenantManagement.Application\Bonyan.TenantManagement.Application.csproj" />
         <ProjectReference Include="..\BonyanTemplate.Domain\BonyanTemplate.Domain.csproj"/>
     </ItemGroup>
 

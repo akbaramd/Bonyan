@@ -95,6 +95,16 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.UserManagement.Domai
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.IdentityManagement.Domain.Abstractions", "Modules\Bonyan.IdentityManagement\Src\Bonyan.IdentityManagement.Domain.Abstractions\Bonyan.IdentityManagement.Domain.Abstractions.csproj", "{5553B83D-9FB3-4710-A446-36E5FFA4C8E9}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Templates", "Templates", "{62C5B786-B72F-4815-AF3E-B1E15E1FCCEC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BonyanTemplate.Domain", "Templates\BonyanTemplate.Domain\BonyanTemplate.Domain.csproj", "{587055AE-0FDC-435F-9872-66CEE6146214}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BonyanTemplate.Infrastructure", "Templates\BonyanTemplate.Infrastructure\BonyanTemplate.Infrastructure.csproj", "{5BEBD3B1-8B94-49C3-8671-2DBC742D06D4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BonyanTemplate.Application", "Templates\BonyanTemplate.Application\BonyanTemplate.Application.csproj", "{24C303B8-39D4-4266-BF87-F0450C75C503}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BonyanTemplate.Blazor", "Templates\BonyanTemplate.Blazor\BonyanTemplate.Blazor.csproj", "{6180A931-A6C0-4FA8-8976-EC65A0A1276C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -241,6 +251,22 @@ Global
 		{5553B83D-9FB3-4710-A446-36E5FFA4C8E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5553B83D-9FB3-4710-A446-36E5FFA4C8E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5553B83D-9FB3-4710-A446-36E5FFA4C8E9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{587055AE-0FDC-435F-9872-66CEE6146214}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{587055AE-0FDC-435F-9872-66CEE6146214}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{587055AE-0FDC-435F-9872-66CEE6146214}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{587055AE-0FDC-435F-9872-66CEE6146214}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5BEBD3B1-8B94-49C3-8671-2DBC742D06D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5BEBD3B1-8B94-49C3-8671-2DBC742D06D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5BEBD3B1-8B94-49C3-8671-2DBC742D06D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5BEBD3B1-8B94-49C3-8671-2DBC742D06D4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{24C303B8-39D4-4266-BF87-F0450C75C503}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{24C303B8-39D4-4266-BF87-F0450C75C503}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{24C303B8-39D4-4266-BF87-F0450C75C503}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{24C303B8-39D4-4266-BF87-F0450C75C503}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6180A931-A6C0-4FA8-8976-EC65A0A1276C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6180A931-A6C0-4FA8-8976-EC65A0A1276C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6180A931-A6C0-4FA8-8976-EC65A0A1276C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6180A931-A6C0-4FA8-8976-EC65A0A1276C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -290,6 +316,10 @@ Global
 		{3BAD587F-6541-4DFD-8AAD-20120F75CF92} = {9BBAFE09-5016-4AF1-BA49-6EF46BDCF77A}
 		{66B51EEE-DCDB-44ED-8AD9-31898D195D49} = {D3289479-B493-46C2-92D3-C496016F28B2}
 		{5553B83D-9FB3-4710-A446-36E5FFA4C8E9} = {238A4AD4-E78A-46B9-822E-78B71A2D9150}
+		{587055AE-0FDC-435F-9872-66CEE6146214} = {62C5B786-B72F-4815-AF3E-B1E15E1FCCEC}
+		{5BEBD3B1-8B94-49C3-8671-2DBC742D06D4} = {62C5B786-B72F-4815-AF3E-B1E15E1FCCEC}
+		{24C303B8-39D4-4266-BF87-F0450C75C503} = {62C5B786-B72F-4815-AF3E-B1E15E1FCCEC}
+		{6180A931-A6C0-4FA8-8976-EC65A0A1276C} = {62C5B786-B72F-4815-AF3E-B1E15E1FCCEC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CACE9943-7714-471F-BCCD-CC6CA1DA43C5}

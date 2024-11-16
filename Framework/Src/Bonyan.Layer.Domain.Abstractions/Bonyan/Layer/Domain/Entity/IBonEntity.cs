@@ -2,7 +2,7 @@
 
 public interface IBonEntity
 {
-    object[] GetKeys();
+    object GetKey();
 }
 
 public interface IBonEntity<TKey> : IBonEntity

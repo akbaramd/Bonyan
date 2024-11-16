@@ -6,8 +6,6 @@ namespace Bonyan.IdentityManagement.Domain.Users;
 
 public class BonIdentityUser : BonUser,IBonIdentityUser
 {
-        private readonly List<BonIdentityRole> _roles = new();
-
         // Parameterless constructor for EF Core
         protected BonIdentityUser()
         {
@@ -47,27 +45,6 @@ public class BonIdentityUser : BonUser,IBonIdentityUser
         {
         }
 
-        public IReadOnlyCollection<IBonIdentityRole> Roles => _roles;
 
-        public void TryAssignRole(BonIdentityRole role)
-        {
-            if (role == null) throw new ArgumentNullException(nameof(role));
-
-            if (_roles.All(r => r.Name != role.Name))
-            {
-                _roles.Add(role);
-            }
-        }
-
-        public void TryRemoveRole(BonIdentityRole role)
-        {
-            if (role == null) throw new ArgumentNullException(nameof(role));
-
-            var existingRole = _roles.FirstOrDefault(r => r.Name == role.Name);
-            if (existingRole != null)
-            {
-                _roles.Remove(existingRole);
-            }
-        }
     
 }

@@ -1,5 +1,7 @@
 ﻿using Bonyan.EntityFrameworkCore;
 using Bonyan.IdentityManagement.Domain;
+using Bonyan.IdentityManagement.Domain.Permissions;
+using Bonyan.IdentityManagement.Domain.Roles;
 using Bonyan.IdentityManagement.EntityFrameworkCore;
 using Bonyan.TenantManagement.Domain;
 using Bonyan.TenantManagement.EntityFrameworkCore;

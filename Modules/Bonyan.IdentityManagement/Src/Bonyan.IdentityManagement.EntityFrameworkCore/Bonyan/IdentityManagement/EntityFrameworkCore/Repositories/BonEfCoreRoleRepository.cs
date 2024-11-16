@@ -1,13 +1,14 @@
 ﻿using Bonyan.IdentityManagement.Domain;
 using Bonyan.IdentityManagement.Domain.Abstractions.Roles;
 using Bonyan.IdentityManagement.Domain.Roles;
+using Bonyan.IdentityManagement.Domain.Roles.ValueObjects;
 using Bonyan.Layer.Domain;
 
 namespace Bonyan.IdentityManagement.EntityFrameworkCore.Repositories;
 
-public class BonEfCoreRoleRepository : EfCoreBonRepository<BonIdentityRole,BonRoleId,BonIdentityManagementDbContext>,IBonRoleRepository,IBonRoleReadOnlyRepository
+public class BonIdentityEfCoreRoleRepository : EfCoreBonRepository<BonIdentityRole,BonRoleId,BonIdentityManagementDbContext>,IBonIdentityRoleRepository,IBonIdentityRoleReadOnlyRepository
 {
-    public BonEfCoreRoleRepository(BonIdentityManagementDbContext userManagementDbContext) : base(userManagementDbContext)
+    public BonIdentityEfCoreRoleRepository(BonIdentityManagementDbContext userManagementDbContext) : base(userManagementDbContext)
     {
     }
 }

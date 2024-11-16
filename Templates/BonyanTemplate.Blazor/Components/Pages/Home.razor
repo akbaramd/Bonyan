@@ -1,21 +1,8 @@
 ﻿@page "/"
-@using Bonyan.Ui.Blazimum.Components.Buttons
 
 
 
 <PageTitle>Counter</PageTitle>
-
-<BlzCard>
-    <Body>
-    <h1>Counter</h1>
-
-    <!-- Display Counter with BlzCollapsible -->
-    <BlzCollapsible IsOpen="_isCountVisible">
-        <p role="status">Current count is visible: @_isCountVisible</p>
-    </BlzCollapsible>
-    <BlzButton Variant="ButtonVariant.Primary" OnClick="ToggleCountVisibility">Toggle Counter Visibility</BlzButton>
-    </Body>
-</BlzCard>
 
 
 @code {

@@ -9,9 +9,9 @@ public class BonIdentityPermission : BonEntity
     {
     }
 
-    public override object[] GetKeys()
+    public override object GetKey()
     {
-        return [Key];
+        return Key;
     }
 
     [Key] public string Key { get; set; } = default!;

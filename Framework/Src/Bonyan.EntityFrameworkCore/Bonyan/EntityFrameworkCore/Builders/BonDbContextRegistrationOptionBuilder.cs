@@ -1,5 +1,6 @@
 using Bonyan.EntityFrameworkCore.Abstractions;
 using Bonyan.Layer.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Bonyan.EntityFrameworkCore.Builders;
@@ -13,6 +14,16 @@ public class BonDbContextRegistrationOptionBuilder : IBonDbContextRegistrationOp
     DefaultRepositoryDbContextType = originalDbContextType;
   }
 
+  
+  public Action<DbContextOptionsBuilder> DbContextOptionsAction { get; set; } = _ => { };
+
+
+  public IBonDbContextRegistrationOptionBuilder Configure(Action<DbContextOptionsBuilder> action) 
+  {
+    DbContextOptionsAction = action;
+    return this;
+  }
+  public List<Type> AdditionalDbContexts { get; } = new();
   public IServiceCollection Services { get; }
   public Dictionary<Type, Type> CustomRepositories { get; } = new();
   public List<Type> SpecifiedDefaultRepositories { get; } = new();
@@ -28,6 +39,15 @@ public class BonDbContextRegistrationOptionBuilder : IBonDbContextRegistrationOp
   }
   
   
+  /// <summary>
+  /// Adds another DbContext type that will use the same configuration as the primary DbContext.
+  /// </summary>
+  public IBonDbContextRegistrationOptionBuilder AsDbContext<TAnotherDbContext>()
+    where TAnotherDbContext : DbContext
+  {
+    AdditionalDbContexts.Add(typeof(TAnotherDbContext));
+    return this;
+  }
   public IBonDbContextRegistrationOptionBuilder AddDefaultRepository(Type entityType)
   {
     BonEntityHelper.CheckEntity(entityType);

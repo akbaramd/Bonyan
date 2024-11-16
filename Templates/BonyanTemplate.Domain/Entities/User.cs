@@ -1,5 +1,6 @@
 ﻿using Bonyan.IdentityManagement.Domain;
-using Bonyan.UserManagement.Domain.ValueObjects;
+using Bonyan.IdentityManagement.Domain.Users;
+using Bonyan.UserManagement.Domain.Users.ValueObjects;
 
 namespace BonyanTemplate.Domain.Entities;
 
