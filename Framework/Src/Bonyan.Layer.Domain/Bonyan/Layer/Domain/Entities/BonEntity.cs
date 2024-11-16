@@ -14,7 +14,7 @@ public abstract class BonEntity : IBonEntity
 
     /// <summary>
     ///     Gets the array of keys that uniquely identify the entity.
-    /// </summary>
+    /// </summary>  
     /// <returns>An array of objects representing the entity's keys.</returns>
     public abstract object[] GetKeys();
 }

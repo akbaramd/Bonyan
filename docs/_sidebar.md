@@ -10,7 +10,7 @@
 - Modules
   - [Bonyan.AutoMapper](/frameworks/automapper.md)
   - [Bonyan.UnitOfWork](/frameworks/unitofworks.md)
-  - [Bonyan.Layer.Domain](/frameworks/ddd-domain.md)
+  - [Bonyan.Layer.Domain](/frameworks/Bonyan.Layer.Domain/)
   - [Bonyan.Layer.Application](/frameworks/ddd-application.md)
   - [Bonyan.EntityFrameworkCore](/frameworks/entity_framework.md)
 - Authors
