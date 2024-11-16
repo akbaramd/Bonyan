@@ -1,0 +1,11 @@
+﻿.blz-collapsible-content {
+    overflow: hidden;
+    max-height: 0;       /* Initially collapsed */
+    opacity: 0;          /* Initially transparent */
+    transition: max-height 0.4s ease, opacity 0.4s ease;
+}
+
+.blz-collapsible-content.open {
+    max-height: none;    /* Open state to show full content */
+    opacity: 1;          /* Fully visible when open */
+}

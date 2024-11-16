@@ -1,0 +1,31 @@
+﻿@namespace Bonyan.Ui.Blazimum
+@inherits Bonyan.Ui.Blazimum.Bases.BlzBaseComponent
+
+<div class="blz-card @Class" style="@Style" @attributes="AdditionalAttributes">
+    @if (Header != null)
+    {
+        <div class="blz-card-header">
+            @Header
+        </div>
+    }
+    <div class="blz-card-body">
+        @Body
+    </div>
+    @if (Footer != null)
+    {
+        <div class="blz-card-footer">
+            @Footer
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public RenderFragment Header { get; set; }
+
+    [Parameter]
+    public RenderFragment Body { get; set; }
+
+    [Parameter]
+    public RenderFragment Footer { get; set; }
+}
