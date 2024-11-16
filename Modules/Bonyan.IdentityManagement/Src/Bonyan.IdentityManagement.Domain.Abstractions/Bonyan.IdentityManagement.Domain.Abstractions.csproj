@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <PackageId>Bonyan.IdentityManagement.Domain.Abstractions</PackageId>
+        <RootNamespace/>
+    </PropertyGroup>
+
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\..\Bonyan.UserManagement\Src\Bonyan.UserManagement.Domain\Bonyan.UserManagement.Domain.csproj" />
+    </ItemGroup>
+
+
+    <ItemGroup>
+      <Folder Include="Bonyan\IdentityManagement\Domain\Permissions\" />
+    </ItemGroup>
+
+    <Import Project="..\..\..\..\module-package.props"/>
+
+</Project>
