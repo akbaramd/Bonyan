@@ -92,21 +92,21 @@ function Main {
     dotnet test
     Set-Location -Path $startingDirectory
     # Publish projects in the Framework directory
-    $frameworkDirectory = ".\Framework"
+    $frameworkDirectory = ".\Framework\Src"
  
     if (Test-Path $frameworkDirectory) {
         Publish-ProjectsInDirectory -directoryPath $frameworkDirectory -publishType "Framework"
     } else {
         Write-Host "Framework directory not found." -ForegroundColor Yellow
     }
-    Set-Location -Path $startingDirectory
-    # Publish projects in the Modules directory
-    $modulesDirectory = ".\Modules"
-    if (Test-Path $modulesDirectory) {
-        Publish-ProjectsInDirectory -directoryPath $modulesDirectory -publishType "Modules"
-    } else {
-        Write-Host "Modules directory not found." -ForegroundColor Yellow
-    }
+#     Set-Location -Path $startingDirectory
+#     # Publish projects in the Modules directory
+#     $modulesDirectory = ".\Modules"
+#     if (Test-Path $modulesDirectory) {
+#         Publish-ProjectsInDirectory -directoryPath $modulesDirectory -publishType "Modules"
+#     } else {
+#         Write-Host "Modules directory not found." -ForegroundColor Yellow
+#     }
 
     # Return to the starting directory
     Set-Location -Path $startingDirectory

@@ -2,18 +2,103 @@
 	<s:String x:Key="/Default/Environment/UnitTesting/CreateUnitTestDialog/TestProjectMapping/=5BD35C5F_002DF6C4_002D4AB7_002DAF24_002D893821832A06/@EntryIndexedValue">F220CCEC-45EB-4DD4-AC2F-37B912A0B708</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/CreateUnitTestDialog/TestTemplateMapping/=xUnit/@EntryIndexedValue">33ff99d8-b1ad-4ed5-a4fd-376b97c2c841</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=e4e9a201_002D1149_002D461e_002Da31e_002Dfeac47034dfb/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="ValueObjectTest #2" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
-  &lt;Not&gt;&#xD;
-    &lt;TestAncestor&gt;&#xD;
-      &lt;TestId&gt;xUnit::D207ACCE-531D-4EDC-AB0E-2604D35C8FA3::net8.0::Bonyan.Tests.Workers.InMemoryBonWorkerManagerTests.Worker_Execution_Exception_Should_Not_Stop_Manager&lt;/TestId&gt;&#xD;
-      &lt;TestId&gt;xUnit::D207ACCE-531D-4EDC-AB0E-2604D35C8FA3::net8.0::Bonyan.Tests.Workers.InMemoryBonWorkerManagerTests.CancelRecurring_Should_Remove_Worker_From_RecurringJobs&lt;/TestId&gt;&#xD;
-    &lt;/TestAncestor&gt;&#xD;
-  &lt;/Not&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;xUnit::AFA9CF2F-B53E-47B6-B4A5-92B05CC16013::net8.0::ModularityApplicationTests&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=e55afdff_002D141e_002D4389_002D9aa8_002Df5e987e76dac/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="ValueObjectTest" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;TestAncestor&gt;&#xD;
-    &lt;TestId&gt;xUnit::AFA9CF2F-B53E-47B6-B4A5-92B05CC16013::net8.0::Bonyan.Tests.Modularity.BonModuleAccessorTests&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::D207ACCE-531D-4EDC-AB0E-2604D35C8FA3::net8.0::Bonyan.Tests.Workers.InMemoryBonWorkerManagerTests.Worker_Execution_Exception_Should_Not_Stop_Manager&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	

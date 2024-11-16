@@ -18,8 +18,6 @@
         <ProjectReference Include="..\..\Framework\Bonyan.AspNetCore.MultiTenant\Bonyan.AspNetCore.MultiTenant.csproj"/>
         <ProjectReference Include="..\..\Framework\Bonyan.EntityFrameworkCore.Sqlite\Bonyan.EntityFrameworkCore.Sqlite.csproj"/>
         <ProjectReference Include="..\..\Framework\Bonyan.EntityFrameworkCore\Bonyan.EntityFrameworkCore.csproj"/>
-        <ProjectReference Include="..\..\Modules\Bonyan.IdentityManagement.EntityFrameworkCore\Bonyan.IdentityManagement.EntityFrameworkCore.csproj"/>
-        <ProjectReference Include="..\..\Modules\Bonyan.TenantManagement.EntityFrameworkCore\Bonyan.TenantManagement.EntityFrameworkCore.csproj"/>
         <ProjectReference Include="..\BonyanTemplate.Domain\BonyanTemplate.Domain.csproj"/>
     </ItemGroup>
 

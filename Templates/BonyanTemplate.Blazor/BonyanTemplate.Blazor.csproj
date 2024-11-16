@@ -14,9 +14,6 @@
         <ProjectReference Include="..\..\Framework\Bonyan.EntityFrameworkCore\Bonyan.EntityFrameworkCore.csproj"/>
         <ProjectReference Include="..\..\Framework\Bonyan.AspNetCore\Bonyan.AspNetCore.csproj"/>
         <ProjectReference Include="..\..\Framework\Bonyan.EntityFrameworkCore.SqlServer\Bonyan.EntityFrameworkCore.SqlServer.csproj"/>
-        <ProjectReference Include="..\..\Modules\Bonyan.AdminLte.Blazor.IdentityManagement\Bonyan.AdminLte.Blazor.IdentityManagement.csproj" />
-        <ProjectReference Include="..\..\Modules\Bonyan.TenantManagement.Web\Bonyan.TenantManagement.Web.csproj"/>
-        <ProjectReference Include="..\..\Modules\Bonyan.Ui.Blazimum\Bonyan.Ui.Blazimum.csproj" />
         <ProjectReference Include="..\BonyanTemplate.Application\BonyanTemplate.Application.csproj"/>
         <ProjectReference Include="..\BonyanTemplate.Infrastructure\BonyanTemplate.Infrastructure.csproj"/>
     </ItemGroup>
@@ -28,6 +25,10 @@
     <ItemGroup>
       <Folder Include="Middlewares\" />
       <Folder Include="wwwroot\fonts\fonts\" />
+    </ItemGroup>
+    <ItemGroup>
+      <None Remove="BonyanTemplate.db-wal" />
+      <None Remove="BonyanTemplate.db-shm" />
     </ItemGroup>
  
 </Project>

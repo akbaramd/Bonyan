@@ -3,7 +3,7 @@
   <PropertyGroup>
     <OutputType>Library</OutputType>
     <IsPackable>true</IsPackable>
-    <Version>1.2.0-pre1</Version>
+    <Version>1.2.0-pre2</Version>
     <Authors>Akbar Ahmadi Saray</Authors>
     <Company>akbar-ahmadi.ir</Company>
     <PackageProjectUrl>https://akbaramd.github.io/Novin</PackageProjectUrl>
@@ -14,8 +14,8 @@
     
   </PropertyGroup>
   <ItemGroup>
-    <None Include="../../logo.jpg" Pack="true" PackagePath="." /> <!-- Include the NuGet icon in the package -->
-    <None Include="../../docs/README.md" Pack="true" PackagePath="." /> <!-- Include the README file in the package -->
+    <None Include="../../../logo.jpg" Pack="true" PackagePath="." /> <!-- Include the NuGet icon in the package -->
+    <None Include="../../../docs/README.md" Pack="true" PackagePath="." /> <!-- Include the README file in the package -->
   </ItemGroup>
 </Project>
  
