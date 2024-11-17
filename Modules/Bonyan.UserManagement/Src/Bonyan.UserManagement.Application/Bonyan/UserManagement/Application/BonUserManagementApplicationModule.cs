@@ -1,14 +1,18 @@
+using Bonyan.AutoMapper;
 using Bonyan.Layer.Application;
 using Bonyan.Modularity;
 using Bonyan.Modularity.Abstractions;
+using Bonyan.UserManagement.Application.Users;
+using Bonyan.UserManagement.Application.Users.Services;
 using Bonyan.UserManagement.Domain;
 using Bonyan.UserManagement.Domain.Users;
 using Bonyan.UserManagement.Domain.Users.Entities;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Bonyan.UserManagement.Application;
 
 
-public class BonUserManagementApplicationModule<TUser> : BonModule where TUser : IBonUser
+public class BonUserManagementApplicationModule<TUser> : BonModule where TUser : class, IBonUser
 {
   public BonUserManagementApplicationModule()
   {
@@ -17,6 +21,13 @@ public class BonUserManagementApplicationModule<TUser> : BonModule where TUser :
   }
   public override Task OnConfigureAsync(BonConfigurationContext context)
   {
+
+    context.Services.Configure<BonAutoMapperOptions>(c =>
+    {
+      c.AddProfile<BonUserProfile>();
+    });
+    
+    context.Services.AddTransient<IBonUserCrudService, BonUserCrudService<TUser>>();
     return base.OnConfigureAsync(context);
   }
 }

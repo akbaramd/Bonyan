@@ -44,7 +44,7 @@ public class BonAutoMapperOptions
     
     Configurators.Add(context =>
     {
-      context.MapperConfiguration.AddProfile(context.ServiceProvider.GetRequiredService<TProfile>());
+      context.MapperConfiguration.AddProfile<TProfile>();
     });
 
     if (validate)

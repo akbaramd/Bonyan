@@ -2,18 +2,20 @@
 using Bonyan.IdentityManagement.Domain.Permissions;
 using Bonyan.IdentityManagement.Domain.Roles;
 using Bonyan.IdentityManagement.Domain.Users;
+using Bonyan.UserManagement.Domain.Users.Entities;
 using Bonyan.UserManagement.Domain.Users.ValueObjects;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Microsoft.EntityFrameworkCore;
 
 public static class BonIdentityManagementEntityTypeBuilderExtensions
 {
-    public static ModelBuilder ConfigureBonIdentityManagementByConvention<TUser>(this ModelBuilder modelBuilder)
+    public static ModelBuilder ConfigureIdentityManagementModelBuilder<TUser>(this ModelBuilder modelBuilder)
         where TUser : class, IBonIdentityUser
     {
         // Configure User Management base conventions
-        modelBuilder.ConfigureBonUserManagementByConvention<TUser>();
-
+        modelBuilder.ConfigureUserManagementModelBuilder<TUser>();
+        modelBuilder.Entity<TUser>(ConfigurePassword);
         // Configure BonIdentityRole
         modelBuilder.Entity<BonIdentityRole>(builder =>
         {
@@ -51,11 +53,22 @@ public static class BonIdentityManagementEntityTypeBuilderExtensions
 
         return modelBuilder;
     }
-
-    public static ModelBuilder ConfigureBonIdentityManagementByConvention(this ModelBuilder modelBuilder)
+    /// <summary>
+    /// Configures the password value object.
+    /// </summary>
+    private static void ConfigurePassword<TUser>(EntityTypeBuilder<TUser> entity)
+        where TUser : class, IBonIdentityUser
+    {
+        entity.OwnsOne(user => user.Password, password =>
+        {
+            password.Property(p => p.HashedPassword).HasColumnName("PasswordHash");
+            password.Property(p => p.Salt).HasColumnName("PasswordSalt");
+        });
+    }
+    public static ModelBuilder ConfigureIdentityManagementModelBuilder(this ModelBuilder modelBuilder)
     {
         // Configure BonIdentityManagement using BonIdentityUser as the default user type
-        modelBuilder.ConfigureBonIdentityManagementByConvention<BonIdentityUser>();
+        modelBuilder.ConfigureIdentityManagementModelBuilder<BonIdentityUser>();
         return modelBuilder;
     }
 }

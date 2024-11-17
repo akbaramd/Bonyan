@@ -39,7 +39,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.Validation", "Framew
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.AspNetCore.Components", "Framework\Src\Bonyan.AspNetCore.Components\Bonyan.AspNetCore.Components.csproj", "{4A61C75C-5BA3-42B5-BEF1-2CBEE47A10C2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.Layer.Application.Abstractions", "Framework\Src\Bonyan.Layer.Application.Abstractions\Bonyan.Layer.Application.Abstractions.csproj", "{32A88CA9-0C39-4986-AC22-E3B569317A30}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.Layer.Application.Contracts", "Framework\Src\Bonyan.Layer.Application.Contracts\Bonyan.Layer.Application.Contracts.csproj", "{32A88CA9-0C39-4986-AC22-E3B569317A30}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.Layer.Domain.Abstractions", "Framework\Src\Bonyan.Layer.Domain.Abstractions\Bonyan.Layer.Domain.Abstractions.csproj", "{2EBB1D52-CC2D-4DE3-B9C6-6AA71FF2B93C}"
 EndProject
@@ -103,7 +103,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BonyanTemplate.Infrastructu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BonyanTemplate.Application", "Templates\BonyanTemplate.Application\BonyanTemplate.Application.csproj", "{24C303B8-39D4-4266-BF87-F0450C75C503}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BonyanTemplate.Blazor", "Templates\BonyanTemplate.Blazor\BonyanTemplate.Blazor.csproj", "{6180A931-A6C0-4FA8-8976-EC65A0A1276C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BonyanTemplate.WebApi", "Templates\BonyanTemplate.WebApi\BonyanTemplate.WebApi.csproj", "{475E86B9-64EB-4354-A88D-A98FACDF0A77}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.UserManagement.Application.Contracts", "Modules\Bonyan.UserManagement\Src\Bonyan.UserManagement.Application.Contracts\Bonyan.UserManagement.Application.Contracts.csproj", "{2CB442EC-D509-4645-8765-16ECFED0DB0C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -263,10 +265,14 @@ Global
 		{24C303B8-39D4-4266-BF87-F0450C75C503}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{24C303B8-39D4-4266-BF87-F0450C75C503}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{24C303B8-39D4-4266-BF87-F0450C75C503}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6180A931-A6C0-4FA8-8976-EC65A0A1276C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6180A931-A6C0-4FA8-8976-EC65A0A1276C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6180A931-A6C0-4FA8-8976-EC65A0A1276C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6180A931-A6C0-4FA8-8976-EC65A0A1276C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{475E86B9-64EB-4354-A88D-A98FACDF0A77}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{475E86B9-64EB-4354-A88D-A98FACDF0A77}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{475E86B9-64EB-4354-A88D-A98FACDF0A77}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{475E86B9-64EB-4354-A88D-A98FACDF0A77}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2CB442EC-D509-4645-8765-16ECFED0DB0C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2CB442EC-D509-4645-8765-16ECFED0DB0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2CB442EC-D509-4645-8765-16ECFED0DB0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2CB442EC-D509-4645-8765-16ECFED0DB0C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -319,7 +325,8 @@ Global
 		{587055AE-0FDC-435F-9872-66CEE6146214} = {62C5B786-B72F-4815-AF3E-B1E15E1FCCEC}
 		{5BEBD3B1-8B94-49C3-8671-2DBC742D06D4} = {62C5B786-B72F-4815-AF3E-B1E15E1FCCEC}
 		{24C303B8-39D4-4266-BF87-F0450C75C503} = {62C5B786-B72F-4815-AF3E-B1E15E1FCCEC}
-		{6180A931-A6C0-4FA8-8976-EC65A0A1276C} = {62C5B786-B72F-4815-AF3E-B1E15E1FCCEC}
+		{475E86B9-64EB-4354-A88D-A98FACDF0A77} = {62C5B786-B72F-4815-AF3E-B1E15E1FCCEC}
+		{2CB442EC-D509-4645-8765-16ECFED0DB0C} = {D3289479-B493-46C2-92D3-C496016F28B2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CACE9943-7714-471F-BCCD-CC6CA1DA43C5}

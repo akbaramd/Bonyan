@@ -17,7 +17,7 @@ public class BonApplicationService : BonLayServiceProviderConfigurator, IBonAppl
     public IMapper Mapper => LazyServiceProvider.LazyGetRequiredService<IMapper>();
     public IBonMessageDispatcher BonMessageDispatcher => LazyServiceProvider.LazyGetRequiredService<IBonMessageDispatcher>();
 
-    protected IBonUnitOfWorkManager BonUnitOfWorkManager =>
+    protected IBonUnitOfWorkManager UnitOfWorkManager =>
         LazyServiceProvider.LazyGetRequiredService<IBonUnitOfWorkManager>();
 
     protected ILoggerFactory LoggerFactory => LazyServiceProvider.LazyGetRequiredService<ILoggerFactory>();
@@ -25,5 +25,5 @@ public class BonApplicationService : BonLayServiceProviderConfigurator, IBonAppl
     protected ILogger Logger => LazyServiceProvider.LazyGetService<ILogger>(provider =>
         LoggerFactory?.CreateLogger(GetType().FullName!) ?? NullLogger.Instance);
 
-    protected IBonUnitOfWork? CurrentUnitOfWork => BonUnitOfWorkManager.Current;
+    protected IBonUnitOfWork? CurrentUnitOfWork => UnitOfWorkManager.Current;
 }

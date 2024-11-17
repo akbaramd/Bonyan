@@ -3,8 +3,8 @@ using Bonyan.Messaging;
 using Bonyan.Modularity;
 using Bonyan.Modularity.Abstractions;
 using Bonyan.TenantManagement.Domain;
-using BonyanTemplate.Domain.Entities;
-using BonyanTemplate.Domain.Handlers;
+using BonyanTemplate.Domain.Books.Handlers;
+using BonyanTemplate.Domain.Users;
 
 
 namespace BonyanTemplate.Domain

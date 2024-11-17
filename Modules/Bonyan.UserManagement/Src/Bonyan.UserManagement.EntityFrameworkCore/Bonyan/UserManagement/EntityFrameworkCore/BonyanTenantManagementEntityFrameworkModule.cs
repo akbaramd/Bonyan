@@ -22,17 +22,16 @@ public class BonUserManagementEntityFrameworkModule<TUser> : Modularity.Abstract
   public override Task OnConfigureAsync(BonConfigurationContext context)
   {
 
+    context.AddBonDbContext<BonUserManagementDbContext<TUser>>(
+      c =>
+      {
+        c.AddRepository<TUser, BonEfCoreUserRepository<TUser>>();
+      });
   
     
     context.Services.AddTransient<BonEfCoreUserRepository<TUser>>();
     context.Services.AddTransient<IBonUserRepository<TUser>,BonEfCoreUserRepository<TUser>>();
     context.Services.AddTransient<IBonUserReadOnlyRepository<TUser>,BonEfCoreUserReadOnlyRepository<TUser>>();
-    
-    context.Services.AddTransient<BonEfCoreUserRepository>();
-    context.Services.AddTransient<IBonUserRepository,BonEfCoreUserRepository>();
-    context.Services.AddTransient<IBonUserReadOnlyRepository,BonEfCoreUserReadOnlyRepository>();
-    
-    
     
     return base.OnConfigureAsync(context);
   }

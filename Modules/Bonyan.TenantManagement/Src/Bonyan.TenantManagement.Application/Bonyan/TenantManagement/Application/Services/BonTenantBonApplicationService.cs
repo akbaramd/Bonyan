@@ -11,7 +11,7 @@ public class BonTenantBonApplicationService : BonApplicationService, IBonTenantB
 {
   public IBonTenantRepository BonTenantRepository => LazyServiceProvider.LazyGetRequiredService<IBonTenantRepository>();
 
-  public async Task<BonPaginatedResult<BonTenantDto>> PaginateAsync(BonTenantFilterDto paginateDto, CancellationToken? cancellationToken = default)
+  public async Task<BonPaginatedResult<BonTenantDto>> PaginateAsync(TenantBonFilterAndDto paginateDto, CancellationToken? cancellationToken = default)
   {
     var paginated = await BonTenantRepository.PaginatedAsync(new TenantPaginateSpec(paginateDto));
     return Mapper.Map<BonPaginatedResult<BonTenant>, BonPaginatedResult<BonTenantDto>>(paginated);

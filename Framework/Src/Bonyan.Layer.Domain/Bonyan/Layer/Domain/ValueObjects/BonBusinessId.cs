@@ -20,7 +20,7 @@ namespace Bonyan.Layer.Domain.ValueObjects
         }
 
         // Static factory method to create a new BusinessId with a new GUID
-        public static T CreateNew()
+        public static T NewId()
         {
             return Create(Guid.NewGuid());
         }

@@ -21,7 +21,7 @@
         <_ContentIncludedByDefault Remove="publish_output\publish_output\Bonyan.AspNetCore.deps.json"/>
     </ItemGroup>
     <ItemGroup>
-        <ProjectReference Include="..\Bonyan.Layer.Application.Abstractions\Bonyan.Layer.Application.Abstractions.csproj" />
+        <ProjectReference Include="..\Bonyan.Layer.Application.Contracts\Bonyan.Layer.Application.Contracts.csproj" />
         <ProjectReference Include="..\Bonyan.Layer.Application\Bonyan.Layer.Application.csproj"/>
         <ProjectReference Include="..\Bonyan\Bonyan.csproj"/>
     </ItemGroup>

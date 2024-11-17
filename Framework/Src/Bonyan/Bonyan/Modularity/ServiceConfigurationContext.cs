@@ -10,7 +10,8 @@ namespace Bonyan.Modularity
     /// </summary>
     public class BonConfigurationContext : BonContextBase
     {
-        public IServiceCollection Services { get; }
+        public IServiceCollection 
+            Services { get; }
 
         public BonConfigurationContext(IServiceCollection services)
             : base(services.BuildServiceProvider())

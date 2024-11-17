@@ -6,7 +6,7 @@ namespace Bonyan.Layer.Domain.Repository.Abstractions;
 
 public interface IBonReadOnlyRepository<TEntity> : IBonRepository where TEntity : class, IBonEntity
 {
-    public IQueryable<TEntity> Queryable { get; }
+    public Task<IQueryable<TEntity>> GetQueryableAsync();
     Task<IEnumerable<TEntity>> FindAsync(Expression<Func<TEntity, bool>> predicate);
     Task<TEntity?> FindOneAsync(Expression<Func<TEntity, bool>> predicate);
     Task<TEntity> GetOneAsync(Expression<Func<TEntity, bool>> predicate);
@@ -22,7 +22,7 @@ public interface IBonReadOnlyRepository<TEntity> : IBonRepository where TEntity 
 }
 
 public interface IBonReadOnlyRepository<TEntity, in TKey> : IBonReadOnlyRepository<TEntity>
-    where TEntity : class, IBonEntity<TKey> where TKey : notnull
+    where TEntity : class, IBonEntity<TKey>
 {
     Task<TEntity?> FindByIdAsync(TKey id);
     Task<TEntity?> GetByIdAsync(TKey id);

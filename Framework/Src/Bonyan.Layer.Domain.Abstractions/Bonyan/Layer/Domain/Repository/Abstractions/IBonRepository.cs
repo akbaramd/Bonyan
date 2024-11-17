@@ -14,7 +14,7 @@
 
     // IRepository for full CRUD operations, extending IReadOnlyRepository.
     public interface IBonRepository<TEntity, in TKey> : IBonRepository<TEntity>, IBonReadOnlyRepository<TEntity, TKey>
-        where TEntity : class, IBonEntity<TKey> where TKey : notnull
+        where TEntity : class, IBonEntity<TKey>
     {
         Task DeleteByIdAsync(TKey id, bool autoSave = false);
     }

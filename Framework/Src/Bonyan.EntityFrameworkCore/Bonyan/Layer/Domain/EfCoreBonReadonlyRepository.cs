@@ -15,20 +15,18 @@ namespace Bonyan.Layer.Domain
 {
     public abstract class EfCoreReadonlyRepository<TEntity, TDbContext> : IReadonlyEfCoreRepository<TEntity>
         where TEntity : class, IBonEntity
-        where TDbContext : DbContext, IBonDbContext<TDbContext>
+        where TDbContext : IEfDbContext
     {
-        protected EfCoreReadonlyRepository(TDbContext userManagementDbContext)
-        {
-        }
+  
 
         public IBonLazyServiceProvider LazyServiceProvider { get; set; } = default!;
-        public IBonDbContextProvider<TDbContext> BonDbContextProvider { get; set; } = default!;
+        public IBonDbContextProvider<TDbContext> BonDbContextProvider => LazyServiceProvider.LazyGetRequiredService<IBonDbContextProvider<TDbContext>>();
         public IBonCurrentTenant? CurrentTenant => LazyServiceProvider.LazyGetService<IBonCurrentTenant>();
 
         // Virtual method to allow including related entities or applying custom logic in derived repositories
         protected virtual IQueryable<TEntity> PrepareQuery(DbSet<TEntity> dbSet) => dbSet;
 
-        // Retrieves DbContext instance
+        // Retrieves BonDbContext instance
         internal async Task<IQueryable<TEntity>> GetQueryAsync()
         {
             var dbContext = await GetDbContextAsync();
@@ -45,6 +43,8 @@ namespace Bonyan.Layer.Domain
 
         public async Task<TDbContext> GetDbContextAsync() => await BonDbContextProvider.GetDbContextAsync();
 
+
+    
 
         public async Task<IEnumerable<TEntity>> FindAsync(Expression<Func<TEntity, bool>> predicate)
         {
@@ -141,16 +141,19 @@ namespace Bonyan.Layer.Domain
         }
 
         public bool? IsChangeTrackingEnabled { get; } = true;
-        public IQueryable<TEntity> Queryable => GetDbContextAsync().GetAwaiter().GetResult().Set<TEntity>();
+
+        public async Task<IQueryable<TEntity>> GetQueryableAsync()
+        {
+            return (await GetDbContextAsync()).Set<TEntity>();
+        }
     }
 
     public class EfCoreReadonlyRepository<TEntity, TKey, TDbContext> : EfCoreReadonlyRepository<TEntity, TDbContext>, IReadonlyEfCoreRepository<TEntity, TKey>
         where TEntity : class, IBonEntity<TKey>
-        where TDbContext : DbContext, IBonDbContext<TDbContext>
+        where TDbContext :IEfDbContext
         where TKey : notnull
     {
-        public EfCoreReadonlyRepository(TDbContext userManagementDbContext) 
-            : base(userManagementDbContext) { }
+    
 
         public async Task<TEntity?> GetByIdAsync(TKey id)
         {

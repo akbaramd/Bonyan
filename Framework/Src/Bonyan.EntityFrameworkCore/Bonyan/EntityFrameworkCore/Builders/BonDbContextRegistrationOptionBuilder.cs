@@ -39,15 +39,7 @@ public class BonDbContextRegistrationOptionBuilder : IBonDbContextRegistrationOp
   }
   
   
-  /// <summary>
-  /// Adds another DbContext type that will use the same configuration as the primary DbContext.
-  /// </summary>
-  public IBonDbContextRegistrationOptionBuilder AsDbContext<TAnotherDbContext>()
-    where TAnotherDbContext : DbContext
-  {
-    AdditionalDbContexts.Add(typeof(TAnotherDbContext));
-    return this;
-  }
+
   public IBonDbContextRegistrationOptionBuilder AddDefaultRepository(Type entityType)
   {
     BonEntityHelper.CheckEntity(entityType);

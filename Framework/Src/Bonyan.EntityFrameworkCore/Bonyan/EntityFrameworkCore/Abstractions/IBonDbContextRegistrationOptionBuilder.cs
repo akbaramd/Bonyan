@@ -14,7 +14,6 @@ public interface IBonDbContextRegistrationOptionBuilder
   Type DefaultRepositoryDbContextType { get; set; }
   IBonDbContextRegistrationOptionBuilder Configure(Action<DbContextOptionsBuilder> action);
   IBonDbContextRegistrationOptionBuilder AddRepository<TEntity, TRepository>();
-  IBonDbContextRegistrationOptionBuilder AsDbContext<TDbContext>() where TDbContext : DbContext;
   IBonDbContextRegistrationOptionBuilder AddDefaultRepositories(bool includeAllEntities = false);
 
 }

@@ -1,6 +1,6 @@
 namespace Bonyan.Layer.Domain.Repository.Abstractions;
 
-public class BonPaginatedResult<T> where T : class
+public class BonPaginatedResult<T> 
 {
     public IEnumerable<T> Results { get; }
     public int Skip { get; }

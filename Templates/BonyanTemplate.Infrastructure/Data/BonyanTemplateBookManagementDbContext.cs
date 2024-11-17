@@ -5,15 +5,17 @@ using Bonyan.IdentityManagement.Domain.Roles;
 using Bonyan.IdentityManagement.EntityFrameworkCore;
 using Bonyan.TenantManagement.Domain;
 using Bonyan.TenantManagement.EntityFrameworkCore;
-using BonyanTemplate.Domain.Entities;
+using BonyanTemplate.Domain.Authors;
+using BonyanTemplate.Domain.Books;
+using BonyanTemplate.Domain.Users;
 using Microsoft.EntityFrameworkCore;
 
 namespace BonyanTemplate.Infrastructure.Data;
 
-public class BonTemplateBookManagementDbContext : BonDbContext<BonTemplateBookManagementDbContext>,
+public class TemplateBookManagementBonDbContext : BonDbContext<TemplateBookManagementBonDbContext>,
     IBonTenantDbContext, IBonIdentityManagementDbContext<User>
 {
-    public BonTemplateBookManagementDbContext(DbContextOptions<BonTemplateBookManagementDbContext> options) :
+    public TemplateBookManagementBonDbContext(DbContextOptions<TemplateBookManagementBonDbContext> options) :
         base(options)
     {
     }
@@ -21,14 +23,14 @@ public class BonTemplateBookManagementDbContext : BonDbContext<BonTemplateBookMa
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-        modelBuilder.Entity<Books>().ConfigureByConvention();
-        modelBuilder.Entity<Books>().HasOne(x => x.Author).WithMany().HasForeignKey(x => x.AuthorId);
+        modelBuilder.Entity<Book>().ConfigureByConvention();
+        modelBuilder.Entity<Book>().HasOne(x => x.Author).WithMany().HasForeignKey(x => x.AuthorId);
         modelBuilder.Entity<Authors>().ConfigureByConvention();
         modelBuilder.ConfigureTenantManagementByConvention();
-        modelBuilder.ConfigureBonIdentityManagementByConvention<User>();
+        modelBuilder.ConfigureIdentityManagementModelBuilder<User>();
     }
 
-    public DbSet<Books> Books { get; set; }
+    public DbSet<Book> Books { get; set; }
     public DbSet<Authors> Authors { get; set; }
     public DbSet<BonTenant> Tenants { get; set; }
     public DbSet<User> Users { get; set; }

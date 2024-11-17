@@ -7,17 +7,17 @@ namespace Bonyan.UnitOfWork;
 public class EfCoreBonTransactionApi : IBonTransactionApi, ISupportsRollback
 {
     public IDbContextTransaction DbContextTransaction { get; }
-    public IBonEfCoreDbContext StarterDbContext { get; }
-    public List<IBonEfCoreDbContext> AttendedDbContexts { get; }
+    public IEfDbContext StarterDbContext { get; }
+    public List<IEfDbContext> AttendedDbContexts { get; }
 
 
     public EfCoreBonTransactionApi(
         IDbContextTransaction dbContextTransaction,
-        IBonEfCoreDbContext starterDbContext)
+        IEfDbContext starterDbContext)
     {
         DbContextTransaction = dbContextTransaction;
         StarterDbContext = starterDbContext;
-        AttendedDbContexts = new List<IBonEfCoreDbContext>();
+        AttendedDbContexts = new List<IEfDbContext>();
     }
 
     public async Task CommitAsync(CancellationToken cancellationToken = default)

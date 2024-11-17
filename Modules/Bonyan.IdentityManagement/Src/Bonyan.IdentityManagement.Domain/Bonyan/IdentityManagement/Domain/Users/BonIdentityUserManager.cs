@@ -5,6 +5,7 @@ using Bonyan.IdentityManagement.Domain.Abstractions.Users;
 using Bonyan.IdentityManagement.Domain.Users;
 using Bonyan.Layer.Domain.DomainService;
 using Bonyan.UserManagement.Domain.Users.DomainServices;
+using Microsoft.Extensions.Logging;
 
 namespace Bonyan.IdentityManagement.Domain.Users
 {
@@ -32,7 +33,8 @@ namespace Bonyan.IdentityManagement.Domain.Users
                     _userRoles[user.Id.Value.ToString()].Add(roleName);
                 }
             });
-            return BonDomainResult.Success();;
+            return BonDomainResult.Success();
+            ;
         }
 
         public async Task<BonDomainResult> RemoveRoleAsync(TUser user, string roleName)
@@ -48,7 +50,8 @@ namespace Bonyan.IdentityManagement.Domain.Users
                     _userRoles[user.Id.Value.ToString()].Remove(roleName);
                 }
             });
-            return BonDomainResult.Success();;
+            return BonDomainResult.Success();
+            ;
         }
 
         public async Task<BonDomainResult<IReadOnlyList<string>>> GetUserRolesAsync(TUser user)
@@ -58,6 +61,41 @@ namespace Bonyan.IdentityManagement.Domain.Users
             return BonDomainResult<IReadOnlyList<string>>.Success(_userRoles.ContainsKey(user.Id.Value.ToString())
                 ? _userRoles[user.Id.Value.ToString()].AsReadOnly()
                 : new List<string>().AsReadOnly());
+        }
+
+
+        public async Task<BonDomainResult> CreateAsync(TUser entity, string password)
+        {
+            try
+            {
+                entity.SetPassword(password);
+                return await CreateAsync(entity);
+            }
+            catch (Exception e)
+            {
+                Logger.LogError(e, "Error creating user.");
+                return BonDomainResult.Failure("Error creating user.");
+            }
+        }
+
+        // Change a user's password
+        public async Task<BonDomainResult> ChangePasswordAsync(TUser entity, string currentPassword, string newPassword)
+        {
+            if (!entity.VerifyPassword(currentPassword))
+            {
+                Logger.LogWarning("Current password does not match.");
+                return BonDomainResult.Failure("Current password does not match.");
+            }
+
+            entity.SetPassword(newPassword);
+            return await UpdateAsync(entity);
+        }
+
+        // Reset a user's password directly (for admin use cases)
+        public async Task<BonDomainResult> ResetPasswordAsync(TUser entity, string newPassword)
+        {
+            entity.SetPassword(newPassword);
+            return await UpdateAsync(entity);
         }
     }
 

@@ -1,4 +1,5 @@
 ﻿using Bonyan.EntityFrameworkCore;
+using Bonyan.EntityFrameworkCore.Abstractions;
 using Bonyan.Layer.Domain.Entities;
 using Bonyan.Layer.Domain.Entity;
 using Microsoft.EntityFrameworkCore;
@@ -8,12 +9,9 @@ namespace Bonyan.Layer.Domain
     public class EfCoreBonRepository<TEntity, TDbContext> : EfCoreReadonlyRepository<TEntity, TDbContext>,
         IEfCoreBonRepository<TEntity>
         where TEntity : class, IBonEntity
-        where TDbContext : BonDbContext<TDbContext>
+        where TDbContext :  IEfDbContext
     {
-        public EfCoreBonRepository(TDbContext dbContext)
-            : base(dbContext)
-        {
-        }
+   
 
         public async Task<TEntity> AddAsync(TEntity entity, bool autoSave = false)
         {
@@ -115,14 +113,10 @@ namespace Bonyan.Layer.Domain
     public class EfCoreBonRepository<TEntity, TKey, TDbContext> : EfCoreReadonlyRepository<TEntity, TKey, TDbContext>,
         IEfCoreBonRepository<TEntity, TKey>
         where TEntity : class, IBonEntity<TKey>
-        where TDbContext : BonDbContext<TDbContext>
+        where TDbContext :  IEfDbContext
         where TKey : notnull
     {
-        public EfCoreBonRepository(TDbContext userManagementDbContext)
-            : base(userManagementDbContext)
-        {
-        }
-
+    
         public async Task DeleteByIdAsync(TKey id, bool autoSave = false)
         {
             var dbContext = await GetDbContextAsync();

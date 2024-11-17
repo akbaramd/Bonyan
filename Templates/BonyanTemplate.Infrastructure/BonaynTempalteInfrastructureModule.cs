@@ -1,6 +1,7 @@
 ﻿using Bonyan.DependencyInjection;
 using Bonyan.EntityFrameworkCore;
 using Bonyan.IdentityManagement.Domain;
+using Bonyan.IdentityManagement.Domain.Abstractions.Users;
 using Bonyan.IdentityManagement.EntityFrameworkCore;
 using Bonyan.Modularity;
 using Bonyan.Modularity.Abstractions;
@@ -10,8 +11,9 @@ using Bonyan.UserManagement.Domain.Users.DomainServices;
 using Bonyan.UserManagement.Domain.Users.ValueObjects;
 using Bonyan.UserManagement.EntityFrameworkCore;
 using BonyanTemplate.Domain;
-using BonyanTemplate.Domain.Entities;
-using BonyanTemplate.Domain.Repositories;
+using BonyanTemplate.Domain.Authors;
+using BonyanTemplate.Domain.Books;
+using BonyanTemplate.Domain.Users;
 using BonyanTemplate.Infrastructure.Data;
 using BonyanTemplate.Infrastructure.Data.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -31,18 +33,12 @@ public class BonaynTempalteInfrastructureModule : BonModule
     public override Task OnConfigureAsync(BonConfigurationContext context)
     {
         context.ConfigureOptions<BonMultiTenancyOptions>(options => { options.IsEnabled = true; });
-        context.Services.AddTransient<IBooksBonRepository, EfBookBonRepository>();
+        context.Services.AddTransient<IBooksRepository, EfBookRepository>();
         context.Services.AddTransient<IAuthorsBonRepository, EfAuthorBonRepository>();
-        context.AddBonDbContext<BonTemplateBookManagementDbContext>(c =>
+        context.AddBonDbContext<TemplateBookManagementBonDbContext>(c =>
         {
             c.UseSqlite("Data Source=BonyanTemplate.db");
             c.AddDefaultRepositories(true);
-
-            c.AsDbContext<BonTenantDbContext>();
-            c.AsDbContext<BonUserManagementDbContext<User>>();
-            c.AsDbContext<BonUserManagementDbContext>();
-            c.AsDbContext<BonIdentityManagementDbContext<User>>();
-            c.AsDbContext<BonIdentityManagementDbContext>();
         });
 
 
@@ -51,10 +47,10 @@ public class BonaynTempalteInfrastructureModule : BonModule
 
     public override async Task OnPostInitializeAsync(BonInitializedContext context)
     {
-        var userRepo = context.RequireService<BonUserManager<User>>();
-        if (await userRepo.FindByUserNameAsync("admin") == null)
+        var userRepo = context.RequireService<IBonIdentityUserManager>();
+        if ((await userRepo.FindByUserNameAsync("admin")).IsSuccess)
         {
-            var user = new User(BonUserId.CreateNew(), "admin");
+            var user = new User(BonUserId.NewId(), "admin");
             await userRepo.CreateAsync(user, "Aa@123456");
         }
 

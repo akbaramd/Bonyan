@@ -7,12 +7,9 @@ using Bonyan.UserManagement.Domain.Users.ValueObjects;
 
 namespace Bonyan.UserManagement.EntityFrameworkCore
 {
-    public class BonEfCoreUserRepository<TUser> : EfCoreBonRepository<TUser, BonUserId, BonUserManagementDbContext<TUser>>, IBonUserRepository<TUser> where TUser : class, IBonUser
+    public class BonEfCoreUserRepository<TUser> : EfCoreBonRepository<TUser, BonUserId, IBonUserManagementDbContext<TUser>>, IBonUserRepository<TUser> where TUser : class, IBonUser
     {
-        public BonEfCoreUserRepository(BonUserManagementDbContext<TUser> userManagementDbContext) : base(userManagementDbContext)
-        {
-        }
-       
+  
         public async Task<TUser?> GetUserByUsernameAsync(string userName)
         {
             return await FindOneAsync(x => x.UserName == userName);
@@ -38,12 +35,8 @@ namespace Bonyan.UserManagement.EntityFrameworkCore
        
     }
     
-    public class BonEfCoreUserReadOnlyRepository<TUser> : EfCoreReadonlyRepository<TUser, BonUserId, BonUserManagementDbContext<TUser>>, IBonUserReadOnlyRepository<TUser> where TUser : class, IBonUser
+    public class BonEfCoreUserReadOnlyRepository<TUser> : EfCoreReadonlyRepository<TUser, BonUserId, IBonUserManagementDbContext<TUser>>, IBonUserReadOnlyRepository<TUser> where TUser : class, IBonUser
     {
-        public BonEfCoreUserReadOnlyRepository(BonUserManagementDbContext<TUser> userManagementDbContext) : base(userManagementDbContext)
-        {
-        }
-       
         public async Task<TUser?> GetUserByUsernameAsync(string userName)
         {
             return await FindOneAsync(x => x.UserName == userName);
@@ -69,66 +62,5 @@ namespace Bonyan.UserManagement.EntityFrameworkCore
        
     }
 
-    public class BonEfCoreUserRepository : EfCoreBonRepository<BonUser, BonUserId, BonUserManagementDbContext>,
-        IBonUserRepository
-    {
-        public BonEfCoreUserRepository(BonUserManagementDbContext context) : base(context)
-        {
-        }
-       
-        public async Task<BonUser?> GetUserByUsernameAsync(string userName)
-        {
-            return await FindOneAsync(x => x.UserName == userName);
-        }
-
-        public async Task<BonUser?> GetUserByEmailAsync(BonUserEmail bonUserEmail)
-        {
-            return await FindOneAsync(x => x.Email == bonUserEmail);
-        }
-        public async Task<BonUser?> GetUserByEmailAsync(string email)
-        {
-            return await GetUserByEmailAsync(new BonUserEmail(email));
-        }
-
-        public async Task<BonUser?> GetUserByPhoneNumberAsync(BonUserPhoneNumber bonUserPhoneNumber)
-        {
-            return await FindOneAsync(x => x.PhoneNumber == bonUserPhoneNumber);
-        }
-        public async Task<BonUser?> GetUserByPhoneNumberAsync(string phoneNumber)
-        {
-            return await GetUserByPhoneNumberAsync(new BonUserPhoneNumber(phoneNumber));
-        }
-    }
-    
-    
-    public class BonEfCoreUserReadOnlyRepository : EfCoreReadonlyRepository<BonUser, BonUserId, BonUserManagementDbContext>, IBonUserReadOnlyRepository
-    {
-        public BonEfCoreUserReadOnlyRepository(BonUserManagementDbContext userManagementDbContext) : base(userManagementDbContext)
-        {
-        }
-       
-        public async Task<BonUser?> GetUserByUsernameAsync(string userName)
-        {
-            return await FindOneAsync(x => x.UserName == userName);
-        }
-
-        public async Task<BonUser?> GetUserByEmailAsync(BonUserEmail bonUserEmail)
-        {
-            return await FindOneAsync(x => x.Email == bonUserEmail);
-        }
-        public async Task<BonUser?> GetUserByEmailAsync(string email)
-        {
-            return await GetUserByEmailAsync(new BonUserEmail(email));
-        }
-
-        public async Task<BonUser?> GetUserByPhoneNumberAsync(BonUserPhoneNumber bonUserPhoneNumber)
-        {
-            return await FindOneAsync(x => x.PhoneNumber == bonUserPhoneNumber);
-        }
-        public async Task<BonUser?> GetUserByPhoneNumberAsync(string phoneNumber)
-        {
-            return await GetUserByPhoneNumberAsync(new BonUserPhoneNumber(phoneNumber));
-        }
-       
-    }
+   
 }

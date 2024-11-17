@@ -6,9 +6,13 @@ using Bonyan.Modularity.Abstractions;
 using Bonyan.TenantManagement.Application;
 using Bonyan.Workers;
 using Bonyan.Workers.Hangfire;
-using BonyanTemplate.Application.Dtos;
-using BonyanTemplate.Application.Jobs;
+using BonyanTemplate.Application.Authors;
+using BonyanTemplate.Application.Authors.Dtos;
+using BonyanTemplate.Application.Books;
+using BonyanTemplate.Application.Books.Dtos;
+using BonyanTemplate.Application.Books.Jobs;
 using BonyanTemplate.Domain;
+using BonyanTemplate.Domain.Authors;
 using Hangfire;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -22,36 +26,34 @@ namespace BonyanTemplate.Application
             DependOn<BonTenantManagementApplicationModule>();
             DependOn<BonyanTemplateDomainModule>();
             DependOn<BonWorkersHangfireModule>();
-            DependOn<BonMessagingModule>();
-            // DependOn<BonMessagingRabbitMQModule>();
-        }
-
-        public override Task OnPreConfigureAsync(BonConfigurationContext context)
-        {
-            PreConfigure<IGlobalConfiguration>(c => { c.ToString(); });
-            PreConfigure<RabbitMQOptions>(c =>
-            {
-                
-            });
-
-
-            return base.OnPreConfigureAsync(context);
         }
 
         public override Task OnConfigureAsync(BonConfigurationContext context)
         {
-            context.ConfigureOptions<BonAutoMapperOptions>(options => { options.AddProfile<BookMapper>(); });
+            context.Services.AddTransient<IBookAppService, BookAppService>();
+            context.Services.AddTransient<IAuthorAppService, AuthorAppService>();
 
-            PreConfigure<BonWorkerConfiguration>(c => { c.RegisterWorker<TestBonWorker>(); });
+            context.ConfigureOptions<BonAutoMapperOptions>(options =>
+            {
+                options.AddProfile<BookMapper>();
+                options.AddProfile<AuthorMapper>();
+            });
+
+            PreConfigure<BonWorkerConfiguration>(c => { c.RegisterWorker<BookOutOfStockNotifierWorker>(); });
 
             return base.OnConfigureAsync(context);
         }
+        
 
-
-        public override Task OnInitializeAsync(BonInitializedContext context)
+        public override async Task OnPostInitializeAsync(BonInitializedContext context)
         {
-            // context.AddBackgroundWorkerAsync<TestBonWorker>();
-            return base.OnInitializeAsync(context);
+            var bookservice = context.RequireService<IAuthorAppService>();
+            var res = await bookservice.CreateAsync(new AuthorDto()
+            {
+                Id = AuthorId.NewId(),
+                Title = "Test"
+            });
+            await base.OnPostInitializeAsync(context);
         }
     }
 }

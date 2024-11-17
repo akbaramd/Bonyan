@@ -7,7 +7,7 @@ namespace Bonyan.TenantManagement.Application.Services;
 
 public interface IBonTenantBonApplicationService : IBonApplicationService
 {
-  Task<BonPaginatedResult<BonTenantDto>> PaginateAsync(BonTenantFilterDto paginateDto,
+  Task<BonPaginatedResult<BonTenantDto>> PaginateAsync(TenantBonFilterAndDto paginateDto,
     CancellationToken? cancellationToken = default);
 
   Task<BonTenantDto> DetailAsync(BonTenantId bonTenantId, CancellationToken? cancellationToken = default);

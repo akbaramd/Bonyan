@@ -10,7 +10,7 @@ using Microsoft.Extensions.Logging.Abstractions;
 namespace Bonyan.UnitOfWork;
 
 public class BonUnitOfWorkBonDbContextProvider<TDbContext> : IBonDbContextProvider<TDbContext>
-    where TDbContext : DbContext, IBonDbContext<TDbContext>
+    where TDbContext : IEfDbContext
 {
     private const string TransactionsNotSupportedWarningMessage = "Current database does not support transactions. Your database may remain in an inconsistent state in an error case.";
 
@@ -35,7 +35,7 @@ public class BonUnitOfWorkBonDbContextProvider<TDbContext> : IBonDbContextProvid
         var unitOfWork = BonUnitOfWorkManager.Current;
         if (unitOfWork == null)
         {
-            throw new BonException("A DbContext can only be created inside a unit of work!");
+            throw new BonException("A BonDbContext can only be created inside a unit of work!");
         }
 
         var targetDbContextType = (typeof(TDbContext));
@@ -120,7 +120,7 @@ public class BonUnitOfWorkBonDbContextProvider<TDbContext> : IBonDbContextProvid
                     {
                         /* User did not re-use the ExistingConnection and we are starting a new transaction.
                             * EfCoreTransactionApi will check the connection string match and separately
-                            * commit/rollback this transaction over the DbContext instance. */
+                            * commit/rollback this transaction over the BonDbContext instance. */
                         if (bonUnitOfWork.Options.IsolationLevel.HasValue)
                         {
                             await dbContext.Database.BeginTransactionAsync(
@@ -148,7 +148,7 @@ public class BonUnitOfWorkBonDbContextProvider<TDbContext> : IBonDbContextProvid
                 try
                 {
                     /* No need to store the returning IDbContextTransaction for non-relational databases
-                        * since EfCoreTransactionApi will handle the commit/rollback over the DbContext instance.
+                        * since EfCoreTransactionApi will handle the commit/rollback over the BonDbContext instance.
                           */
                     await dbContext.Database.BeginTransactionAsync(cancellationToken);
                 }

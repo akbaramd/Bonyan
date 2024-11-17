@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <RootNamespace/>
+        <PackageId>Bonyan.Layer.Application.Contracts</PackageId>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Bonyan.Layer.Domain.Abstractions\Bonyan.Layer.Domain.Abstractions.csproj" />
+    </ItemGroup>
+
+    <Import Project="..\..\..\framework-package.props"/>
+</Project>

@@ -6,15 +6,15 @@ namespace Bonyan.TenantManagement.Application.Specs;
 
 public class TenantPaginateSpec : BonPaginatedSpecification<BonTenant>
 {
-  private readonly BonTenantFilterDto _filterDto;
+  private readonly TenantBonFilterAndDto _filterAndDto;
 
-  public TenantPaginateSpec(BonTenantFilterDto filterDto) : base(filterDto.Skip,filterDto.Take)
+  public TenantPaginateSpec(TenantBonFilterAndDto filterAndDto) : base(filterAndDto.Skip,filterAndDto.Take)
   {
-    _filterDto = filterDto;
+    _filterAndDto = filterAndDto;
   }
 
   public override void Handle(IBonSpecificationContext<BonTenant> context)
   {
-    context.AddCriteria(x=>_filterDto.Search == null || x.Key.Contains(_filterDto.Search));
+    context.AddCriteria(x=>_filterAndDto.Search == null || x.Key.Contains(_filterAndDto.Search));
   }
 }

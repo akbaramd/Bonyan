@@ -18,10 +18,7 @@ namespace Bonyan.UserManagement.Domain.Users
         /// </summary>
         public string UserName { get; private set; }
 
-        /// <summary>
-        /// Gets the user's hashed password.
-        /// </summary>
-        public BonUserPassword Password { get; private set; }
+
 
         /// <summary>
         /// Gets or sets the user's email address.
@@ -59,16 +56,6 @@ namespace Bonyan.UserManagement.Domain.Users
             AddDomainEvent(new BonUserCreatedDomainEvent(this));
         }
 
-        /// <summary>
-        /// Initializes a new user with a username and password.
-        /// </summary>
-        /// <param name="id">The unique identifier of the user.</param>
-        /// <param name="userName">The unique username of the user.</param>
-        /// <param name="password">The initial password of the user.</param>
-        public BonUser(BonUserId id, string userName, string password) : this(id, userName)
-        {
-            SetPassword(password);
-        }
 
         /// <summary>
         /// Initializes a new user with complete details including email and phone number.
@@ -78,23 +65,15 @@ namespace Bonyan.UserManagement.Domain.Users
         /// <param name="password">The initial password of the user.</param>
         /// <param name="email">The initial email address of the user.</param>
         /// <param name="phoneNumber">The initial phone number of the user.</param>
-        public BonUser(BonUserId id, string userName, string password, BonUserEmail? email, BonUserPhoneNumber? phoneNumber)
-            : this(id, userName, password)
+        public BonUser(BonUserId id, string userName, BonUserEmail? email, BonUserPhoneNumber? phoneNumber)
+            : this(id, userName)
         {
             Email = email;
             PhoneNumber = phoneNumber;
             AddDomainEvent(new BonUserProfileUpdatedDomainEvent(this));
         }
 
-        /// <summary>
-        /// Sets a new password for the user.
-        /// </summary>
-        /// <param name="newPassword">The new password in plain text.</param>
-        public void SetPassword(string newPassword)
-        {
-            Password = new BonUserPassword(newPassword);
-            AddDomainEvent(new BonUserPasswordChangedDomainEvent(this));
-        }
+       
 
         /// <summary>
         /// Updates the user's profile information such as username, email, and phone number.
@@ -130,15 +109,6 @@ namespace Bonyan.UserManagement.Domain.Users
             AddDomainEvent(new BonUserProfileUpdatedDomainEvent(this));
         }
 
-        /// <summary>
-        /// Verifies if the provided plain password matches the user's stored hashed password.
-        /// </summary>
-        /// <param name="plainPassword">The password to verify in plain text.</param>
-        /// <returns>True if the password matches; otherwise, false.</returns>
-        public bool VerifyPassword(string plainPassword)
-        {
-            return Password.Verify(plainPassword);
-        }
 
         /// <summary>
         /// Marks the user's email as verified.

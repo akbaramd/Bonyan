@@ -17,7 +17,13 @@ public class BonTenantManagementEntityFrameworkModule : Modularity.Abstractions.
   }
   public override Task OnConfigureAsync(BonConfigurationContext context)
   {
-    context.Services.AddTransient<IBonTenantRepository, BonTenantRepository>();
+
+    context.AddBonDbContext<TenantBonDbContext>(c =>
+    {
+      c.AddRepository<BonTenant, BonEfCoreTenantRepository>();
+    });
+    
+    context.Services.AddTransient<IBonTenantRepository, BonEfCoreTenantRepository>();
     
     return base.OnConfigureAsync(context);
   }

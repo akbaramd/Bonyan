@@ -23,27 +23,9 @@ public class BonIdentityManagementDbContext<TUser> :
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.ConfigureBonIdentityManagementByConvention<TUser>();
+        modelBuilder.ConfigureIdentityManagementModelBuilder<TUser>();
         base.OnModelCreating(modelBuilder);
     }
 }
 
 
-public class BonIdentityManagementDbContext : BonDbContext<BonIdentityManagementDbContext>
-    , IBonIdentityManagementDbContext
-{
-    public BonIdentityManagementDbContext(DbContextOptions<BonIdentityManagementDbContext> options) :
-        base(options)
-    {
-    }
-
-    public DbSet<BonIdentityUser> Users { get; set; }
-    public DbSet<BonIdentityRole> Roles { get; set; }
-    public DbSet<BonIdentityPermission> Permissions { get; set; }
-
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        modelBuilder.ConfigureBonIdentityManagementByConvention();
-        base.OnModelCreating(modelBuilder);
-    }
-}

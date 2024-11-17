@@ -15,7 +15,7 @@ public static class BonUserManagementEntityTypeBuilderExtensions
     /// <typeparam name="TUser">The user entity type.</typeparam>
     /// <param name="modelBuilder">The model builder.</param>
     /// <returns>The configured model builder.</returns>
-    public static ModelBuilder ConfigureBonUserManagementByConvention<TUser>(this ModelBuilder modelBuilder)
+    public static ModelBuilder ConfigureUserManagementModelBuilder<TUser>(this ModelBuilder modelBuilder)
         where TUser : class, IBonUser
     {
         var entity = modelBuilder.Entity<TUser>();
@@ -29,7 +29,6 @@ public static class BonUserManagementEntityTypeBuilderExtensions
         // Configure owned properties for value objects
         ConfigureEmail(entity);
         ConfigurePhoneNumber(entity);
-        ConfigurePassword(entity);
 
         // Configure properties
         ConfigureStatus(entity);
@@ -67,18 +66,7 @@ public static class BonUserManagementEntityTypeBuilderExtensions
         });
     }
 
-    /// <summary>
-    /// Configures the password value object.
-    /// </summary>
-    private static void ConfigurePassword<TUser>(EntityTypeBuilder<TUser> entity)
-        where TUser : class, IBonUser
-    {
-        entity.OwnsOne(user => user.Password, password =>
-        {
-            password.Property(p => p.HashedPassword).HasColumnName("PasswordHash");
-            password.Property(p => p.Salt).HasColumnName("PasswordSalt");
-        });
-    }
+
 
     /// <summary>
     /// Configures the status property.

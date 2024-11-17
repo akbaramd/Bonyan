@@ -25,19 +25,28 @@ public class BonIdentityManagementEntityFrameworkCoreModule<TUser> : BonModule
 
     public override Task OnConfigureAsync(BonConfigurationContext context)
     {
+        context.AddBonDbContext<BonIdentityManagementDbContext<TUser>>(
+            c => { c.AddRepository<TUser, BonEfCoreUserRepository<TUser>>(); });
 
-        context.Services.AddTransient<IBonIdentityRoleRepository, BonIdentityEfCoreRoleRepository>();
-        context.Services.AddTransient<IBonIdentityRoleReadOnlyRepository, BonIdentityEfCoreRoleRepository>();
-        context.Services.AddTransient<IBonIdentityPermissionRepository, BonIdentityEfCorePermissionRepository>();
         context.Services
-            .AddTransient<IBonIdentityPermissionReadOnlyRepository, BonIdentityEfCorePermissionRepository>();
+            .AddTransient<IBonIdentityRoleRepository, BonIdentityEfCoreRoleRepository<TUser>>();
+        context.Services
+            .AddTransient<IBonIdentityRoleReadOnlyRepository, BonIdentityEfCoreRoleRepository<TUser>>();
 
-        context.Services.AddTransient<IBonIdentityUserRepository<TUser>, BonEfCoreIdentityUserRepository<TUser>>();
+        context.Services
+            .AddTransient<IBonIdentityPermissionRepository, BonIdentityEfCorePermissionRepository<TUser>>();
+        context.Services
+            .AddTransient<IBonIdentityPermissionReadOnlyRepository, BonIdentityEfCorePermissionRepository<TUser>>();
+
+        context.Services
+            .AddTransient<IBonIdentityUserRepository<TUser>, BonEfCoreIdentityUserRepository<TUser>>();
         context.Services
             .AddTransient<IBonIdentityUserReadOnlyRepository<TUser>, BonEfCoreIdentityUserRepository<TUser>>();
 
-        context.Services.AddTransient<IBonIdentityUserRepository, BonEfCoreIdentityUserRepository>();
-        context.Services.AddTransient<IBonIdentityUserReadOnlyRepository, BonEfCoreIdentityUserRepository>();
+        context.Services
+            .AddTransient<IBonIdentityUserRepository, BonEfCoreIdentityUserRepository>();
+        context.Services
+            .AddTransient<IBonIdentityUserReadOnlyRepository, BonEfCoreIdentityUserRepository>();
 
         return base.OnConfigureAsync(context);
     }

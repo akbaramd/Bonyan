@@ -1,5 +1,4 @@
 ﻿using Bonyan.IdentityManagement.Domain.Abstractions.Roles;
-using Bonyan.IdentityManagement.Domain.Roles.ValueObjects;
 using Bonyan.Layer.Domain.DomainService;
 using Bonyan.Layer.Domain.Services;
 using Microsoft.Extensions.Logging;
@@ -21,7 +20,7 @@ namespace Bonyan.IdentityManagement.Domain.Roles
                     return BonDomainResult.Failure($"Role with name {name} already exists.");
                 }
 
-                var role = new BonIdentityRole(BonRoleId.CreateNew(), name, title);
+                var role = new BonIdentityRole(BonRoleId.NewId(), name, title);
                 await IdentityRoleRepository.AddAsync(role, true);
                 return BonDomainResult.Success();
             }

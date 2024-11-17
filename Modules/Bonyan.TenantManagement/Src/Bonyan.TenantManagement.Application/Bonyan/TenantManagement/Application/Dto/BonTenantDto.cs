@@ -15,6 +15,6 @@ public class BonTenantUpdateDto
 {
   public string Key { get; set; } = default!;
 }
-public class BonTenantFilterDto : FilterAndBonPaginateDto 
+public class TenantBonFilterAndDto : BonFilterAndPaginateDto 
 {
 }

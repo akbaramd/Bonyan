@@ -3,9 +3,9 @@ using Bonyan.EntityFrameworkCore;
 namespace Bonyan.UnitOfWork;
 public class EfCoreBonDatabaseApi : IBonDatabaseApi, ISupportsSavingChanges
 {
-  public IBonEfCoreDbContext DbContext { get; }
+  public IEfDbContext DbContext { get; }
 
-  public EfCoreBonDatabaseApi(IBonEfCoreDbContext dbContext)
+  public EfCoreBonDatabaseApi(IEfDbContext dbContext)
   {
     DbContext = dbContext;
   }

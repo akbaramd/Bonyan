@@ -12,26 +12,7 @@ public class BonUserManager<TUser> : BonDomainService, IBonUserManager<TUser> wh
         LazyServiceProvider.LazyGetRequiredService<IBonUserRepository<TUser>>();
 
     // Create a new user and set an initial password
-    public async Task<BonDomainResult> CreateAsync(TUser entity, string password)
-    {
-        try
-        {
-            if (await UserRepository.ExistsAsync(x => x.UserName.Equals(entity.UserName)))
-            {
-                Logger.LogWarning($"User with username {entity.UserName} already exists.");
-                return BonDomainResult.Failure($"User with username {entity.UserName} already exists.");
-            }
-
-            entity.SetPassword(password);
-            await UserRepository.AddAsync(entity, true);
-            return BonDomainResult.Success();
-        }
-        catch (Exception e)
-        {
-            Logger.LogError(e, "Error creating user.");
-            return BonDomainResult.Failure("Error creating user.");
-        }
-    }
+   
 
     // Update user information
     public async Task<BonDomainResult> UpdateAsync(TUser entity)
@@ -67,24 +48,25 @@ public class BonUserManager<TUser> : BonDomainService, IBonUserManager<TUser> wh
             return BonDomainResult<TUser>.Failure("Error finding user by username.");
         }
     }
-
-    // Change a user's password
-    public async Task<BonDomainResult> ChangePasswordAsync(TUser entity, string currentPassword, string newPassword)
+    public async Task<BonDomainResult> CreateAsync(TUser entity)
     {
-        if (!entity.VerifyPassword(currentPassword))
+        try
         {
-            Logger.LogWarning("Current password does not match.");
-            return BonDomainResult.Failure("Current password does not match.");
+            if (await UserRepository.ExistsAsync(x => x.UserName.Equals(entity.UserName)))
+            {
+                Logger.LogWarning($"User with username {entity.UserName} already exists.");
+                return BonDomainResult.Failure($"User with username {entity.UserName} already exists.");
+            }
+            
+            await UserRepository.AddAsync(entity, true);
+            return BonDomainResult.Success();
         }
-
-        entity.SetPassword(newPassword);
-        return await UpdateAsync(entity);
+        catch (Exception e)
+        {
+            Logger.LogError(e, "Error creating user.");
+            return BonDomainResult.Failure("Error creating user.");
+        }
     }
+    // Change a user's password
 
-    // Reset a user's password directly (for admin use cases)
-    public async Task<BonDomainResult> ResetPasswordAsync(TUser entity, string newPassword)
-    {
-        entity.SetPassword(newPassword);
-        return await UpdateAsync(entity);
-    }
 }
