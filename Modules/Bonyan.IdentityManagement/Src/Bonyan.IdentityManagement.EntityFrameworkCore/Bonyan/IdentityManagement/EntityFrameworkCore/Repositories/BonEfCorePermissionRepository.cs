@@ -1,6 +1,6 @@
 ﻿using Bonyan.IdentityManagement.Domain;
-using Bonyan.IdentityManagement.Domain.Abstractions.Permissions;
 using Bonyan.IdentityManagement.Domain.Permissions;
+using Bonyan.IdentityManagement.Domain.Permissions.Repositories;
 using Bonyan.IdentityManagement.Domain.Users;
 using Bonyan.Layer.Domain;
 

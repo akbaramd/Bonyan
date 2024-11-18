@@ -2,7 +2,6 @@
 using Bonyan.IdentityManagement.Domain.Permissions;
 using Bonyan.IdentityManagement.Domain.Roles;
 using Bonyan.IdentityManagement.Domain.Users;
-using Bonyan.UserManagement.Domain.Users.Entities;
 using Bonyan.UserManagement.Domain.Users.ValueObjects;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -15,7 +14,13 @@ public static class BonIdentityManagementEntityTypeBuilderExtensions
     {
         // Configure User Management base conventions
         modelBuilder.ConfigureUserManagementModelBuilder<TUser>();
-        modelBuilder.Entity<TUser>(ConfigurePassword);
+
+        modelBuilder.Entity<TUser>(builder =>
+        {
+            builder.ConfigureByConvention();
+            builder.ConfigurePassword();
+        });
+
         // Configure BonIdentityRole
         modelBuilder.Entity<BonIdentityRole>(builder =>
         {
@@ -37,6 +42,8 @@ public static class BonIdentityManagementEntityTypeBuilderExtensions
         // Configure BonIdentityUserRoles (Join Table)
         modelBuilder.Entity<BonIdentityUserRoles>(builder =>
         {
+            builder.ConfigureByConvention();
+
             builder.ToTable("UserRoles"); // Name the join table
             builder.HasOne<TUser>()
                 .WithMany()
@@ -47,16 +54,16 @@ public static class BonIdentityManagementEntityTypeBuilderExtensions
                 .HasForeignKey(e => e.RoleId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            builder.HasKey(x => new {x.RoleId,x.UserId});
-            ;
+            builder.HasKey(x => new { x.RoleId, x.UserId });
         });
 
         return modelBuilder;
     }
+
     /// <summary>
     /// Configures the password value object.
     /// </summary>
-    private static void ConfigurePassword<TUser>(EntityTypeBuilder<TUser> entity)
+    private static void ConfigurePassword<TUser>(this EntityTypeBuilder<TUser> entity)
         where TUser : class, IBonIdentityUser
     {
         entity.OwnsOne(user => user.Password, password =>
@@ -65,6 +72,7 @@ public static class BonIdentityManagementEntityTypeBuilderExtensions
             password.Property(p => p.Salt).HasColumnName("PasswordSalt");
         });
     }
+
     public static ModelBuilder ConfigureIdentityManagementModelBuilder(this ModelBuilder modelBuilder)
     {
         // Configure BonIdentityManagement using BonIdentityUser as the default user type

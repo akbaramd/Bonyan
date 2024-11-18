@@ -1,4 +1,4 @@
-﻿namespace Bonyan.Layer.Application.Abstractions;
+﻿namespace Bonyan.Layer.Application.Services;
 
 public interface IBonCreateAppService<TEntityDto>
     : IBonCreateAppService<TEntityDto, TEntityDto>

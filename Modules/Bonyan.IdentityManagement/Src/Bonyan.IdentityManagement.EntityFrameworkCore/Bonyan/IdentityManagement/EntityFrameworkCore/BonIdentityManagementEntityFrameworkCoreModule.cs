@@ -1,11 +1,11 @@
 using Bonyan.DependencyInjection;
 using Bonyan.IdentityManagement.Domain;
-using Bonyan.IdentityManagement.Domain.Abstractions.Permissions;
-using Bonyan.IdentityManagement.Domain.Abstractions.Roles;
-using Bonyan.IdentityManagement.Domain.Abstractions.Users;
 using Bonyan.IdentityManagement.Domain.Permissions;
+using Bonyan.IdentityManagement.Domain.Permissions.Repositories;
 using Bonyan.IdentityManagement.Domain.Roles;
+using Bonyan.IdentityManagement.Domain.Roles.Repostories;
 using Bonyan.IdentityManagement.Domain.Users;
+using Bonyan.IdentityManagement.Domain.Users.Repositories;
 using Bonyan.IdentityManagement.EntityFrameworkCore.Repositories;
 using Bonyan.Modularity;
 using Bonyan.Modularity.Abstractions;
@@ -44,9 +44,7 @@ public class BonIdentityManagementEntityFrameworkCoreModule<TUser> : BonModule
             .AddTransient<IBonIdentityUserReadOnlyRepository<TUser>, BonEfCoreIdentityUserRepository<TUser>>();
 
         context.Services
-            .AddTransient<IBonIdentityUserRepository, BonEfCoreIdentityUserRepository>();
-        context.Services
-            .AddTransient<IBonIdentityUserReadOnlyRepository, BonEfCoreIdentityUserRepository>();
+            .AddTransient<IBonIdentityUserRolesRepository, BonEfCoreUserRolesRepository<TUser>>();
 
         return base.OnConfigureAsync(context);
     }

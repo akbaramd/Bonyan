@@ -1,7 +1,8 @@
 ﻿using Bonyan.DependencyInjection;
 using Bonyan.EntityFrameworkCore;
 using Bonyan.IdentityManagement.Domain;
-using Bonyan.IdentityManagement.Domain.Abstractions.Users;
+using Bonyan.IdentityManagement.Domain.Users;
+using Bonyan.IdentityManagement.Domain.Users.DomainServices;
 using Bonyan.IdentityManagement.EntityFrameworkCore;
 using Bonyan.Modularity;
 using Bonyan.Modularity.Abstractions;
@@ -47,7 +48,7 @@ public class BonaynTempalteInfrastructureModule : BonModule
 
     public override async Task OnPostInitializeAsync(BonInitializedContext context)
     {
-        var userRepo = context.RequireService<IBonIdentityUserManager>();
+        var userRepo = context.RequireService<IBonIdentityUserManager<User>>();
         if ((await userRepo.FindByUserNameAsync("admin")).IsSuccess)
         {
             var user = new User(BonUserId.NewId(), "admin");

@@ -1,6 +1,7 @@
 ﻿using System.Security.Claims;
 using Bonyan.IdentityManagement.Domain;
 using Bonyan.IdentityManagement.Domain.Users;
+using Bonyan.IdentityManagement.Domain.Users.DomainServices;
 using Bonyan.Layer.Application.Services;
 using Bonyan.Security.Claims;
 using Microsoft.AspNetCore.Authentication;

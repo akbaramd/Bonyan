@@ -1,4 +1,5 @@
 ﻿using Bonyan.IdentityManagement.Domain.Permissions;
+using Bonyan.IdentityManagement.Domain.Roles.ValueObjects;
 using Bonyan.IdentityManagement.Domain.Users;
 using Bonyan.Layer.Domain.Aggregate;
 using Bonyan.Layer.Domain.Events;
@@ -14,16 +15,15 @@ namespace Bonyan.IdentityManagement.Domain.Roles
 
         
         // Main constructor initializing essential properties
-        public BonIdentityRole(BonRoleId id,string title, string name)
+        public BonIdentityRole(BonRoleId id,string title)
         {
             Id = id;
             Title = title;
-            Name = name;
         }
 
         // Title and Name properties
         public string Title { get; private set; } = default!;
-        public string Name { get; private set; } = default!;
+
 
         // Backing field for permissions, ensuring encapsulation
         private readonly List<BonIdentityPermission> _permissions = new();

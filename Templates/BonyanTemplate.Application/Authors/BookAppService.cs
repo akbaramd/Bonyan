@@ -5,7 +5,7 @@ using BonyanTemplate.Domain.Authors;
 
 namespace BonyanTemplate.Application.Authors;
 
-public class AuthorAppService : CrudAppService<Domain.Authors.Authors,AuthorId,AuthorDto>,IAuthorAppService
+public class AuthorAppService : BonCrudAppService<Domain.Authors.Authors,AuthorId,AuthorDto>,IAuthorAppService
 {
     public AuthorAppService(IBonRepository<Domain.Authors.Authors, AuthorId> repository) : base(repository)
     {

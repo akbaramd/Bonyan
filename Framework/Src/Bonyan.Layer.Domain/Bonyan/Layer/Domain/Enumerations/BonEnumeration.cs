@@ -10,6 +10,8 @@ namespace Bonyan.Layer.Domain.Enumerations;
 /// </summary>
 public abstract class BonEnumeration : BonValueObject, IComparable
 {
+    
+
     /// <summary>
     ///     Initializes a new instance of the <see cref="BonEnumeration" /> class.
     /// </summary>
@@ -24,12 +26,12 @@ public abstract class BonEnumeration : BonValueObject, IComparable
     /// <summary>
     ///     Gets the name of the enumeration.
     /// </summary>
-    public string Name { get; }
+    public string Name { get; private set; }
 
     /// <summary>
     ///     Gets the identifier of the enumeration.
     /// </summary>
-    public int Id { get; }
+    public int Id { get;private set; }
 
     /// <summary>
     ///     Compares this enumeration instance to another based on Id.

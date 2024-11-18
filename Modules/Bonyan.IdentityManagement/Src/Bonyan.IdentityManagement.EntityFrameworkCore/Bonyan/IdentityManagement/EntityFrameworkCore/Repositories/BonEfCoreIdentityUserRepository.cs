@@ -1,8 +1,7 @@
 ﻿using Bonyan.IdentityManagement.Domain;
-using Bonyan.IdentityManagement.Domain.Abstractions.Roles;
-using Bonyan.IdentityManagement.Domain.Abstractions.Users;
 using Bonyan.IdentityManagement.Domain.Roles;
 using Bonyan.IdentityManagement.Domain.Users;
+using Bonyan.IdentityManagement.Domain.Users.Repositories;
 using Bonyan.Layer.Domain;
 using Bonyan.UserManagement.Domain.Users;
 using Bonyan.UserManagement.Domain.Users.ValueObjects;
@@ -15,8 +14,3 @@ public class BonEfCoreIdentityUserRepository<TUser> : BonEfCoreUserRepository<TU
   
 }
 
-public class BonEfCoreIdentityUserRepository : BonEfCoreIdentityUserRepository<BonIdentityUser>,IBonIdentityUserRepository,IBonIdentityUserReadOnlyRepository
-{
-
-  
-}

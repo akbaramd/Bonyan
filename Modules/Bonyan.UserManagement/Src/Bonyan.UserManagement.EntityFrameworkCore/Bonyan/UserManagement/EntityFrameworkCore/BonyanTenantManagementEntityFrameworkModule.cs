@@ -3,7 +3,6 @@ using Bonyan.EntityFrameworkCore;
 using Bonyan.Modularity;
 using Bonyan.UserManagement.Domain;
 using Bonyan.UserManagement.Domain.Users;
-using Bonyan.UserManagement.Domain.Users.Entities;
 using Bonyan.UserManagement.Domain.Users.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 

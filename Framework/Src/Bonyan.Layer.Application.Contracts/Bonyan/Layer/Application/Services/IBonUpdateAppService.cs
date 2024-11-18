@@ -1,4 +1,4 @@
-﻿namespace Bonyan.Layer.Application.Abstractions;
+﻿namespace Bonyan.Layer.Application.Services;
 
 public interface IBonUpdateAppService<in TKey, in TCreateInput, TDto>
     : IBonApplicationService

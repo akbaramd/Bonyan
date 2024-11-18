@@ -1,7 +1,6 @@
 ﻿using Bonyan.Layer.Domain.Enumerations;
 using Bonyan.UserManagement.Domain;
 using Bonyan.UserManagement.Domain.Users;
-using Bonyan.UserManagement.Domain.Users.Entities;
 using Bonyan.UserManagement.Domain.Users.Enumerations;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -31,7 +30,7 @@ public static class BonUserManagementEntityTypeBuilderExtensions
         ConfigurePhoneNumber(entity);
 
         // Configure properties
-        ConfigureStatus(entity);
+        // ConfigureStatus(entity);
         ConfigureConcurrencyToken(entity);
 
         // Configure indexes
@@ -68,18 +67,7 @@ public static class BonUserManagementEntityTypeBuilderExtensions
 
 
 
-    /// <summary>
-    /// Configures the status property.
-    /// </summary>
-    private static void ConfigureStatus<TUser>(EntityTypeBuilder<TUser> entity)
-        where TUser : class, IBonUser
-    {
-        entity.Property(user => user.Status)
-            .HasConversion(
-                status => status.Name, // Convert enumeration to string
-                name => BonEnumeration.FromName<UserStatus>(name) ?? UserStatus.PendingApproval // Convert string back to enumeration
-            );
-    }
+
 
     /// <summary>
     /// Configures the concurrency token.

@@ -1,5 +1,4 @@
-﻿using Bonyan.Layer.Application.Abstractions;
-using Bonyan.Layer.Application.Dto;
+﻿using Bonyan.Layer.Application.Dto;
 using Bonyan.Layer.Application.Exceptions;
 using Bonyan.Layer.Domain.Entity;
 using Bonyan.Layer.Domain.Repository.Abstractions;
@@ -7,9 +6,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Bonyan.Layer.Application.Services;
 
-public abstract class AbstractCrudAppService<TEntity, TKey, TPaginateDto, TGetOutputDto, TGetListOutputDto, TCreateInput, TUpdateInput>
+public abstract class AbstractCrudAppService<TEntity, TKey, TPaginateDto, TGetOutputDto, TGetListOutputDto,
+    TCreateInput, TUpdateInput>
     : AbstractBonReadonlyAppService<TEntity, TKey, TPaginateDto, TGetOutputDto, TGetListOutputDto>,
-      ICrudAppService<TKey, TPaginateDto, TCreateInput, TUpdateInput, TGetOutputDto, TGetListOutputDto>
+        IBonCrudAppService<TKey, TPaginateDto, TCreateInput, TUpdateInput, TGetOutputDto, TGetListOutputDto>
     where TEntity : class, IBonEntity<TKey>
     where TGetListOutputDto : IBonEntityDto<TKey>
     where TGetOutputDto : IBonEntityDto<TKey>
@@ -30,7 +30,7 @@ public abstract class AbstractCrudAppService<TEntity, TKey, TPaginateDto, TGetOu
     {
         try
         {
-            var entity = MapToEntity(input);
+            var entity = MapCreateDtoToEntity(input);
             await Repository.AddAsync(entity);
             await UnitOfWorkManager.Current?.SaveChangesAsync();
 
@@ -51,7 +51,7 @@ public abstract class AbstractCrudAppService<TEntity, TKey, TPaginateDto, TGetOu
         try
         {
             var entity = await GetEntityByIdAsync(id);
-            MapToEntity(input, entity);
+            MapUpdateDtoToEntity(input, entity);
             await Repository.UpdateAsync(entity);
             await UnitOfWorkManager.Current?.SaveChangesAsync();
 
@@ -95,12 +95,12 @@ public abstract class AbstractCrudAppService<TEntity, TKey, TPaginateDto, TGetOu
 
     #region Mapping Helpers
 
-    protected virtual TEntity MapToEntity(TCreateInput input)
+    protected virtual TEntity MapCreateDtoToEntity(TCreateInput input)
     {
         return Mapper.Map<TCreateInput, TEntity>(input);
     }
 
-    protected virtual void MapToEntity(TUpdateInput input, TEntity entity)
+    protected virtual void MapUpdateDtoToEntity(TUpdateInput input, TEntity entity)
     {
         Mapper.Map(input, entity);
     }

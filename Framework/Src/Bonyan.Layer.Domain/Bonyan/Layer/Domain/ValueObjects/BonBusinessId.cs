@@ -1,37 +1,89 @@
 namespace Bonyan.Layer.Domain.ValueObjects
 {
-    public abstract class BonBusinessId<T> : BonValueObject where T : BonBusinessId<T>, new()
+    public abstract class BonBusinessId<T, TKey> : BonValueObject where T : BonBusinessId<T, TKey>, new()
     {
         // The underlying value of the business ID
-        public Guid Value { get; private set; }
+        public TKey Value { get; private set; }
 
-        protected BonBusinessId()
+        public BonBusinessId()
         {
-            Value = Guid.NewGuid();
+            throw new NotSupportedException("Use the appropriate factory method to create a business ID.");
         }
 
         // Protected constructor to allow subclassing
-        protected BonBusinessId(Guid value)
+        public BonBusinessId(TKey value)
         {
-            if (value == Guid.Empty)
-                throw new ArgumentException("Business ID cannot be an empty GUID.", nameof(value));
+            if (value == null || value.Equals(default(TKey)))
+                throw new ArgumentException($"The value of {nameof(TKey)} cannot be null or default.", nameof(value));
 
             Value = value;
         }
 
-        // Static factory method to create a new BusinessId with a new GUID
+        /// <summary>
+        /// Factory method to create an instance of the derived class from an existing value.
+        /// </summary>
+        public static T FromValue(TKey value)
+        {
+            if (value == null || value.Equals(default(TKey)))
+                throw new ArgumentException($"The value of {nameof(TKey)} cannot be null or default.", nameof(value));
+
+            return NewId(value);
+        }
+
+        /// <summary>
+        /// Helper method to create an instance of the derived class.
+        /// </summary>
+        public static T NewId(TKey value)
+        {
+            // Use reflection to create an instance of the derived class
+            var instance = new T();
+            instance.Value = value;
+            return instance;
+        }
+
+        // Overrides ToString for easier debugging and display purposes
+        public override string ToString()
+        {
+            return Value?.ToString() ?? string.Empty;
+        }
+
+        // Overrides equality components for comparing value objects
+        protected override IEnumerable<object?> GetEqualityComponents()
+        {
+            yield return Value;
+        }
+    }
+}
+
+namespace Bonyan.Layer.Domain.ValueObjects
+{
+    /// <summary>
+    /// Represents a specialized implementation of BonBusinessId with a GUID as the key type.
+    /// </summary>
+    public abstract class BonBusinessId<T> : BonBusinessId<T, Guid> where T : BonBusinessId<T>, new()
+    {
+        public BonBusinessId() : base(Guid.Empty)
+        {
+            // Default constructor prevents direct instantiation without valid GUID
+        }
+
+        public BonBusinessId(Guid value) : base(value)
+        {
+        }
+
+        /// <summary>
+        /// Factory method to create a new BusinessId with a new GUID.
+        /// </summary>
         public static T NewId()
         {
-            return Create(Guid.NewGuid());
+            return FromValue(Guid.NewGuid());
         }
 
-        // Static method to create a BusinessId from an existing GUID
-        public static T FromGuid(Guid guid)
-        {
-            return Create(guid);
-        }
+        /// <summary>
+        /// Factory method to create a BusinessId from a string representation of a GUID.
+        /// </summary>
+     
 
-        // Static method to create a BusinessId from a string representation of a GUID
         public static T FromString(string value)
         {
             if (string.IsNullOrWhiteSpace(value))
@@ -40,36 +92,7 @@ namespace Bonyan.Layer.Domain.ValueObjects
             if (!Guid.TryParse(value, out var parsedGuid))
                 throw new ArgumentException("Invalid GUID format.", nameof(value));
 
-            return Create(parsedGuid);
-        }
-
-        // Helper method to create an instance of the derived class
-        private static T Create(Guid value)
-        {
-            // Use reflection to create an instance of the derived class
-            var instance = new T();
-            instance.Initialize(value);
-            return instance;
-        }
-
-        // Protected initialization method to set the value after creation
-        protected void Initialize(Guid value)
-        {
-            // This is called only once during the creation process
-            var obj = (T)(object)this;
-            obj.Value = value;
-        }
-
-        // Overrides ToString for easier debugging and display purposes
-        public override string ToString()
-        {
-            return Value.ToString();
-        }
-
-        // Overrides equality components for comparing value objects
-        protected override IEnumerable<object?> GetEqualityComponents()
-        {
-            yield return Value;
+            return FromValue(parsedGuid);
         }
     }
 }

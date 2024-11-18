@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Bonyan.UserManagement.Application.Users.Dtos;
+using Bonyan.UserManagement.Application.Users.Dto;
 using Bonyan.UserManagement.Domain.Users;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
@@ -10,5 +10,7 @@ public class BonUserProfile : Profile
     public BonUserProfile()
     {
         CreateMap<BonUser, BonUserDto>().ReverseMap();
+        CreateMap<BonUser, BonUserCreateDto>().ReverseMap();
+        CreateMap<BonUser, BonUserUpdateDto>().ReverseMap();
     }
 }

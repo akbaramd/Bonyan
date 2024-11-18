@@ -10,7 +10,7 @@
     <Import Project="..\..\..\..\module-package.props"/>
     <ItemGroup>
         <ProjectReference Include="..\..\..\..\Framework\Src\Bonyan.Layer.Application.Contracts\Bonyan.Layer.Application.Contracts.csproj" />
-        <ProjectReference Include="..\Bonyan.UserManagement.Domain.Abstractions\Bonyan.UserManagement.Domain.Abstractions.csproj"/>
+        <ProjectReference Include="..\Bonyan.UserManagement.Domain\Bonyan.UserManagement.Domain.csproj" />
     </ItemGroup>
 
 </Project>

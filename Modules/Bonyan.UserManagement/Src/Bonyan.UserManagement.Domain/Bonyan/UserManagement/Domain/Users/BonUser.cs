@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Bonyan.Layer.Domain.Aggregate;
 using Bonyan.UserManagement.Domain.Users.DomainEvents;
-using Bonyan.UserManagement.Domain.Users.Entities;
 using Bonyan.UserManagement.Domain.Users.Enumerations;
 using Bonyan.UserManagement.Domain.Users.ValueObjects;
 
@@ -11,14 +10,12 @@ namespace Bonyan.UserManagement.Domain.Users
     /// Represents a user entity in the domain with properties and methods
     /// for managing a user's profile, contact information, verification status, and overall status.
     /// </summary>
-    public class BonUser : BonAggregateRoot<BonUserId>, IBonUser
+    public class BonUser : BonFullAggregateRoot<BonUserId>, IBonUser
     {
         /// <summary>
         /// Gets or sets the user's unique username.
         /// </summary>
         public string UserName { get; private set; }
-
-
 
         /// <summary>
         /// Gets or sets the user's email address.

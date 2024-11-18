@@ -1,5 +1,4 @@
-﻿using Bonyan.Layer.Application.Abstractions;
-using Bonyan.Layer.Application.Dto;
+﻿using Bonyan.Layer.Application.Dto;
 using Bonyan.Layer.Application.Exceptions;
 using Bonyan.Layer.Domain.Entity;
 using Bonyan.Layer.Domain.Repository.Abstractions;
@@ -32,12 +31,12 @@ public abstract class BonReadonlyAppService<TEntity, TKey, TGetListInput, TEntit
     }
 }
 
-public class BonReadonlyAppService<TEntity, TKey,TPaginatedDto, TDto, TDetailDto>
-    : AbstractBonReadonlyAppService<TEntity, TKey,TPaginatedDto, TDto, TDetailDto>
+public class BonReadonlyAppService<TEntity, TKey,TFilterDto, TDto, TDetailDto>
+    : AbstractBonReadonlyAppService<TEntity, TKey,TFilterDto, TDto, TDetailDto>
     where TEntity : class, IBonEntity<TKey>
     where TDto : IBonEntityDto<TKey>
     where TDetailDto : IBonEntityDto<TKey>
-    where TPaginatedDto : BonPaginateDto
+    where TFilterDto : BonPaginateDto
 {
     public BonReadonlyAppService(IBonReadOnlyRepository<TEntity,TKey> repository)
         : base(repository)
@@ -55,19 +54,5 @@ public class BonReadonlyAppService<TEntity, TKey,TPaginatedDto, TDto, TDetailDto
         return entity;
     }
 
-    protected override async Task<IQueryable<TEntity>> CreateFilteredQueryAsync(TPaginatedDto input)
-    {
-        return await Repository.GetQueryableAsync();
-    }
-
-    protected override IQueryable<TEntity> ApplyDefaultSorting(IQueryable<TEntity> query)
-    {
-        return query.OrderByDescending(e => e.Id);
-    }
-
-    protected override TDto MapToDto(TEntity entity)
-    {
-        // Use AutoMapper or custom mapping logic
-        return Mapper.Map<TEntity, TDto>(entity);
-    }
+  
 }
