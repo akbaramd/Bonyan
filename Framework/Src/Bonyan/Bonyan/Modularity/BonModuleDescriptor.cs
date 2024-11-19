@@ -3,11 +3,11 @@ using Bonyan.Modularity.Abstractions;
 
 namespace Bonyan.Modularity;
 
-public class ModuleInfo
+public class BonModuleDescriptor
 {
     public Type ModuleType { get; }
     public IBonModule? Instance { get; set; }
-    public List<ModuleInfo> Dependencies { get; }
+    public List<BonModuleDescriptor> Dependencies { get; }
     
     Assembly Assembly { get; }
     
@@ -19,12 +19,19 @@ public class ModuleInfo
     public Assembly[] AllAssemblies { get; }
     public bool IsLoaded { get; set; }
 
-    public ModuleInfo(Type moduleType)
+    public BonModuleDescriptor(Type moduleType , IBonModule instance, bool isLoaded)
     {
         ModuleType = moduleType ?? throw new ArgumentNullException(nameof(moduleType));
-        Dependencies = new List<ModuleInfo>();
-        Assembly = moduleType.Assembly;
+        Dependencies = new List<BonModuleDescriptor>();
         AllAssemblies = BonyanModuleHelper.GetAllAssemblies(moduleType);
-        IsLoaded = false;
+        Instance = instance;
+        IsLoaded = isLoaded;
     }
+    
+    
+    public void AddDependency(BonModuleDescriptor descriptor)
+    {
+        Dependencies.AddIfNotContains(descriptor);
+    }
+
 }

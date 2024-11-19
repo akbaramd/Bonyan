@@ -2,23 +2,25 @@ using Bonyan.AspNetCore.Security;
 using Bonyan.ExceptionHandling;
 using Bonyan.Layer.Domain;
 using Bonyan.Modularity;
+using Bonyan.Reflection;
 using Bonyan.Security.Claims;
 using Bonyan.UnitOfWork;
 using Microsoft;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 
 namespace Bonyan.AspNetCore;
 
 /// <summary>
 /// Configures services and middleware specific to the Bonyan ASP.NET Core module.
 /// </summary>
-
 public class BonAspNetCoreModule : BonWebModule
 {
-
     public BonAspNetCoreModule()
     {
         DependOn<BonLayerDomainModule>();
     }
+
     /// <summary>
     /// Configures exception handling settings before the module configuration phase.
     /// </summary>
@@ -38,6 +40,35 @@ public class BonAspNetCoreModule : BonWebModule
         context.Services.AddLogging();
         ConfigureMiddlewares(context);
         ConfigureCoreServices(context);
+        
+        
+        Configure<BonEndpointRouterOptions>(options =>
+        {
+            options.EndpointConfigureActions.Add(endpointContext =>
+            {
+                endpointContext.Endpoints.MapGet("/bonyan/modules",
+                    ([FromServices] IBonModuleContainer container) =>
+                    {
+                        return container.Modules.Select(module => new
+                        {
+                            Name = module.ModuleType.Name,
+                            Namespace = module.ModuleType.Namespace,
+                            Assembly = module.ModuleType.Assembly.FullName,
+                            Dependencies = module.Dependencies.Select(dep => new
+                            {
+                                Name = dep.ModuleType.Name,
+                                Namespace = dep.ModuleType.Namespace,
+                                Assembly = dep.ModuleType.Assembly.FullName
+                            }),
+                            IsLoadedAsPlugIn = module.IsLoaded,
+                            AllAssemblies = module.AllAssemblies.Select(assembly => assembly.FullName).ToList(),
+                            IsActive = module.Instance != null,
+                            Timestamp = DateTime.UtcNow // Optionally include a timestamp for when this data was fetched
+                        });
+                    });
+            });
+        });
+        
         return base.OnConfigureAsync(context);
     }
 
@@ -57,7 +88,7 @@ public class BonAspNetCoreModule : BonWebModule
     /// <param name="context">The configuration context for services.</param>
     private void ConfigureExceptionHandling(BonConfigurationContext context)
     {
-        context.ConfigureOptions<ExceptionHandlingOptions>(options => 
+        context.ConfigureOptions<ExceptionHandlingOptions>(options =>
         {
             options.ApiExceptionMiddlewareEnabled = false;
         });
@@ -84,5 +115,40 @@ public class BonAspNetCoreModule : BonWebModule
         context.Services.AddTransient<IBonCurrentPrincipalAccessor, HttpContextBonCurrentPrincipalAccessor>();
         // Ensures IApplicationBuilder is accessible throughout the application's service configuration lifecycle
         context.Services.AddObjectAccessor<IApplicationBuilder>();
+    }
+
+    public override Task OnPreApplicationAsync(BonWebApplicationContext context)
+    {
+        context.Application.UseStaticFiles();
+        return base.OnPreApplicationAsync(context);
+    }
+
+    public override Task OnPostApplicationAsync(BonWebApplicationContext context)
+    {
+        var options = context.Application.Services
+            .GetRequiredService<IOptions<BonEndpointRouterOptions>>()
+            .Value;
+        
+        if (!options.EndpointConfigureActions.Any())
+        {
+            return base.OnPostApplicationAsync(context);
+        }
+
+        context.Application.UseRouting();
+        context.Application.UseEndpoints(endpoints =>
+        {
+            using var scope = context.Application.Services.CreateScope();
+            if (options.EndpointConfigureActions.Count == 0) return;
+
+            var endpointRouteBuilderContext = new EndpointRouteBuilderContext(endpoints, scope.ServiceProvider);
+
+            foreach (var configureAction in options.EndpointConfigureActions)
+            {
+                configureAction(endpointRouteBuilderContext);
+            }
+            
+        });
+        
+        return base.OnPostApplicationAsync(context);
     }
 }

@@ -16,8 +16,8 @@ namespace Bonyan.Messaging.RabbitMQ
         {
             PreConfigure<BonMessagingConfiguration>(c =>
             {
-                var pres = context.Services.GetPreConfigureActions<RabbitMQOptions>();
-                c.AddRabbitMqMessaging(r => { pres.Configure(r); });
+             
+                c.AddRabbitMqMessaging(r => { context.Services.ExecutePreConfiguredActions(r); });
             });
             return base.OnConfigureAsync(context);
         }

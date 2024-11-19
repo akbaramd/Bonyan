@@ -1,6 +1,5 @@
 using BonyanTemplate.WebApi;
 
-var application = BonyanApplication.CreateModularApplication<BonyanTemplateWebApiModule>("BonyanTemplate",args);
-
-await application.RunAsync();
-
+var builder = BonyanApplication.CreateModularBuilder<BonyanTemplateWebApiModule>("BonyanTemplate");
+var app = await builder.BuildAsync();
+await app.RunAsync();

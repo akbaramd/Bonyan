@@ -1,4 +1,7 @@
 using Bonyan.AspNetCore.Components;
+using Bonyan.AspNetCore.Mvc;
+using Bonyan.IdentityManagement;
+using Bonyan.IdentityManagement.EntityFrameworkCore;
 using Bonyan.Modularity;
 using BonyanTemplate.Application;
 using BonyanTemplate.Infrastructure;
@@ -11,17 +14,14 @@ public class BonyanTemplateWebApiModule : BonWebModule
     {
         DependOn<BonyanTemplateApplicationModule>();
         DependOn<BonaynTempalteInfrastructureModule>();
-        DependOn<BonAspNetCoreComponentsModule>();
+        DependOn<BonAspNetCoreMvcModule>();
+        DependOn<BonIdentityManagementModule>();
     }
 
     public override Task OnConfigureAsync(BonConfigurationContext context)
     {
-        
-        context.Services.AddAuthorization();
-
         context.Services.AddEndpointsApiExplorer();
         context.Services.AddSwaggerGen();
-
         return base.OnConfigureAsync(context);
     }
 
@@ -36,6 +36,7 @@ public class BonyanTemplateWebApiModule : BonWebModule
 
         context.Application.UseHttpsRedirection();
 
+        
         return base.OnPostApplicationAsync(context);
     }
 }

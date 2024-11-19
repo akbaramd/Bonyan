@@ -1,6 +1,8 @@
 ﻿using Bonyan;
+using Bonyan.AspNetCore;
 using Bonyan.Modularity;
 using Bonyan.Modularity.Abstractions;
+using Bonyan.Plugins;
 using Microsoft.Hosting;
 
 namespace Microsoft.AspNetCore.Builder;
@@ -11,7 +13,7 @@ namespace Microsoft.AspNetCore.Builder;
 public class BonyanApplication
 {
     public WebApplication Application { get; }
-    public BonyanServiceInfo ServiceInfo { get; private set;}
+    public BonyanServiceInfo ServiceInfo { get; private set; }
 
     /// <summary>
     /// Initializes a new instance of <see cref="BonyanApplication"/>.
@@ -30,31 +32,37 @@ public class BonyanApplication
     /// <typeparam name="TModule">The root module type.</typeparam>
     /// <param name="args">Application arguments.</param>
     /// <returns>An instance of <see cref="IBonyanApplicationBuilder"/> configured with the root module.</returns>
-    public static IBonyanApplicationBuilder CreateModularApplication<TModule>(string serviceName ,params string[] args) where TModule : IBonModule
+    public static IBonyanApplicationBuilder CreateModularBuilder<TModule>(string serviceName,
+        Action<AbpApplicationCreationOptions>? creationContext = null, params string[] args)
+        where TModule : IBonModule
     {
-        
-        
-        
         var applicationBuilder = WebApplication.CreateBuilder(args);
         applicationBuilder.Host.UseBonAutofac();
-        
+
         // Store the service name in a shared configuration
         applicationBuilder.Services.AddObjectAccessor<BonServiceOptions>(new BonServiceOptions()
         {
             ServiceName = serviceName
         });
-        
+
         // Initialize the modular application and configure modules
-        var modularApp = InitializeModularApplication<TModule>(applicationBuilder.Services);
+        var modularApp = InitializeModularApplication<TModule>(applicationBuilder.Services, creationContext);
 
         // Register core services for the modular application
-        
+
         applicationBuilder.Services.AddSingleton<IWebBonModularityApplication>(modularApp);
 
-      
+
         // Build the Bonyan application builder with dependency injection support
         var builder = new BonyanApplicationBuilder(modularApp, applicationBuilder);
         return builder;
+    }
+
+    public static IBonyanApplicationBuilder CreateBuilder(string serviceName,
+        Action<AbpApplicationCreationOptions>? creationContext = null,
+        params string[] args)
+    {
+        return CreateModularBuilder<BonAspNetCoreModule>(serviceName, creationContext, args);
     }
 
     /// <summary>
@@ -63,10 +71,12 @@ public class BonyanApplication
     /// <typeparam name="TModule">The root module type.</typeparam>
     /// <param name="services">Service collection to register dependencies.</param>
     /// <returns>An initialized instance of <see cref="WebBonModularityApplication{TModule}"/>.</returns>
-    private static WebBonModularityApplication<TModule> InitializeModularApplication<TModule>(IServiceCollection services) where TModule : IBonModule
+    private static WebBonModularityApplication<TModule> InitializeModularApplication<TModule>(
+        IServiceCollection services, Action<AbpApplicationCreationOptions>? creationContext = null)
+        where TModule : IBonModule
     {
-        var modularApp = new WebBonModularityApplication<TModule>(services);
-        
+        var modularApp = new WebBonModularityApplication<TModule>(services, creationContext);
+
         // Asynchronously configure modules, handling potential errors
         try
         {

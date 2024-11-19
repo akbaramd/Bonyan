@@ -13,10 +13,12 @@
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\..\Framework\Src\Bonyan.AspNetCore.Components\Bonyan.AspNetCore.Components.csproj" />
+        <ProjectReference Include="..\..\Framework\Src\Bonyan.AspNetCore.Mvc\Bonyan.AspNetCore.Mvc.csproj" />
         <ProjectReference Include="..\..\Framework\Src\Bonyan.Workers.Hangfire\Bonyan.Workers.Hangfire.csproj" />
         <ProjectReference Include="..\..\Framework\Src\Bonyan.EntityFrameworkCore\Bonyan.EntityFrameworkCore.csproj"/>
         <ProjectReference Include="..\..\Framework\Src\Bonyan.AspNetCore\Bonyan.AspNetCore.csproj"/>
         <ProjectReference Include="..\..\Framework\Src\Bonyan.EntityFrameworkCore.SqlServer\Bonyan.EntityFrameworkCore.SqlServer.csproj"/>
+        <ProjectReference Include="..\..\Modules\Bonyan.IdentityManagement\Src\Bonyan.IdentityManagement\Bonyan.IdentityManagement.csproj" />
         <ProjectReference Include="..\BonyanTemplate.Application\BonyanTemplate.Application.csproj"/>
         <ProjectReference Include="..\BonyanTemplate.Infrastructure\BonyanTemplate.Infrastructure.csproj"/>
     </ItemGroup>

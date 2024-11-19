@@ -1,7 +1,14 @@
+using Bonyan.Castle.DynamicProxy;
+using Bonyan.DependencyInjection;
 using Bonyan.Modularity;
 using Bonyan.Modularity.Abstractions;
+using Bonyan.Plugins;
+using Bonyan.Reflection;
+using Microsoft;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Volo.Abp.Modularity;
 
 namespace Bonyan;
 
@@ -12,31 +19,44 @@ namespace Bonyan;
 public class BonModularityApplication<TModule> : IBonModularityApplication where TModule : IBonModule
 {
     private readonly IServiceCollection _serviceCollection;
-    private readonly IBonModuleAccessor _bonModuleAccessor;
+    private readonly IBonModuleLoader _bonModuleLoader;
 
     /// <summary>
     /// Initializes a new instance of <see cref="BonModularityApplication{TModule}"/> with core services.
     /// </summary>
     /// <param name="serviceCollection">The service collection to which dependencies are added.</param>
-    public BonModularityApplication(IServiceCollection serviceCollection)
+    /// <param name="plugInSource"></param>
+    public BonModularityApplication(IServiceCollection serviceCollection,
+        Action<AbpApplicationCreationOptions>? creationContext = null)
     {
         _serviceCollection = serviceCollection ?? throw new ArgumentNullException(nameof(serviceCollection));
 
-      
-        
-        _bonModuleAccessor = new BonModuleAccessor();
-        var moduleManager = new ModuleManager(_bonModuleAccessor);
+
+        _bonModuleLoader = new BonModuleLoader();
+        var assemblyFinder = new AssemblyFinder(this);
+        var typeFinder = new TypeFinder(assemblyFinder);
+
+        var options = new AbpApplicationCreationOptions(_serviceCollection);
+        creationContext?.Invoke(options);
+
+        Modules = _bonModuleLoader.LoadModules(_serviceCollection, typeof(TModule), options.PlugInSources);
 
         // Register core services
-        _serviceCollection.AddSingleton(_bonModuleAccessor);
-        _serviceCollection.AddSingleton(moduleManager);
-        _serviceCollection.AddSingleton<IModuleLoader>(moduleManager);
-        _serviceCollection.AddSingleton<IBonModuleConfigurator>(this);
-        _serviceCollection.AddSingleton<IBonModuleInitializer>(this);
-        _serviceCollection.AddSingleton<IBonModularityApplication>(this);
+        _serviceCollection.AddObjectAccessor(_bonModuleLoader);
 
-        
-        moduleManager.LoadModules(typeof(TModule));
+        _serviceCollection.TryAddSingleton(_bonModuleLoader);
+        _serviceCollection.TryAddSingleton<IBonModuleContainer>(this);
+        _serviceCollection.TryAddSingleton<IBonModuleConfigurator>(this);
+        _serviceCollection.TryAddSingleton<IBonModuleInitializer>(this);
+        _serviceCollection.TryAddSingleton<IBonModularityApplication>(this);
+        _serviceCollection.TryAddSingleton<IAssemblyFinder>(assemblyFinder);
+        _serviceCollection.TryAddSingleton<ITypeFinder>(typeFinder);
+
+        _serviceCollection.AddTransient(typeof(BonAsyncDeterminationInterceptor<>));
+        _serviceCollection.AddTransient<IBonCachedServiceProviderBase, BonLazyServiceProvider>();
+        _serviceCollection.AddTransient<IBonLazyServiceProvider, BonLazyServiceProvider>();
+
+
         ServiceProvider = _serviceCollection.BuildServiceProvider();
     }
 
@@ -48,7 +68,7 @@ public class BonModularityApplication<TModule> : IBonModularityApplication where
     /// <summary>
     /// Gets all loaded modules.
     /// </summary>
-    public IEnumerable<ModuleInfo> Modules => _bonModuleAccessor.GetAllModules();
+    public IReadOnlyList<BonModuleDescriptor> Modules { get; }
 
     /// <summary>
     /// Configures all modules by invoking pre-configuration, configuration, and post-configuration phases.

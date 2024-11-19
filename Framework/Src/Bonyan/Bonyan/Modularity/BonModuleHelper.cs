@@ -6,11 +6,11 @@ namespace Bonyan.Modularity;
 
 internal static class BonyanModuleHelper
 {
-    public static List<Type> FindAllModuleTypes(Type startupModuleType, ILogger logger)
+    public static List<Type> FindAllModuleTypes(Type startupModuleType)
     {
         var moduleTypes = new List<Type>();
-        logger.Log(LogLevel.Information, "Loaded ABP modules:");
-        AddModuleAndDependenciesRecursively(moduleTypes, startupModuleType, logger);
+        Console.WriteLine( "Loaded Bonyan modules:");
+        AddModuleAndDependenciesRecursively(moduleTypes, startupModuleType);
         return moduleTypes;
     }
 
@@ -20,6 +20,7 @@ internal static class BonyanModuleHelper
 
         var dependencies = new List<Type>();
 
+        // Retrieve dependencies from custom attributes
         var dependencyDescriptors = moduleType
             .GetCustomAttributes()
             .OfType<IDependedTypesProvider>();
@@ -29,6 +30,28 @@ internal static class BonyanModuleHelper
             foreach (var dependedModuleType in descriptor.GetDependedTypes())
             {
                 dependencies.AddIfNotContains(dependedModuleType);
+            }
+        }
+
+        // Initialize the module instance and extract DependedModules
+        IBonModule? moduleInstance = null;
+        try
+        {
+            moduleInstance = Activator.CreateInstance(moduleType) as IBonModule;
+            if (moduleInstance != null)
+            {
+                var instanceDependencies = moduleInstance.DependedModules;
+                foreach (var dependedModuleType in instanceDependencies)
+                {
+                    dependencies.AddIfNotContains(dependedModuleType);
+                }
+            }
+        }
+        finally
+        {
+            if (moduleInstance is IDisposable disposable)
+            {
+                disposable.Dispose();
             }
         }
 
@@ -59,7 +82,6 @@ internal static class BonyanModuleHelper
     private static void AddModuleAndDependenciesRecursively(
         List<Type> moduleTypes,
         Type moduleType,
-        ILogger logger,
         int depth = 0)
     {
         BonModule.CheckBonyanModuleType(moduleType);
@@ -70,11 +92,11 @@ internal static class BonyanModuleHelper
         }
 
         moduleTypes.Add(moduleType);
-        logger.Log(LogLevel.Information, $"{new string(' ', depth * 2)}- {moduleType.FullName}");
+        Console.WriteLine($"{new string(' ', depth * 2)}- {moduleType.FullName}");
 
         foreach (var dependedModuleType in FindDependedModuleTypes(moduleType))
         {
-            AddModuleAndDependenciesRecursively(moduleTypes, dependedModuleType, logger, depth + 1);
+            AddModuleAndDependenciesRecursively(moduleTypes, dependedModuleType, depth + 1);
         }
     }
 }

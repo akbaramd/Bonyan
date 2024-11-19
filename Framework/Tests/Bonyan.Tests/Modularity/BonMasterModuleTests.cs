@@ -16,34 +16,6 @@ namespace Bonyan.Tests.Modularity
         }
 
         [Fact]
-        public void BonMasterModule_Should_Be_Added_To_ModularityApplication()
-        {
-            // Arrange
-            var application = new BonModularityApplication<TestModule>(_services);
-
-            // Act
-            var modules = application.Modules.ToList();
-
-            // Assert
-            Assert.Contains(modules, m => m.ModuleType == typeof(BonMasterModule));
-        }
-
-        [Fact]
-        public void BonMasterModule_Should_Be_Added_To_ModuleManager()
-        {
-            // Arrange
-            var moduleAccessor = new BonModuleAccessor();
-            var moduleManager = new ModuleManager(moduleAccessor);
-
-            // Act
-            moduleManager.LoadModules(typeof(TestModule));
-            var modules = moduleAccessor.GetAllModules().ToList();
-
-            // Assert
-            Assert.Contains(modules, m => m.ModuleType == typeof(BonMasterModule));
-        }
-
-        [Fact]
         public void BonMasterModule_Should_Register_Required_Services()
         {
             // Arrange

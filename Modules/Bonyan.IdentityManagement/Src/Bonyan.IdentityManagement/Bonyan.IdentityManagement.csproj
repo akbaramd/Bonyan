@@ -9,11 +9,14 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\..\..\Framework\Src\Bonyan.AspNetCore\Bonyan.AspNetCore.csproj" />
       <ProjectReference Include="..\..\..\..\Framework\Src\Bonyan\Bonyan.csproj" />
     </ItemGroup>
 
     <ItemGroup>
       <PackageReference Include="Microsoft.AspNetCore.Authentication" Version="2.2.0" />
+      <PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="2.2.0" />
+      <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.8" />
     </ItemGroup>
 
     <Import Project="..\..\..\..\module-package.props"/>

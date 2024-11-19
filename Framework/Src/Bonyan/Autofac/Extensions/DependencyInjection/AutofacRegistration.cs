@@ -3,6 +3,7 @@ using System.Reflection;
 using Autofac.Builder;
 using Bonyan.Exceptions;
 using Bonyan.Modularity.Abstractions;
+using Bonyan.Reflection;
 using Microsoft;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -81,9 +82,9 @@ public static class AutofacRegistration
         IServiceCollection services,
         object? lifetimeScopeTagForSingletons)
     {
-        var moduleContainer = services.GetSingletonInstance<IBonModuleAccessor>();
+        var moduleContainer = services.GetSingletonInstance<IBonModuleContainer>();
 
-        foreach (var module in moduleContainer.GetAllModules().Select(x=>x.Instance))
+        foreach (var module in moduleContainer.Modules.Select(x=>x.Instance))
         {
             if (module != null) builder.RegisterModule(module);
         }

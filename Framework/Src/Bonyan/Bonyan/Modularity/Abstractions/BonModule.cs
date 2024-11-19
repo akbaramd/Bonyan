@@ -1,4 +1,7 @@
+using System;
+using System.Collections.Generic;
 using System.Reflection;
+using System.Threading.Tasks;
 using Microsoft;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -10,19 +13,26 @@ namespace Bonyan.Modularity.Abstractions
     /// </summary>
     public abstract class BonModule : global::Autofac.Module, IBonModule
     {
+        /// <summary>
+        /// Service collection for registering module dependencies.
+        /// </summary>
+        public IServiceCollection Services { get; set; }
 
-        public IServiceCollection Services { get; set; } 
-        
+        /// <summary>
+        /// List of dependent modules required by this module.
+        /// </summary>
+        public List<Type> DependedModules { get; set; } = new();
+
+        /// <summary>
+        /// Tracks whether the object has already been disposed.
+        /// </summary>
+        private bool _disposed;
+
         public virtual Task OnPreConfigureAsync(BonConfigurationContext context) => Task.CompletedTask;
-
         public virtual Task OnConfigureAsync(BonConfigurationContext context) => Task.CompletedTask;
-
         public virtual Task OnPostConfigureAsync(BonConfigurationContext context) => Task.CompletedTask;
-
         public virtual Task OnPreInitializeAsync(BonInitializedContext context) => Task.CompletedTask;
-
         public virtual Task OnInitializeAsync(BonInitializedContext context) => Task.CompletedTask;
-
         public virtual Task OnPostInitializeAsync(BonInitializedContext context) => Task.CompletedTask;
 
         /// <summary>
@@ -51,11 +61,6 @@ namespace Bonyan.Modularity.Abstractions
                    !typeInfo.IsAbstract &&
                    typeof(IBonModule).GetTypeInfo().IsAssignableFrom(type);
         }
-
-        /// <summary>
-        /// List of dependent modules required by this module.
-        /// </summary>
-        public List<Type> DependedModules { get; set; } = new();
 
         /// <summary>
         /// Adds a dependency on the specified module type.
@@ -100,7 +105,7 @@ namespace Bonyan.Modularity.Abstractions
                 }
             }
         }
-        
+
         protected void Configure<TOptions>(Action<TOptions> configureOptions)
             where TOptions : class
         {
@@ -118,7 +123,6 @@ namespace Bonyan.Modularity.Abstractions
         {
             Services.Configure<TOptions>(configuration);
         }
-
 
         protected void Configure<TOptions>(string name, IConfiguration configuration)
             where TOptions : class
@@ -142,6 +146,44 @@ namespace Bonyan.Modularity.Abstractions
             where TOptions : class
         {
             Services.PostConfigureAll(configureOptions);
+        }
+
+        /// <summary>
+        /// Disposes of the resources used by this module.
+        /// </summary>
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        /// <summary>
+        /// Releases managed and unmanaged resources.
+        /// </summary>
+        /// <param name="disposing">Indicates whether the method was called directly or indirectly.</param>
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                    // Dispose managed resources here
+                    Services = null;
+                    DependedModules.Clear();
+                }
+
+                // Dispose unmanaged resources here, if any
+
+                _disposed = true;
+            }
+        }
+
+        /// <summary>
+        /// Destructor for final cleanup.
+        /// </summary>
+        ~BonModule()
+        {
+            Dispose(false);
         }
     }
 }

@@ -1,5 +1,8 @@
-﻿using Bonyan.Exceptions;
+﻿using System.Reflection;
+using Bonyan.Exceptions;
 using Bonyan.Modularity;
+using Bonyan.Modularity.Abstractions;
+using Bonyan.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
@@ -33,6 +36,11 @@ namespace Microsoft
             return context;
         }
 
+        public static Assembly[] GetAllAssemblies(this BonConfigurationContext context)
+        {
+            return context.Services.GetRequiredService<IAssemblyFinder>().Assemblies.ToArray();
+        }
+        
         /// <summary>
         /// Registers a transient service of type <typeparamref name="TService"/> with an optional implementation type.
         /// </summary>

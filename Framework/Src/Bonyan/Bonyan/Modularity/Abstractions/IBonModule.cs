@@ -2,7 +2,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Bonyan.Modularity.Abstractions;
 
-public interface IBonModule : global::Autofac.Core.IModule,IConfigurableModule, IInitializableModule
+public interface IBonModule : global::Autofac.Core.IModule,IConfigurableModule, IInitializableModule,IDisposable
 {
     public IServiceCollection Services { get; set; }
     public List<Type> DependedModules { get; set; }

@@ -13,14 +13,14 @@ namespace Microsoft.Extensions.DependencyInjection
         public static BonWorkerConfiguration AddHangfire(
             this BonWorkerConfiguration configure)
         {
-            var preActions = configure.Context.Services.GetPreConfigureActions<IGlobalConfiguration>();
 
+            var pre = configure.Context.Services.GetPreConfigureActions<IGlobalConfiguration>();
             configure.Context.Services.AddHangfire(config =>
             {
                 config.UseInMemoryStorage();
                 var x = configure.Context.Services.GetObjectOrNull<IContainer>();
                 config.UseAutofacActivator(x);
-                preActions.Configure(config);
+                pre.Configure(config);
             });
 
             configure.Context.Services.AddHangfireServer();

@@ -4,6 +4,7 @@ using Bonyan.Autofac;
 using Bonyan.Castle.DynamicProxy;
 using Bonyan.DependencyInjection;
 using Bonyan.Modularity.Abstractions;
+using Bonyan.Reflection;
 
 namespace Autofac.Builder;
 
@@ -11,7 +12,7 @@ public static class BonyanRegistrationBuilderExtensions
 {
     public static IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> ConfigureBonyanConventions<TLimit, TActivatorData, TRegistrationStyle>(
             this IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> registrationBuilder,
-            IBonModuleAccessor bonModuleContainer,
+            IBonModuleContainer bonModuleContainer,
             BonServiceRegistrationActionList registrationActionList)
     {
         var serviceType = registrationBuilder.RegistrationData.Services
@@ -77,7 +78,7 @@ public static class BonyanRegistrationBuilderExtensions
 
     private static IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> EnablePropertyInjection<TLimit, TActivatorData, TRegistrationStyle>(
             this IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> registrationBuilder,
-            IBonModuleAccessor bonModuleContainer,
+            IBonModuleContainer bonModuleContainer,
             Type? implementationType)
     {
         if (implementationType == null)
@@ -86,7 +87,7 @@ public static class BonyanRegistrationBuilderExtensions
         }
 
         // Enable Property Injection only for types in an assembly containing a BonyanModule and without a DisablePropertyInjection attribute.
-        if (bonModuleContainer.GetAllModules().Any(m => m.AllAssemblies.Contains(implementationType.Assembly)) &&
+        if (bonModuleContainer.Modules.Any(m => m.AllAssemblies.Contains(implementationType.Assembly)) &&
             implementationType.GetCustomAttributes(typeof(DisablePropertyInjectionAttribute), true).IsNullOrEmpty())
         {
             registrationBuilder = registrationBuilder.PropertiesAutowired(new BonyanPropertySelector(false));

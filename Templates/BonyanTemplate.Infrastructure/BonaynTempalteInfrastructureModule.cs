@@ -46,15 +46,5 @@ public class BonaynTempalteInfrastructureModule : BonModule
         return base.OnConfigureAsync(context);
     }
 
-    public override async Task OnPostInitializeAsync(BonInitializedContext context)
-    {
-        var userRepo = context.RequireService<IBonIdentityUserManager<User>>();
-        if ((await userRepo.FindByUserNameAsync("admin")).IsSuccess)
-        {
-            var user = new User(BonUserId.NewId(), "admin");
-            await userRepo.CreateAsync(user, "Aa@123456");
-        }
-
-        await base.OnPostInitializeAsync(context);
-    }
+ 
 }

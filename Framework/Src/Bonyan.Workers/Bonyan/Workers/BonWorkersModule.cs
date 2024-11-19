@@ -15,11 +15,9 @@ public class BonWorkersModule : BonModule
 
     public override Task OnPostConfigureAsync(BonConfigurationContext context)
     {
-        var preConfigure = context.Services.GetPreConfigureActions<BonWorkerConfiguration>();
-
         context.AddWorkers(c =>
         {
-            preConfigure.Configure(c);
+            context.Services.ExecutePreConfiguredActions(c);
         });
 
         return base.OnPostConfigureAsync(context);

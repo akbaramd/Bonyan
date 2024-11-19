@@ -4,8 +4,10 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Bonyan.Modularity;
 using Bonyan.Modularity.Abstractions;
+using Bonyan.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
+using Volo.Abp.Modularity;
 using Xunit;
 
 namespace Bonyan.Tests.Modularity
@@ -111,8 +113,8 @@ namespace Bonyan.Tests.Modularity
 
             // Assert
             var serviceProvider = services.BuildServiceProvider();
-            Assert.NotNull(serviceProvider.GetService<IBonModuleAccessor>());
-            Assert.NotNull(serviceProvider.GetService<IModuleLoader>());
+            Assert.NotNull(serviceProvider.GetService<IBonModuleLoader>());
+            Assert.NotNull(serviceProvider.GetService<IBonModuleContainer>());
             Assert.NotNull(serviceProvider.GetService<IBonModuleConfigurator>());
             Assert.NotNull(serviceProvider.GetService<IBonModuleInitializer>());
             Assert.NotNull(serviceProvider.GetService<IBonModularityApplication>());
@@ -122,12 +124,12 @@ namespace Bonyan.Tests.Modularity
         private void ReplaceModuleInstance(BonModularityApplication<TestModule> application, IBonModule moduleInstance)
         {
             var bonModuleAccessorField = typeof(BonModularityApplication<TestModule>)
-                .GetField("_bonModuleAccessor", BindingFlags.NonPublic | BindingFlags.Instance);
-            var bonModuleAccessor = (IBonModuleAccessor)bonModuleAccessorField.GetValue(application);
+                .GetField("_bonModuleLoader", BindingFlags.NonPublic | BindingFlags.Instance);
+            var bonModuleAccessor = (IBonModuleLoader)bonModuleAccessorField.GetValue(application);
 
-            var modulesField = typeof(BonModuleAccessor)
+            var modulesField = typeof(BonModuleLoader)
                 .GetField("_modules", BindingFlags.NonPublic | BindingFlags.Instance);
-            var modules = (Dictionary<Type, ModuleInfo>)modulesField.GetValue(bonModuleAccessor);
+            var modules = (Dictionary<Type, BonModuleDescriptor>)modulesField.GetValue(bonModuleAccessor);
 
             var moduleType = moduleInstance.GetType();
             if (modules.ContainsKey(moduleType))
@@ -136,7 +138,7 @@ namespace Bonyan.Tests.Modularity
             }
             else
             {
-                var moduleInfo = new ModuleInfo(moduleType) { Instance = moduleInstance };
+                var moduleInfo = new BonModuleDescriptor(moduleType,moduleInstance,false);
                 modules[moduleType] = moduleInfo;
             }
         }

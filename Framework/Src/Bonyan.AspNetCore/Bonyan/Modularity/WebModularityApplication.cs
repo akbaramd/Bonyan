@@ -1,4 +1,5 @@
 using Bonyan.Modularity.Abstractions;
+using Bonyan.Plugins;
 
 namespace Bonyan.Modularity;
 
@@ -13,7 +14,9 @@ public class WebBonModularityApplication<TModule> : BonModularityApplication<TMo
     /// Initializes a new instance of the <see cref="WebBonModularityApplication{TModule}"/> class.
     /// </summary>
     /// <param name="serviceCollection">Service collection to register dependencies.</param>
-    public WebBonModularityApplication(IServiceCollection serviceCollection) : base(serviceCollection)
+    /// <param name="plugInSource"></param>
+    public WebBonModularityApplication(IServiceCollection serviceCollection, Action<AbpApplicationCreationOptions>? creationContext = null) :
+        base(serviceCollection, creationContext)
     {
     }
 

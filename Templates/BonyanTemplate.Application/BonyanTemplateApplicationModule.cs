@@ -45,15 +45,5 @@ namespace BonyanTemplate.Application
         }
         
 
-        public override async Task OnPostInitializeAsync(BonInitializedContext context)
-        {
-            var bookservice = context.RequireService<IAuthorAppService>();
-            var res = await bookservice.CreateAsync(new AuthorDto()
-            {
-                Id = AuthorId.NewId(),
-                Title = "Test"
-            });
-            await base.OnPostInitializeAsync(context);
-        }
     }
 }
