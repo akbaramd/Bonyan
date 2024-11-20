@@ -12,6 +12,7 @@ public interface IBonUserManager<TUser> : IBonDomainService where TUser : IBonUs
     // Core CRUD operations
     Task<BonDomainResult> CreateAsync(TUser entity);
     Task<BonDomainResult> UpdateAsync(TUser entity);
+    Task<BonDomainResult<TUser>> FindByIdAsync(BonUserId id);
     Task<BonDomainResult<TUser>> FindByUserNameAsync(string userName);
     Task<BonDomainResult<TUser>> FindByPhoneNumberAsync(string phoneNumber);
     Task<BonDomainResult<TUser>> FindByPhoneNumberAsync(BonUserPhoneNumber phoneNumber);

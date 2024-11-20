@@ -23,13 +23,14 @@ public class BonUserManager<TUser> : BonDomainService, IBonUserManager<TUser> wh
                 return BonDomainResult.Failure($"User with username {entity.UserName} already exists.");
             }
 
+            entity.Id = BonUserId.NewId();
             await UserRepository.AddAsync(entity, true);
             return BonDomainResult.Success();
         }
         catch (Exception e)
         {
             Logger.LogError(e, "Error creating user.");
-            return BonDomainResult.Failure("Error creating user.");
+            return BonDomainResult.Failure(e.Message);
         }
     }
 
@@ -47,7 +48,25 @@ public class BonUserManager<TUser> : BonDomainService, IBonUserManager<TUser> wh
             return BonDomainResult.Failure("Error updating user.");
         }
     }
+    // Find user by username
+    public async Task<BonDomainResult<TUser>> FindByIdAsync(BonUserId id)
+    {
+        try
+        {
+            var user = await UserRepository.FindOneAsync(x => x.Id == id);
+            if (user == null)
+            {
+                return BonDomainResult<TUser>.Failure($"User with username {id} not found.");
+            }
 
+            return BonDomainResult<TUser>.Success(user);
+        }
+        catch (Exception e)
+        {
+            Logger.LogError(e, "Error finding user by username.");
+            return BonDomainResult<TUser>.Failure("Error finding user by username.");
+        }
+    }
     // Find user by username
     public async Task<BonDomainResult<TUser>> FindByUserNameAsync(string userName)
     {

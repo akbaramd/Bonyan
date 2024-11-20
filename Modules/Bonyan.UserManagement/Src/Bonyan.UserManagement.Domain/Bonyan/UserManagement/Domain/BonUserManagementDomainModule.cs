@@ -18,8 +18,7 @@ public class BonUserManagementDomainModule<TUser> : Modularity.Abstractions.BonM
     public override Task OnConfigureAsync(BonConfigurationContext context)
     {
         context.Services.AddTransient<BonUserManager<TUser>>();
-        context.Services.AddTransient<IBonUserManager<TUser>>(sp => 
-            sp.GetRequiredService<BonUserManager<TUser>>());
+        context.Services.AddTransient<IBonUserManager<TUser>,BonUserManager<TUser>>();
 
         return base.OnConfigureAsync(context);
     }

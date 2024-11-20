@@ -120,7 +120,7 @@ public class BonIdentityUserManager<TUser> : BonUserManager<TUser>, IBonIdentity
         catch (Exception e)
         {
             Logger.LogError(e, "Error creating user.");
-            return BonDomainResult.Failure("Error creating user.");
+            return BonDomainResult.Failure(e.Message);
         }
     }
 
@@ -142,5 +142,71 @@ public class BonIdentityUserManager<TUser> : BonUserManager<TUser>, IBonIdentity
     {
         entity.SetPassword(newPassword);
         return await UpdateAsync(entity);
+    }
+    
+    // Add a token to the user
+    public async Task<BonDomainResult> SetTokenAsync(TUser user, string tokenType, string tokenValue, DateTime? expiration = null)
+    {
+        if (user == null) throw new ArgumentNullException(nameof(user));
+        if (string.IsNullOrWhiteSpace(tokenType)) throw new ArgumentException("Token type is required.", nameof(tokenType));
+        if (string.IsNullOrWhiteSpace(tokenValue)) throw new ArgumentException("Token value is required.", nameof(tokenValue));
+
+        try
+        {
+            user.SetToken(tokenType, tokenValue, expiration);
+            await UpdateAsync(user);
+            return BonDomainResult.Success();
+        }
+        catch (Exception e)
+        {
+            Logger.LogError(e, "Error adding token to user.");
+            return BonDomainResult.Failure("Error adding token to user.");
+        }
+    }
+
+    // Remove a token from the user
+    public async Task<BonDomainResult> RemoveTokenAsync(TUser user, string tokenType)
+    {
+        if (user == null) throw new ArgumentNullException(nameof(user));
+        if (string.IsNullOrWhiteSpace(tokenType)) throw new ArgumentException("Token type is required.", nameof(tokenType));
+
+        try
+        {
+            user.RemoveToken(tokenType);
+            await UpdateAsync(user);
+            return BonDomainResult.Success();
+        }
+        catch (Exception e)
+        {
+            Logger.LogError(e, "Error removing token from user.");
+            return BonDomainResult.Failure("Error removing token from user.");
+        }
+    }
+
+    // Update a token for the user
+
+
+    // Find a user by token
+    public async Task<BonDomainResult<TUser>> FindByTokenAsync(string tokenType, string tokenValue)
+    {
+        if (string.IsNullOrWhiteSpace(tokenType)) throw new ArgumentException("Token type is required.", nameof(tokenType));
+        if (string.IsNullOrWhiteSpace(tokenValue)) throw new ArgumentException("Token value is required.", nameof(tokenValue));
+
+        try
+        {
+            // Search directly through user repository by checking token
+            var user = await UserRepository.FindOneAsync(u => u.Tokens.Any(t => t.Type == tokenType && t.Value == tokenValue));
+            if (user == null)
+            {
+                return BonDomainResult<TUser>.Failure($"No user found with the specified token.");
+            }
+
+            return BonDomainResult<TUser>.Success(user);
+        }
+        catch (Exception e)
+        {
+            Logger.LogError(e, "Error finding user by token.");
+            return BonDomainResult<TUser>.Failure("Error finding user by token.");
+        }
     }
 }

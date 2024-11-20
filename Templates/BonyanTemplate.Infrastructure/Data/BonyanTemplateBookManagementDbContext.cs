@@ -2,6 +2,7 @@
 using Bonyan.IdentityManagement.Domain;
 using Bonyan.IdentityManagement.Domain.Permissions;
 using Bonyan.IdentityManagement.Domain.Roles;
+using Bonyan.IdentityManagement.Domain.Users;
 using Bonyan.IdentityManagement.EntityFrameworkCore;
 using Bonyan.TenantManagement.Domain;
 using Bonyan.TenantManagement.EntityFrameworkCore;
@@ -34,6 +35,7 @@ public class TemplateBookManagementBonDbContext : BonDbContext<TemplateBookManag
     public DbSet<Authors> Authors { get; set; }
     public DbSet<BonTenant> Tenants { get; set; }
     public DbSet<User> Users { get; set; }
+    public DbSet<BonIdentityUserToken> UserTokens { get; set; }
     public DbSet<BonIdentityRole> Roles { get; set; }
     public DbSet<BonIdentityPermission> Permissions { get; set; }
 }

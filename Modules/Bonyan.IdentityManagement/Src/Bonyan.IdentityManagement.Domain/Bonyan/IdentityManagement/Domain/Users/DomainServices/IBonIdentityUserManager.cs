@@ -13,5 +13,12 @@ public interface IBonIdentityUserManager<TIdentityUser> : IBonUserManager<TIdent
     Task<BonDomainResult> CreateAsync(TIdentityUser entity, string password);
     Task<BonDomainResult> ChangePasswordAsync(TIdentityUser entity, string currentPassword, string newPassword);
     Task<BonDomainResult> ResetPasswordAsync(TIdentityUser entity, string newPassword);
+    
+    
+    // Token-related behaviors
+    Task<BonDomainResult> SetTokenAsync(TIdentityUser user, string tokenType, string tokenValue, DateTime? expiration = null);
+    Task<BonDomainResult> RemoveTokenAsync(TIdentityUser user, string tokenType);
+    Task<BonDomainResult<TIdentityUser>> FindByTokenAsync(string tokenType, string tokenValue);
+
 }
 

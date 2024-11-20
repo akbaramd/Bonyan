@@ -1,79 +1,36 @@
-﻿using System.Text;
-using Bonyan.IdentityManagement;
+﻿using System;
+using System.Threading.Tasks;
+using Bonyan.AspNetCore.Authentication;
+using Bonyan.AspNetCore.Authentication.Options;
 using Bonyan.Modularity;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace Bonyan.AspNetCore.Authentication;
-
-public class BonAspNetCoreAuthenticationModule : BonWebModule
+namespace Bonyan.AspNetCore.Authentication
 {
-    public BonAspNetCoreAuthenticationModule()
+    public class BonAuthenticationModule : BonWebModule
     {
-        DependOn<BonAspNetCoreModule>();
-    }
-    
-    public override Task OnConfigureAsync(BonConfigurationContext context)
-    {
-        return Task.CompletedTask;
-    }
-
-    public override Task OnPostConfigureAsync(BonConfigurationContext context)
-    {
-        var jwtOptions = context.GetOption<BonJwtOptions>();
-        var cookieOptions = context.GetOption<BonCookieOptions>();
-
-        var services = context.Services;
-
-        var authBuilder = services.AddAuthentication();
-
-        // Configure JWT authentication if enabled
-        if (jwtOptions?.Enabled == true && !string.IsNullOrWhiteSpace(jwtOptions.SecretKey))
+        public BonAuthenticationModule()
         {
-            authBuilder.AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
-            {
-                options.RequireHttpsMetadata = jwtOptions.RequireHttpsMetadata;
-                options.SaveToken = jwtOptions.SaveToken;
-
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuer = !string.IsNullOrEmpty(jwtOptions.Issuer),
-                    ValidateAudience = !string.IsNullOrEmpty(jwtOptions.Audience),
-                    ValidateLifetime = true,
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.SecretKey)),
-                    ValidIssuer = jwtOptions.Issuer,
-                    ValidAudience = jwtOptions.Audience
-                };
-            });
+            DependOn<BonAspNetCoreModule>();
         }
 
-        // Configure cookie authentication
-        if (cookieOptions != null)
+        public override Task OnPostConfigureAsync(BonConfigurationContext context)
         {
-            authBuilder.AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
-            {
-                options.LoginPath = cookieOptions.LoginPath;
-                options.LogoutPath = cookieOptions.LogoutPath;
-                options.AccessDeniedPath = cookieOptions.AccessDeniedPath;
-
-                options.SlidingExpiration = cookieOptions.SlidingExpiration;
-                options.ExpireTimeSpan = TimeSpan.FromMinutes(cookieOptions.ExpirationInMinutes);
-                options.Cookie.Name = cookieOptions.CookieName;
-                options.Cookie.SecurePolicy = cookieOptions.CookieSecure
-                    ? CookieSecurePolicy.Always
-                    : CookieSecurePolicy.None;
-            });
+            ConfigureAuthentication(context);
+            return base.OnPostConfigureAsync(context);
         }
 
-        return base.OnPostConfigureAsync(context);
-    }
+        private void ConfigureAuthentication(BonConfigurationContext context)
+        {
+            var options = GetPreConfigure<BonAuthenticationConfiguration>();
+            context.AddAuthentication(manager => { options.Configure(manager); });
+        }
 
-    public override Task OnApplicationAsync(BonWebApplicationContext context)
-    {
-        context.Application.UseAuthentication();
-        context.Application.UseAuthorization();
-        return base.OnApplicationAsync(context);
+        public override Task OnApplicationAsync(BonWebApplicationContext context)
+        {
+            context.Application.UseAuthentication();
+            context.Application.UseAuthorization();
+            return base.OnApplicationAsync(context);
+        }
     }
 }

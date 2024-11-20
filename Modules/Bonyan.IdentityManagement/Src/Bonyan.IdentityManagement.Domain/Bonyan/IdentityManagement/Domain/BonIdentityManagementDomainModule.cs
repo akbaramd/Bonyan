@@ -23,8 +23,8 @@ public class BonIdentityManagementDomainModule<TUser> : Modularity.Abstractions.
     {
         context.Services.AddTransient<BonIdentityRoleManager>();
         context.Services.AddTransient<BonIdentityUserManager<TUser>>();
-        context.Services.AddTransient<IBonIdentityRoleManager>(s=>s.GetRequiredService<BonIdentityRoleManager>());
-        context.Services.AddTransient<IBonIdentityUserManager<TUser>>(s=>s.GetRequiredService<BonIdentityUserManager<TUser>>());
+        context.Services.AddTransient<IBonIdentityRoleManager,BonIdentityRoleManager>();
+        context.Services.AddTransient<IBonIdentityUserManager<TUser>,BonIdentityUserManager<TUser>>();
    
         return base.OnConfigureAsync(context);
     }

@@ -20,7 +20,15 @@ public static class BonIdentityManagementEntityTypeBuilderExtensions
             builder.ConfigureByConvention();
             builder.ConfigurePassword();
         });
-
+        // Configure BonIdentityRole
+        modelBuilder.Entity<BonIdentityUserToken>(builder =>
+        {
+            builder.ConfigureByConvention();
+            builder.ToTable("UserTokens"); // Name the table
+            builder.HasOne<TUser>()
+                .WithMany(x => x.Tokens)
+                .HasForeignKey(x => x.UserId);
+        });
         // Configure BonIdentityRole
         modelBuilder.Entity<BonIdentityRole>(builder =>
         {

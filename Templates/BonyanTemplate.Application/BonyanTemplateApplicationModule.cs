@@ -1,11 +1,14 @@
 using Bonyan.AutoMapper;
 using Bonyan.IdentityManagement.Application;
+using Bonyan.IdentityManagement.Application.Dto;
 using Bonyan.IdentityManagement.Domain;
 using Bonyan.Messaging;
 using Bonyan.Messaging.RabbitMQ;
 using Bonyan.Modularity;
 using Bonyan.Modularity.Abstractions;
 using Bonyan.TenantManagement.Application;
+using Bonyan.UserManagement.Domain.Users.Enumerations;
+using Bonyan.UserManagement.Domain.Users.ValueObjects;
 using Bonyan.Workers;
 using Bonyan.Workers.Hangfire;
 using BonyanTemplate.Application.Authors;
@@ -47,7 +50,21 @@ namespace BonyanTemplate.Application
 
             return base.OnConfigureAsync(context);
         }
-        
 
+
+        public override async Task OnInitializeAsync(BonInitializedContext context)
+        {
+            var service = context.RequireService<IBonIdentityAuthService>();
+            var res = await service.RegisterAsync(new BonIdentityUserRegistererDto()
+            {
+                Email = new BonUserEmail("akbarsafari00@gmail.com"),
+                Password = "Aa@13567975",
+                Status = UserStatus.Active,
+                PhoneNumber = new BonUserPhoneNumber("09371770774"),
+                UserName = "akbarsfari00"
+            });
+            var login = await service.JwtBearerSignInAsync("akbarsfari00", "Aa@13567975");
+            await base.OnInitializeAsync(context);
+        }
     }
 }

@@ -12,6 +12,7 @@ namespace Bonyan.IdentityManagement.EntityFrameworkCore;
 public interface IBonIdentityManagementDbContext<TUser> : IBonUserManagementDbContext<TUser>
     where TUser : class, IBonIdentityUser 
 {
+    public DbSet<BonIdentityUserToken> UserTokens { get; set; }
     public DbSet<BonIdentityRole> Roles { get; set; }
     public DbSet<BonIdentityPermission> Permissions { get; set; }
 }

@@ -62,7 +62,7 @@ namespace Bonyan.Layer.Domain.ValueObjects
     /// </summary>
     public abstract class BonBusinessId<T> : BonBusinessId<T, Guid> where T : BonBusinessId<T>, new()
     {
-        public BonBusinessId() : base(Guid.Empty)
+        public BonBusinessId() : base(Guid.NewGuid())
         {
             // Default constructor prevents direct instantiation without valid GUID
         }

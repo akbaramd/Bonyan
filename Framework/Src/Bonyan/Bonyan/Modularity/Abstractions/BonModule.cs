@@ -2,9 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Threading.Tasks;
+using Bonyan.DependencyInjection;
 using Microsoft;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 
 namespace Bonyan.Modularity.Abstractions
 {
@@ -142,12 +144,24 @@ namespace Bonyan.Modularity.Abstractions
             Services.PostConfigure(configureOptions);
         }
 
+        protected TOptions? GetOption<TOptions>()
+            where TOptions : class
+        {
+            return Services.GetService<IOptions<TOptions>>()?.Value;
+        }
+
+   
+        protected BonPreConfigureActionList<TOptions> GetPreConfigure<TOptions>()
+            where TOptions : class
+        {
+            return Services.GetPreConfigureActions<TOptions>();
+        }
+
         protected void PostConfigureAll<TOptions>(Action<TOptions> configureOptions)
             where TOptions : class
         {
             Services.PostConfigureAll(configureOptions);
         }
-
         /// <summary>
         /// Disposes of the resources used by this module.
         /// </summary>

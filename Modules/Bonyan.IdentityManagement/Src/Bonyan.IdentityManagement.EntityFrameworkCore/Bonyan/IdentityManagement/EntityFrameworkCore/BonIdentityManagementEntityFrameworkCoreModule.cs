@@ -25,8 +25,7 @@ public class BonIdentityManagementEntityFrameworkCoreModule<TUser> : BonModule
 
     public override Task OnConfigureAsync(BonConfigurationContext context)
     {
-        context.AddBonDbContext<BonIdentityManagementDbContext<TUser>>(
-            c => { c.AddRepository<TUser, BonEfCoreUserRepository<TUser>>(); });
+       
 
         context.Services
             .AddTransient<IBonIdentityRoleRepository, BonIdentityEfCoreRoleRepository<TUser>>();
@@ -44,7 +43,7 @@ public class BonIdentityManagementEntityFrameworkCoreModule<TUser> : BonModule
             .AddTransient<IBonIdentityUserReadOnlyRepository<TUser>, BonEfCoreIdentityUserRepository<TUser>>();
 
         context.Services
-            .AddTransient<IBonIdentityUserRolesRepository, BonEfCoreUserRolesRepository<TUser>>();
+            .AddTransient<IBonIdentityUserRolesRepository, BonEfCoreIdentityUserRolesRepository<TUser>>();
 
         return base.OnConfigureAsync(context);
     }

@@ -1,4 +1,5 @@
 using Bonyan.AspNetCore.Authentication;
+using Bonyan.AutoMapper;
 using Bonyan.IdentityManagement.Domain;
 using Bonyan.IdentityManagement.Domain.Users;
 using Bonyan.Modularity;
@@ -13,13 +14,18 @@ public class BonIdentityManagementApplicationModule<TUser> : BonModule where TUs
     public BonIdentityManagementApplicationModule()
     {
         DependOn<BonUserManagementApplicationModule<TUser>>();
-        DependOn<BonIdentityManagementDomainModule<TUser>>();
-        DependOn<BonAspNetCoreAuthenticationModule>();
+        DependOn<BonIdentityManagementModule<TUser>>();
     }
 
     public override Task OnConfigureAsync(BonConfigurationContext context)
     {
-        context.Services.AddTransient<IBonAuthService, BonAuthService<TUser>>();
+        context.Services.AddTransient<IBonIdentityAuthService, BonIdentityAuthService<TUser>>();
+        
+        Configure<BonAutoMapperOptions>(c =>
+        {
+            c.AddProfile<BonUserMapper<TUser>>();
+        });
+        
         return base.OnConfigureAsync(context);
     }
 }

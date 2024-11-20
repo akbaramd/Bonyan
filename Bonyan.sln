@@ -107,6 +107,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.AspNetCore.Mvc", "Fr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.AspNetCore.Authentication", "Framework\Src\Bonyan.AspNetCore.Authentication\Bonyan.AspNetCore.Authentication.csproj", "{257670E8-C6DB-4D25-BFE3-C5BC1D096F29}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.IdentityManagement", "Modules\Bonyan.IdentityManagement\Src\Bonyan.IdentityManagement\Bonyan.IdentityManagement.csproj", "{12E29FD1-2409-4014-B139-5C7A387EE4D5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -273,6 +275,10 @@ Global
 		{257670E8-C6DB-4D25-BFE3-C5BC1D096F29}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{257670E8-C6DB-4D25-BFE3-C5BC1D096F29}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{257670E8-C6DB-4D25-BFE3-C5BC1D096F29}.Release|Any CPU.Build.0 = Release|Any CPU
+		{12E29FD1-2409-4014-B139-5C7A387EE4D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{12E29FD1-2409-4014-B139-5C7A387EE4D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{12E29FD1-2409-4014-B139-5C7A387EE4D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{12E29FD1-2409-4014-B139-5C7A387EE4D5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -327,6 +333,7 @@ Global
 		{2CB442EC-D509-4645-8765-16ECFED0DB0C} = {D3289479-B493-46C2-92D3-C496016F28B2}
 		{F97C91B8-9AE4-446E-816B-18B583C57239} = {31BFDED6-5439-4D9A-ABBA-882C07DE7024}
 		{257670E8-C6DB-4D25-BFE3-C5BC1D096F29} = {31BFDED6-5439-4D9A-ABBA-882C07DE7024}
+		{12E29FD1-2409-4014-B139-5C7A387EE4D5} = {238A4AD4-E78A-46B9-822E-78B71A2D9150}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CACE9943-7714-471F-BCCD-CC6CA1DA43C5}

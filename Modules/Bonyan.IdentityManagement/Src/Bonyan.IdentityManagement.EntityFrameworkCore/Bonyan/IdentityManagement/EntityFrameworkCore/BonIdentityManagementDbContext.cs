@@ -18,6 +18,7 @@ public class BonIdentityManagementDbContext<TUser> :
     }
 
     public DbSet<TUser> Users { get; set; }
+    public DbSet<BonIdentityUserToken> UserTokens { get; set; }
     public DbSet<BonIdentityRole> Roles { get; set; }
     public DbSet<BonIdentityPermission> Permissions { get; set; }
 

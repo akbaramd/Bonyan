@@ -1,3 +1,5 @@
+using Bonyan.AspNetCore.Authentication;
+using Bonyan.AspNetCore.Authentication.Options;
 using Bonyan.AspNetCore.Components;
 using Bonyan.AspNetCore.Mvc;
 using Bonyan.IdentityManagement;
@@ -22,12 +24,14 @@ public class BonyanTemplateWebApiModule : BonWebModule
         context.Services.AddEndpointsApiExplorer();
         context.Services.AddSwaggerGen();
 
-        context.Services.Configure<BonJwtOptions>(c =>
+        PreConfigure<BonAuthenticationConfiguration>(c =>
         {
-            c.Enabled = true;
-            c.SecretKey = "sss";
+            c.ConfigureJwtAuthentication(x =>
+            {
+                x.Enabled = true;
+                x.SecretKey = "AS2Da2s2dK4A5SD8HaAiSD9YAaS2DU285472KHs2d6734haS35";
+            });
         });
-        
         return base.OnConfigureAsync(context);
     }
 
@@ -42,7 +46,7 @@ public class BonyanTemplateWebApiModule : BonWebModule
 
         context.Application.UseHttpsRedirection();
 
-        
+
         return base.OnPostApplicationAsync(context);
     }
 }

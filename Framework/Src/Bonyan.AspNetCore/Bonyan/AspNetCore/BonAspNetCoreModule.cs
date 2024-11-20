@@ -110,7 +110,7 @@ public class BonAspNetCoreModule : BonWebModule
     /// <param name="context">The configuration context for services.</param>
     private void ConfigureCoreServices(BonConfigurationContext context)
     {
-        context.Services.AddAuthorization();
+      
         context.Services.AddHttpContextAccessor();
         context.Services.AddTransient<IBonCurrentPrincipalAccessor, HttpContextBonCurrentPrincipalAccessor>();
         // Ensures IApplicationBuilder is accessible throughout the application's service configuration lifecycle
