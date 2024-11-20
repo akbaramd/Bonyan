@@ -1,4 +1,6 @@
 using Bonyan.AutoMapper;
+using Bonyan.IdentityManagement.Application;
+using Bonyan.IdentityManagement.Domain;
 using Bonyan.Messaging;
 using Bonyan.Messaging.RabbitMQ;
 using Bonyan.Modularity;
@@ -13,6 +15,7 @@ using BonyanTemplate.Application.Books.Dtos;
 using BonyanTemplate.Application.Books.Jobs;
 using BonyanTemplate.Domain;
 using BonyanTemplate.Domain.Authors;
+using BonyanTemplate.Domain.Users;
 using Hangfire;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -24,6 +27,7 @@ namespace BonyanTemplate.Application
         public BonyanTemplateApplicationModule()
         {
             DependOn<BonTenantManagementApplicationModule>();
+            DependOn<BonIdentityManagementApplicationModule<User>>();
             DependOn<BonyanTemplateDomainModule>();
             DependOn<BonWorkersHangfireModule>();
         }

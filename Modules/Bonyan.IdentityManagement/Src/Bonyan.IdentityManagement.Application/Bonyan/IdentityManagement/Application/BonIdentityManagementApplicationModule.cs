@@ -1,3 +1,4 @@
+using Bonyan.AspNetCore.Authentication;
 using Bonyan.IdentityManagement.Domain;
 using Bonyan.IdentityManagement.Domain.Users;
 using Bonyan.Modularity;
@@ -13,6 +14,7 @@ public class BonIdentityManagementApplicationModule<TUser> : BonModule where TUs
     {
         DependOn<BonUserManagementApplicationModule<TUser>>();
         DependOn<BonIdentityManagementDomainModule<TUser>>();
+        DependOn<BonAspNetCoreAuthenticationModule>();
     }
 
     public override Task OnConfigureAsync(BonConfigurationContext context)

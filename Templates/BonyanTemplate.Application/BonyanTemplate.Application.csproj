@@ -12,6 +12,7 @@
         <ProjectReference Include="..\..\Framework\Src\Bonyan.Worker.Abstraction\Bonyan.Worker.Abstraction.csproj" />
         <ProjectReference Include="..\..\Framework\Src\Bonyan.AspNetCore\Bonyan.AspNetCore.csproj"/>
         <ProjectReference Include="..\..\Framework\Src\Bonyan.AutoMapper\Bonyan.AutoMapper.csproj"/>
+        <ProjectReference Include="..\..\Modules\Bonyan.IdentityManagement\Src\Bonyan.IdentityManagement.Application\Bonyan.IdentityManagement.Application.csproj" />
         <ProjectReference Include="..\..\Modules\Bonyan.TenantManagement\Src\Bonyan.TenantManagement.Application\Bonyan.TenantManagement.Application.csproj" />
         <ProjectReference Include="..\BonyanTemplate.Domain\BonyanTemplate.Domain.csproj"/>
     </ItemGroup>

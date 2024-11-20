@@ -10,6 +10,7 @@
 
     <Import Project="..\..\..\..\module-package.props"/>
     <ItemGroup>
+      <ProjectReference Include="..\..\..\..\Framework\Src\Bonyan.AspNetCore.Authentication\Bonyan.AspNetCore.Authentication.csproj" />
       <ProjectReference Include="..\..\..\Bonyan.UserManagement\Src\Bonyan.UserManagement.Application\Bonyan.UserManagement.Application.csproj" />
       <ProjectReference Include="..\Bonyan.IdentityManagement.Domain\Bonyan.IdentityManagement.Domain.csproj" />
     </ItemGroup>
@@ -17,6 +18,7 @@
     <ItemGroup>
       <PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="2.2.0">
       </PackageReference>
+      <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.1.2" />
     </ItemGroup>
 
 

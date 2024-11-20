@@ -7,7 +7,6 @@ using Bonyan.Modularity.Abstractions;
 using Bonyan.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
-using Volo.Abp.Modularity;
 using Xunit;
 
 namespace Bonyan.Tests.Modularity

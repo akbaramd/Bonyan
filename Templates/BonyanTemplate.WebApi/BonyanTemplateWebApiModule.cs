@@ -15,13 +15,19 @@ public class BonyanTemplateWebApiModule : BonWebModule
         DependOn<BonyanTemplateApplicationModule>();
         DependOn<BonaynTempalteInfrastructureModule>();
         DependOn<BonAspNetCoreMvcModule>();
-        DependOn<BonIdentityManagementModule>();
     }
 
     public override Task OnConfigureAsync(BonConfigurationContext context)
     {
         context.Services.AddEndpointsApiExplorer();
         context.Services.AddSwaggerGen();
+
+        context.Services.Configure<BonJwtOptions>(c =>
+        {
+            c.Enabled = true;
+            c.SecretKey = "sss";
+        });
+        
         return base.OnConfigureAsync(context);
     }
 
