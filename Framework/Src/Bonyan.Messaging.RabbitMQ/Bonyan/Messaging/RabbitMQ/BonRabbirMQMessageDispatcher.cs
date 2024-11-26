@@ -10,7 +10,7 @@ using RabbitMQ.Client;
 
 namespace Bonyan.Messaging.RabbitMQ
 {
-    public class BonRabbitMQMessageDispatcher : IBonMessageDispatcher, IDisposable
+    public class BonRabbitMqMessageBus : IBonMessageBus, IDisposable
     {
         private readonly IConnection _connection;
         private readonly IModel _channel;
@@ -18,7 +18,7 @@ namespace Bonyan.Messaging.RabbitMQ
         private readonly string _serviceName;
         private readonly string _exchangeName;
 
-        public BonRabbitMQMessageDispatcher(
+        public BonRabbitMqMessageBus(
             RabbitMQOptions options,
             IBonObjectAccessor<BonServiceOptions> serviceOptions)
         {

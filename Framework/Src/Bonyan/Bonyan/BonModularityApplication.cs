@@ -42,6 +42,7 @@ public class BonModularityApplication<TModule> : IBonModularityApplication where
 
         // Register core services
         _serviceCollection.AddObjectAccessor(_bonModuleLoader);
+        _serviceCollection.AddObjectAccessor<IAssemblyFinder>(assemblyFinder);
 
         _serviceCollection.TryAddSingleton(_bonModuleLoader);
         _serviceCollection.TryAddSingleton<IBonModuleContainer>(this);

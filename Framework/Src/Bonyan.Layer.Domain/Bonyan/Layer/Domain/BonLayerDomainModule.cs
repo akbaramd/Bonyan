@@ -9,7 +9,7 @@ namespace Bonyan.Layer.Domain
     {
         public BonLayerDomainModule()
         {
-            DependOn<BonMessagingModule>();
+            DependOn<BonMediatorModule>();
         }
 
 

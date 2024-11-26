@@ -1,0 +1,16 @@
+﻿@namespace Bonyan.Ui.Blazimum.Components.Assets
+@inherits ComponentBase
+
+@code {
+    [Parameter] public bool IsMinified { get; set; } = false;
+
+    private string FooterJsFile => IsMinified
+        ? "_content/Bonyan.Ui.Blazimum/js/blazimum.umd.min.js"
+        : "_content/Bonyan.Ui.Blazimum/js/blazimum.umd.js";
+
+}
+
+<!-- Render JS link for the footer -->
+<script src="@FooterJsFile" defer></script>
+
+

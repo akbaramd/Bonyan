@@ -3,11 +3,13 @@ using BonyanTemplate.Domain.Books.DomainEvents;
 
 namespace BonyanTemplate.Domain.Books.Handlers;
 
-public class BookBonDomainHandler : IBonMessageConsumer<BookCreated>
+public class BookBonDomainHandler : IBonEventHandler<BookCreated>
 {
-    public Task ConsumeAsync(BookCreated domainEvent , CancellationToken? cancellationToken )
+ 
+
+    public Task HandleAsync(BookCreated @event, CancellationToken cancellationToken = default)
     {
         Console.WriteLine("BookBonDomainHandler");
-        return Task.CompletedTask;
+        throw new NotImplementedException();
     }
 }

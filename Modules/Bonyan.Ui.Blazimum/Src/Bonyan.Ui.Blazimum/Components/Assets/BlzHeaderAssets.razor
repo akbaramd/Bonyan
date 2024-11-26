@@ -1,0 +1,32 @@
+﻿@namespace Bonyan.Ui.Blazimum.Components.Assets
+@inherits ComponentBase
+
+@code {
+    [Parameter]
+    public bool IsMinified { get; set; } = false;
+
+    [Parameter]
+    public bool IsRtl { get; set; } = false;
+
+    // Define paths for CSS and JS files based on IsMinified and IsRtl
+    private string CssFile => IsMinified 
+        ? (IsRtl ? "_content/Bonyan.Ui.Blazimum/css/blazimum-rtl.min.css" : "_content/Bonyan.Ui.Blazimum/css/blazimum.min.css")
+        : (IsRtl ? "_content/Bonyan.Ui.Blazimum/css/blazimum-rtl.css" : "_content/Bonyan.Ui.Blazimum/css/blazimum.css");
+
+}
+
+<!-- Render CSS and JS links for the header -->
+<link rel="stylesheet" href="@CssFile" />
+<link
+    href="https://fonts.googleapis.com/icon?family=Material+Icons"
+    rel="stylesheet"
+/>
+<!-- Font Awesome Link -->
+<link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css"
+    integrity="sha512-HK5fgLBL+xu6dm/Ii3z4xhlSUyZgTT9tuc/hSrtw6uzJOvgRr2a9jyxxT1ely+B+xFAmJKVSTbpM/CuL7qxO8w=="
+    crossorigin="anonymous"
+/>
+
+<script src="https://unpkg.com/@@material-tailwind/html@latest/scripts/ripple.js"></script>

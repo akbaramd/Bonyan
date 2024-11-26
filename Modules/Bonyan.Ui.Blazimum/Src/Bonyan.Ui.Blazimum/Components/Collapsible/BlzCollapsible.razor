@@ -1,0 +1,39 @@
+﻿@namespace Bonyan.Ui.Blazimum.Components.Collapsible
+@using Microsoft.JSInterop
+@inherits Bonyan.Ui.Blazimum.Bases.BlzBaseComponent
+@inject IJSRuntime JS
+
+<div id="@Id"
+     class="blz-collapsible-content @(IsOpen ? "open" : "closed")"
+     style="@Style">
+    @ChildContent
+</div>
+
+@code {
+    [Parameter] public bool IsOpen { get; set; }
+    [Parameter] public EventCallback<bool> IsOpenChanged { get; set; }
+    [Parameter] public RenderFragment ChildContent { get; set; }
+
+    private bool isInitialized = false;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            // Initialize the component state based on `IsOpen` without animation
+            await JS.InvokeVoidAsync("Blazimum.Collapsible.initialize", Id, IsOpen);
+            isInitialized = true;
+        }
+        else
+        {
+            // Use toggle animation for subsequent state changes
+            await JS.InvokeVoidAsync("Blazimum.Collapsible.toggle", Id, IsOpen);
+        }
+    }
+
+    public async Task Toggle()
+    {
+        IsOpen = !IsOpen;
+        await IsOpenChanged.InvokeAsync(IsOpen);
+    }
+}

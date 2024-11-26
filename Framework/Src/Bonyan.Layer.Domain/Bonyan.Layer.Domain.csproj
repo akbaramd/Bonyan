@@ -12,7 +12,7 @@
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\Bonyan.Layer.Domain.Abstractions\Bonyan.Layer.Domain.Abstractions.csproj" />
-        <ProjectReference Include="..\Bonyan.Messaging\Bonyan.Messaging.csproj" />
+        <ProjectReference Include="..\Bonyan.Mediator\Bonyan.Mediator.csproj" />
         <ProjectReference Include="..\Bonyan.MultiTenant\Bonyan.MultiTenant.csproj"/>
         <ProjectReference Include="..\Bonyan.UnitOfWork\Bonyan.UnitOfWork.csproj"/>
         <ProjectReference Include="..\Bonyan.Validation\Bonyan.Validation.csproj"/>

@@ -1,0 +1,90 @@
+﻿@page "/buttons"
+@using Bonyan.Ui.Blazimum.Bases
+@using Bonyan.Ui.Blazimum.Components.Buttons
+@rendermode InteractiveServer
+
+<PageTitle>Buttons Showcase</PageTitle>
+
+<h1>Buttons Showcase</h1>
+
+<p role="status">Current count: @currentCount</p>
+
+<div class="flex flex-col gap-8">
+    <!-- Filled Buttons -->
+    <section>
+        <h2>Filled Buttons</h2>
+        <div class="flex gap-4">
+            <BlzButton Color="BlzButtonColor.Primary" OnClick="IncrementCount">Primary</BlzButton>
+            <BlzButton Color="BlzButtonColor.Secondary" OnClick="IncrementCount">Secondary</BlzButton>
+            <BlzButton Color="BlzButtonColor.Neutral" OnClick="IncrementCount">Neutral</BlzButton>
+        </div>
+    </section>
+
+    <!-- Gradient Buttons -->
+    <section>
+        <h2>Gradient Buttons</h2>
+        <div class="flex gap-4">
+            <BlzButton Variant="BlzVariant.Gradient" Color="BlzButtonColor.Primary" OnClick="IncrementCount">Primary Gradient</BlzButton>
+            <BlzButton Variant="BlzVariant.Gradient" Color="BlzButtonColor.Secondary" OnClick="IncrementCount">Secondary Gradient</BlzButton>
+            <BlzButton Variant="BlzVariant.Gradient" Color="BlzButtonColor.Neutral" OnClick="IncrementCount">Neutral Gradient</BlzButton>
+        </div>
+    </section>
+
+    <!-- Outlined Buttons -->
+    <section>
+        <h2>Outlined Buttons</h2>
+        <div class="flex gap-4">
+            <BlzButton Variant="BlzVariant.Outlined" Color="BlzButtonColor.Primary" OnClick="IncrementCount">Primary Outlined</BlzButton>
+            <BlzButton Variant="BlzVariant.Outlined" Color="BlzButtonColor.Secondary" OnClick="IncrementCount">Secondary Outlined</BlzButton>
+            <BlzButton Variant="BlzVariant.Outlined" Color="BlzButtonColor.Neutral" OnClick="IncrementCount">Neutral Outlined</BlzButton>
+        </div>
+    </section>
+
+    <!-- Text Buttons -->
+    <section>
+        <h2>Text Buttons</h2>
+        <div class="flex gap-4">
+            <BlzButton Variant="BlzVariant.Text" Color="BlzButtonColor.Primary" OnClick="IncrementCount">Primary Text</BlzButton>
+            <BlzButton Variant="BlzVariant.Text" Color="BlzButtonColor.Secondary" OnClick="IncrementCount">Secondary Text</BlzButton>
+            <BlzButton Variant="BlzVariant.Text" Color="BlzButtonColor.Neutral" OnClick="IncrementCount">Neutral Text</BlzButton>
+        </div>
+    </section>
+
+    <!-- Block-Level Buttons -->
+    <section>
+        <h2>Block-Level Buttons</h2>
+        <div class="flex flex-col gap-4">
+            <BlzButton IsBlock="true" Color="BlzButtonColor.Primary" OnClick="IncrementCount">Primary Block</BlzButton>
+            <BlzButton IsBlock="true" Variant="BlzVariant.Gradient" Color="BlzButtonColor.Secondary" OnClick="IncrementCount">Secondary Block Gradient</BlzButton>
+            <BlzButton IsBlock="true" Variant="BlzVariant.Outlined" Color="BlzButtonColor.Neutral" OnClick="IncrementCount">Neutral Block Outlined</BlzButton>
+        </div>
+    </section>
+
+    <!-- Ripple Effect Buttons -->
+    <section>
+        <h2>Ripple Effect Buttons</h2>
+        <div class="flex gap-4">
+            <BlzButton RippleLight="true" Color="BlzButtonColor.Primary" OnClick="IncrementCount">Ripple On Primary</BlzButton>
+            <BlzButton RippleLight="false" Color="BlzButtonColor.Secondary" OnClick="IncrementCount">Ripple Off Secondary</BlzButton>
+        </div>
+    </section>
+
+    <!-- Size Variations -->
+    <section>
+        <h2>Size Variations</h2>
+        <div class="flex gap-4">
+            <BlzButton Size="BlzButtonSize.Small" Color="BlzButtonColor.Primary" OnClick="IncrementCount">Small Button</BlzButton>
+            <BlzButton Size="BlzButtonSize.Default" Color="BlzButtonColor.Secondary" OnClick="IncrementCount">Default Button</BlzButton>
+            <BlzButton Size="BlzButtonSize.Large" Color="BlzButtonColor.Neutral" OnClick="IncrementCount">Large Button</BlzButton>
+        </div>
+    </section>
+</div>
+
+@code {
+private int currentCount = 0;
+
+private void IncrementCount()
+{
+currentCount++;
+}
+}

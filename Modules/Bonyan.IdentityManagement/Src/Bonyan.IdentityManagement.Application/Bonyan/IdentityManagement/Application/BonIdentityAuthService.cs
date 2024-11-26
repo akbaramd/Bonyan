@@ -1,9 +1,9 @@
-﻿using AutoMapper;
-using System.IdentityModel.Tokens.Jwt;
+﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using System.Text.RegularExpressions;
+using AutoMapper;
 using Bonyan.AspNetCore.Authentication.Options;
-using Bonyan.IdentityManagement;
 using Bonyan.IdentityManagement.Application.Dto;
 using Bonyan.IdentityManagement.Domain.Users;
 using Bonyan.IdentityManagement.Domain.Users.DomainServices;
@@ -13,10 +13,9 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using System.Text.RegularExpressions;
-using Bonyan.IdentityManagement.Application;
+
+namespace Bonyan.IdentityManagement.Application;
 
 public class BonIdentityAuthService<TUser> : BonApplicationService, IBonIdentityAuthService where TUser : class, IBonIdentityUser
 {
@@ -254,54 +253,54 @@ public class BonIdentityAuthService<TUser> : BonApplicationService, IBonIdentity
         }
     }
 
-public async Task<ServiceResult<BonIdentityJwtResultDto>> RefreshTokenAsync(string refreshToken)
-{
-    try
+    public async Task<ServiceResult<BonIdentityJwtResultDto>> RefreshTokenAsync(string refreshToken)
     {
-        // Find the user by refresh token
-        var userResult = await _identityUserManager.FindByTokenAsync("RefreshToken", refreshToken);
-        if (userResult.IsFailure)
+        try
         {
-            _logger.LogWarning("Refresh token is invalid or expired.");
-            return ServiceResult<BonIdentityJwtResultDto>.Failure("Refresh token is invalid or expired.");
+            // Find the user by refresh token
+            var userResult = await _identityUserManager.FindByTokenAsync("RefreshToken", refreshToken);
+            if (userResult.IsFailure)
+            {
+                _logger.LogWarning("Refresh token is invalid or expired.");
+                return ServiceResult<BonIdentityJwtResultDto>.Failure("Refresh token is invalid or expired.");
+            }
+
+            var user = userResult.Value;
+
+            // Validate the refresh token (check if it exists and is not expired)
+            var token = user.Tokens.FirstOrDefault(t => t.Type == "RefreshToken" && t.Value == refreshToken);
+            if (token == null || token.IsExpired())
+            {
+                _logger.LogWarning("Refresh token is invalid or expired.");
+                return ServiceResult<BonIdentityJwtResultDto>.Failure("Refresh token is invalid or expired.");
+            }
+
+            // Generate a new access token
+            var claims = await GenerateClaimsAsync(user);
+            var newAccessToken = GenerateJwtToken(claims);
+
+            // Generate a new refresh token
+            var newRefreshToken = GenerateRefreshToken();
+
+            // Update the refresh token in the user's record
+            user.SetToken("RefreshToken", newRefreshToken, DateTime.UtcNow.AddDays(7));
+            await _identityUserManager.UpdateAsync(user);
+
+            _logger.LogInformation($"Refresh token for user '{user.UserName}' has been successfully updated.");
+
+            return ServiceResult<BonIdentityJwtResultDto>.Success(new BonIdentityJwtResultDto
+            {
+                AccessToken = newAccessToken,
+                RefreshToken = newRefreshToken,
+                Expired = TimeSpan.FromMinutes(_authenticationJwtOptions.ExpirationInMinutes)
+            });
         }
-
-        var user = userResult.Value;
-
-        // Validate the refresh token (check if it exists and is not expired)
-        var token = user.Tokens.FirstOrDefault(t => t.Type == "RefreshToken" && t.Value == refreshToken);
-        if (token == null || token.IsExpired())
+        catch (Exception ex)
         {
-            _logger.LogWarning("Refresh token is invalid or expired.");
-            return ServiceResult<BonIdentityJwtResultDto>.Failure("Refresh token is invalid or expired.");
+            _logger.LogError(ex, "An error occurred while refreshing the token.");
+            return ServiceResult<BonIdentityJwtResultDto>.Failure(ex.Message);
         }
-
-        // Generate a new access token
-        var claims = await GenerateClaimsAsync(user);
-        var newAccessToken = GenerateJwtToken(claims);
-
-        // Generate a new refresh token
-        var newRefreshToken = GenerateRefreshToken();
-
-        // Update the refresh token in the user's record
-        user.SetToken("RefreshToken", newRefreshToken, DateTime.UtcNow.AddDays(7));
-        await _identityUserManager.UpdateAsync(user);
-
-        _logger.LogInformation($"Refresh token for user '{user.UserName}' has been successfully updated.");
-
-        return ServiceResult<BonIdentityJwtResultDto>.Success(new BonIdentityJwtResultDto
-        {
-            AccessToken = newAccessToken,
-            RefreshToken = newRefreshToken,
-            Expired = TimeSpan.FromMinutes(_authenticationJwtOptions.ExpirationInMinutes)
-        });
     }
-    catch (Exception ex)
-    {
-        _logger.LogError(ex, "An error occurred while refreshing the token.");
-        return ServiceResult<BonIdentityJwtResultDto>.Failure(ex.Message);
-    }
-}
 
     #endregion
 

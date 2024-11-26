@@ -4,8 +4,10 @@ using Bonyan.DependencyInjection;
 using Bonyan.EntityFrameworkCore.Abstractions;
 using Bonyan.Layer.Domain.Aggregate.Abstractions;
 using Bonyan.Layer.Domain.Audit.Abstractions;
+using Bonyan.Layer.Domain.DomainEvent.Abstractions;
 using Bonyan.Layer.Domain.Entity;
 using Bonyan.Messaging.Abstractions;
+using Bonyan.Messaging.Abstractions.Mediators;
 using Bonyan.MultiTenant;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
@@ -27,7 +29,7 @@ public class BonDbContext<TDbContext> : DbContext , IBonDbContext<TDbContext> wh
   
   public IBonCurrentTenant? CurrentTenant => ServiceProvider?.GetService<IBonCurrentTenant>();
   private IOptions<BonMultiTenancyOptions>? TenancyOptions => ServiceProvider?.GetService<IOptions<BonMultiTenancyOptions>>();
-  private IBonMessageDispatcher? DomainEventDispatcher => ServiceProvider?.GetService<IBonMessageDispatcher>();
+  private IBonDomainEventDispatcher? DomainEventDispatcher => ServiceProvider?.GetService<IBonDomainEventDispatcher>();
   protected virtual Guid? CurrentTenantId => CurrentTenant?.Id;
 
 
@@ -88,7 +90,7 @@ public class BonDbContext<TDbContext> : DbContext , IBonDbContext<TDbContext> wh
       
       foreach (var @event in agge.DomainEvents)
       {
-        await DomainEventDispatcher.PublishAsync(@event, cancellationToken);
+        await DomainEventDispatcher.DispatchAsync(@event, cancellationToken);
       }
     }
 

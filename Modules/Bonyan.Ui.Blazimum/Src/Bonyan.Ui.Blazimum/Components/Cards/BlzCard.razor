@@ -1,0 +1,11 @@
+﻿@namespace Bonyan.Ui.Blazimum
+@inherits Bonyan.Ui.Blazimum.Bases.BlzBaseComponent
+
+<div class="blz-card @Class" style="@Style" @attributes="AdditionalAttributes">
+    @ChildContent
+</div>
+
+@code {
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+}

@@ -135,6 +135,7 @@ public class BonAspNetCoreModule : BonWebModule
         }
 
         context.Application.UseRouting();
+        context.Application.UseAntiforgery();
         context.Application.UseEndpoints(endpoints =>
         {
             using var scope = context.Application.Services.CreateScope();

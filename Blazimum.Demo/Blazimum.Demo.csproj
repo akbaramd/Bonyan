@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Framework\Src\Bonyan.AspNetCore.Components\Bonyan.AspNetCore.Components.csproj" />
+      <ProjectReference Include="..\Framework\Src\Bonyan.AspNetCore\Bonyan.AspNetCore.csproj" />
+      <ProjectReference Include="..\Modules\Bonyan.Ui.Blazimum\Src\Bonyan.Ui.Blazimum\Bonyan.Ui.Blazimum.csproj" />
+    </ItemGroup>
+
+</Project>

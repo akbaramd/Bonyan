@@ -4,7 +4,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <RootNamespace/>
-        <PackageId>Bonyan.Layer.Messaging</PackageId>
+        <PackageId>Bonyan.Messaging</PackageId>
     </PropertyGroup>
 <Import Project="..\..\..\framework-package.props"/>
     <ItemGroup>

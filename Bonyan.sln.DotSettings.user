@@ -11,6 +11,8 @@
     &lt;TestId&gt;xUnit::D207ACCE-531D-4EDC-AB0E-2604D35C8FA3::net8.0::Bonyan.Tests.Workers.InMemoryBonWorkerManagerTests.Worker_Execution_Exception_Should_Not_Stop_Manager&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
+	<s:Boolean x:Key="/Default/UnloadedProject/UnloadedProjects/=4d9df658_002D791d_002D4db8_002Daa66_002D16d3018e2c08_0023Bonyan_002EMessaging_002ERabbitMQ/@EntryIndexedValue">True</s:Boolean>
+	
 	
 	
 	

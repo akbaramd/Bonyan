@@ -14,7 +14,7 @@ namespace Bonyan.Layer.Application
         {
             DependOn(typeof(BonAutoMapperModule),
                 typeof(BonUnitOfWorkModule),
-                typeof(BonMessagingModule),
+                typeof(BonMediatorModule),
                 typeof(BonValidationModule));
         }
 

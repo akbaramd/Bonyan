@@ -1,0 +1,19 @@
+﻿/* Card container */
+.blz-card {
+   @apply bg-white rounded-lg shadow-md overflow-hidden border border-gray-200;
+}
+
+/* Card header */
+.blz-card-header {
+   @apply bg-gray-100 text-gray-800 font-semibold p-4 border-b border-gray-200;
+}
+
+/* Card body */
+.blz-card-body {
+   @apply p-4 text-gray-700;
+}
+
+/* Card footer */
+.blz-card-footer {
+   @apply bg-gray-50 p-4 border-t border-gray-200 text-right;
+}

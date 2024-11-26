@@ -39,11 +39,13 @@ public class BonyanApplication
         var applicationBuilder = WebApplication.CreateBuilder(args);
         applicationBuilder.Host.UseBonAutofac();
 
-        // Store the service name in a shared configuration
-        applicationBuilder.Services.AddObjectAccessor<BonServiceOptions>(new BonServiceOptions()
+        var options = new BonServiceOptions()
         {
             ServiceName = serviceName
-        });
+        };
+        // Store the service name in a shared configuration
+        applicationBuilder.Services.AddSingleton<BonServiceOptions>(options);
+        applicationBuilder.Services.AddObjectAccessor<BonServiceOptions>(options);
 
         // Initialize the modular application and configure modules
         var modularApp = InitializeModularApplication<TModule>(applicationBuilder.Services, creationContext);

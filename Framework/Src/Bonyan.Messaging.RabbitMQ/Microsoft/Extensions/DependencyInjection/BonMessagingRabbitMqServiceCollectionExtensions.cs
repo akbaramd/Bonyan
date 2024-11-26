@@ -16,7 +16,7 @@ namespace Microsoft.Extensions.DependencyInjection
             configureOptions(options);
 
             configuration.Context.Services.AddSingleton(options);
-            configuration.Context.Services.Replace(ServiceDescriptor.Transient<IBonMessageDispatcher,BonRabbitMQMessageDispatcher>()) ;
+            configuration.Context.Services.Replace(ServiceDescriptor.Transient<IBonMessageBus,BonRabbitMqMessageBus>()) ;
 
             return configuration;
         }

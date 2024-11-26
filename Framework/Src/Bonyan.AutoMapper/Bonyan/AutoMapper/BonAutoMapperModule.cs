@@ -14,7 +14,7 @@ namespace Bonyan.AutoMapper
     {
         public override Task OnConfigureAsync(BonConfigurationContext context)
         {
-            var assembliesToScan = context.GetAllAssemblies();
+            var assembliesToScan = context.DiscoverApplicationAssemblies();
 
             context.Services.Configure<MapperConfigurationExpression>(
                 (Action<MapperConfigurationExpression>)(options => options.AddMaps(assembliesToScan)));
@@ -27,13 +27,12 @@ namespace Bonyan.AutoMapper
                 typeof(IValueConverter<,>),
                 typeof(IMappingAction<,>)
             };
-            foreach (Type service in assembliesToScan.SelectMany<Assembly, Type>(
-                         (Func<Assembly, IEnumerable<Type>>)(a =>
-                             ((IEnumerable<Type>)a.GetTypes()).Where<Type>((Func<Type, bool>)(type =>
-                                 type.IsClass && !type.IsAbstract && Array.Exists<Type>(openTypes,
-                                     (Predicate<Type>)(openType =>
-                                         type.GetGenericInterface(openType) != (Type)null)))))))
-                context.Services.TryAddTransient(service);
+
+            foreach (var openType in openTypes)
+            {
+                context.RegisterTransientServicesOf(openType);
+            }
+            
 
             context.Services.AddSingleton<IConfigurationProvider>(sp =>
             {

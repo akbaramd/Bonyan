@@ -19,10 +19,7 @@ namespace BonyanTemplate.Domain
 
         public override Task OnConfigureAsync(BonConfigurationContext context)
         {
-            PreConfigure<BonMessagingConfiguration>(c =>
-            {
-                c.RegisterConsumer<BookBonDomainHandler>();
-            });
+           
             
             
 

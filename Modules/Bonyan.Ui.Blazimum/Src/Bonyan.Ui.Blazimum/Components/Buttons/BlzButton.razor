@@ -1,0 +1,84 @@
+﻿@namespace Bonyan.Ui.Blazimum.Components
+@using Bonyan.Ui.Blazimum.Bases
+@using Bonyan.Ui.Blazimum.Components
+@using Bonyan.Ui.Blazimum.Components.Buttons
+@inherits Bonyan.Ui.Blazimum.Bases.BlzBaseComponent
+
+<button id="@Id"
+        class="@ButtonClass @Class"
+        style="@Style"
+        type="@ButtonType"
+        @onclick="HandleClick"
+        disabled="@IsDisabled"
+        role="button"
+        data-ripple-dark="true"
+        @attributes="AdditionalAttributes">
+    @ChildContent
+</button>
+
+@code {
+
+    // Button Variants
+    [Parameter] public BlzVariant Variant { get; set; } = BlzVariant.Filled;
+
+    // Button Colors
+    [Parameter] public BlzButtonColor Color { get; set; } = BlzButtonColor.Primary;
+
+    // Button Size
+    [Parameter] public BlzButtonSize Size { get; set; } = BlzButtonSize.Default;
+
+    // Button Block-Level Support
+    [Parameter] public bool IsBlock { get; set; } = false;
+
+    // Button Ripple Effect
+    [Parameter] public bool RippleLight { get; set; } = false;
+
+    [Parameter] public bool IsDisabled { get; set; } = false;
+
+    [Parameter] public RenderFragment ChildContent { get; set; }
+
+    [Parameter] public EventCallback<MouseEventArgs> OnClick { get; set; }
+
+    [Parameter] public ButtonType ButtonType { get; set; } = ButtonType.Button;
+
+    private string ButtonClass => $"{VariantClass} {ColorClass} {SizeClass} {(IsBlock ? "w-full" : "ml-2")}";
+
+    // Define CSS for Variants
+    private string VariantClass => Variant switch
+    {
+        BlzVariant.Filled => "rounded-md border border-transparent text-center text-sm transition-all shadow-md hover:shadow-lg focus:shadow-none active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none",
+        BlzVariant.Gradient => "rounded-md bg-gradient-to-tr py-2 px-4 border border-transparent text-center text-sm transition-all shadow-md hover:shadow-lg focus:shadow-none active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none",
+        BlzVariant.Outlined => "rounded-md border py-2 px-4 text-center text-sm transition-all shadow-sm hover:shadow-lg focus:border active:border disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none",
+        BlzVariant.Text => "rounded-md border border-transparent py-2 px-4 text-center text-sm transition-all disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none",
+        _ => ""
+    };
+
+    // Define CSS for Colors
+    private string ColorClass => Color switch
+    {
+        BlzButtonColor.Primary => "bg-slate-800 text-white hover:bg-slate-700 focus:bg-slate-700 active:bg-slate-700",
+        BlzButtonColor.Secondary => "bg-gray-600 text-white hover:bg-gray-500 focus:bg-gray-500 active:bg-gray-500",
+        BlzButtonColor.Neutral => "bg-gray-200 text-gray-700 hover:bg-gray-300 focus:bg-gray-300 active:bg-gray-300",
+        _ => ""
+    };
+
+    // Define CSS for Size
+    private string SizeClass => Size switch
+    {
+        BlzButtonSize.Small => "text-xs py-1 px-2",
+        BlzButtonSize.Large => "text-lg py-3 px-6",
+        _ => "text-sm py-2 px-4"
+    };
+
+    // Ripple Effect Class
+
+
+    private async Task HandleClick(MouseEventArgs e)
+    {
+        if (!IsDisabled && OnClick.HasDelegate)
+        {
+            await OnClick.InvokeAsync(e);
+        }
+    }
+
+}
