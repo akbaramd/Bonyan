@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Bonyan.Messaging.Abstractions;
 using Bonyan.Messaging.RabbitMQ;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
@@ -16,14 +17,13 @@ public class RabbitMqDispatcherTests
         var services = new ServiceCollection();
 
         // Initialize modular application with RabbitMQModule
-        var application = new BonModularityApplication<RabbitMQModule>(services, c =>
+        var builder =BonyanApplication.CreateModularBuilder <RabbitMQModule>( c =>
         {
             c.ApplicationName = nameof(RabbitMqDispatcherTests);
         });
-        application.ConfigureModulesAsync().GetAwaiter().GetResult();
-        application.InitializeModulesAsync(application.ServiceProvider).GetAwaiter().GetResult();
 
-        _serviceProvider = application.ServiceProvider;
+        var app = builder.BuildAsync().GetAwaiter().GetResult();
+        _serviceProvider = app.Services;
     }
 
     [Fact]

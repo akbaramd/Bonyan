@@ -7,6 +7,16 @@
     &lt;TestId&gt;xUnit::94B42DA5-8F69-435B-AFED-2F76C4A05589::net8.0::Bonyan.Messaging.RabbitMQ.Tests.RabbitMqDispatcherTests&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=e4e9a201_002D1149_002D461e_002Da31e_002Dfeac47034dfb/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="ValueObjectTest #2" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;xUnit::94B42DA5-8F69-435B-AFED-2F76C4A05589::net8.0::Bonyan.Messaging.RabbitMQ.Tests.RabbitMqDispatcherTests&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=e55afdff_002D141e_002D4389_002D9aa8_002Df5e987e76dac/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="ValueObjectTest" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;xUnit::94B42DA5-8F69-435B-AFED-2F76C4A05589::net8.0::Bonyan.Messaging.RabbitMQ.Tests.RabbitMqDispatcherTests&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
 	
 	
 	

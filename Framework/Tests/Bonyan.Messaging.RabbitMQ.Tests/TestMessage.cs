@@ -1,4 +1,6 @@
-﻿namespace Bonyan.Messaging.RabbitMQ.Tests;
+﻿using Bonyan.Messaging.Abstractions;
+
+namespace Bonyan.Messaging.RabbitMQ.Tests;
 
 public class TestCommand
 {
@@ -13,4 +15,12 @@ public class TestResponse
 public class TestEvent
 {
     public string Content { get; set; }
+}
+
+public class TestEventConsumer : IBonMessageConsumer<TestEvent>
+{
+    public Task ConsumeAsync(BonMessageContext<TestEvent> context, CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
+    }
 }
