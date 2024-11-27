@@ -8,7 +8,6 @@
     </PropertyGroup>
 <Import Project="..\..\..\framework-package.props"/>
     <ItemGroup>
-        <ProjectReference Include="..\Bonyan.Messaging.Abstractions\Bonyan.Messaging.Abstractions.csproj" />
         <ProjectReference Include="..\Bonyan\Bonyan.csproj"/>
     </ItemGroup>
 </Project>

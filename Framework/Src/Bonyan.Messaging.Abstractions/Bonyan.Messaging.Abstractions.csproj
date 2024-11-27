@@ -7,5 +7,9 @@
         <RootNamespace/>
         <PackageId>Bonyan.Messaging.Abstractions</PackageId>
     </PropertyGroup>
+
+    <ItemGroup>
+      <Folder Include="Bonyan\Messaging\" />
+    </ItemGroup>
 <Import Project="..\..\..\framework-package.props"/>
 </Project>
