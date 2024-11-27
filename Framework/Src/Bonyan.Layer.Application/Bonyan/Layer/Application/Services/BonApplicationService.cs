@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Bonyan.DependencyInjection;
-using Bonyan.Messaging.Abstractions;
-using Bonyan.Messaging.Abstractions.Mediators;
+using Bonyan.Mediators;
 using Bonyan.MultiTenant;
 using Bonyan.UnitOfWork;
 using Bonyan.User;

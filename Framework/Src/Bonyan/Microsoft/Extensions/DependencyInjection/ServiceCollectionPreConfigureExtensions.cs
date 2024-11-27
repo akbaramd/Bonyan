@@ -1,7 +1,6 @@
 ﻿using Bonyan.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection;
 
-namespace Microsoft;
+namespace Microsoft.Extensions.DependencyInjection;
 
 public static class ServiceCollectionPreConfigureExtensions
 {

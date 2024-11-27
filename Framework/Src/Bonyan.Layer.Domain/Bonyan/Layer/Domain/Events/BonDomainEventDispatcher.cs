@@ -1,7 +1,5 @@
 using Bonyan.Layer.Domain.DomainEvent.Abstractions;
-using Bonyan.Messaging;
-using Bonyan.Messaging.Abstractions;
-using Bonyan.Messaging.Abstractions.Mediators;
+using Bonyan.Mediators;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Bonyan.Layer.Domain.Events;

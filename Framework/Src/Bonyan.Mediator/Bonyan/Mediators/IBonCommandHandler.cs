@@ -1,6 +1,4 @@
-﻿using Bonyan.Messaging.Abstractions.Mediators;
-
-namespace Bonyan.Messaging.Abstractions;
+﻿namespace Bonyan.Mediators;
 
 /// <summary>
 /// Handler for commands.

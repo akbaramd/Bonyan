@@ -1,4 +1,4 @@
-using Bonyan.Messaging;
+using Bonyan.Mediators;
 using Bonyan.Modularity;
 using Bonyan.Modularity.Abstractions;
 using Microsoft.Extensions.DependencyInjection;

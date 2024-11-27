@@ -1,5 +1,4 @@
 using Bonyan.IdentityManagement.Domain;
-using Bonyan.Messaging;
 using Bonyan.Modularity;
 using Bonyan.Modularity.Abstractions;
 using Bonyan.TenantManagement.Domain;

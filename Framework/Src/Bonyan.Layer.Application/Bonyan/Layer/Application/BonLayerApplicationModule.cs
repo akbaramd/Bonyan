@@ -1,5 +1,5 @@
 using Bonyan.AutoMapper;
-using Bonyan.Messaging;
+using Bonyan.Mediators;
 using Bonyan.Modularity;
 using Bonyan.Modularity.Abstractions;
 using Bonyan.UnitOfWork;

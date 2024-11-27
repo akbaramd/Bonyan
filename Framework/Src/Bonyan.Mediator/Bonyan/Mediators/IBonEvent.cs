@@ -1,4 +1,4 @@
-﻿namespace Bonyan.Messaging.Abstractions.Mediators;
+﻿namespace Bonyan.Mediators;
 
 public interface IBonEvent 
 {

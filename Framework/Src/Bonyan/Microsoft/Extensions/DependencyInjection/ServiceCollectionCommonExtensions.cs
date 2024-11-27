@@ -4,9 +4,8 @@ using Bonyan.Core;
 using Bonyan.Exceptions;
 using Bonyan.Reflection;
 using JetBrains.Annotations;
-using Microsoft.Extensions.DependencyInjection;
 
-namespace Microsoft;
+namespace Microsoft.Extensions.DependencyInjection;
 
 public static class ServiceCollectionCommonExtensions
 {

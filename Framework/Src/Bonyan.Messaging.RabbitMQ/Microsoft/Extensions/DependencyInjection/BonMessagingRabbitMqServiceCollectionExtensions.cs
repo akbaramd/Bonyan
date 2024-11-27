@@ -12,11 +12,8 @@ namespace Microsoft.Extensions.DependencyInjection
             this BonMessagingConfiguration configuration,
             Action<RabbitMQOptions> configureOptions)
         {
-            var options = new RabbitMQOptions();
-            configureOptions(options);
-
-            configuration.Context.Services.AddSingleton(options);
-            configuration.Context.Services.Replace(ServiceDescriptor.Transient<IBonMessageBus,BonRabbitMqMessageBus>()) ;
+           configuration.Context.ConfigureOptions(configureOptions);
+            configuration.Context.Services.Replace(ServiceDescriptor.Transient<IBonMessageBus,RabbitMQMessageBus>()) ;
 
             return configuration;
         }

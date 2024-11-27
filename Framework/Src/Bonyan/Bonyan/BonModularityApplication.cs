@@ -25,19 +25,23 @@ public class BonModularityApplication<TModule> : IBonModularityApplication where
     /// </summary>
     /// <param name="serviceCollection">The service collection to which dependencies are added.</param>
     /// <param name="plugInSource"></param>
-    public BonModularityApplication(IServiceCollection serviceCollection,
-        Action<AbpApplicationCreationOptions>? creationContext = null)
+    public BonModularityApplication(IServiceCollection serviceCollection, 
+        Action<BonApplicationCreationOptions>? creationContext = null)
     {
         _serviceCollection = serviceCollection ?? throw new ArgumentNullException(nameof(serviceCollection));
 
-
+      
+     
         _bonModuleLoader = new BonModuleLoader();
         var assemblyFinder = new AssemblyFinder(this);
         var typeFinder = new TypeFinder(assemblyFinder);
 
-        var options = new AbpApplicationCreationOptions(_serviceCollection);
+        var options = new BonApplicationCreationOptions(_serviceCollection);
         creationContext?.Invoke(options);
 
+        _serviceCollection.AddSingleton(options);
+        _serviceCollection.AddObjectAccessor(options);
+        
         Modules = _bonModuleLoader.LoadModules(_serviceCollection, typeof(TModule), options.PlugInSources);
 
         // Register core services
@@ -55,9 +59,6 @@ public class BonModularityApplication<TModule> : IBonModularityApplication where
         _serviceCollection.AddTransient(typeof(BonAsyncDeterminationInterceptor<>));
         _serviceCollection.AddTransient<IBonCachedServiceProviderBase, BonLazyServiceProvider>();
         _serviceCollection.AddTransient<IBonLazyServiceProvider, BonLazyServiceProvider>();
-
-
-        ServiceProvider = _serviceCollection.BuildServiceProvider();
     }
 
     /// <summary>
@@ -87,6 +88,8 @@ public class BonModularityApplication<TModule> : IBonModularityApplication where
             ExecuteModulePhaseAsync(context, (module, ctx) => module.OnPostConfigureAsync(ctx)).GetAwaiter()
                 .GetResult();
         });
+
+        ServiceProvider = _serviceCollection.BuildServiceProvider();
 
         return Task.CompletedTask;
     }

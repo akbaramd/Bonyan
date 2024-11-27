@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Bonyan;
 
-public class AbpApplicationCreationOptions
+public class BonApplicationCreationOptions
 {
     [NotNull]
     public IServiceCollection Services { get; }
@@ -20,7 +20,7 @@ public class AbpApplicationCreationOptions
 
     public string? Environment { get; set; }
 
-    public AbpApplicationCreationOptions([NotNull] IServiceCollection services)
+    public BonApplicationCreationOptions([NotNull] IServiceCollection services)
     {
         Services = Check.NotNull(services, nameof(services));
         PlugInSources = new PlugInSourceList();

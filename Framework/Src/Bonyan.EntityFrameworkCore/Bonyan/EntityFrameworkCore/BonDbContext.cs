@@ -6,8 +6,6 @@ using Bonyan.Layer.Domain.Aggregate.Abstractions;
 using Bonyan.Layer.Domain.Audit.Abstractions;
 using Bonyan.Layer.Domain.DomainEvent.Abstractions;
 using Bonyan.Layer.Domain.Entity;
-using Bonyan.Messaging.Abstractions;
-using Bonyan.Messaging.Abstractions.Mediators;
 using Bonyan.MultiTenant;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;

@@ -1,4 +1,4 @@
-using Bonyan.Messaging.Abstractions;
+using Bonyan.Mediators;
 using BonyanTemplate.Domain.Books.DomainEvents;
 
 namespace BonyanTemplate.Domain.Books.Handlers;

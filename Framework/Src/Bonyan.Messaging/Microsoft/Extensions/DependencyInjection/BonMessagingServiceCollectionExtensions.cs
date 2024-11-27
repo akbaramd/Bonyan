@@ -11,7 +11,6 @@ public static class BonMessagingServiceCollectionExtensions
         string serviceName,
         Action<BonMessagingConfiguration> configureOptions)
     {
-        context.Services.AddTransient<IBonMessageBus, InMemoryMessageBus>();
 
         var options = new BonMessagingConfiguration(context, serviceName);
 

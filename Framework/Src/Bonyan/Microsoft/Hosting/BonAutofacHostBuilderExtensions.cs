@@ -1,5 +1,6 @@
 using Autofac;
 using Bonyan.Autofac;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
 namespace Microsoft.Hosting;

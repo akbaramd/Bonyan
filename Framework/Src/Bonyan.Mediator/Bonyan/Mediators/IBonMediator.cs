@@ -1,4 +1,4 @@
-﻿namespace Bonyan.Messaging.Abstractions.Mediators;
+﻿namespace Bonyan.Mediators;
 
 /// <summary>
 /// Represents a mediator bus for handling commands, queries, and events.
