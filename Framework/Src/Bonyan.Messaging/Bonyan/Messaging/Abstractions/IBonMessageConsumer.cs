@@ -6,18 +6,9 @@ namespace Bonyan.Messaging.Abstractions;
 /// <typeparam name="TMessage">The type of the event or command.</typeparam>
 public interface IBonMessageConsumer<TMessage> : IBonMessageConsumer where TMessage : class
 {
-    Task ConsumeAsync(BonMessageContext<TMessage> context, CancellationToken cancellationToken = default);
+    Task ConsumeAsync(BonMessageContext<TMessage> context, CancellationToken cancellationToken);
 }
 
-/// <summary>
-/// Represents a handler for commands or queries with a response.
-/// </summary>
-/// <typeparam name="TMessage">The type of the command or query.</typeparam>
-/// <typeparam name="TResponse">The type of the expected response.</typeparam>
-public interface IBonMessageConsumer<TMessage, TResponse> : IBonMessageConsumer where TMessage : class
-{
-    Task<TResponse> ConsumeAsync(BonMessageContext<TMessage> context, CancellationToken cancellationToken = default);
-}
 
 /// <summary>
 /// Represents a non-generic consumer base interface.
