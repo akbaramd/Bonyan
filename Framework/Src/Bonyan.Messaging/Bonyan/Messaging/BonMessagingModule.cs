@@ -1,3 +1,4 @@
+using Bonyan.Messaging.Abstractions;
 using Bonyan.Modularity;
 using Bonyan.Modularity.Abstractions;
 using Microsoft;
@@ -7,11 +8,14 @@ namespace Bonyan.Messaging
 {
     public class BonMessagingModule : BonModule
     {
+        public override Task OnConfigureAsync(BonConfigurationContext context)
+        {
+            return base.OnConfigureAsync(context);
+        }
+
         public override Task OnPostConfigureAsync(BonConfigurationContext context)
         {
-            var service = context.Services.GetObject<BonApplicationCreationOptions>();
-
-            context.AddMessaging(service.ApplicationName, c =>
+            context.AddMessaging( c =>
             {
                 context.Services.ExecutePreConfiguredActions(c);
             });

@@ -16,6 +16,7 @@ using BonyanTemplate.Application.Authors.Dtos;
 using BonyanTemplate.Application.Books;
 using BonyanTemplate.Application.Books.Dtos;
 using BonyanTemplate.Application.Books.Jobs;
+using BonyanTemplate.Application.Consumers;
 using BonyanTemplate.Domain;
 using BonyanTemplate.Domain.Authors;
 using BonyanTemplate.Domain.Users;
@@ -37,6 +38,11 @@ namespace BonyanTemplate.Application
 
         public override Task OnConfigureAsync(BonConfigurationContext context)
         {
+            PreConfigure<BonMessagingConfiguration>(c =>
+            {
+                c.RegisterConsumer<BookConsumer>("");
+            });
+            
             context.Services.AddTransient<IBookAppService, BookAppService>();
             context.Services.AddTransient<IAuthorAppService, AuthorAppService>();
 

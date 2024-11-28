@@ -18,6 +18,7 @@ namespace Bonyan;
 public class BonModularityApplication<TModule> : IBonModularityApplication where TModule : IBonModule
 {
     private readonly IServiceCollection _serviceCollection;
+    private readonly string _serviceName;
     private readonly IBonModuleLoader _bonModuleLoader;
 
     /// <summary>
@@ -25,13 +26,14 @@ public class BonModularityApplication<TModule> : IBonModularityApplication where
     /// </summary>
     /// <param name="serviceCollection">The service collection to which dependencies are added.</param>
     /// <param name="plugInSource"></param>
-    public BonModularityApplication(IServiceCollection serviceCollection, 
+    /// <param name="serviceName"></param>
+    public BonModularityApplication(IServiceCollection serviceCollection, string serviceName,
         Action<BonApplicationCreationOptions>? creationContext = null)
     {
         _serviceCollection = serviceCollection ?? throw new ArgumentNullException(nameof(serviceCollection));
+        _serviceName = serviceName;
 
-      
-     
+
         _bonModuleLoader = new BonModuleLoader();
         var assemblyFinder = new AssemblyFinder(this);
         var typeFinder = new TypeFinder(assemblyFinder);
@@ -39,9 +41,6 @@ public class BonModularityApplication<TModule> : IBonModularityApplication where
         var options = new BonApplicationCreationOptions(_serviceCollection);
         creationContext?.Invoke(options);
 
-        _serviceCollection.AddSingleton(options);
-        _serviceCollection.AddObjectAccessor(options);
-        
         Modules = _bonModuleLoader.LoadModules(_serviceCollection, typeof(TModule), options.PlugInSources);
 
         // Register core services
@@ -76,7 +75,7 @@ public class BonModularityApplication<TModule> : IBonModularityApplication where
     /// </summary>
     public Task ConfigureModulesAsync()
     {
-        _serviceCollection.AddBonyan((context) =>
+        _serviceCollection.AddBonyan(_serviceName,(context) =>
         {
             foreach (var module in Modules)
             {

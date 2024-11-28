@@ -18,7 +18,7 @@ namespace Bonyan.Tests.Modularity
         {
             // Arrange
             var services = new ServiceCollection();
-            var application = new BonModularityApplication<TestModule>(services);
+            var application = new BonModularityApplication<TestModule>(services,"servicename");
 
             var moduleMock = new Mock<TestModule> { CallBase = true };
             moduleMock.Setup(m => m.OnPreConfigureAsync(It.IsAny<BonConfigurationContext>())).Returns(Task.CompletedTask);
@@ -42,7 +42,7 @@ namespace Bonyan.Tests.Modularity
             // Arrange
             var services = new ServiceCollection();
             
-            var application = new BonModularityApplication<TestModule>(services);
+            var application = new BonModularityApplication<TestModule>(services,"servicename");
 
             var moduleMock = new Mock<TestModule> { CallBase = true };
             moduleMock.Setup(m => m.OnPreInitializeAsync(It.IsAny<BonInitializedContext>())).Returns(Task.CompletedTask);
@@ -66,7 +66,7 @@ namespace Bonyan.Tests.Modularity
         {
             // Arrange
             var services = new ServiceCollection();
-            var application = new BonModularityApplication<TestModule>(services);
+            var application = new BonModularityApplication<TestModule>(services,"service");
 
             var moduleMock = new Mock<TestModule> { CallBase = true };
             moduleMock.Setup(m => m.OnPreConfigureAsync(It.IsAny<BonConfigurationContext>())).ThrowsAsync(new Exception("Test exception"));
@@ -83,7 +83,7 @@ namespace Bonyan.Tests.Modularity
             // Arrange
             var services = new ServiceCollection();
             var serviceProvider = services.BuildServiceProvider();
-            var application = new BonModularityApplication<TestModule>(services);
+            var application = new BonModularityApplication<TestModule>(services,"service");
 
             var moduleMock = new Mock<TestModule> { CallBase = true };
             moduleMock.Setup(m => m.OnPreInitializeAsync(It.IsAny<BonInitializedContext>())).ThrowsAsync(new Exception("Test exception"));
@@ -98,7 +98,7 @@ namespace Bonyan.Tests.Modularity
         public void Constructor_Should_Throw_If_ServiceCollection_Is_Null()
         {
             // Act & Assert
-            Assert.Throws<ArgumentNullException>(() => new BonModularityApplication<TestModule>(null));
+            Assert.Throws<ArgumentNullException>(() => new BonModularityApplication<TestModule>(null,"servicename"));
         }
 
         [Fact]
@@ -108,7 +108,7 @@ namespace Bonyan.Tests.Modularity
             var services = new ServiceCollection();
 
             // Act
-            var application = new BonModularityApplication<TestModule>(services);
+            var application = new BonModularityApplication<TestModule>(services,"service");
 
             // Assert
             var serviceProvider = services.BuildServiceProvider();

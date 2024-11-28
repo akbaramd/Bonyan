@@ -4,22 +4,22 @@ using System.Linq;
 using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 using Bonyan.Messaging.Abstractions;
-using Bonyan.Messaging.Attributes;
 using Bonyan.Modularity;
 
 namespace Bonyan.Messaging
 {
     /// <summary>
-    /// Provides configuration options for registering message consumers and dispatchers in the messaging system.
+    /// Provides configuration options for registering message consumers in the messaging system.
     /// </summary>
     public class BonMessagingConfiguration
     {
-        public BonMessagingConfiguration(BonConfigurationContext services, string serviceName, ServiceLifetime consumerLifetime = ServiceLifetime.Transient)
+        private readonly List<ConsumerRegistration> _consumerRegistrations = new List<ConsumerRegistration>();
+
+        public BonMessagingConfiguration(BonConfigurationContext services,
+            ServiceLifetime consumerLifetime = ServiceLifetime.Transient)
         {
             Context = services ?? throw new ArgumentNullException(nameof(services));
             ConsumerLifetime = consumerLifetime;
-            ServiceName = serviceName ?? throw new ArgumentNullException(nameof(serviceName));
-
             // Register the configuration instance
             Context.Services.AddSingleton(this);
         }
@@ -33,130 +33,71 @@ namespace Bonyan.Messaging
         public ServiceLifetime ConsumerLifetime { get; set; }
 
         /// <summary>
-        /// Gets or sets a type filter predicate to include or exclude certain consumer types.
-        /// By default, all types are included.
-        /// </summary>
-        public Func<Type, bool> TypeFilter { get; set; } = type => true;
-
-        /// <summary>
         /// Gets or sets the service name for this service. It is used for routing and identification.
         /// </summary>
         public string ServiceName { get; set; }
 
 
-        private readonly List<ConsumerRegistration> _consumerRegistrations = new List<ConsumerRegistration>();
-
         /// <summary>
-        /// Registers all consumers that implement <see cref="IBonMessageConsumer{TMessage}"/> from the specified assemblies.
+        /// Registers a specific consumer type with an optional queue name.
         /// </summary>
-        public BonMessagingConfiguration RegisterConsumersFromAssemblies(params Assembly[] assemblies)
-        {
-            if (assemblies == null) throw new ArgumentNullException(nameof(assemblies));
-
-            // Collect all consumer types from assemblies and register them immediately
-            var consumerTypes = assemblies
-                .SelectMany(assembly => assembly.GetTypes())
-                .Where(type => type.IsClass && !type.IsAbstract && ImplementsConsumerInterface(type))
-                .Where(TypeFilter);
-
-            foreach (var consumerType in consumerTypes)
-            {
-                RegisterConsumerType(consumerType, ConsumerLifetime, null);
-            }
-
-            return this;
-        }
-
-        /// <summary>
-        /// Registers specific consumer types directly.
-        /// </summary>
-        public BonMessagingConfiguration RegisterConsumersFromTypes(params Type[] types)
-        {
-            if (types == null) throw new ArgumentNullException(nameof(types));
-
-            foreach (var consumerType in types.Where(TypeFilter))
-            {
-                RegisterConsumerType(consumerType, ConsumerLifetime, null);
-            }
-
-            return this;
-        }
-
-        /// <summary>
-        /// Registers a specific consumer type using a generic method.
-        /// </summary>
-        public BonMessagingConfiguration RegisterConsumer<TConsumer>(ServiceLifetime? lifetime = null, string serviceName = null)
+        public BonMessagingConfiguration RegisterConsumer<TConsumer>(string? queueName = null,
+            ServiceLifetime? lifetime = null)
             where TConsumer : class
         {
             var consumerType = typeof(TConsumer);
-
-            // Register the consumer immediately
-            RegisterConsumerType(consumerType, lifetime ?? ConsumerLifetime, serviceName);
-
+            RegisterConsumerType(consumerType, queueName ?? Context.ServiceManager.ServiceId, lifetime);
             return this;
         }
 
-
-        /// <summary>
-        /// Determines whether the specified type implements the <see cref="IBonMessageConsumer{TMessage}"/> interface.
-        /// </summary>
-        private static bool ImplementsConsumerInterface(Type type)
-        {
-            return type.GetInterfaces()
-                       .Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IBonMessageConsumer<>));
-        }
-
-        /// <summary>
-        /// Registers a specific consumer type into the IServiceCollection and stores it in the collection.
-        /// </summary>
-        private void RegisterConsumerType(Type consumerType, ServiceLifetime lifetime, string serviceName)
+        private void RegisterConsumerType(Type consumerType, string? queueName, ServiceLifetime? lifetime = null)
         {
             var interfaces = consumerType.GetInterfaces()
                 .Where(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IBonMessageConsumer<>));
 
-            // Read the service name from the attribute if not provided
-            if (string.IsNullOrEmpty(serviceName))
-            {
-                var attribute = consumerType.GetCustomAttribute<ConsumerServiceAttribute>();
-                serviceName = attribute?.ServiceName ?? ServiceName;
-            }
-
             foreach (var serviceType in interfaces)
             {
-                // Avoid duplicate registrations
-                if (!Context.Services.Any(descriptor => descriptor.ServiceType == serviceType && descriptor.ImplementationType == consumerType))
+                if (!Context.Services.Any(descriptor =>
+                        descriptor.ServiceType == serviceType && descriptor.ImplementationType == consumerType))
                 {
-                    // Register the consumer in the DI container
-                    var descriptor = new ServiceDescriptor(serviceType, consumerType, lifetime);
+                    var descriptor = new ServiceDescriptor(consumerType, consumerType, lifetime ?? ConsumerLifetime);
                     Context.Services.Add(descriptor);
 
-                    // Store the consumer registration
                     _consumerRegistrations.Add(new ConsumerRegistration
                     {
                         ServiceType = serviceType,
                         ImplementationType = consumerType,
-                        Lifetime = lifetime,
-                        ServiceName = serviceName
+                        Lifetime = lifetime ?? ConsumerLifetime,
+                        QueueName = queueName ?? ServiceName
                     });
                 }
             }
         }
 
         /// <summary>
-        /// Represents a registration of a consumer, including service type, implementation type, lifetime, and service name.
+        /// Checks if the type implements the consumer interface.
         /// </summary>
-        internal class ConsumerRegistration
+        private static bool ImplementsConsumerInterface(Type type)
+        {
+            return type.GetInterfaces().Any(i =>
+                i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IBonMessageConsumer<>));
+        }
+
+        /// <summary>
+        /// Represents a registration of a consumer, including service type, implementation type, lifetime, and queue name.
+        /// </summary>
+        public class ConsumerRegistration
         {
             public Type ServiceType { get; set; }
             public Type ImplementationType { get; set; }
             public ServiceLifetime Lifetime { get; set; }
-            public string ServiceName { get; set; }
+            public string QueueName { get; set; }
         }
 
         /// <summary>
         /// Gets the collection of consumer registrations.
         /// </summary>
-        internal IEnumerable<ConsumerRegistration> GetConsumerRegistrations()
+        public IEnumerable<ConsumerRegistration> GetConsumerRegistrations()
         {
             return _consumerRegistrations;
         }

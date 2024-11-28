@@ -13,12 +13,14 @@ public class RabbitMQMessageBus : IBonMessageBus, IDisposable
     private readonly IModel _channel;
     private readonly IConnection _connection;
     private readonly string _topicExchangeName;
-    private readonly BonApplicationCreationOptions _applicationCreationOptions;
+    private readonly BonServiceManager _serviceManager;
+    private readonly IServiceProvider _serviceProvider;
     private readonly ConcurrentDictionary<string, TaskCompletionSource<byte[]>> _responseHandlers;
 
-    public RabbitMQMessageBus(IOptions<RabbitMQOptions> options, BonApplicationCreationOptions applicationCreationOptions)
+    public RabbitMQMessageBus(IOptions<RabbitMQOptions> options, BonServiceManager applicationCreationOptions, IServiceProvider serviceProvider)
     {
-        _applicationCreationOptions = applicationCreationOptions;
+        _serviceManager = applicationCreationOptions;
+        _serviceProvider = serviceProvider;
 
         var rabbitOptions = options.Value;
         _connection = CreateConnection(rabbitOptions);
@@ -122,7 +124,7 @@ public class RabbitMQMessageBus : IBonMessageBus, IDisposable
         PublishMessage(
             message: message,
             messageType: typeof(TMessage).Name,
-            routingKeySuffix: _applicationCreationOptions.ApplicationName+".broadcast",
+            routingKeySuffix: _serviceManager.ServiceId+".broadcast",
             headers: headers,
             correlationId: correlationId
         );
@@ -173,7 +175,7 @@ public class RabbitMQMessageBus : IBonMessageBus, IDisposable
 
     private string CreateTemporaryReplyQueue(string coreealtionId)
     {
-        var replyQueueName = $"{_applicationCreationOptions.ApplicationName}.reply.{coreealtionId}".ToLowerInvariant();
+        var replyQueueName = $"{_serviceManager.ServiceId}.reply.{coreealtionId}".ToLowerInvariant();
         _channel.QueueDeclare(queue: replyQueueName, durable: false, exclusive: true, autoDelete: true);
         return replyQueueName;
     }
@@ -230,7 +232,7 @@ public class RabbitMQMessageBus : IBonMessageBus, IDisposable
                 var headers = ea.BasicProperties.Headers?.ToDictionary(k => k.Key, v => (object)v.Value) ?? new Dictionary<string, object>();
                 var replyTo = ea.BasicProperties.ReplyTo ?? string.Empty;
 
-                var context = new BonMessageContext<TMessage>(message, correlationId, headers, replyTo,this);
+                var context = new BonMessageContext<TMessage>(message, correlationId, headers, replyTo,_serviceProvider);
                 await handler(context);
             }
             catch (Exception ex)

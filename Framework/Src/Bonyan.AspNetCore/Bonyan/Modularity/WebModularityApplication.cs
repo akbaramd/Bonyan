@@ -15,8 +15,8 @@ public class WebBonModularityApplication<TModule> : BonModularityApplication<TMo
     /// </summary>
     /// <param name="serviceCollection">Service collection to register dependencies.</param>
     /// <param name="plugInSource"></param>
-    public WebBonModularityApplication(IServiceCollection serviceCollection, Action<BonApplicationCreationOptions>? creationContext = null) :
-        base(serviceCollection, creationContext)
+    public WebBonModularityApplication(IServiceCollection serviceCollection,string serviceName, Action<BonApplicationCreationOptions>? creationContext = null) :
+        base(serviceCollection, serviceName,creationContext)
     {
     }
 

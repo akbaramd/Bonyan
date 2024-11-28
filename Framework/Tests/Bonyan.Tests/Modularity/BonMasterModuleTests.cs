@@ -19,7 +19,7 @@ namespace Bonyan.Tests.Modularity
         public void BonMasterModule_Should_Register_Required_Services()
         {
             // Arrange
-            var application = new BonModularityApplication<TestModule>(_services);
+            var application = new BonModularityApplication<TestModule>(_services,"service");
 
 
             application.ConfigureModulesAsync().GetAwaiter();
@@ -56,7 +56,7 @@ namespace Bonyan.Tests.Modularity
         public async Task BonMasterModule_Configuration_Should_Succeed()
         {
             // Arrange
-            var application = new BonModularityApplication<TestModule>(_services);
+            var application = new BonModularityApplication<TestModule>(_services,"service");
 
             // Act
             var configureTask = application.ConfigureModulesAsync();

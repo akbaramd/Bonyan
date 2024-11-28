@@ -12,7 +12,7 @@ public class InMemoryBonMediatorTests
         var services = new ServiceCollection();
 
         // Initialize modular application
-        var application = new BonModularityApplication<TestModule>(services);
+        var application = new BonModularityApplication<TestModule>(services,"servicename");
         application.ConfigureModulesAsync().GetAwaiter().GetResult();
         application.InitializeModulesAsync(application.ServiceProvider).GetAwaiter().GetResult();
 

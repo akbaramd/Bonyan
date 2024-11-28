@@ -12,26 +12,22 @@ namespace Bonyan.Messaging.RabbitMQ
         public BonMessagingRabbitMQModule()
         {
             DependOn<BonMessagingModule>();
-            DependOn<BonWorkersModule>();
         }
 
         public override Task OnPreConfigureAsync(BonConfigurationContext context)
         {
-            PreConfigure<BonWorkerConfiguration>(c =>
-            {
-                c.RegisterWorker<BonConsumersWorkers>();
-            });
+            context.Services.AddHostedService<BonBackgroundConsumerService>();
             return base.OnPreConfigureAsync(context);
         }
 
         public override Task OnConfigureAsync(BonConfigurationContext context)
         {
-            context.RegisterScopedServicesFor(typeof(IBonMessageConsumer<>));
+  
             
             PreConfigure<BonMessagingConfiguration>(c =>
             {
              
-                c.AddRabbitMqMessaging(r => { context.Services.ExecutePreConfiguredActions(r); });
+                c.AddRabbitMQ(r => { context.Services.ExecutePreConfiguredActions(r); });
             });
             return base.OnConfigureAsync(context);
         }

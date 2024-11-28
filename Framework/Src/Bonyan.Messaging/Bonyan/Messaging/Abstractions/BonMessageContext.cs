@@ -1,4 +1,6 @@
-﻿namespace Bonyan.Messaging;
+﻿using Microsoft.Extensions.DependencyInjection;
+
+namespace Bonyan.Messaging;
 
 /// <summary>
 /// Provides context for messages being processed, including reply functionality, headers, and correlation management.
@@ -42,13 +44,13 @@ public class BonMessageContext<TMessage>
         string correlationId,
         IDictionary<string, object>? headers,
         string replyTo,
-        IBonMessageBus messageBus)
+        IServiceProvider serviceProvider)
     {
         Message = message ?? throw new ArgumentNullException(nameof(message));
         CorrelationId = correlationId ?? throw new ArgumentNullException(nameof(correlationId));
         Headers = headers ?? new Dictionary<string, object>();
         ReplyTo = replyTo ?? throw new ArgumentNullException(nameof(replyTo));
-        _messageBus = messageBus ?? throw new ArgumentNullException(nameof(messageBus));
+        _messageBus = serviceProvider.GetRequiredService<IBonMessageBus>();
     }
 
     /// <summary>

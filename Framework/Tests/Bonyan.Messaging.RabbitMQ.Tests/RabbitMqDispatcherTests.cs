@@ -17,12 +17,10 @@ public class RabbitMqDispatcherTests
         var services = new ServiceCollection();
 
         // Initialize modular application with RabbitMQModule
-        var builder =BonyanApplication.CreateModularBuilder <RabbitMQModule>( c =>
-        {
-            c.ApplicationName = nameof(RabbitMqDispatcherTests);
-        });
+        var builder =BonyanApplication.CreateModularBuilder<RabbitMQModule>(nameof(RabbitMqDispatcherTests));
 
         var app = builder.BuildAsync().GetAwaiter().GetResult();
+        app.StartAsync();
         _serviceProvider = app.Services;
     }
 
@@ -63,7 +61,21 @@ public class RabbitMqDispatcherTests
         Assert.True(subscriber1Handled, "Subscriber 1 did not handle the published message.");
         Assert.True(subscriber2Handled, "Subscriber 2 did not handle the published message.");
     }
+    [Fact]
+    public async Task PublishAsync_ShouldDeliverMessageToConsumers()
+    {
+        // Arrange
+        var bus = _serviceProvider.GetRequiredService<IBonMessageBus>();
+        var message = new TestEvent { Content = "Test Publish Event" };
 
+       var res =  await bus.SendAsync<TestEvent,TestEvent>("test-event",message);
+
+        // Allow time for message processing
+        await Task.Delay(500);
+
+        // Assert
+        Assert.Equal(res.Content, message.Content);
+    }
     [Fact]
     public async Task SendAsync_ShouldDeliverMessageToSpecificSubscriber()
     {

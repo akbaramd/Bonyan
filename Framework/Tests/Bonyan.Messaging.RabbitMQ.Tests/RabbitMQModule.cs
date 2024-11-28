@@ -12,6 +12,11 @@ public class RabbitMQModule : BonModule
     }
     public override Task OnConfigureAsync(BonConfigurationContext context)
     {
+        PreConfigure<BonMessagingConfiguration>(c =>
+        {
+            c.RegisterConsumer<TestEventConsumer>("test-event");
+        });
+        
         PreConfigure<RabbitMQOptions>(options =>
         {
             options.HostName = "localhost";

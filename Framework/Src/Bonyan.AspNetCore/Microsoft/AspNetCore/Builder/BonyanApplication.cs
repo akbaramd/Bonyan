@@ -31,8 +31,9 @@ public class BonyanApplication
     /// </summary>
     /// <typeparam name="TModule">The root module type.</typeparam>
     /// <param name="args">Application arguments.</param>
+    /// <param name="serviceName"></param>
     /// <returns>An instance of <see cref="IBonyanApplicationBuilder"/> configured with the root module.</returns>
-    public static IBonyanApplicationBuilder CreateModularBuilder<TModule>(
+    public static IBonyanApplicationBuilder CreateModularBuilder<TModule>(string serviceName,
         Action<BonApplicationCreationOptions>? creationContext = null, params string[] args)
         where TModule : IBonModule
     {
@@ -42,7 +43,7 @@ public class BonyanApplication
 
 
         // Initialize the modular application and configure modules
-        var modularApp = InitializeModularApplication<TModule>(applicationBuilder.Services, creationContext);
+        var modularApp = InitializeModularApplication<TModule>(applicationBuilder.Services,serviceName, creationContext);
 
         // Register core services for the modular application
 
@@ -58,7 +59,7 @@ public class BonyanApplication
         Action<BonApplicationCreationOptions>? creationContext = null,
         params string[] args)
     {
-        return CreateModularBuilder<BonAspNetCoreModule>( creationContext, args);
+        return CreateModularBuilder<BonAspNetCoreModule>( serviceName,creationContext, args);
     }
 
     /// <summary>
@@ -68,10 +69,10 @@ public class BonyanApplication
     /// <param name="services">Service collection to register dependencies.</param>
     /// <returns>An initialized instance of <see cref="WebBonModularityApplication{TModule}"/>.</returns>
     private static WebBonModularityApplication<TModule> InitializeModularApplication<TModule>(
-        IServiceCollection services, Action<BonApplicationCreationOptions>? creationContext = null)
+        IServiceCollection services,string serviceName, Action<BonApplicationCreationOptions>? creationContext = null)
         where TModule : IBonModule
     {
-        var modularApp = new WebBonModularityApplication<TModule>(services, creationContext);
+        var modularApp = new WebBonModularityApplication<TModule>(services,serviceName, creationContext);
 
         // Asynchronously configure modules, handling potential errors
         try

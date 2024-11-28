@@ -19,6 +19,8 @@ namespace Bonyan.Modularity
             Services = services;
         }
 
+        public BonServiceManager ServiceManager { get; set; }
+        
 
         /// <summary>
         /// Configures options of type <typeparamref name="TOptions"/> using an action.

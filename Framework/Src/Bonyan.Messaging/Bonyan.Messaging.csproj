@@ -8,6 +8,10 @@
     </PropertyGroup>
 <Import Project="..\..\..\framework-package.props"/>
     <ItemGroup>
+        <ProjectReference Include="..\Bonyan.StateMachine\Bonyan.StateMachine.csproj" />
         <ProjectReference Include="..\Bonyan\Bonyan.csproj"/>
+    </ItemGroup>
+    <ItemGroup>
+      <PackageReference Include="Stateless" Version="5.16.0" />
     </ItemGroup>
 </Project>

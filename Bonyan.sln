@@ -125,6 +125,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.Messaging.RabbitMQ.T
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.Mediator.Messaging", "Framework\Src\Bonyan.Mediator.Messaging\Bonyan.Mediator.Messaging.csproj", "{488887D9-6879-4B54-B93D-C93242485BDD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.StateMachine", "Framework\Src\Bonyan.StateMachine\Bonyan.StateMachine.csproj", "{D6E0CB5E-1859-425F-9133-7D788A045E9E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.StateMachine.Tests", "Framework\Tests\Bonyan.StateMachine.Tests\Bonyan.StateMachine.Tests.csproj", "{BC9023D9-EAB9-4A19-803F-94CA6793C34D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -315,6 +319,14 @@ Global
 		{488887D9-6879-4B54-B93D-C93242485BDD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{488887D9-6879-4B54-B93D-C93242485BDD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{488887D9-6879-4B54-B93D-C93242485BDD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D6E0CB5E-1859-425F-9133-7D788A045E9E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D6E0CB5E-1859-425F-9133-7D788A045E9E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D6E0CB5E-1859-425F-9133-7D788A045E9E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D6E0CB5E-1859-425F-9133-7D788A045E9E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BC9023D9-EAB9-4A19-803F-94CA6793C34D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC9023D9-EAB9-4A19-803F-94CA6793C34D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BC9023D9-EAB9-4A19-803F-94CA6793C34D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BC9023D9-EAB9-4A19-803F-94CA6793C34D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -377,6 +389,8 @@ Global
 		{188731F8-26A0-4E50-ADBB-BA721345E2BB} = {451B13E9-4996-4493-82C0-BCE2AA275E43}
 		{94B42DA5-8F69-435B-AFED-2F76C4A05589} = {451B13E9-4996-4493-82C0-BCE2AA275E43}
 		{488887D9-6879-4B54-B93D-C93242485BDD} = {31BFDED6-5439-4D9A-ABBA-882C07DE7024}
+		{D6E0CB5E-1859-425F-9133-7D788A045E9E} = {31BFDED6-5439-4D9A-ABBA-882C07DE7024}
+		{BC9023D9-EAB9-4A19-803F-94CA6793C34D} = {451B13E9-4996-4493-82C0-BCE2AA275E43}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CACE9943-7714-471F-BCCD-CC6CA1DA43C5}

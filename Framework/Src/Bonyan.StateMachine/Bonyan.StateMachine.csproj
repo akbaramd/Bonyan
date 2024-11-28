@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <PackageId>Bonyan.StateMachine</PackageId>
+        <RootNamespace/>
+    </PropertyGroup><Import Project="..\..\..\framework-package.props"/>
+    <ItemGroup>
+        <ProjectReference Include="..\Bonyan\Bonyan.csproj"/>
+    </ItemGroup>
+
+</Project>

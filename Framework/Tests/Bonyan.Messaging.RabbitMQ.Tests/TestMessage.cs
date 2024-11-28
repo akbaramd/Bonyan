@@ -21,6 +21,6 @@ public class TestEventConsumer : IBonMessageConsumer<TestEvent>
 {
     public Task ConsumeAsync(BonMessageContext<TestEvent> context, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        return context.ReplyAsync(context.Message);
     }
 }

@@ -1,71 +1,65 @@
-﻿using Bonyan.Messaging.Abstractions;
-using Bonyan.Workers;
-using Microsoft.Extensions.DependencyInjection;
+﻿using System;
+using System.Linq;
 using System.Reflection;
+using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Bonyan.Messaging.Abstractions;
 
 namespace Bonyan.Messaging.RabbitMQ;
 
-public class BonConsumersWorkers : IBonWorker
+public class BonBackgroundConsumerService : BackgroundService
 {
     private readonly IBonMessageBus _messageBus;
     private readonly IServiceProvider _serviceProvider;
-    private readonly BonApplicationCreationOptions _options;
+    private readonly BonMessagingConfiguration _messagingConfiguration;
 
-    public BonConsumersWorkers(IBonMessageBus messageBus, IServiceProvider serviceProvider, BonApplicationCreationOptions options)
+    public BonBackgroundConsumerService(IBonMessageBus messageBus, IServiceProvider serviceProvider, BonMessagingConfiguration messagingConfiguration)
     {
         _messageBus = messageBus;
         _serviceProvider = serviceProvider;
-        _options = options;
+        _messagingConfiguration = messagingConfiguration;
     }
 
-    public async Task ExecuteAsync(CancellationToken cancellationToken = default)
+    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        var consumerInterfaceType = typeof(IBonMessageConsumer<>);
-        var consumers = _serviceProvider.GetServices<object>() // Resolve all services
-            .Where(service => service.GetType().GetInterfaces()
-                .Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == consumerInterfaceType))
-            .ToList();
-
-        foreach (var consumer in consumers)
+        foreach (var registration in _messagingConfiguration.GetConsumerRegistrations())
         {
-            // Identify the IBonMessageConsumer<TMessage> interface and extract TMessage
-            var consumerInterface = consumer.GetType().GetInterfaces()
-                .First(i => i.IsGenericType && i.GetGenericTypeDefinition() == consumerInterfaceType);
-            var messageType = consumerInterface.GenericTypeArguments[0];
-
-            // Subscribe to the message bus
-            RegisterConsumer(consumer, messageType);
+            var consumer = _serviceProvider.GetRequiredService(registration.ImplementationType);
+            RegisterConsumer(consumer, registration.QueueName, stoppingToken);
         }
+
+        await Task.CompletedTask; // Keep the background service alive
     }
 
-    private void RegisterConsumer(object consumer, Type messageType)
+    private void RegisterConsumer(object consumer, string queueName, CancellationToken stoppingToken)
     {
-        var subscribeMethod = typeof(IBonMessageBus)
-            .GetMethod("Subscribe")
+        var consumerInterface = consumer.GetType().GetInterfaces()
+            .FirstOrDefault(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IBonMessageConsumer<>));
+
+        if (consumerInterface == null)
+            throw new InvalidOperationException($"Consumer {consumer.GetType().Name} does not implement IBonMessageConsumer<>");
+
+        var messageType = consumerInterface.GenericTypeArguments[0];
+
+        var handleMethod = GetType()
+            .GetMethod(nameof(Handle), BindingFlags.NonPublic | BindingFlags.Instance)
             ?.MakeGenericMethod(messageType);
 
-        if (subscribeMethod == null)
-            throw new InvalidOperationException($"Subscribe method not found on {nameof(IBonMessageBus)}.");
+        if (handleMethod == null)
+            throw new InvalidOperationException("Handle method not found.");
 
-        subscribeMethod.Invoke(_messageBus, new object[]
-        {
-            _options.ApplicationName,
-            CreateMessageHandler(consumer, messageType)
-        });
+        handleMethod.Invoke(this, new object[] { queueName, consumer, stoppingToken });
     }
 
-    private Func<object, Task> CreateMessageHandler(object consumer, Type messageType)
+    private void Handle<TMessage>(string queue, IBonMessageConsumer<TMessage> consumer, CancellationToken token)
+        where TMessage : class
     {
-        var consumeMethod = consumer.GetType().GetMethod("ConsumeAsync", new[] { typeof(BonMessageContext<>).MakeGenericType(messageType), typeof(CancellationToken) });
-
-        if (consumeMethod == null)
-            throw new InvalidOperationException($"Consumer {consumer.GetType().Name} does not have a valid ConsumeAsync method.");
-
-        return async (message) =>
+        _messageBus.Subscribe<TMessage>(queue, async context =>
         {
-            var context = Activator.CreateInstance(typeof(BonMessageContext<>).MakeGenericType(messageType), message);
-            var token = CancellationToken.None; // Replace with meaningful token if available
-            await (Task)consumeMethod.Invoke(consumer, new[] { context, token });
-        };
+            if (token.IsCancellationRequested) return;
+            await consumer.ConsumeAsync(context, token);
+        });
     }
 }
