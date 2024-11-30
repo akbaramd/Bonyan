@@ -1,223 +1,342 @@
-﻿namespace Bonyan.StateMachine
+﻿namespace Bonyan.StateMachine;
+
+public abstract class BonStateMachine<TStateInstance>
+    where TStateInstance : class, IStateInstance
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
+    private readonly Dictionary<string, BonState<TStateInstance>> _stateRegistry =
+        new(StringComparer.OrdinalIgnoreCase);
 
-    public abstract class BonStateManager<TInstance> where TInstance : class, IBonStateModel
+    protected readonly Dictionary<Type, List<IEventHandler<TStateInstance>>> _eventHandlers = new();
+    private readonly HashSet<Type> _definedEvents = new();
+
+    // Error handling delegate
+    public Action<TStateInstance, Exception>? OnError { get; set; }
+
+    public BonState<TStateInstance> Initial { get; }
+    public BonState<TStateInstance> Final { get; }
+
+    public HashSet<Type> DefinedEvents => _definedEvents;
+
+    protected BonStateMachine()
     {
-        private readonly Dictionary<string, BonState<TInstance>> _stateCache = new(StringComparer.OrdinalIgnoreCase);
-        private readonly Dictionary<Type, List<IWhenClause<TInstance>>> _eventHandlers = new();
-        private readonly HashSet<Type> _definedEvents = new();
-        public BonState<TInstance> Initial { get; }
-        public BonState<TInstance> Final { get; }
+        Initial = new BonState<TStateInstance>("Initial");
+        Final = new BonState<TStateInstance>("Final");
 
-        protected BonStateManager()
+        DefineState(Initial);
+        DefineState(Final);
+    }
+
+    #region State and Event Definitions
+
+    public void DefineState(BonState<TStateInstance> bonState)
+    {
+        if (bonState == null) throw new ArgumentNullException(nameof(bonState));
+        if (_stateRegistry.ContainsKey(bonState.Name))
+            throw new InvalidOperationException($"State '{bonState.Name}' is already defined.");
+
+        _stateRegistry[bonState.Name] = bonState;
+    }
+
+    public void DefineEvent<TEvent>() where TEvent : class
+    {
+        if (_definedEvents.Contains(typeof(TEvent)))
+            throw new InvalidOperationException($"Event of type '{typeof(TEvent).Name}' is already defined.");
+
+        _definedEvents.Add(typeof(TEvent));
+
+        if (!_eventHandlers.ContainsKey(typeof(TEvent)))
         {
-            Initial = new BonState<TInstance>("Initial");
-            Final = new BonState<TInstance>("Final");
-
-            DefineState(Initial);
-            DefineState(Final);
-
-            Configure();
+            _eventHandlers[typeof(TEvent)] = new List<IEventHandler<TStateInstance>>();
         }
+    }
 
-        #region State and Event Definitions
+    public BonState<TStateInstance> GetState(string name)
+    {
+        if (string.IsNullOrWhiteSpace(name))
+            return Initial;
 
-        public void DefineState(BonState<TInstance> state)
+        if (_stateRegistry.TryGetValue(name, out var state))
+            return state;
+
+        throw new InvalidOperationException($"State '{name}' is not defined.");
+    }
+
+    #endregion
+
+    #region State Transitions
+
+    protected ContextAwareEventHandler<TStateInstance, TEvent> OnEvent<TEvent>() where TEvent : class
+    {
+        if (!_eventHandlers.ContainsKey(typeof(TEvent)))
+            throw new InvalidOperationException($"Event '{typeof(TEvent).Name}' is not defined.");
+
+        var handler = new ContextAwareEventHandler<TStateInstance, TEvent>(this);
+
+        _eventHandlers[typeof(TEvent)].Add(handler);
+        return handler;
+    }
+
+    protected void Initially(params IEventHandler<TStateInstance>[] handlers)
+    {
+        During(Initial, handlers);
+    }
+
+    protected void DuringAny(params IEventHandler<TStateInstance>[] handlers)
+    {
+        // Apply the handlers to all states.
+        foreach (var state in _stateRegistry.Values)
         {
-            if (state == null) throw new ArgumentNullException(nameof(state));
-            if (_stateCache.ContainsKey(state.Name))
-                throw new InvalidOperationException($"State '{state.Name}' is already defined.");
-
-            _stateCache[state.Name] = state;
+            During(state, handlers);
         }
+    }
 
-        public void DefineEvent<TEvent>() where TEvent : class
+    protected void DuringStateTransition(BonState<TStateInstance> fromState, BonState<TStateInstance> toState, params IEventHandler<TStateInstance>[] handlers)
+    {
+        // Apply handlers specifically for state transitions from one state to another.
+        foreach (var handler in handlers)
         {
-            if (_definedEvents.Contains(typeof(TEvent)))
-                throw new InvalidOperationException($"Event of type '{typeof(TEvent).Name}' is already defined.");
+            handler.SetOriginState(fromState);
+            handler.TransitionToState = toState;
+            _eventHandlers[handler.EventType].Add(handler);
+        }
+    }
 
-            _definedEvents.Add(typeof(TEvent));
+    protected void During(BonState<TStateInstance> bonState, params IEventHandler<TStateInstance>[] handlers)
+    {
+        if (bonState == null) throw new ArgumentNullException(nameof(bonState));
+        if (handlers == null || handlers.Length == 0)
+            throw new ArgumentException("At least one event handler must be specified.", nameof(handlers));
 
-            if (!_eventHandlers.ContainsKey(typeof(TEvent)))
+        foreach (var handler in handlers)
+        {
+            handler.SetOriginState(bonState);
+            if (!_eventHandlers.ContainsKey(handler.EventType))
             {
-                _eventHandlers[typeof(TEvent)] = new List<IWhenClause<TInstance>>();
+                _eventHandlers[handler.EventType] = new List<IEventHandler<TStateInstance>>();
             }
+
+            _eventHandlers[handler.EventType].Add(handler);
         }
+    }
 
-        public BonState<TInstance> GetState(string name)
+    protected void Finally(params Action<TStateInstance>[] actions)
+    {
+        if (actions == null || actions.Length == 0)
+            throw new ArgumentException("At least one action must be specified.", nameof(actions));
+
+        foreach (var action in actions)
         {
-            if (string.IsNullOrWhiteSpace(name))
-                throw new ArgumentException("State name cannot be null or empty.", nameof(name));
-
-            if (_stateCache.TryGetValue(name, out var state))
-                return state;
-
-            throw new InvalidOperationException($"State '{name}' is not defined.");
+            Final.AddEntryAction(instance => Task.Run(() => action(instance)));
         }
+    }
 
-        #endregion
+    #endregion
 
-        #region When, Initially, and During
+    #region Event Processing
 
-        protected WhenClause<TInstance, TEvent> When<TEvent>() where TEvent : class
+    public async Task ProcessAsync<TEvent>(TStateInstance instance, TEvent eventData) where TEvent : class
+    {
+        await ProcessAsync(instance, null, eventData);
+    }
+
+    public async Task ProcessAsync<TEvent>(TStateInstance instance, object? context, TEvent eventData)
+        where TEvent : class
+    {
+        if (instance == null) throw new ArgumentNullException(nameof(instance));
+        if (eventData == null) throw new ArgumentNullException(nameof(eventData));
+
+        try
         {
-            if (!_eventHandlers.ContainsKey(typeof(TEvent)))
-                throw new InvalidOperationException($"Event '{typeof(TEvent).Name}' is not defined.");
-
-            var clause = new WhenClause<TInstance, TEvent>();
-
-            _eventHandlers[typeof(TEvent)].Add(clause);
-            return clause;
-        }
-
-        protected void Initially(params IWhenClause<TInstance>[] clauses)
-        {
-            During(Initial, clauses);
-        }
-
-        protected void During(BonState<TInstance> state, params IWhenClause<TInstance>[] clauses)
-        {
-            if (state == null) throw new ArgumentNullException(nameof(state));
-            if (clauses == null || clauses.Length == 0)
-                throw new ArgumentException("At least one WhenClause must be specified.", nameof(clauses));
-
-            foreach (var clause in clauses)
-            {
-                clause.SetTransitionFromState(state);
-                if (!_eventHandlers.ContainsKey(clause.EventType))
-                {
-                    _eventHandlers[clause.EventType] = new List<IWhenClause<TInstance>>();
-                }
-
-                _eventHandlers[clause.EventType].Add(clause);
-            }
-        }
-
-        protected void Finally(params Action<TInstance>[] actions)
-        {
-            if (actions == null || actions.Length == 0)
-                throw new ArgumentException("At least one action must be specified.", nameof(actions));
-
-            foreach (var action in actions)
-            {
-                Final.AddEntryAction(instance => Task.Run(() => action(instance)));
-            }
-        }
-
-        #endregion
-
-        #region Event Handling
-
-        public async Task RaiseEvent<TEvent>(TInstance instance, TEvent eventData) where TEvent : class
-        {
-            if (instance == null) throw new ArgumentNullException(nameof(instance));
-            if (eventData == null) throw new ArgumentNullException(nameof(eventData));
-
             if (!_eventHandlers.TryGetValue(typeof(TEvent), out var handlers))
                 throw new InvalidOperationException($"No handlers defined for event '{typeof(TEvent).Name}'.");
 
             var currentState = GetState(instance.State);
 
-            foreach (var handler in handlers.OfType<WhenClause<TInstance, TEvent>>())
+            // Execute event handlers with respect to the current state.
+            foreach (var handler in handlers.OfType<IContextAwareEventHandler<TStateInstance, TEvent>>())
             {
-                if (handler.TransitionFromState?.Name == currentState.Name)
+                if (handler.OriginState?.Name == currentState.Name)
                 {
-                    await handler.ExecuteAsync(instance, eventData);
+                    await handler.ExecuteAsync(instance, context, eventData);
                     return;
                 }
             }
 
-            throw new InvalidOperationException($"No valid transitions for event '{typeof(TEvent).Name}' in state '{instance.State}'.");
+            // Custom error handling, can be overridden in derived classes.
+            HandleEventProcessingError(instance, eventData);
         }
-
-        #endregion
-
-        protected abstract void Configure();
+        catch (Exception ex)
+        {
+            OnErrorHandled(instance, ex);
+        }
     }
 
-    public class BonState<TInstance>
+    // Virtual hook for customizing event processing error handling.
+    protected virtual void HandleEventProcessingError<TEvent>(TStateInstance instance, TEvent eventData) where TEvent : class
     {
-        public string Name { get; }
-        private readonly List<Func<TInstance, Task>> _entryActions = new();
-
-        public BonState(string name)
-        {
-            if (string.IsNullOrWhiteSpace(name))
-                throw new ArgumentException("State name cannot be null or empty.", nameof(name));
-
-            Name = name;
-        }
-
-        public void AddEntryAction(Func<TInstance, Task> action)
-        {
-            if (action == null) throw new ArgumentNullException(nameof(action));
-            _entryActions.Add(action);
-        }
-
-        public async Task ExecuteEntryActions(TInstance instance)
-        {
-            if (instance == null) throw new ArgumentNullException(nameof(instance));
-
-            foreach (var action in _entryActions)
-            {
-                await action(instance);
-            }
-        }
+        // Default error handling or logging could go here.
+        Console.WriteLine($"Error processing event {typeof(TEvent).Name} for instance {instance.State}: {eventData}");
     }
 
-    public interface IWhenClause<TInstance>
+    protected virtual void OnErrorHandled(TStateInstance instance, Exception exception)
     {
-        Type EventType { get; }
-        BonState<TInstance>? TransitionFromState { get; }
-        void SetTransitionFromState(BonState<TInstance> state);
+        // Hook for error handling that can be customized in derived classes.
+        Console.WriteLine($"Error in state machine: {exception.Message}");
     }
 
-    public class WhenClause<TInstance, TEvent> : IWhenClause<TInstance> where TInstance : class, IBonStateModel where TEvent : class
+    #endregion
+
+    #region State Management Helpers
+
+    // Virtual method to allow derived classes to have control over state transition behavior.
+    protected virtual Task ExecuteStateTransitionAsync(TStateInstance instance, BonState<TStateInstance> state)
     {
-        public Type EventType => typeof(TEvent);
-        public BonState<TInstance>? TransitionFromState { get; private set; }
-        private Action<TInstance, TEvent>? _action;
-        private BonState<TInstance>? _transitionToState;
-
-        public WhenClause() {}
-
-        public WhenClause<TInstance, TEvent> Then(Action<TInstance, TEvent> action)
-        {
-            _action = action ?? throw new ArgumentNullException(nameof(action));
-            return this;
-        }
-
-        public WhenClause<TInstance, TEvent> TransitionTo(BonState<TInstance> state)
-        {
-            _transitionToState = state ?? throw new ArgumentNullException(nameof(state));
-            return this;
-        }
-
-        public void SetTransitionFromState(BonState<TInstance> state)
-        {
-            TransitionFromState = state ?? throw new ArgumentNullException(nameof(state));
-        }
-
-        public async Task ExecuteAsync(TInstance instance, TEvent eventData)
-        {
-            if (instance == null) throw new ArgumentNullException(nameof(instance));
-
-            _action?.Invoke(instance, eventData);
-
-            if (_transitionToState != null)
-            {
-                instance.State = _transitionToState.Name;
-                await _transitionToState.ExecuteEntryActions(instance);
-            }
-        }
+        return state.ExecuteEntryActionsAsync(instance);
     }
 
-    public interface IBonStateModel
+    #endregion
+}
+
+public class BonState<TStateInstance>
+{
+    public string Name { get; }
+    private readonly List<Func<TStateInstance, Task>> _entryActions = new();
+    private readonly List<Func<TStateInstance, Task>> _finalizeActions = new();
+
+    public BonState(string name)
     {
-        string State { get; set; }
+        if (string.IsNullOrWhiteSpace(name))
+            throw new ArgumentException("State name cannot be null or empty.", nameof(name));
+
+        Name = name;
     }
+
+    public void AddEntryAction(Func<TStateInstance, Task> action)
+    {
+        if (action == null) throw new ArgumentNullException(nameof(action));
+        _entryActions.Add(action);
+    }
+
+    public void AddFinalizeAction(Func<TStateInstance, Task> action)
+    {
+        if (action == null) throw new ArgumentNullException(nameof(action));
+        _finalizeActions.Add(action);
+    }
+
+    public async Task ExecuteEntryActionsAsync(TStateInstance instance)
+    {
+        if (instance == null) throw new ArgumentNullException(nameof(instance));
+
+        foreach (var action in _entryActions)
+        {
+            await action(instance);
+        }
+    }
+
+    public async Task ExecuteFinalizeActionsAsync(TStateInstance instance)
+    {
+        if (instance == null) throw new ArgumentNullException(nameof(instance));
+
+        foreach (var action in _finalizeActions)
+        {
+            await action(instance);
+        }
+    }
+}
+
+public interface IEventHandler<TStateInstance>
+{
+    Type EventType { get; }
+    BonState<TStateInstance>? OriginState { get; }
+    BonState<TStateInstance>? TransitionToState { get; set; }
+    void SetOriginState(BonState<TStateInstance> bonState);
+
+    // Finalize actions inside event handler
+    void AddFinalizeAction(Func<TStateInstance, Task> finalizeAction);
+}
+
+public interface IContextAwareEventHandler<TStateInstance, TEvent> : IEventHandler<TStateInstance>
+{
+    Task ExecuteAsync(TStateInstance instance, object? context, TEvent eventData);
+    Task ExecuteAsync(TStateInstance instance, TEvent eventData);
+}
+
+public class ContextAwareEventHandler<TStateInstance, TEvent> : IContextAwareEventHandler<TStateInstance, TEvent>
+    where TStateInstance : class, IStateInstance
+    where TEvent : class
+{
+    private readonly BonStateMachine<TStateInstance> _stateMachine;
+    public Type EventType => typeof(TEvent);
+    public BonState<TStateInstance>? OriginState { get; set; }
+    private Action<TStateInstance, object?, TEvent>? _action;
+    public BonState<TStateInstance>? TransitionToState { get; set; }
+    private readonly List<Func<TStateInstance, Task>> _finalizeActions = new();
+
+    public ContextAwareEventHandler(BonStateMachine<TStateInstance> stateMachine)
+    {
+        _stateMachine = stateMachine;
+    }
+
+    public ContextAwareEventHandler<TStateInstance, TEvent> Then(Action<TStateInstance, object?, TEvent> action)
+    {
+        _action = action ?? throw new ArgumentNullException(nameof(action));
+        return this;
+    }
+
+    public ContextAwareEventHandler<TStateInstance, TEvent> Then(Action<TStateInstance, TEvent> action)
+    {
+        this.Then((instance, _, eventData) => action(instance, eventData));
+        return this;
+    }
+
+    public ContextAwareEventHandler<TStateInstance, TEvent> TransitionTo(BonState<TStateInstance> bonState)
+    {
+        TransitionToState = bonState ?? throw new ArgumentNullException(nameof(bonState));
+        return this;
+    }
+        
+    public ContextAwareEventHandler<TStateInstance, TEvent> Finalize()
+    {
+        TransitionTo(_stateMachine.Final);
+        return this;
+    }
+
+    public void SetOriginState(BonState<TStateInstance> bonState)
+    {
+        OriginState = bonState ?? throw new ArgumentNullException(nameof(bonState));
+    }
+
+    public void AddFinalizeAction(Func<TStateInstance, Task> finalizeAction)
+    {
+        if (finalizeAction == null) throw new ArgumentNullException(nameof(finalizeAction));
+        _finalizeActions.Add(finalizeAction);
+    }
+
+    public async Task ExecuteAsync(TStateInstance instance, object? context, TEvent eventData)
+    {
+        if (_action == null) throw new InvalidOperationException("No action defined.");
+        _action(instance, context, eventData);
+
+        if (TransitionToState != null)
+        {
+            instance.State = TransitionToState.Name;
+            await TransitionToState.ExecuteEntryActionsAsync(instance);
+        }
+
+        // Execute finalize actions for the handler.
+        foreach (var finalizeAction in _finalizeActions)
+        {
+            await finalizeAction(instance);
+        }
+    }
+
+    public Task ExecuteAsync(TStateInstance instance, TEvent eventData)
+    {
+        return ExecuteAsync(instance, null, eventData);
+    }
+}
+
+public interface IStateInstance
+{
+    string State { get; set; }
 }

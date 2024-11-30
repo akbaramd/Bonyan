@@ -36,6 +36,12 @@ public class BonyanTemplateWebApiModule : BonWebModule
     }
 
 
+    public override Task OnApplicationAsync(BonWebApplicationContext context)
+    {
+        context.Application.UseCorrelationId();
+        return base.OnApplicationAsync(context);
+    }
+
     public override Task OnPostApplicationAsync(BonWebApplicationContext context)
     {
         if (context.Application.Environment.IsDevelopment())

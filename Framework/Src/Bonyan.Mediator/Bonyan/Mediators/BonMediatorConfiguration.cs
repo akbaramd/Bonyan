@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
+﻿using Bonyan.Modularity;
 using Microsoft.Extensions.DependencyInjection;
 
-using Bonyan.Modularity;
-
-namespace Bonyan.Messaging
+namespace Bonyan.Mediators
 {
     /// <summary>
     /// Provides configuration options for registering message consumers and dispatchers in the messaging system.

@@ -1,4 +1,5 @@
 using Bonyan.AspNetCore.Security;
+using Bonyan.AspNetCore.Tracing;
 using Bonyan.ExceptionHandling;
 using Bonyan.Layer.Domain;
 using Bonyan.Modularity;
@@ -102,6 +103,7 @@ public class BonAspNetCoreModule : BonWebModule
     {
         context.Services.AddTransient<BonyanClaimsMapMiddleware>();
         context.Services.AddTransient<BonyanUnitOfWorkMiddleware>();
+        context.Services.AddTransient<BonCorrelationIdMiddleware>();
     }
 
     /// <summary>

@@ -1,4 +1,5 @@
 ﻿using Bonyan.Mediators;
+using Bonyan.Mediators.Messaging;
 using Bonyan.Messaging;
 using Bonyan.Modularity;
 

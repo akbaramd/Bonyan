@@ -1,5 +1,4 @@
 ﻿using Bonyan.Mediators;
-using Bonyan.Messaging;
 using Bonyan.Modularity;
 
 namespace Microsoft.Extensions.DependencyInjection;

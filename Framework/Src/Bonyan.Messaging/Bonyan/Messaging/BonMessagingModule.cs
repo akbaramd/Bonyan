@@ -8,10 +8,13 @@ namespace Bonyan.Messaging
 {
     public class BonMessagingModule : BonModule
     {
-        public override Task OnConfigureAsync(BonConfigurationContext context)
+        public override Task OnPreConfigureAsync(BonConfigurationContext context)
         {
-            return base.OnConfigureAsync(context);
+            context.Services.AddHostedService<BonBackgroundConsumerService>();
+            context.Services.AddHostedService<BonSagaBackgroundService>();
+            return base.OnPreConfigureAsync(context);
         }
+
 
         public override Task OnPostConfigureAsync(BonConfigurationContext context)
         {

@@ -1,4 +1,6 @@
-﻿namespace Bonyan.Mediators;
+﻿using Bonyan.Messaging.Abstractions;
+
+namespace Bonyan.Mediators.Messaging;
 
 public class BonMediatorMessagingBehavior<TMessage> : IBonMediatorBehavior<TMessage> where TMessage : class
 {

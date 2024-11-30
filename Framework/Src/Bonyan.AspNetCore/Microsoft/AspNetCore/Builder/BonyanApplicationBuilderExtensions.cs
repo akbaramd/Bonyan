@@ -1,4 +1,5 @@
 ﻿using Bonyan.AspNetCore.Security;
+using Bonyan.AspNetCore.Tracing;
 using Bonyan.ExceptionHandling;
 using Bonyan.UnitOfWork;
 
@@ -15,6 +16,12 @@ public static class BonyanApplicationBuilderExtensions
     {
         return app
             .UseMiddleware<BonyanUnitOfWorkMiddleware>();
+    }
+    
+    public static IApplicationBuilder UseCorrelationId(this IApplicationBuilder app)
+    {
+        return app
+            .UseMiddleware<BonCorrelationIdMiddleware>();
     }
 
    

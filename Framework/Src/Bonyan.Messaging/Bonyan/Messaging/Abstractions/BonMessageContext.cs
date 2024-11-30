@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
-namespace Bonyan.Messaging;
+namespace Bonyan.Messaging.Abstractions;
 
 /// <summary>
 /// Provides context for messages being processed, including reply functionality, headers, and correlation management.

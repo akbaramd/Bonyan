@@ -3,6 +3,7 @@ using Bonyan;
 using Microsoft.Extensions.DependencyInjection;
 using Bonyan.Messaging;
 using Bonyan.Messaging.Abstractions;
+using Bonyan.Messaging.Saga;
 using Bonyan.Modularity;
 
 namespace Microsoft.Extensions.DependencyInjection
@@ -25,16 +26,20 @@ namespace Microsoft.Extensions.DependencyInjection
 
             // Create and configure messaging options
             var options = new BonMessagingConfiguration(context);
-
             // Ensure the message bus is implemented
             context.Services.AddTransient<IBonMessageBus>(sp =>
                 throw new NotImplementedException(
                     "No message bus implementation provided. Please register a compatible message bus (e.g., RabbitMQ, Azure Service Bus, etc.)."));
 
+            context.Services.AddTransient<IBonMessageProducer>(sp => sp.GetRequiredService<IBonMessageBus>());
+            context.Services.AddTransient<IBonMessageSubscriber>(sp => sp.GetRequiredService<IBonMessageBus>());
+            
             configureOptions(options);
 
+            context.Services.AddSingleton<IBonStateStore, BonInMemoryStateStore>();
+            
             context.ServiceManager.RegisterFeatureHealth("BonMessaging", () => BonHealthStatus.Up);
-
+            
             return context;
         }
     }

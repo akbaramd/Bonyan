@@ -1,6 +1,9 @@
 ﻿using Autofac;
 using Bonyan;
+using Bonyan.Castle.DynamicProxy;
+using Bonyan.DependencyInjection;
 using Bonyan.Modularity;
+using Bonyan.Tracing;
 using Microsoft.Extensions.Configuration;
 
 namespace Microsoft.Extensions.DependencyInjection
@@ -11,6 +14,12 @@ namespace Microsoft.Extensions.DependencyInjection
             
             this IServiceCollection services, string serviceName,Action<BonConfigurationContext> configure)
         {
+            
+            services.AddTransient(typeof(BonAsyncDeterminationInterceptor<>));
+            services.AddTransient<IBonCachedServiceProviderBase, BonLazyServiceProvider>();
+            services.AddTransient<IBonLazyServiceProvider, BonLazyServiceProvider>();
+            services.AddSingleton<ICorrelationIdProvider, DefaultCorrelationIdProvider>();
+            
             var context = new BonConfigurationContext(services);
             context.ServiceManager = new BonServiceManager()
             {

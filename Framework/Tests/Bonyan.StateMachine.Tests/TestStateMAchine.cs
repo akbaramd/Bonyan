@@ -1,7 +1,6 @@
-﻿using Bonyan.StateMachine;
-using System;
+﻿namespace Bonyan.StateMachine.Tests;
 
-public class TestStateMachine : BonStateManager<TestStateMachine.TestInstance>
+public class TestStateMachine : BonStateMachine<TestStateMachine.TestInstance>
 {
     // Define states
     public BonState<TestInstance> Registered { get; } = new(nameof(Registered));
@@ -11,7 +10,7 @@ public class TestStateMachine : BonStateManager<TestStateMachine.TestInstance>
     // Define events
 
 
-    protected override void Configure()
+    public TestStateMachine()
     {
         // Register states
         DefineState(Registered);
@@ -25,8 +24,8 @@ public class TestStateMachine : BonStateManager<TestStateMachine.TestInstance>
 
         // Define transitions and initial state behavior
         Initially(
-            When<RegisterEvent>()
-                .Then((instance, eventData) =>
+            OnEvent<RegisterEvent>()
+                .Then((instance,obj, eventData) =>
                 {
                     Console.WriteLine($"Registered: {eventData.Message}");
                     instance.Id = eventData.UserId;
@@ -36,14 +35,14 @@ public class TestStateMachine : BonStateManager<TestStateMachine.TestInstance>
 
         During(
             Registered,
-            When<ConfirmEvent>()
-                .Then((instance, eventData) =>
+            OnEvent<ConfirmEvent>()
+                .Then((instance, ctx,eventData) =>
                 {
                     Console.WriteLine($"Confirmed: {eventData.ApproverId}");
                 })
                 .TransitionTo(Confirmed),
-            When<CompleteEvent>()
-                .Then((instance, eventData) =>
+            OnEvent<CompleteEvent>()
+                .Then((instance,ctx, eventData) =>
                 {
                     Console.WriteLine($"Completed: {eventData.Timestamp}");
                 })
@@ -51,7 +50,7 @@ public class TestStateMachine : BonStateManager<TestStateMachine.TestInstance>
         );
     }
 
-    public class TestInstance : IBonStateModel
+    public class TestInstance : IStateInstance
     {
         public string Id { get; set; }
         public string State { get; set; } = "Initial";

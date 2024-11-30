@@ -14,12 +14,7 @@ namespace Bonyan.Messaging.RabbitMQ
             DependOn<BonMessagingModule>();
         }
 
-        public override Task OnPreConfigureAsync(BonConfigurationContext context)
-        {
-            context.Services.AddHostedService<BonBackgroundConsumerService>();
-            return base.OnPreConfigureAsync(context);
-        }
-
+      
         public override Task OnConfigureAsync(BonConfigurationContext context)
         {
   

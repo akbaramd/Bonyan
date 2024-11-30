@@ -1,12 +1,13 @@
 using System.Collections.Concurrent;
 using System.Text;
 using System.Text.Json;
-using Bonyan.Messaging.RabbitMQ;
+using Bonyan.Messaging.Abstractions;
+using Bonyan.Tracing;
+using Microsoft.Extensions.Options;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
-using Microsoft.Extensions.Options;
 
-namespace Bonyan.Messaging.Abstractions;
+namespace Bonyan.Messaging.RabbitMQ;
 
 public class RabbitMQMessageBus : IBonMessageBus, IDisposable
 {
@@ -15,12 +16,14 @@ public class RabbitMQMessageBus : IBonMessageBus, IDisposable
     private readonly string _topicExchangeName;
     private readonly BonServiceManager _serviceManager;
     private readonly IServiceProvider _serviceProvider;
+    private readonly ICorrelationIdProvider _correlationIdProvider;
     private readonly ConcurrentDictionary<string, TaskCompletionSource<byte[]>> _responseHandlers;
 
-    public RabbitMQMessageBus(IOptions<RabbitMQOptions> options, BonServiceManager applicationCreationOptions, IServiceProvider serviceProvider)
+    public RabbitMQMessageBus(IOptions<RabbitMQOptions> options, BonServiceManager applicationCreationOptions, IServiceProvider serviceProvider, ICorrelationIdProvider correlationIdProvider)
     {
         _serviceManager = applicationCreationOptions;
         _serviceProvider = serviceProvider;
+        _correlationIdProvider = correlationIdProvider;
 
         var rabbitOptions = options.Value;
         _connection = CreateConnection(rabbitOptions);
@@ -61,11 +64,12 @@ public class RabbitMQMessageBus : IBonMessageBus, IDisposable
 
         // Bind the reply queue for direct responses
         BindQueue(replyQueueName, $"{typeof(TResponse).Name}.{replyQueueName}.direct");
-
+        
         // Set up a consumer to listen to the reply queue
         var replyConsumer = CreateReplyConsumer(replyQueueName, correlationId, tcs);
         
         var suffix = isReply ? $"{serviceName}.{correlationId}.direct" : $"{serviceName}.direct";
+        
         // Publish the message with a routing key for the specific service
         PublishMessage(
             message: message,

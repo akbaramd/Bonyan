@@ -1,13 +1,9 @@
-﻿using System;
-using System.Linq;
-using System.Reflection;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Reflection;
+using Bonyan.Messaging.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Bonyan.Messaging.Abstractions;
 
-namespace Bonyan.Messaging.RabbitMQ;
+namespace Bonyan.Messaging;
 
 public class BonBackgroundConsumerService : BackgroundService
 {

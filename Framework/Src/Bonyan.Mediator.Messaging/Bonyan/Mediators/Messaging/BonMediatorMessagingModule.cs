@@ -3,7 +3,7 @@ using Bonyan.Modularity;
 using Bonyan.Modularity.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Bonyan.Mediators
+namespace Bonyan.Mediators.Messaging
 {
     public class BonMediatorMessagingModule : BonModule
     {

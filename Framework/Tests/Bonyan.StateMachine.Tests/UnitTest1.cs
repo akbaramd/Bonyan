@@ -11,10 +11,10 @@ namespace Bonyan.StateMachine.Tests
             var stateMachine = new TestStateMachine();
             var instance = new TestStateMachine.TestInstance { Id = Guid.NewGuid().ToString() };
 
-            await stateMachine.RaiseEvent(instance,new TestStateMachine.RegisterEvent());
+            await stateMachine.ProcessAsync(instance,new TestStateMachine.RegisterEvent());
             Console.WriteLine($"Current State: {instance.State}");
 
-            await stateMachine.RaiseEvent( instance,new TestStateMachine.ConfirmEvent());
+            await stateMachine.ProcessAsync( instance,new TestStateMachine.ConfirmEvent());
             Console.WriteLine($"Current State: {instance.State}");
 
             
