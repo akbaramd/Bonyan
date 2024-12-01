@@ -28,6 +28,16 @@ public class BonyanTemplateWebApiModule : BonWebModule
                 x.SecretKey = "AS2Da2s2dK4A5SD8HaAiSD9YAaS2DU285472KHs2d6734haS35";
             });
         });
+
+        PreConfigure<BonAuthorizationConfiguration>(c =>
+        {
+            c.RegisterPermissions([
+                "book.create",
+                "book.read",
+                "book.delete",
+                "book.edit",
+            ]);
+        });
         return base.OnConfigureAsync(context);
     }
 

@@ -11,6 +11,8 @@
     <Import Project="..\..\..\..\module-package.props"/>
     <ItemGroup>
       <ProjectReference Include="..\..\..\..\Framework\Src\Bonyan.AspNetCore.Authentication\Bonyan.AspNetCore.Authentication.csproj" />
+      <ProjectReference Include="..\..\..\..\Framework\Src\Bonyan.Worker.Abstraction\Bonyan.Worker.Abstraction.csproj" />
+      <ProjectReference Include="..\..\..\..\Framework\Src\Bonyan.Workers\Bonyan.Workers.csproj" />
       <ProjectReference Include="..\..\..\Bonyan.UserManagement\Src\Bonyan.UserManagement.Application\Bonyan.UserManagement.Application.csproj" />
       <ProjectReference Include="..\Bonyan.IdentityManagement.Domain\Bonyan.IdentityManagement.Domain.csproj" />
       <ProjectReference Include="..\Bonyan.IdentityManagement\Bonyan.IdentityManagement.csproj" />

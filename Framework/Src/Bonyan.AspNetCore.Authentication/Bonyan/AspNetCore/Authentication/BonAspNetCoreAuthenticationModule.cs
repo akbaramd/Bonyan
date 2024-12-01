@@ -11,6 +11,11 @@ namespace Bonyan.AspNetCore.Authentication
 
         public override Task OnPostConfigureAsync(BonConfigurationContext context)
         {
+            context.AddAuthorization(c =>
+            {
+                context.Services.ExecutePreConfiguredActions(c);
+            });
+            
             ConfigureAuthentication(context);
             return base.OnPostConfigureAsync(context);
         }

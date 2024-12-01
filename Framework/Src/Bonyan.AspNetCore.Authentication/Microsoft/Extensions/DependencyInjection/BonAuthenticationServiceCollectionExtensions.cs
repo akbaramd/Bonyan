@@ -1,4 +1,5 @@
 ﻿using Bonyan.AspNetCore.Authentication;
+using Bonyan.IdentityManagement.Permissions;
 using Bonyan.Modularity;
 
 namespace Microsoft.Extensions.DependencyInjection
@@ -21,9 +22,30 @@ namespace Microsoft.Extensions.DependencyInjection
             var manager = new BonAuthenticationConfiguration(context);
             manager.ConfigureCookieAuthentication();
             configure(manager);
-            
-            
-            
+
+
+            return context;
+        }
+
+        public static BonConfigurationContext AddAuthorization(
+            this BonConfigurationContext context,
+            Action<BonAuthorizationConfiguration> configure)
+        {
+            var v = new BonAuthorizationConfiguration(context);
+            configure(v);
+
+            context.Services.AddAuthorization(c =>
+            {
+                var acc = context.Services.GetObject<PermissionAccessor>();
+                
+                foreach (var permission in acc)
+                {
+                    // Create a policy with the required permissions
+                    c.AddPolicy(permission, policy =>
+                        policy.RequireClaim(permission));
+                }
+            });
+
             return context;
         }
     }

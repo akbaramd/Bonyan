@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using Bonyan.AspNetCore.Authentication.Options;
+using Bonyan.IdentityManagement.Permissions;
 using Bonyan.Modularity;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -12,7 +13,7 @@ namespace Bonyan.AspNetCore.Authentication
     {
         private readonly BonConfigurationContext _context;
         private readonly AuthenticationBuilder _authenticationBuilder;
-
+        
         public BonAuthenticationConfiguration(BonConfigurationContext context)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
