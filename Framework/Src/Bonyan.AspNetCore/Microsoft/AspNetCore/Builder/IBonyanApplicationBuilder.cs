@@ -1,5 +1,7 @@
 ﻿
 
+using Bonyan.Modularity;
+
 namespace Microsoft.AspNetCore.Builder;
 
 public interface IBonyanApplicationBuilder 
@@ -15,5 +17,5 @@ public interface IBonyanApplicationBuilder
 
  IHostBuilder Host { get; }
 
- Task<WebApplication> BuildAsync();
+ Task<WebApplication> BuildAsync(Action<BonWebApplicationContext>? action = null);
 }

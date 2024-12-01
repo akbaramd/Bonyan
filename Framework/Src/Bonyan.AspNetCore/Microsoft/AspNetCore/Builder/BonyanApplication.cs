@@ -1,8 +1,6 @@
-﻿using Bonyan;
-using Bonyan.AspNetCore;
+﻿using Bonyan.AspNetCore;
 using Bonyan.Modularity;
 using Bonyan.Modularity.Abstractions;
-using Bonyan.Plugins;
 using Microsoft.Hosting;
 
 namespace Microsoft.AspNetCore.Builder;
@@ -34,7 +32,7 @@ public class BonyanApplication
     /// <param name="serviceName"></param>
     /// <returns>An instance of <see cref="IBonyanApplicationBuilder"/> configured with the root module.</returns>
     public static IBonyanApplicationBuilder CreateModularBuilder<TModule>(string serviceName,
-        Action<BonApplicationCreationOptions>? creationContext = null, params string[] args)
+        Action<BonConfigurationContext>? creationContext = null, params string[] args)
         where TModule : IBonModule
     {
         var applicationBuilder = WebApplication.CreateBuilder(args);
@@ -56,7 +54,7 @@ public class BonyanApplication
     }
 
     public static IBonyanApplicationBuilder CreateBuilder(string serviceName,
-        Action<BonApplicationCreationOptions>? creationContext = null,
+        Action<BonConfigurationContext>? creationContext = null,
         params string[] args)
     {
         return CreateModularBuilder<BonAspNetCoreModule>( serviceName,creationContext, args);
@@ -69,22 +67,10 @@ public class BonyanApplication
     /// <param name="services">Service collection to register dependencies.</param>
     /// <returns>An initialized instance of <see cref="WebBonModularityApplication{TModule}"/>.</returns>
     private static WebBonModularityApplication<TModule> InitializeModularApplication<TModule>(
-        IServiceCollection services,string serviceName, Action<BonApplicationCreationOptions>? creationContext = null)
+        IServiceCollection services,string serviceName, Action<BonConfigurationContext>? creationContext = null)
         where TModule : IBonModule
     {
         var modularApp = new WebBonModularityApplication<TModule>(services,serviceName, creationContext);
-
-        // Asynchronously configure modules, handling potential errors
-        try
-        {
-            modularApp.ConfigureModulesAsync().GetAwaiter().GetResult();
-        }
-        catch (Exception ex)
-        {
-            // Log or handle errors during module configuration as needed
-            // Example: logger.LogError(ex, "Module configuration failed.");
-            throw new InvalidOperationException("Module configuration failed.", ex);
-        }
 
         return modularApp;
     }

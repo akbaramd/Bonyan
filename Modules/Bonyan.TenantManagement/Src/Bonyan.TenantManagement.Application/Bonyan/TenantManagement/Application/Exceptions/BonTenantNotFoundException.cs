@@ -5,7 +5,7 @@ using Bonyan.TenantManagement.Domain;
 namespace Bonyan.TenantManagement.Application.Exceptions;
 
 /// <summary>
-/// Custom exception thrown when a tenant cannot be found in the application layer.
+/// Custom exception thrown when a tenant cannot be found in the application Layer.
 /// </summary>
 public class BonTenantNotFoundException : BonApplicationException
 {
@@ -19,7 +19,7 @@ public class BonTenantNotFoundException : BonApplicationException
   /// <param name="parameters">Additional parameters for logging or debugging.</param>
   public BonTenantNotFoundException(
     BonTenantId? tenantId = null,
-    string message = "The specified tenant could not be found in the application layer.",
+    string message = "The specified tenant could not be found in the application Layer.",
     string errorCode = "TenantNotFound",
     object? parameters = null
   ) : base( HttpStatusCode.NotFound, $"{message} | Tenant ID: {tenantId?.Value.ToString()}", errorCode, parameters)

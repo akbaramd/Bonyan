@@ -3,15 +3,15 @@ using Microsoft.EntityFrameworkCore.Design;
 
 namespace BonyanTemplate.Infrastructure.Data;
 
-public class BonyanTemplateDbContextFactory : IDesignTimeDbContextFactory<TemplateBookManagementBonDbContext>
+public class BonyanTemplateDbContextFactory : IDesignTimeDbContextFactory<BonyanTemplateDbContext>
 {
-    public TemplateBookManagementBonDbContext CreateDbContext(string[] args)
+    public BonyanTemplateDbContext CreateDbContext(string[] args)
     {
-        var optionsBuilder = new DbContextOptionsBuilder<TemplateBookManagementBonDbContext>();
+        var optionsBuilder = new DbContextOptionsBuilder<BonyanTemplateDbContext>();
 
         optionsBuilder.UseSqlite($"Data Source=../BonyanTemplate.WebApi/BonyanTemplate.db");
 
-        var xtx =  new TemplateBookManagementBonDbContext(optionsBuilder.Options);
-        return xtx;
+        var context =  new BonyanTemplateDbContext(optionsBuilder.Options);
+        return context;
     }
 }

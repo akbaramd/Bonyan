@@ -15,14 +15,16 @@ public class RabbitMqWithImplementation : BonModule
     {
         context.AddMessaging(c =>
         {
-            c.RegisterConsumer<TestEventConsumer>("test");
-            c.AddRabbitMQ(options =>
+            c.RegisterConsumer<TestEventConsumer>();
+            c.AddRabbitMq(options =>
             {
                 options.HostName = "localhost";
                 options.Port = 5672;
                 options.UserName = "guest";
                 options.Password = "guest";
                 options.VirtualHost = "/";
+                
+                options.ConfigureConsumer<TestEventConsumer>("test");
             });
         });
         

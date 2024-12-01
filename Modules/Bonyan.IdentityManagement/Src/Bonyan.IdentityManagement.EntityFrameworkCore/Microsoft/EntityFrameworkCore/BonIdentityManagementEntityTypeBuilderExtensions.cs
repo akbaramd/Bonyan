@@ -1,8 +1,6 @@
-﻿using Bonyan.IdentityManagement.Domain;
-using Bonyan.IdentityManagement.Domain.Permissions;
+﻿using Bonyan.IdentityManagement.Domain.Permissions;
 using Bonyan.IdentityManagement.Domain.Roles;
 using Bonyan.IdentityManagement.Domain.Users;
-using Bonyan.UserManagement.Domain.Users.ValueObjects;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Microsoft.EntityFrameworkCore;

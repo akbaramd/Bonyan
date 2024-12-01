@@ -21,7 +21,7 @@ public interface IBonMediator
     Task SendAsync<TCommand>(
         TCommand command,
         CancellationToken cancellationToken = default)
-        where TCommand : IBonCommand;
+        where TCommand : IBonCommand?;
     /// <summary>
     /// Sends a query to a single handler and expects a response.
     /// </summary>

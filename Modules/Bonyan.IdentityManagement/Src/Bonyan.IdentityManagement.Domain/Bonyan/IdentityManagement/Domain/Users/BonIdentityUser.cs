@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Bonyan.IdentityManagement.Domain.Users.DomainEvents;
+﻿using Bonyan.IdentityManagement.Domain.Users.DomainEvents;
 using Bonyan.IdentityManagement.Domain.Users.ValueObjects;
 using Bonyan.UserManagement.Domain.Users;
 using Bonyan.UserManagement.Domain.Users.ValueObjects;

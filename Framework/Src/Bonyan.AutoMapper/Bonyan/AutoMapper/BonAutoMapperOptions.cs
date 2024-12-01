@@ -1,6 +1,5 @@
 using AutoMapper;
 using Bonyan.Collections;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Bonyan.AutoMapper;
 

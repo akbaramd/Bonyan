@@ -1,6 +1,5 @@
 ﻿using Bonyan.IdentityManagement.Domain.Permissions;
 using Bonyan.IdentityManagement.Domain.Roles.ValueObjects;
-using Bonyan.IdentityManagement.Domain.Users;
 using Bonyan.Layer.Domain.Aggregate;
 using Bonyan.Layer.Domain.Events;
 

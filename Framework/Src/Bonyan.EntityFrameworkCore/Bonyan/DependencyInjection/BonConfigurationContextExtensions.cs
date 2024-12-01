@@ -1,18 +1,16 @@
-﻿using System.Reflection;
-using Bonyan.EntityFrameworkCore;
+﻿using Bonyan.EntityFrameworkCore;
 using Bonyan.EntityFrameworkCore.Abstractions;
 using Bonyan.EntityFrameworkCore.Builders;
 using Bonyan.Modularity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.Extensions.Options;
 
 namespace Bonyan.DependencyInjection;
 
 public static class Extensions
 {
-    public static BonConfigurationContext AddBonDbContext<TDbContext>(this BonConfigurationContext context,
+    public static BonConfigurationContext AddDbContext<TDbContext>(this BonConfigurationContext context,
         Action<IBonDbContextRegistrationOptionBuilder>? optionsBuilder = null)
         where TDbContext : BonDbContext<TDbContext>
     {

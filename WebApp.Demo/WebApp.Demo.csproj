@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.8"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.8">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.0" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="7.1.0"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Framework\Src\Bonyan.EntityFrameworkCore\Bonyan.EntityFrameworkCore.csproj" />
+      <ProjectReference Include="..\Framework\Src\Bonyan.Messaging.OutBox.EntityFrameworkCore\Bonyan.Messaging.OutBox.EntityFrameworkCore.csproj" />
+      <ProjectReference Include="..\Novin\src\Novin.AspNetCore\Novin.AspNetCore.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Data\Entities\" />
+    </ItemGroup>
+
+
+
+</Project>

@@ -2,9 +2,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using Autofac.Builder;
 using Bonyan.Exceptions;
-using Bonyan.Modularity.Abstractions;
 using Bonyan.Reflection;
-using Microsoft;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Autofac.Extensions.DependencyInjection;

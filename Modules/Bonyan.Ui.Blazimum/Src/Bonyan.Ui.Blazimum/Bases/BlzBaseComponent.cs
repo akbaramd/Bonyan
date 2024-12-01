@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
-using System.Text.Json;
+using Newtonsoft.Json;
 
 namespace Bonyan.Ui.Blazimum.Bases
 {
@@ -34,7 +34,7 @@ namespace Bonyan.Ui.Blazimum.Bases
                 Style,
                 AdditionalAttributes
             };
-            Console.WriteLine(JsonSerializer.Serialize(parameterData, new JsonSerializerOptions { WriteIndented = true }));
+            Console.WriteLine(JsonConvert.SerializeObject(parameterData));
         }
 
         /// <summary>

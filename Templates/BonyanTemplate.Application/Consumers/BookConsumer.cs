@@ -1,5 +1,4 @@
-﻿using Bonyan.Messaging;
-using Bonyan.Messaging.Abstractions;
+﻿using Bonyan.Messaging.Abstractions;
 using BonyanTemplate.Domain.Books.DomainEvents;
 
 namespace BonyanTemplate.Application.Consumers;

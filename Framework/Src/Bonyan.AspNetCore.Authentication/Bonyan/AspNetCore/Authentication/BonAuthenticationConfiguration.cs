@@ -1,11 +1,9 @@
-﻿using System;
-using System.Text;
+﻿using System.Text;
 using Bonyan.AspNetCore.Authentication.Options;
 using Bonyan.Modularity;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Bonyan.AspNetCore.Authentication

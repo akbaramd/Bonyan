@@ -1,6 +1,5 @@
 ﻿using Bonyan.Modularity;
 using Bonyan.Workers.Tests.Mock;
-using Microsoft;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 

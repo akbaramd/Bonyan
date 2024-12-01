@@ -1,6 +1,4 @@
-using Bonyan.AspNetCore.Authentication;
 using Bonyan.AutoMapper;
-using Bonyan.IdentityManagement.Domain;
 using Bonyan.IdentityManagement.Domain.Users;
 using Bonyan.Modularity;
 using Bonyan.Modularity.Abstractions;

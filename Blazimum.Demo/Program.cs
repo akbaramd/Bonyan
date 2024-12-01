@@ -1,5 +1,4 @@
 using Blazimum.Demo;
-using Blazimum.Demo.Components;
 
 var builder = BonyanApplication.CreateModularBuilder<BlazimumDemoModule>("demo-app",args: args);
 

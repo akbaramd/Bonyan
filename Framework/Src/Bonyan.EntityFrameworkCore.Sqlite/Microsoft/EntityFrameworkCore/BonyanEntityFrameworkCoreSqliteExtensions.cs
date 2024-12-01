@@ -1,5 +1,4 @@
-﻿using Bonyan.EntityFrameworkCore;
-using Bonyan.EntityFrameworkCore.Abstractions;
+﻿using Bonyan.EntityFrameworkCore.Abstractions;
 
 namespace Microsoft.EntityFrameworkCore;
 

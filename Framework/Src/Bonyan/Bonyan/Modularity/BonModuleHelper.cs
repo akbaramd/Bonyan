@@ -1,6 +1,5 @@
 using System.Reflection;
 using Bonyan.Modularity.Abstractions;
-using Microsoft.Extensions.Logging;
 
 namespace Bonyan.Modularity;
 

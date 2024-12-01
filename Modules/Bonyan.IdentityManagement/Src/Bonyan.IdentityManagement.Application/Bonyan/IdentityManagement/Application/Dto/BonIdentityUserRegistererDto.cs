@@ -1,5 +1,4 @@
-﻿using Bonyan.IdentityManagement.Domain.Users.ValueObjects;
-using Bonyan.UserManagement.Application.Users.Dto;
+﻿using Bonyan.UserManagement.Application.Users.Dto;
 
 namespace Bonyan.IdentityManagement.Application.Dto;
 

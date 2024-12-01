@@ -1,8 +1,4 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using Bonyan.Mediator.Tests;
-using Bonyan.Mediators;
+﻿using Bonyan.Mediators;
 
 namespace Bonyan.Mediator.Tests
 {

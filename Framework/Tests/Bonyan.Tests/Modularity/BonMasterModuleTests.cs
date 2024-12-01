@@ -1,7 +1,5 @@
 ﻿using Bonyan.Castle.DynamicProxy;
 using Bonyan.DependencyInjection;
-using Bonyan.Modularity;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Bonyan.Tests.Modularity

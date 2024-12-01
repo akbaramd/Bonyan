@@ -1,8 +1,5 @@
-using Autofac;
 using Bonyan.Modularity;
 using Bonyan.Modularity.Abstractions;
-using Hangfire;
-using Microsoft;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Bonyan.Workers.Hangfire;

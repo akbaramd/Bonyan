@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using BonyanTemplate.Application.Authors.Dtos;
-using BonyanTemplate.Application.Books.Dtos;
 
 namespace BonyanTemplate.Application.Authors;
 

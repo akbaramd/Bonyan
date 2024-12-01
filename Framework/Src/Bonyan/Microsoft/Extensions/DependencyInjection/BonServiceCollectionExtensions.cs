@@ -1,10 +1,8 @@
-﻿using Autofac;
-using Bonyan;
+﻿using Bonyan;
 using Bonyan.Castle.DynamicProxy;
 using Bonyan.DependencyInjection;
 using Bonyan.Modularity;
 using Bonyan.Tracing;
-using Microsoft.Extensions.Configuration;
 
 namespace Microsoft.Extensions.DependencyInjection
 {

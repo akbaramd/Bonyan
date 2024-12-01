@@ -6,7 +6,7 @@ public abstract class BonStateMachine<TStateInstance>
     private readonly Dictionary<string, BonState<TStateInstance>> _stateRegistry =
         new(StringComparer.OrdinalIgnoreCase);
 
-    protected readonly Dictionary<Type, List<IEventHandler<TStateInstance>>> _eventHandlers = new();
+    protected readonly Dictionary<Type, List<IEventHandler<TStateInstance>>> EventHandlers = new();
     private readonly HashSet<Type> _definedEvents = new();
 
     // Error handling delegate
@@ -44,9 +44,9 @@ public abstract class BonStateMachine<TStateInstance>
 
         _definedEvents.Add(typeof(TEvent));
 
-        if (!_eventHandlers.ContainsKey(typeof(TEvent)))
+        if (!EventHandlers.ContainsKey(typeof(TEvent)))
         {
-            _eventHandlers[typeof(TEvent)] = new List<IEventHandler<TStateInstance>>();
+            EventHandlers[typeof(TEvent)] = new List<IEventHandler<TStateInstance>>();
         }
     }
 
@@ -67,12 +67,12 @@ public abstract class BonStateMachine<TStateInstance>
 
     protected ContextAwareEventHandler<TStateInstance, TEvent> OnEvent<TEvent>() where TEvent : class
     {
-        if (!_eventHandlers.ContainsKey(typeof(TEvent)))
+        if (!EventHandlers.ContainsKey(typeof(TEvent)))
             throw new InvalidOperationException($"Event '{typeof(TEvent).Name}' is not defined.");
 
         var handler = new ContextAwareEventHandler<TStateInstance, TEvent>(this);
 
-        _eventHandlers[typeof(TEvent)].Add(handler);
+        EventHandlers[typeof(TEvent)].Add(handler);
         return handler;
     }
 
@@ -97,7 +97,7 @@ public abstract class BonStateMachine<TStateInstance>
         {
             handler.SetOriginState(fromState);
             handler.TransitionToState = toState;
-            _eventHandlers[handler.EventType].Add(handler);
+            EventHandlers[handler.EventType].Add(handler);
         }
     }
 
@@ -110,12 +110,12 @@ public abstract class BonStateMachine<TStateInstance>
         foreach (var handler in handlers)
         {
             handler.SetOriginState(bonState);
-            if (!_eventHandlers.ContainsKey(handler.EventType))
+            if (!EventHandlers.ContainsKey(handler.EventType))
             {
-                _eventHandlers[handler.EventType] = new List<IEventHandler<TStateInstance>>();
+                EventHandlers[handler.EventType] = new List<IEventHandler<TStateInstance>>();
             }
 
-            _eventHandlers[handler.EventType].Add(handler);
+            EventHandlers[handler.EventType].Add(handler);
         }
     }
 
@@ -147,7 +147,7 @@ public abstract class BonStateMachine<TStateInstance>
 
         try
         {
-            if (!_eventHandlers.TryGetValue(typeof(TEvent), out var handlers))
+            if (!EventHandlers.TryGetValue(typeof(TEvent), out var handlers))
                 throw new InvalidOperationException($"No handlers defined for event '{typeof(TEvent).Name}'.");
 
             var currentState = GetState(instance.State);
@@ -268,7 +268,8 @@ public class ContextAwareEventHandler<TStateInstance, TEvent> : IContextAwareEve
     private readonly BonStateMachine<TStateInstance> _stateMachine;
     public Type EventType => typeof(TEvent);
     public BonState<TStateInstance>? OriginState { get; set; }
-    private Action<TStateInstance, object?, TEvent>? _action;
+    private Func<TStateInstance, object?, TEvent, Task>? _asyncAction;
+    private Action<TStateInstance, object?, TEvent>? _syncAction;
     public BonState<TStateInstance>? TransitionToState { get; set; }
     private readonly List<Func<TStateInstance, Task>> _finalizeActions = new();
 
@@ -279,7 +280,7 @@ public class ContextAwareEventHandler<TStateInstance, TEvent> : IContextAwareEve
 
     public ContextAwareEventHandler<TStateInstance, TEvent> Then(Action<TStateInstance, object?, TEvent> action)
     {
-        _action = action ?? throw new ArgumentNullException(nameof(action));
+        _syncAction = action ?? throw new ArgumentNullException(nameof(action));
         return this;
     }
 
@@ -289,12 +290,23 @@ public class ContextAwareEventHandler<TStateInstance, TEvent> : IContextAwareEve
         return this;
     }
 
+    public ContextAwareEventHandler<TStateInstance, TEvent> ThenAsync(Func<TStateInstance, object?, TEvent, Task> asyncAction)
+    {
+        _asyncAction = asyncAction ?? throw new ArgumentNullException(nameof(asyncAction));
+        return this;
+    }
+
+    public ContextAwareEventHandler<TStateInstance, TEvent> ThenAsync(Func<TStateInstance, TEvent, Task> asyncAction)
+    {
+        return ThenAsync((instance, _, eventData) => asyncAction(instance, eventData));
+    }
+
     public ContextAwareEventHandler<TStateInstance, TEvent> TransitionTo(BonState<TStateInstance> bonState)
     {
         TransitionToState = bonState ?? throw new ArgumentNullException(nameof(bonState));
         return this;
     }
-        
+
     public ContextAwareEventHandler<TStateInstance, TEvent> Finalize()
     {
         TransitionTo(_stateMachine.Final);
@@ -314,8 +326,15 @@ public class ContextAwareEventHandler<TStateInstance, TEvent> : IContextAwareEve
 
     public async Task ExecuteAsync(TStateInstance instance, object? context, TEvent eventData)
     {
-        if (_action == null) throw new InvalidOperationException("No action defined.");
-        _action(instance, context, eventData);
+        if (_syncAction != null)
+        {
+            _syncAction(instance, context, eventData);
+        }
+
+        if (_asyncAction != null)
+        {
+            await _asyncAction(instance, context, eventData);
+        }
 
         if (TransitionToState != null)
         {
@@ -335,6 +354,7 @@ public class ContextAwareEventHandler<TStateInstance, TEvent> : IContextAwareEve
         return ExecuteAsync(instance, null, eventData);
     }
 }
+
 
 public interface IStateInstance
 {

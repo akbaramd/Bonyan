@@ -2,7 +2,6 @@ using System.Linq.Dynamic.Core;
 using System.Linq.Expressions;
 using Bonyan.DependencyInjection;
 using Bonyan.EntityFrameworkCore;
-using Bonyan.EntityFrameworkCore.Abstractions;
 using Bonyan.Exceptions;
 using Bonyan.Layer.Domain.Entity;
 using Bonyan.Layer.Domain.Repository.Abstractions;

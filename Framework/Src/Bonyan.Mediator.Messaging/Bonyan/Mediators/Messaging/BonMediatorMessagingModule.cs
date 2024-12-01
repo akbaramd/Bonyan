@@ -15,7 +15,7 @@ namespace Bonyan.Mediators.Messaging
 
         public override Task OnPreConfigureAsync(BonConfigurationContext context)
         {
-            PreConfigure<BonMediatorConfiguration>(c => { c.AddEventMessaging(); });
+            PreConfigure<BonMediatorConfiguration>(c => { c.UseMessagingForDomainEvent(); });
             return base.OnPreConfigureAsync(context);
         }
     }

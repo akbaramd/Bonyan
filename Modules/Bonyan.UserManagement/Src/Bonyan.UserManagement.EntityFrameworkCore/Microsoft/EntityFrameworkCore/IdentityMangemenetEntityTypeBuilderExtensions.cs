@@ -1,7 +1,4 @@
-﻿using Bonyan.Layer.Domain.Enumerations;
-using Bonyan.UserManagement.Domain;
-using Bonyan.UserManagement.Domain.Users;
-using Bonyan.UserManagement.Domain.Users.Enumerations;
+﻿using Bonyan.UserManagement.Domain.Users;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Microsoft.EntityFrameworkCore;

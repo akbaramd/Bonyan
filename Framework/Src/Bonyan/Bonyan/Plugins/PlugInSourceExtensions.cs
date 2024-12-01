@@ -2,7 +2,6 @@
 using Bonyan.Modularity;
 
 using JetBrains.Annotations;
-using Microsoft.Extensions.Logging;
 
 namespace Bonyan.Plugins;
 

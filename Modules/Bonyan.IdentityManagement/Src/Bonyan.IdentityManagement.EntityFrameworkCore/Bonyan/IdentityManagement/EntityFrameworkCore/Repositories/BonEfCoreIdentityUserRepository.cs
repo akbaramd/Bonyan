@@ -1,10 +1,5 @@
-﻿using Bonyan.IdentityManagement.Domain;
-using Bonyan.IdentityManagement.Domain.Roles;
-using Bonyan.IdentityManagement.Domain.Users;
+﻿using Bonyan.IdentityManagement.Domain.Users;
 using Bonyan.IdentityManagement.Domain.Users.Repositories;
-using Bonyan.Layer.Domain;
-using Bonyan.UserManagement.Domain.Users;
-using Bonyan.UserManagement.Domain.Users.ValueObjects;
 using Bonyan.UserManagement.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 

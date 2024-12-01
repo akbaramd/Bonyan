@@ -1,5 +1,4 @@
 using Bonyan.Modularity.Abstractions;
-using Bonyan.Plugins;
 
 namespace Bonyan.Modularity;
 
@@ -15,7 +14,7 @@ public class WebBonModularityApplication<TModule> : BonModularityApplication<TMo
     /// </summary>
     /// <param name="serviceCollection">Service collection to register dependencies.</param>
     /// <param name="plugInSource"></param>
-    public WebBonModularityApplication(IServiceCollection serviceCollection,string serviceName, Action<BonApplicationCreationOptions>? creationContext = null) :
+    public WebBonModularityApplication(IServiceCollection serviceCollection,string serviceName, Action<BonConfigurationContext>? creationContext = null) :
         base(serviceCollection, serviceName,creationContext)
     {
     }
@@ -25,8 +24,9 @@ public class WebBonModularityApplication<TModule> : BonModularityApplication<TMo
     /// and post-application phases for all loaded web modules.
     /// </summary>
     /// <param name="application">The <see cref="WebApplication"/> instance.</param>
+    /// <param name="applciationContext"></param>
     /// <exception cref="InvalidOperationException">Thrown if module initialization fails.</exception>
-    public async Task InitializeApplicationAsync(WebApplication application)
+    public async Task InitializeApplicationAsync(WebApplication application,Action<BonWebApplicationContext>? applciationContext = null)
     {
         if (application == null)
             throw new ArgumentNullException(nameof(application), "Application cannot be null.");
@@ -45,6 +45,8 @@ public class WebBonModularityApplication<TModule> : BonModularityApplication<TMo
                 .GetAwaiter().GetResult();
             ExecuteModulePhaseAsync(webModules, (module) => module.OnPostApplicationAsync(context), "Post-Application")
                 .GetAwaiter().GetResult();
+            
+            applciationContext?.Invoke(context);
         });
     }
 

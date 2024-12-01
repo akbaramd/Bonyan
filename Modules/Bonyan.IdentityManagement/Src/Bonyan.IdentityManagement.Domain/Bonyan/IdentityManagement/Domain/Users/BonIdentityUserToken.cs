@@ -1,5 +1,4 @@
-﻿using System;
-using Bonyan.IdentityManagement.Domain.Users.ValueObjects;
+﻿using Bonyan.IdentityManagement.Domain.Users.ValueObjects;
 using Bonyan.Layer.Domain.Entities;
 using Bonyan.UserManagement.Domain.Users.ValueObjects;
 

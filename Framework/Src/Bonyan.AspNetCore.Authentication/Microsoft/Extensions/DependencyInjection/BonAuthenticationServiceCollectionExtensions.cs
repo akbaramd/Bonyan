@@ -1,7 +1,5 @@
-﻿using System;
-using Bonyan.AspNetCore.Authentication;
+﻿using Bonyan.AspNetCore.Authentication;
 using Bonyan.Modularity;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Microsoft.Extensions.DependencyInjection
 {

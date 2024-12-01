@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Threading.Tasks;
+﻿using System.Runtime.Serialization;
 using Microsoft.Extensions.Logging;
 
 namespace Bonyan.Layer.Application.Services
@@ -151,20 +147,20 @@ namespace Bonyan.Layer.Application.Services
         }
 
         // Transformations
-        public ServiceResult<U> Map<U>(Func<T, U> mapper)
+        public ServiceResult<TU> Map<TU>(Func<T, TU> mapper)
         {
             if (mapper == null) throw new ArgumentNullException(nameof(mapper));
 
             return IsSuccess
-                ? ServiceResult<U>.Success(mapper(Value))
-                : ServiceResult<U>.Failure(ErrorMessage, ErrorCode, ValidationErrors as List<string>, ValidationDetails);
+                ? ServiceResult<TU>.Success(mapper(Value))
+                : ServiceResult<TU>.Failure(ErrorMessage, ErrorCode, ValidationErrors as List<string>, ValidationDetails);
         }
 
-        public async Task<ServiceResult<U>> BindAsync<U>(Func<T, Task<ServiceResult<U>>> binder)
+        public async Task<ServiceResult<TU>> BindAsync<TU>(Func<T, Task<ServiceResult<TU>>> binder)
         {
             if (binder == null) throw new ArgumentNullException(nameof(binder));
 
-            return IsSuccess ? await binder(Value) : ServiceResult<U>.Failure(ErrorMessage, ErrorCode, ValidationErrors as List<string>, ValidationDetails);
+            return IsSuccess ? await binder(Value) : ServiceResult<TU>.Failure(ErrorMessage, ErrorCode, ValidationErrors as List<string>, ValidationDetails);
         }
 
         // Implicit conversions

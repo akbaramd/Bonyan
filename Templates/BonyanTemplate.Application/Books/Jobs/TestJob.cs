@@ -1,5 +1,4 @@
-﻿using Bonyan.UnitOfWork;
-using Bonyan.Workers;
+﻿using Bonyan.Workers;
 using BonyanTemplate.Domain.Books;
 
 namespace BonyanTemplate.Application.Books.Jobs;

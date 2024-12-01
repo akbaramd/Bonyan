@@ -1,4 +1,5 @@
-﻿using Bonyan.Modularity.Abstractions;
+﻿using Bonyan.Modularity;
+using Bonyan.Modularity.Abstractions;
 
 namespace Microsoft.AspNetCore.Builder
 {
@@ -25,6 +26,11 @@ namespace Microsoft.AspNetCore.Builder
         /// </summary>
         public IHostBuilder Host => _builder.Host;
 
+        public Task<WebApplication> BuildAsync()
+        {
+            throw new NotImplementedException();
+        }
+
         /// <summary>
         /// Provides access to configuration settings.
         /// </summary>
@@ -50,7 +56,7 @@ namespace Microsoft.AspNetCore.Builder
         /// Builds and initializes the modular ASP.NET Core application.
         /// </summary>
         /// <returns>Returns a fully built and initialized WebApplication instance.</returns>
-        public async Task<WebApplication> BuildAsync()
+        public async Task<WebApplication> BuildAsync(Action<BonWebApplicationContext>? context = null)
         {
             var application = _builder.Build();
 
@@ -58,7 +64,7 @@ namespace Microsoft.AspNetCore.Builder
             try
             {
                 await _modularApp.InitializeModulesAsync(application.Services);
-                await _modularApp.InitializeApplicationAsync(application);
+                await _modularApp.InitializeApplicationAsync(application,context);
             }
             catch (Exception ex)
             {

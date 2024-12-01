@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Bonyan.IdentityManagement.Application.Dto;
-using Bonyan.UserManagement.Application.Users.Dto;
 
 namespace Bonyan.IdentityManagement.Application;
 

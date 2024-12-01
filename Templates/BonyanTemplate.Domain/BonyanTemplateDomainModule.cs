@@ -2,7 +2,6 @@ using Bonyan.IdentityManagement.Domain;
 using Bonyan.Modularity;
 using Bonyan.Modularity.Abstractions;
 using Bonyan.TenantManagement.Domain;
-using BonyanTemplate.Domain.Books.Handlers;
 using BonyanTemplate.Domain.Users;
 
 

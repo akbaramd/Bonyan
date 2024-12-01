@@ -1,6 +1,3 @@
-using System;
-using Xunit;
-
 namespace Bonyan.StateMachine.Tests
 {
     public class TestStateMachineTests

@@ -2,5 +2,5 @@ namespace Bonyan.Modularity.Abstractions;
 
 public interface IBonModuleConfigurator
 {
-    Task ConfigureModulesAsync();
+    Task ConfigureModulesAsync(Action<BonConfigurationContext> configure);
 }

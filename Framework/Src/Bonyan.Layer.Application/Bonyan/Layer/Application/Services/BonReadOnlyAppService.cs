@@ -2,7 +2,6 @@
 using Bonyan.Layer.Application.Exceptions;
 using Bonyan.Layer.Domain.Entity;
 using Bonyan.Layer.Domain.Repository.Abstractions;
-using Microsoft.EntityFrameworkCore;
 
 namespace Bonyan.Layer.Application.Services;
 

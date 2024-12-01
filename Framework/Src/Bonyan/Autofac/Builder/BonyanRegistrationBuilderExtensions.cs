@@ -3,7 +3,6 @@ using Autofac.Extras.DynamicProxy;
 using Bonyan.Autofac;
 using Bonyan.Castle.DynamicProxy;
 using Bonyan.DependencyInjection;
-using Bonyan.Modularity.Abstractions;
 using Bonyan.Reflection;
 
 namespace Autofac.Builder;

@@ -1,7 +1,6 @@
 ﻿using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Bonyan.Core;
-using Microsoft;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Bonyan.Autofac;

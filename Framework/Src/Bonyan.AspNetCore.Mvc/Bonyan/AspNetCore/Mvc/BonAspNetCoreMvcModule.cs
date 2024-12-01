@@ -1,10 +1,4 @@
 ﻿using Bonyan.Modularity;
-using Bonyan.Reflection;
-using Microsoft;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Routing;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Bonyan.AspNetCore.Mvc;
 

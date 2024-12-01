@@ -1,9 +1,7 @@
 using Bonyan.Layer.Domain;
-using Bonyan.UserManagement.Domain;
 using Bonyan.UserManagement.Domain.Users;
 using Bonyan.UserManagement.Domain.Users.Repositories;
 using Bonyan.UserManagement.Domain.Users.ValueObjects;
-using Microsoft.EntityFrameworkCore;
 
 namespace Bonyan.UserManagement.EntityFrameworkCore
 {

@@ -1,6 +1,4 @@
-﻿using Bonyan.IdentityManagement.Domain.Users;
-using Bonyan.IdentityManagement.Domain.Users.ValueObjects;
-using Bonyan.Layer.Domain.DomainEvent.Abstractions;
+﻿using Bonyan.Layer.Domain.DomainEvent.Abstractions;
 
 namespace Bonyan.IdentityManagement.Domain.Users.DomainEvents;
 

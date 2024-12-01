@@ -3,7 +3,7 @@ using BonyanTemplate.Domain.Books;
 
 namespace BonyanTemplate.Infrastructure.Data.Repositories;
 
-public class EfBookRepository : EfCoreBonRepository<Book,BookId,TemplateBookManagementBonDbContext>, IBooksRepository
+public class EfBookRepository : EfCoreBonRepository<Book,BookId,BonyanTemplateDbContext>, IBooksRepository
 {
  
 }

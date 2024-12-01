@@ -6,7 +6,6 @@ using Bonyan.Modularity;
 using Bonyan.Reflection;
 using Bonyan.Security.Claims;
 using Bonyan.UnitOfWork;
-using Microsoft;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 
@@ -28,6 +27,7 @@ public class BonAspNetCoreModule : BonWebModule
     /// <param name="context">The configuration context for services.</param>
     public override Task OnPreConfigureAsync(BonConfigurationContext context)
     {
+        context.Services.AddAntiforgery();
         ConfigureExceptionHandling(context);
         return base.OnPreConfigureAsync(context);
     }
@@ -115,8 +115,6 @@ public class BonAspNetCoreModule : BonWebModule
       
         context.Services.AddHttpContextAccessor();
         context.Services.AddTransient<IBonCurrentPrincipalAccessor, HttpContextBonCurrentPrincipalAccessor>();
-        // Ensures IApplicationBuilder is accessible throughout the application's service configuration lifecycle
-        context.Services.AddObjectAccessor<IApplicationBuilder>();
     }
 
     public override Task OnPreApplicationAsync(BonWebApplicationContext context)

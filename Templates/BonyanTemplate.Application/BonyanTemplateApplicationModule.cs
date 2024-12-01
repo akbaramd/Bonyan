@@ -1,9 +1,6 @@
 using Bonyan.AutoMapper;
 using Bonyan.IdentityManagement.Application;
 using Bonyan.IdentityManagement.Application.Dto;
-using Bonyan.IdentityManagement.Domain;
-using Bonyan.Messaging;
-using Bonyan.Messaging.RabbitMQ;
 using Bonyan.Modularity;
 using Bonyan.Modularity.Abstractions;
 using Bonyan.TenantManagement.Application;
@@ -12,15 +9,10 @@ using Bonyan.UserManagement.Domain.Users.ValueObjects;
 using Bonyan.Workers;
 using Bonyan.Workers.Hangfire;
 using BonyanTemplate.Application.Authors;
-using BonyanTemplate.Application.Authors.Dtos;
 using BonyanTemplate.Application.Books;
-using BonyanTemplate.Application.Books.Dtos;
 using BonyanTemplate.Application.Books.Jobs;
-using BonyanTemplate.Application.Consumers;
 using BonyanTemplate.Domain;
-using BonyanTemplate.Domain.Authors;
 using BonyanTemplate.Domain.Users;
-using Hangfire;
 using Microsoft.Extensions.DependencyInjection;
 
 
@@ -34,15 +26,13 @@ namespace BonyanTemplate.Application
             DependOn<BonIdentityManagementApplicationModule<User>>();
             DependOn<BonyanTemplateDomainModule>();
             DependOn<BonWorkersHangfireModule>();
+    
         }
 
         public override Task OnConfigureAsync(BonConfigurationContext context)
         {
-            PreConfigure<BonMessagingConfiguration>(c =>
-            {
-                c.RegisterConsumer<BookConsumer>("");
-            });
-            
+           
+
             context.Services.AddTransient<IBookAppService, BookAppService>();
             context.Services.AddTransient<IAuthorAppService, AuthorAppService>();
 

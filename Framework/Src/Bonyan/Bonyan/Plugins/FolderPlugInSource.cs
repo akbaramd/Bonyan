@@ -1,7 +1,6 @@
 ﻿using System.Reflection;
 using System.Runtime.Loader;
 using Bonyan.Core;
-using Bonyan.Exceptions;
 using Bonyan.Modularity.Abstractions;
 using Bonyan.Reflection;
 using JetBrains.Annotations;

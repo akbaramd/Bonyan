@@ -1,6 +1,4 @@
-﻿using Autofac;
-using Bonyan.Modularity;
-using Microsoft.Extensions.Configuration;
+﻿using Bonyan.Modularity;
 
 namespace Microsoft.Extensions.DependencyInjection
 {

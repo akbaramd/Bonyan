@@ -1,11 +1,7 @@
-using Bonyan.Castle.DynamicProxy;
-using Bonyan.DependencyInjection;
 using Bonyan.Modularity;
 using Bonyan.Modularity.Abstractions;
 using Bonyan.Plugins;
 using Bonyan.Reflection;
-using Bonyan.Tracing;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
@@ -42,7 +38,7 @@ public class BonModularityApplication<TModule> : IBonModularityApplication where
     public BonModularityApplication(
         IServiceCollection serviceCollection,
         string serviceName,
-        Action<BonApplicationCreationOptions>? creationContext = null)
+        Action<BonConfigurationContext>? creationContext = null)
     {
         _serviceCollection = serviceCollection ?? throw new ArgumentNullException(nameof(serviceCollection));
         _serviceName = serviceName ?? throw new ArgumentNullException(nameof(serviceName));
@@ -53,11 +49,12 @@ public class BonModularityApplication<TModule> : IBonModularityApplication where
         _typeFinder = new TypeFinder(_assemblyFinder);
 
         // Configure application options
-        var options = new BonApplicationCreationOptions(_serviceCollection);
-        creationContext?.Invoke(options);
-
         // Load modules
-        Modules = _moduleLoader.LoadModules(_serviceCollection, typeof(TModule), options.PlugInSources);
+        Modules = _moduleLoader.LoadModules(_serviceCollection, typeof(TModule),new PlugInSourceList());
+        
+        
+        ConfigureModulesAsync(creationContext).GetAwaiter().GetType();
+ 
 
         RegisterCoreServices();
     }
@@ -65,11 +62,14 @@ public class BonModularityApplication<TModule> : IBonModularityApplication where
     /// <summary>
     /// Configures all modules in the application.
     /// </summary>
-    public Task ConfigureModulesAsync()
+    public Task ConfigureModulesAsync(Action<BonConfigurationContext>? action = null)
     {
         // Register additional services and execute configuration phases
         _serviceCollection.AddBonyan(_serviceName, context =>
         {
+          
+            action?.Invoke(context);
+            
             InitializeModuleServices();
 
             ExecuteModulePhases(context, (module, ctx) => module.OnPreConfigureAsync(ctx)).GetAwaiter().GetResult();
@@ -79,6 +79,8 @@ public class BonModularityApplication<TModule> : IBonModularityApplication where
 
         // Build the service provider
         ServiceProvider = _serviceCollection.BuildServiceProvider();
+
+        _serviceCollection.AddObjectAccessor(ServiceProvider);
         return Task.CompletedTask;
     }
 

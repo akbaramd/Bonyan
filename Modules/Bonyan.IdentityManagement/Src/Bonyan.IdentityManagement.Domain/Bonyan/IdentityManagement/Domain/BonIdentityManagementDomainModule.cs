@@ -1,11 +1,8 @@
-using Bonyan.IdentityManagement.Domain.Roles;
 using Bonyan.IdentityManagement.Domain.Roles.DomainServices;
 using Bonyan.IdentityManagement.Domain.Users;
 using Bonyan.IdentityManagement.Domain.Users.DomainServices;
 using Bonyan.Modularity;
 using Bonyan.UserManagement.Domain;
-using Bonyan.UserManagement.Domain.Users;
-using Bonyan.UserManagement.Domain.Users.DomainServices;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Bonyan.IdentityManagement.Domain;

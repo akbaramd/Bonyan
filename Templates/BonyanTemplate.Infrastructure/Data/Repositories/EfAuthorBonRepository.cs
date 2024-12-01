@@ -3,7 +3,7 @@ using BonyanTemplate.Domain.Authors;
 
 namespace BonyanTemplate.Infrastructure.Data.Repositories;
 
-public class EfAuthorBonRepository : EfCoreBonRepository<Authors,AuthorId,TemplateBookManagementBonDbContext>, IAuthorsBonRepository
+public class EfAuthorBonRepository : EfCoreBonRepository<Authors,AuthorId,BonyanTemplateDbContext>, IAuthorsBonRepository
 {
  
 }

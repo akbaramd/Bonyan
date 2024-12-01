@@ -34,6 +34,35 @@ namespace Bonyan.Messaging.Saga
     public class BonMessagingEventHandler<TInstance, TEvent> : ContextAwareEventHandler<TInstance, TEvent>
         where TInstance : class, IStateInstance where TEvent : class
     {
+        
+        
+        public BonMessagingEventHandler<TInstance, TEvent> Then(Action<TInstance, BonMessageContext<TEvent>, TEvent> action)
+        {
+            base.Then((c, context, b) =>
+            {
+                if (context is not BonMessageContext<TEvent> ctx)
+                    throw new InvalidOperationException("Invalid context type.");
+                
+                action.Invoke(c,ctx,b);
+            });
+            return this;
+        }
+
+    
+        public ContextAwareEventHandler<TInstance, TEvent> ThenAsync(Func<TInstance,  BonMessageContext<TEvent>, TEvent, Task> asyncAction)
+        {
+            base.ThenAsync((c, context, b) =>
+            {
+                if (context is not BonMessageContext<TEvent> ctx)
+                    throw new InvalidOperationException("Invalid context type.");
+                
+                return asyncAction.Invoke(c,ctx,b);
+            });
+            return this;
+        }
+
+      
+        
         /// <summary>
         /// Publishes an event to all subscribers, ensuring the correlation ID is included.
         /// </summary>
@@ -55,7 +84,9 @@ namespace Bonyan.Messaging.Saga
 
             return this;
         }
-
+        
+        
+        
         /// <summary>
         /// Sends a message to a specific service, ensuring the correlation ID is included and handled.
         /// </summary>
@@ -81,28 +112,7 @@ namespace Bonyan.Messaging.Saga
             return this;
         }
 
-        /// <summary>
-        /// Sends a reply to a received message, using the correlation ID and reply-to information from the context.
-        /// </summary>
-        public BonMessagingEventHandler<TInstance, TEvent> Reply<TResponse>(
-            Func<TInstance, TEvent, TResponse> responseFactory)
-            where TResponse : class
-        {
-            Then(async (instance, context, eventData) =>
-            {
-                if (context is not BonMessageContext<TEvent> ctx)
-                    throw new InvalidOperationException("Invalid context type.");
-
-                var response = responseFactory(instance,eventData);
-                if (response == null)
-                    throw new InvalidOperationException("Response factory produced a null response.");
-
-                await ctx.ReplyAsync(response);
-            });
-
-            return this;
-        }
-
+     
         public BonMessagingEventHandler(BonMessagingSagaMachine<TInstance> stateMachine) : base(stateMachine)
         {
         }

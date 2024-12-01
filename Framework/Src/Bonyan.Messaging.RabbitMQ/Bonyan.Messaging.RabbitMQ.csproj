@@ -4,7 +4,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <RootNamespace />
-        <PackageId>Bonyan.Layer.Messaging.OutBox</PackageId>
+        <PackageId>Bonyan.Messaging.RabbitMQ</PackageId>
     </PropertyGroup>
 
     <Import Project="..\..\..\framework-package.props" />

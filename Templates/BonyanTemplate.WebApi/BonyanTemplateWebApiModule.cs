@@ -1,9 +1,5 @@
 using Bonyan.AspNetCore.Authentication;
-using Bonyan.AspNetCore.Authentication.Options;
-using Bonyan.AspNetCore.Components;
 using Bonyan.AspNetCore.Mvc;
-using Bonyan.IdentityManagement;
-using Bonyan.IdentityManagement.EntityFrameworkCore;
 using Bonyan.Modularity;
 using BonyanTemplate.Application;
 using BonyanTemplate.Infrastructure;

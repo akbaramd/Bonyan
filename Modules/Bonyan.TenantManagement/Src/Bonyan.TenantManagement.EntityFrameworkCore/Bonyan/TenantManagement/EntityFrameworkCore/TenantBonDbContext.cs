@@ -8,7 +8,6 @@ public class TenantBonDbContext : BonDbContext<TenantBonDbContext>,IBonTenantDbC
 {
   public TenantBonDbContext(DbContextOptions<TenantBonDbContext> options) : base(options)
   {
-    Console.Write(ServiceProvider);
   }
   protected override void OnModelCreating(ModelBuilder modelBuilder)
   {

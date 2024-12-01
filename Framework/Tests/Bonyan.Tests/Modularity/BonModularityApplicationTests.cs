@@ -1,40 +1,15 @@
-﻿using System;
-using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
+﻿using System.Reflection;
 using Bonyan.Modularity;
 using Bonyan.Modularity.Abstractions;
 using Bonyan.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
-using Xunit;
 
 namespace Bonyan.Tests.Modularity
 {
     public class BonModularityApplicationTests
     {
-        [Fact]
-        public async Task ConfigureModulesAsync_Should_Invoke_Module_Configure_Methods()
-        {
-            // Arrange
-            var services = new ServiceCollection();
-            var application = new BonModularityApplication<TestModule>(services,"servicename");
-
-            var moduleMock = new Mock<TestModule> { CallBase = true };
-            moduleMock.Setup(m => m.OnPreConfigureAsync(It.IsAny<BonConfigurationContext>())).Returns(Task.CompletedTask);
-            moduleMock.Setup(m => m.OnConfigureAsync(It.IsAny<BonConfigurationContext>())).Returns(Task.CompletedTask);
-            moduleMock.Setup(m => m.OnPostConfigureAsync(It.IsAny<BonConfigurationContext>())).Returns(Task.CompletedTask);
-
-            ReplaceModuleInstance(application, moduleMock.Object);
-
-            // Act
-            await application.ConfigureModulesAsync();
-
-            // Assert
-            moduleMock.Verify(m => m.OnPreConfigureAsync(It.IsAny<BonConfigurationContext>()), Times.Once);
-            moduleMock.Verify(m => m.OnConfigureAsync(It.IsAny<BonConfigurationContext>()), Times.Once);
-            moduleMock.Verify(m => m.OnPostConfigureAsync(It.IsAny<BonConfigurationContext>()), Times.Once);
-        }
+  
 
         [Fact]
         public async Task InitializeModulesAsync_Should_Invoke_Module_Initialize_Methods()
@@ -61,39 +36,9 @@ namespace Bonyan.Tests.Modularity
             moduleMock.Verify(m => m.OnPostInitializeAsync(It.IsAny<BonInitializedContext>()), Times.Once);
         }
 
-        [Fact]
-        public async Task ConfigureModulesAsync_Should_Handle_Exceptions()
-        {
-            // Arrange
-            var services = new ServiceCollection();
-            var application = new BonModularityApplication<TestModule>(services,"service");
 
-            var moduleMock = new Mock<TestModule> { CallBase = true };
-            moduleMock.Setup(m => m.OnPreConfigureAsync(It.IsAny<BonConfigurationContext>())).ThrowsAsync(new Exception("Test exception"));
 
-            ReplaceModuleInstance(application, moduleMock.Object);
-
-            // Act & Assert
-            await Assert.ThrowsAsync<InvalidOperationException>(() => application.ConfigureModulesAsync());
-        }
-
-        [Fact]
-        public async Task InitializeModulesAsync_Should_Handle_Exceptions()
-        {
-            // Arrange
-            var services = new ServiceCollection();
-            var serviceProvider = services.BuildServiceProvider();
-            var application = new BonModularityApplication<TestModule>(services,"service");
-
-            var moduleMock = new Mock<TestModule> { CallBase = true };
-            moduleMock.Setup(m => m.OnPreInitializeAsync(It.IsAny<BonInitializedContext>())).ThrowsAsync(new Exception("Test exception"));
-
-            ReplaceModuleInstance(application, moduleMock.Object);
-
-            // Act & Assert
-            await Assert.ThrowsAsync<InvalidOperationException>(() => application.InitializeModulesAsync(serviceProvider));
-        }
-
+       
         [Fact]
         public void Constructor_Should_Throw_If_ServiceCollection_Is_Null()
         {

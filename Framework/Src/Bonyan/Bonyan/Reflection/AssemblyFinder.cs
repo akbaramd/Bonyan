@@ -1,6 +1,5 @@
 ﻿using System.Collections.Immutable;
 using System.Reflection;
-using Bonyan.Modularity.Abstractions;
 
 namespace Bonyan.Reflection;
 

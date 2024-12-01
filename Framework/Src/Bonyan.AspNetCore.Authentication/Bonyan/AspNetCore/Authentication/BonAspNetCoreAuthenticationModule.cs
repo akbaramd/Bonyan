@@ -1,9 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-using Bonyan.AspNetCore.Authentication;
-using Bonyan.AspNetCore.Authentication.Options;
-using Bonyan.Modularity;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Bonyan.Modularity;
 
 namespace Bonyan.AspNetCore.Authentication
 {

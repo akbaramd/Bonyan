@@ -1,6 +1,4 @@
 using Bonyan.Exceptions;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
 namespace Bonyan.Modularity

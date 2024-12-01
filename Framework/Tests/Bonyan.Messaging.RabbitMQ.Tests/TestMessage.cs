@@ -11,6 +11,10 @@ public class TestResponse
 {
     public string Content { get; set; }
 }
+public class NotHandledResponse
+{
+    public string Content { get; set; }
+}
 
 public class TestEvent
 {

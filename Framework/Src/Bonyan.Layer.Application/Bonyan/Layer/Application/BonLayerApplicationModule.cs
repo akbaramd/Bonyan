@@ -21,6 +21,7 @@ namespace Bonyan.Layer.Application
 
         public override Task OnConfigureAsync(BonConfigurationContext context)
         {
+            context.AddApplication();
             return base.OnConfigureAsync(context);
         }
     }

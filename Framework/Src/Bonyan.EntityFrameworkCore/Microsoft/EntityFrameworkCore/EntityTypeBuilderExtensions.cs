@@ -1,13 +1,9 @@
-using System.Reflection;
-using AutoMapper.Internal;
 using Bonyan.Layer.Domain.Audit.Abstractions;
-using Bonyan.Layer.Domain.Entity;
 using Bonyan.Layer.Domain.Enumerations;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Bonyan.Layer.Domain.ValueObjects;
 using Bonyan.MultiTenant;
-using Microsoft.EntityFrameworkCore.Migrations.Internal;
 
 namespace Microsoft.EntityFrameworkCore
 {
@@ -102,7 +98,6 @@ namespace Microsoft.EntityFrameworkCore
         public static EntityTypeBuilder ConfigureEnumerationProperties(this EntityTypeBuilder builder)
         {
             var entityType = builder.Metadata.ClrType;
-            Console.WriteLine(entityType.Name);
             // Find all properties of type BonEnumeration
             var enumerationProperties = entityType
                 .GetProperties()

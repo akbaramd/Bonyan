@@ -1,7 +1,6 @@
 ﻿using Autofac;
 using Bonyan.Workers;
 using Bonyan.Workers.Hangfire;
-using Hangfire.AspNetCore;
 using Hangfire;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using IGlobalConfiguration = Hangfire.IGlobalConfiguration;

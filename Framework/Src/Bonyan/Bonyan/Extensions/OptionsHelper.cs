@@ -9,10 +9,10 @@ namespace Bonyan.Extensions
     /// Only properties with matching names and compatible types are copied.
     /// </summary>
     /// <typeparam name="T">Type of the target object.</typeparam>
-    /// <typeparam name="U">Type of the source object.</typeparam>
+    /// <typeparam name="TU">Type of the source object.</typeparam>
     /// <param name="target">The target object to which properties will be copied.</param>
     /// <param name="source">The source object from which properties will be copied.</param>
-    public static void CopyProperties<T, U>(T target, U source)
+    public static void CopyProperties<T, TU>(T target, TU source)
     {
       if (target == null)
         throw new ArgumentNullException(nameof(target));
@@ -20,7 +20,7 @@ namespace Bonyan.Extensions
         throw new ArgumentNullException(nameof(source));
 
       PropertyInfo[] targetProperties = typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance);
-      PropertyInfo[] sourceProperties = typeof(U).GetProperties(BindingFlags.Public | BindingFlags.Instance);
+      PropertyInfo[] sourceProperties = typeof(TU).GetProperties(BindingFlags.Public | BindingFlags.Instance);
 
       foreach (var targetProp in targetProperties)
       {

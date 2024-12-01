@@ -1,5 +1,4 @@
 using Bonyan.EntityFrameworkCore;
-using Bonyan.EntityFrameworkCore.Abstractions;
 using Bonyan.Exceptions;
 using Bonyan.MultiTenant;
 using Microsoft.EntityFrameworkCore;

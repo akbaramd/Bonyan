@@ -1,6 +1,4 @@
 using Bonyan.EntityFrameworkCore;
-using Bonyan.EntityFrameworkCore.Abstractions;
-using Bonyan.UserManagement.Domain;
 using Bonyan.UserManagement.Domain.Users;
 using Microsoft.EntityFrameworkCore;
 

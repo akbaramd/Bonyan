@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-
-namespace Bonyan.Messaging.Saga
+﻿namespace Bonyan.Messaging.Saga
 {
     public interface IBonStateStore
     {

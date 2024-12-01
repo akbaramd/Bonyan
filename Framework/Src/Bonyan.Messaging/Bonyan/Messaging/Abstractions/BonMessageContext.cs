@@ -74,7 +74,6 @@ public class BonMessageContext<TMessage>
             message: response,
             headers: headers,
             correlationId: CorrelationId,
-            isReply: true,
             cancellationToken
         );
     }
@@ -126,7 +125,6 @@ public class BonMessageContext<TMessage>
             message: message,
             headers: headers,
             correlationId: CorrelationId,
-            isReply: false,
             cancellationToken: cancellationToken
         );
     }
@@ -156,7 +154,6 @@ public class BonMessageContext<TMessage>
             message: message,
             headers: headers,
             correlationId: CorrelationId,
-            isReply: false,
             cancellationToken: cancellationToken
         );
     }

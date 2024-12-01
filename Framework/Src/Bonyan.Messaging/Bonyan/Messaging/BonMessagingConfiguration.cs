@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Bonyan.Messaging.Abstractions;
 using Bonyan.Messaging.Saga;
 using Bonyan.Modularity;
@@ -41,12 +38,17 @@ namespace Bonyan.Messaging
         /// <summary>
         /// Registers a specific consumer type with an optional queue name.
         /// </summary>
-        public BonMessagingConfiguration RegisterConsumer<TConsumer>(string? queueName = null,
-            ServiceLifetime? lifetime = null)
+        public BonMessagingConfiguration RegisterConsumer<TConsumer>(ServiceLifetime? lifetime = null)
             where TConsumer : class
         {
             var consumerType = typeof(TConsumer);
-            RegisterConsumerType(consumerType, queueName ?? Context.ServiceManager.ServiceId, lifetime);
+
+            // Register the consumer type with the DI container
+            if (!Context.Services.Any(descriptor => descriptor.ServiceType == consumerType))
+            {
+                Context.Services.Add(new ServiceDescriptor(consumerType, consumerType, lifetime ?? ConsumerLifetime));
+            }
+
             return this;
         }
 

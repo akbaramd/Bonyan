@@ -1,6 +1,5 @@
 ﻿using Bonyan.Modularity;
 using Bonyan.Modularity.Abstractions;
-using Microsoft;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Bonyan.UnitOfWork;

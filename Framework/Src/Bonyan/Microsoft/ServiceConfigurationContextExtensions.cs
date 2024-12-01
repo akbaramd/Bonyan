@@ -1,7 +1,6 @@
 ﻿using System.Reflection;
 using Bonyan.Exceptions;
 using Bonyan.Modularity;
-using Bonyan.Modularity.Abstractions;
 using Bonyan.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -43,7 +42,7 @@ namespace Microsoft
 
         public static Assembly[] DiscoverApplicationAssemblies(this BonConfigurationContext context)
         {
-            return context.Services.GetObject<IAssemblyFinder>().Assemblies.ToArray();
+            return context.Services.GetObjectOrNull<IAssemblyFinder>()?.Assemblies?.ToArray() ?? AppDomain.CurrentDomain.GetAssemblies();
         }
 
         /// <summary>
