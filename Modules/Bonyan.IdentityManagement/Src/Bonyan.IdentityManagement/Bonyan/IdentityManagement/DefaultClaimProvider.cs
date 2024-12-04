@@ -26,8 +26,13 @@ public async Task<IEnumerable<Claim>> GenerateClaimsAsync(TUser user)
             new(BonClaimTypes.Email, user.Email?.Address ?? string.Empty),
             new(BonClaimTypes.PhoneNumber, user.PhoneNumber?.Number ?? string.Empty),
             new(BonClaimTypes.RememberMe, "false") ,
-            new(BonClaimTypes.Role, string.Join(",",roles.Value.Select(x=>x.Id.Value))) ,
+            
         };
+
+        foreach (var role in roles.Value)
+        {
+            claims.Add(new(BonClaimTypes.Role, role.Id.Value));
+        }
 
         return claims;
 }

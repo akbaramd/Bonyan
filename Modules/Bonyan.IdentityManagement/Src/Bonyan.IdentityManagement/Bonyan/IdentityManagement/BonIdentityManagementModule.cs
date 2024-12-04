@@ -7,6 +7,7 @@ using Bonyan.Modularity;
 using Bonyan.Modularity.Abstractions;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 
@@ -58,7 +59,7 @@ public class BonIdentityManagementModule<TUser> : BonModule where TUser : class,
 
     public override Task OnConfigureAsync(BonConfigurationContext context)
     {
-        
+        context.Services.AddSingleton<IAuthorizationHandler, PermissionHandler>();
         // Register the ClaimProviderManager
         context.Services.AddTransient<IBonIdentityClaimProvider<TUser>, DefaultClaimProvider<TUser>>();
         context.Services.AddTransient<IBonIdentityClaimProviderManager<TUser>, ClaimProviderManager<TUser>>();

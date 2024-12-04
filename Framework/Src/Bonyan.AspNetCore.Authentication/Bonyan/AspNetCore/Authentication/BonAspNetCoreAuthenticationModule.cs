@@ -29,7 +29,7 @@ namespace Bonyan.AspNetCore.Authentication
                 {
                     // Create a policy with the required permissions
                     c.AddPolicy(permission, policy =>
-                        policy.RequireClaim(permission));
+                        policy.Requirements.Add(new PermissionRequirement(permission)));
                 }
 
                 configure.Configure(c);
