@@ -9,60 +9,49 @@ public class BonCrudAppService<TEntity, TKey, TGetOutputDto>
     where TEntity : class, IBonEntity<TKey>
     where TGetOutputDto : class, IBonEntityDto<TKey>
 {
-    public BonCrudAppService(IBonRepository<TEntity, TKey> repository) : base(repository)
-    {
-    }
+   
 }
 
 public class BonCrudAppService<TEntity, TKey, TPaginateDto, TGetOutputDto>
     : BonCrudAppService<TEntity, TKey, TPaginateDto, TGetOutputDto, TGetOutputDto>
     where TEntity : class, IBonEntity<TKey>
-    where TGetOutputDto : class, IBonEntityDto<TKey>
+    where TGetOutputDto : class
     where TPaginateDto : BonPaginateDto
 {
-    public BonCrudAppService(IBonRepository<TEntity, TKey> repository) : base(repository)
-    {
-    }
+
 }
 
 public class BonCrudAppService<TEntity, TKey, TPaginateDto, TGetOutputDto, TGetListOutputDto>
     : BonCrudAppService<TEntity, TKey, TPaginateDto, TGetOutputDto, TGetListOutputDto, TGetOutputDto>
     where TEntity : class, IBonEntity<TKey>
-    where TGetListOutputDto : IBonEntityDto<TKey>
-    where TGetOutputDto : class, IBonEntityDto<TKey>
+    where TGetListOutputDto : class
+    where TGetOutputDto : class
     where TPaginateDto : BonPaginateDto
 {
-    public BonCrudAppService(IBonRepository<TEntity, TKey> repository) : base(repository)
-    {
-    }
+   
 }
 
 public class BonCrudAppService<TEntity, TKey, TPaginateDto, TGetOutputDto, TGetListOutputDto, TCreateUpdateInput>
     : BonCrudAppService<TEntity, TKey, TPaginateDto, TGetOutputDto, TGetListOutputDto, TCreateUpdateInput,
         TCreateUpdateInput>
     where TEntity : class, IBonEntity<TKey>
-    where TGetListOutputDto : IBonEntityDto<TKey>
-    where TGetOutputDto : IBonEntityDto<TKey>
+    where TGetListOutputDto : class
+    where TGetOutputDto : class
     where TCreateUpdateInput : class
     where TPaginateDto : BonPaginateDto
 {
-    public BonCrudAppService(IBonRepository<TEntity, TKey> repository) : base(repository)
-    {
-    }
+
 }
 
 public class BonCrudAppService<TEntity, TKey, TPaginateDto, TGetOutputDto, TGetListOutputDto, TCreateInput, TUpdateInput>
     : AbstractCrudAppService<TEntity, TKey, TPaginateDto, TGetOutputDto, TGetListOutputDto, TCreateInput, TUpdateInput>
     where TEntity : class, IBonEntity<TKey>
-    where TGetListOutputDto : IBonEntityDto<TKey>
-    where TGetOutputDto : IBonEntityDto<TKey>
+    where TGetListOutputDto : class
+    where TGetOutputDto : class
     where TCreateInput : class
     where TUpdateInput : class
     where TPaginateDto : IBonPaginateDto
 {
-    public BonCrudAppService(IBonRepository<TEntity, TKey> repository) : base(repository)
-    {
-    }
 
 
     protected override Task<TEntity?> GetEntityByIdAsync(TKey id)

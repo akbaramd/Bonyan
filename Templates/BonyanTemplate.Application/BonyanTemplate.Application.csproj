@@ -7,7 +7,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\Framework\Src\Bonyan.Messaging\Bonyan.Messaging.csproj" />
         <ProjectReference Include="..\..\Framework\Src\Bonyan.Workers.Hangfire\Bonyan.Workers.Hangfire.csproj" />
         <ProjectReference Include="..\..\Framework\Src\Bonyan.Worker.Abstraction\Bonyan.Worker.Abstraction.csproj" />
         <ProjectReference Include="..\..\Framework\Src\Bonyan.AspNetCore\Bonyan.AspNetCore.csproj"/>

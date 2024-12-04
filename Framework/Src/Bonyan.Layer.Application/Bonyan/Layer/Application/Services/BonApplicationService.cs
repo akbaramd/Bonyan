@@ -9,7 +9,7 @@ using Microsoft.Extensions.Logging.Abstractions;
 
 namespace Bonyan.Layer.Application.Services;
 
-public class BonApplicationService : BonLayServiceProviderConfigurator, IBonApplicationService
+public class BonApplicationService :  BonLayServiceProviderConfigurator, IBonApplicationService,IBonUnitOfWorkEnabled
 {
     public IBonCurrentUser BonCurrentUser => LazyServiceProvider.LazyGetRequiredService<IBonCurrentUser>();
     public IBonCurrentTenant BonCurrentTenant => LazyServiceProvider.LazyGetRequiredService<IBonCurrentTenant>();

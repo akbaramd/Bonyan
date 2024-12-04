@@ -80,6 +80,8 @@ public class BonAspNetCoreModule : BonWebModule
     public override Task OnApplicationAsync(BonWebApplicationContext webApplicationContext)
     {
         webApplicationContext.Application.UseHttpsRedirection();
+        webApplicationContext.Application.UseAntiforgery();
+        webApplicationContext.Application.UseRouting();
         return base.OnApplicationAsync(webApplicationContext);
     }
 
@@ -123,6 +125,7 @@ public class BonAspNetCoreModule : BonWebModule
         return base.OnPreApplicationAsync(context);
     }
 
+    
     public override Task OnPostApplicationAsync(BonWebApplicationContext context)
     {
         var options = context.Application.Services
@@ -134,8 +137,7 @@ public class BonAspNetCoreModule : BonWebModule
             return base.OnPostApplicationAsync(context);
         }
 
-        context.Application.UseRouting();
-        context.Application.UseAntiforgery();
+        context.Application.UseUnitOfWork();
         context.Application.UseEndpoints(endpoints =>
         {
             using var scope = context.Application.Services.CreateScope();

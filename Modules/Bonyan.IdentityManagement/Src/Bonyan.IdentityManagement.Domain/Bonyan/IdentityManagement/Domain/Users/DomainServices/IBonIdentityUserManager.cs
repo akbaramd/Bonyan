@@ -1,4 +1,6 @@
-﻿using Bonyan.Layer.Domain.DomainService;
+﻿using Bonyan.IdentityManagement.Domain.Roles;
+using Bonyan.IdentityManagement.Domain.Roles.ValueObjects;
+using Bonyan.Layer.Domain.DomainService;
 using Bonyan.UserManagement.Domain.Users.DomainServices;
 
 namespace Bonyan.IdentityManagement.Domain.Users.DomainServices;
@@ -6,9 +8,9 @@ namespace Bonyan.IdentityManagement.Domain.Users.DomainServices;
 public interface IBonIdentityUserManager<TIdentityUser> : IBonUserManager<TIdentityUser>
     where TIdentityUser : IBonIdentityUser
 {
-    Task<BonDomainResult> AssignRoleAsync(TIdentityUser user, string roleName);
-    Task<BonDomainResult> RemoveRoleAsync(TIdentityUser user, string roleName);
-    Task<BonDomainResult<IReadOnlyList<string>>> GetUserRolesAsync(TIdentityUser user);
+    Task<BonDomainResult> AssignRolesAsync(TIdentityUser user, IEnumerable<BonRoleId> roleIds);
+    Task<BonDomainResult> RemoveRoleAsync(TIdentityUser user, BonRoleId roleName);
+    Task<BonDomainResult<IReadOnlyList<BonIdentityRole>>> GetUserRolesAsync(TIdentityUser user);
     
     Task<BonDomainResult> CreateAsync(TIdentityUser entity, string password);
     Task<BonDomainResult> ChangePasswordAsync(TIdentityUser entity, string currentPassword, string newPassword);

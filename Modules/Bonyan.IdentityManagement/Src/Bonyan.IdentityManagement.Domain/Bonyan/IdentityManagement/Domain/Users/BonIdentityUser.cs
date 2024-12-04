@@ -78,6 +78,8 @@ public class BonIdentityUser : BonUser, IBonIdentityUser
         AddDomainEvent(new BonIdentityUserTokenRemovedDomainEvent(this, token));
     }
 
+  
+
     public bool IsTokenExpired(string tokenType)
     {
         var token = _tokens.FirstOrDefault(t => t.Type == tokenType);

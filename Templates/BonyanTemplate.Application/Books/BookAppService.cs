@@ -7,7 +7,5 @@ namespace BonyanTemplate.Application.Books;
 
 public class BookAppService : BonCrudAppService<Book,BookId,BookDto>,IBookAppService
 {
-    public BookAppService(IBonRepository<Book, BookId> repository) : base(repository)
-    {
-    }
+   
 }

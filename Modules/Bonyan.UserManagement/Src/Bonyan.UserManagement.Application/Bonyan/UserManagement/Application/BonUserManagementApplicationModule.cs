@@ -28,8 +28,8 @@ public class BonUserManagementApplicationModule<TUser> : BonModule where TUser :
     
     context.Services.AddTransient<BonUserCrudAppService<TUser>>();
     context.Services.AddTransient<BonUserReadOnlyAppService<TUser>>();
-    context.Services.AddTransient<IBonUserCrudAppService>(sp=>sp.GetRequiredService<BonUserCrudAppService<TUser>>());
-    context.Services.AddTransient<IBonUserReadOnlyAppService>(sp=>sp.GetRequiredService<BonUserReadOnlyAppService<TUser>>());
+    context.Services.AddTransient<IBonUserCrudAppService,BonUserCrudAppService<TUser>>();
+    context.Services.AddTransient<IBonUserReadOnlyAppService,BonUserReadOnlyAppService<TUser>>();
     
     
     return base.OnConfigureAsync(context);

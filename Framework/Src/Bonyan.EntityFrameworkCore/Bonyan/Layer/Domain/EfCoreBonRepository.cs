@@ -136,21 +136,21 @@ namespace Bonyan.Layer.Domain
             BonEntityHelper.TrySetTenantId(entity, CurrentTenant?.Id);
             var dbContext = await GetDbContextAsync();
 
-            var savedEntity = (await dbContext.Set<TEntity>().AddAsync(entity)).Entity;
+            var res = (await dbContext.Set<TEntity>().AddAsync(entity));
 
             if (autoSave)
             {
                 await dbContext.SaveChangesAsync();
             }
 
-            return savedEntity;
+            return res.Entity;
         }
 
         public async Task UpdateAsync(TEntity entity, bool autoSave = false)
         {
             var dbContext = await GetDbContextAsync();
-
-            if (dbContext.Set<TEntity>().Local.All(e => e != entity))
+            var local = dbContext.Set<TEntity>().Local;
+            if (local.All(e => e != entity))
             {
                 dbContext.Set<TEntity>().Attach(entity);
                 dbContext.Update(entity);

@@ -1,9 +1,9 @@
 ﻿using Bonyan.IdentityManagement.Application.Dto;
 using Bonyan.Layer.Application.Services;
 
-namespace Bonyan.IdentityManagement.Application;
+namespace Bonyan.IdentityManagement.Application.Auth;
 
-public interface IBonIdentityAuthService : IBonApplicationService
+public interface IBonIdentityAuthAppService : IBonApplicationService
 {
     Task<ServiceResult<bool>> RegisterAsync(BonIdentityUserRegistererDto createDto);
     Task<ServiceResult<BonIdentityUserDto>> ProfileAsync();

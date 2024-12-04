@@ -1,68 +1,68 @@
-﻿using Bonyan.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
+﻿    using Bonyan.DependencyInjection;
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Options;
 
-namespace Bonyan.UnitOfWork;
+    namespace Bonyan.UnitOfWork;
 
-public class BonUnitOfWorkInterceptor : BonInterceptor
-{
-    private readonly IServiceScopeFactory _serviceScopeFactory;
-
-    public BonUnitOfWorkInterceptor(IServiceScopeFactory serviceScopeFactory)
+    public class BonUnitOfWorkInterceptor : BonInterceptor
     {
-        _serviceScopeFactory = serviceScopeFactory;
-    }
+        private readonly IServiceScopeFactory _serviceScopeFactory;
 
-    public override async Task InterceptAsync(IBonMethodInvocation invocation)
-    {
-        if (!BonUnitOfWorkHelper.IsUnitOfWorkMethod(invocation.Method, out var unitOfWorkAttribute))
+        public BonUnitOfWorkInterceptor(IServiceScopeFactory serviceScopeFactory)
         {
-            await invocation.ProceedAsync();
-            return;
+            _serviceScopeFactory = serviceScopeFactory;
         }
 
-        using (var scope = _serviceScopeFactory.CreateScope())
+        public override async Task InterceptAsync(IBonMethodInvocation invocation)
         {
-            var options = CreateOptions(scope.ServiceProvider, invocation, unitOfWorkAttribute);
-
-            var unitOfWorkManager = scope.ServiceProvider.GetRequiredService<IBonUnitOfWorkManager>();
-
-            //Trying to begin a reserved UOW by BonUnitOfWorkMiddleware
-            if (unitOfWorkManager.TryBeginReserved(BonUnitOfWork.UnitOfWorkReservationName, options))
+            if (!BonUnitOfWorkHelper.IsUnitOfWorkMethod(invocation.Method, out var unitOfWorkAttribute))
             {
                 await invocation.ProceedAsync();
-
-                if (unitOfWorkManager.Current != null)
-                {
-                    await unitOfWorkManager.Current.SaveChangesAsync();
-                }
-
                 return;
             }
 
-            using (var uow = unitOfWorkManager.Begin(options))
+            using (var scope = _serviceScopeFactory.CreateScope())
             {
-                await invocation.ProceedAsync();
-                await uow.CompleteAsync();
+                var options = CreateOptions(scope.ServiceProvider, invocation, unitOfWorkAttribute);
+
+                var unitOfWorkManager = scope.ServiceProvider.GetRequiredService<IBonUnitOfWorkManager>();
+
+                //Trying to begin a reserved UOW by BonUnitOfWorkMiddleware
+                if (unitOfWorkManager.TryBeginReserved(BonUnitOfWork.UnitOfWorkReservationName, options))
+                {
+                    await invocation.ProceedAsync();
+
+                    if (unitOfWorkManager.Current != null)
+                    {
+                        await unitOfWorkManager.Current.SaveChangesAsync();
+                    }
+
+                    return;
+                }
+
+                using (var uow = unitOfWorkManager.Begin(options))
+                {
+                    await invocation.ProceedAsync();
+                    await uow.CompleteAsync();
+                }
             }
         }
-    }
 
-    private BonUnitOfWorkOptions CreateOptions(IServiceProvider serviceProvider, IBonMethodInvocation invocation, BonUnitOfWorkAttribute? unitOfWorkAttribute)
-    {
-        var options = new BonUnitOfWorkOptions();
-
-        unitOfWorkAttribute?.SetOptions(options);
-
-        if (unitOfWorkAttribute?.IsTransactional == null)
+        private BonUnitOfWorkOptions CreateOptions(IServiceProvider serviceProvider, IBonMethodInvocation invocation, BonUnitOfWorkAttribute? unitOfWorkAttribute)
         {
-            var defaultOptions = serviceProvider.GetRequiredService<IOptions<BonUnitOfWorkDefaultOptions>>().Value;
-            options.IsTransactional = defaultOptions.CalculateIsTransactional(
-                autoValue: serviceProvider.GetRequiredService<IUnitOfWorkTransactionBehaviourProvider>().IsTransactional
-                           ?? !invocation.Method.Name.StartsWith("Get", StringComparison.InvariantCultureIgnoreCase)
-            );
-        }
+            var options = new BonUnitOfWorkOptions();
 
-        return options;
+            unitOfWorkAttribute?.SetOptions(options);
+
+            if (unitOfWorkAttribute?.IsTransactional == null)
+            {
+                var defaultOptions = serviceProvider.GetRequiredService<IOptions<BonUnitOfWorkDefaultOptions>>().Value;
+                options.IsTransactional = defaultOptions.CalculateIsTransactional(
+                    autoValue: serviceProvider.GetRequiredService<IUnitOfWorkTransactionBehaviourProvider>().IsTransactional
+                               ?? !invocation.Method.Name.StartsWith("Get", StringComparison.InvariantCultureIgnoreCase)
+                );
+            }
+
+            return options;
+        }
     }
-}

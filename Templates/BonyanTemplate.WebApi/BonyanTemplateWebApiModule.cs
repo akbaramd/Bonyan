@@ -1,8 +1,14 @@
 using Bonyan.AspNetCore.Authentication;
+using Bonyan.AspNetCore.Authorization;
 using Bonyan.AspNetCore.Mvc;
+using Bonyan.IdentityManagement;
+using Bonyan.IdentityManagement.Options;
+using Bonyan.IdentityManagement.WebApi;
 using Bonyan.Modularity;
 using BonyanTemplate.Application;
+using BonyanTemplate.Domain.Users;
 using BonyanTemplate.Infrastructure;
+using Microsoft.OpenApi.Models;
 
 namespace BonyanTemplate.WebApi;
 
@@ -12,21 +18,49 @@ public class BonyanTemplateWebApiModule : BonWebModule
     {
         DependOn<BonyanTemplateApplicationModule>();
         DependOn<BonaynTempalteInfrastructureModule>();
-        DependOn<BonAspNetCoreMvcModule>();
+        DependOn<BonIdentityManagementWebApiModule<User>>();
+       
     }
 
     public override Task OnConfigureAsync(BonConfigurationContext context)
     {
         context.Services.AddEndpointsApiExplorer();
-        context.Services.AddSwaggerGen();
-
-        PreConfigure<BonAuthenticationConfiguration>(c =>
+        context.Services.AddSwaggerGen(options =>
         {
-            c.ConfigureJwtAuthentication(x =>
+            options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
             {
-                x.Enabled = true;
-                x.SecretKey = "AS2Da2s2dK4A5SD8HaAiSD9YAaS2DU285472KHs2d6734haS35";
+                Name = "Authorization",
+                Scheme = "bearer",
+                BearerFormat = "JWT",
+                In = ParameterLocation.Header,
+                Description = "Enter 'Bearer' [space] and then your token in the text input below."
             });
+
+            options.AddSecurityRequirement(new OpenApiSecurityRequirement
+            {
+                {
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = "Bearer"
+                        }
+                    },
+                    new string[] {}
+                }
+            });
+        });
+
+        PreConfigure<BonAuthenticationJwtOptions>(c =>
+        {
+            c.SecretKey = "asdasdasdasdadawdawd453434534534534534534534adw"; // کلید رمزگذاری JWT
+            c.Issuer = "your-issuer"; // تنظیم Issuer
+            c.Audience = "your-audience"; // تنظیم Audience
+            c.Enabled = true; // فعال کردن JWT
+            c.RequireHttpsMetadata = true; // نیاز به HTTPS
+            c.SaveToken = true; // ذخیره کردن توکن
+            c.ExpirationInMinutes = 60; // تنظیم انقضای توکن (در دقیقه)
         });
 
         PreConfigure<BonAuthorizationConfiguration>(c =>

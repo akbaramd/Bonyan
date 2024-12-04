@@ -1,14 +1,17 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace Bonyan.Mediators;
 
 public class InMemoryBonMediator : IBonMediator
 {
     private readonly IServiceProvider _serviceProvider;
+    private readonly ILogger<InMemoryBonMediator> _logger;
 
-    public InMemoryBonMediator(IServiceProvider serviceProvider)
+    public InMemoryBonMediator(IServiceProvider serviceProvider, ILogger<InMemoryBonMediator> logger)
     {
         _serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
+        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
     // Handle commands with a response
@@ -17,11 +20,14 @@ public class InMemoryBonMediator : IBonMediator
         CancellationToken cancellationToken = default)
         where TCommand : IBonCommand<TResponse>
     {
+        _logger.LogInformation("Handling command of type {CommandType}", command.GetType().Name);
+
         var behaviors = _serviceProvider.GetServices<IBonMediatorBehavior<TCommand, TResponse>>().ToList();
         var handler = _serviceProvider.GetService<IBonCommandHandler<TCommand, TResponse>>();
         if (handler == null)
         {
-            throw new InvalidOperationException($"No handler found for command type {typeof(TCommand).Name}");
+            _logger.LogError("No handler found for command type {CommandType}", command.GetType().Name);
+            throw new InvalidOperationException($"No handler found for command type {command.GetType().Name}");
         }
 
         async Task<TResponse> HandlerDelegate() => await handler.HandleAsync(command, cancellationToken);
@@ -30,7 +36,9 @@ public class InMemoryBonMediator : IBonMediator
             .Aggregate((Func<Task<TResponse>>)HandlerDelegate,
                 (next, behavior) => () => behavior.HandleAsync(command, next, cancellationToken));
 
-        return await pipeline();
+        var response = await pipeline();
+        _logger.LogInformation("Successfully handled command of type {CommandType}", command.GetType().Name);
+        return response;
     }
 
     // Handle commands without a response
@@ -39,11 +47,14 @@ public class InMemoryBonMediator : IBonMediator
         CancellationToken cancellationToken = default)
         where TCommand : IBonCommand
     {
+        _logger.LogInformation("Handling command of type {CommandType}", command.GetType().Name);
+
         var behaviors = _serviceProvider.GetServices<IBonMediatorBehavior<TCommand>>().ToList();
         var handler = _serviceProvider.GetService<IBonCommandHandler<TCommand>>();
         if (handler == null)
         {
-            throw new InvalidOperationException($"No handler found for command type {typeof(TCommand).Name}");
+            _logger.LogError("No handler found for command type {CommandType}", command.GetType().Name);
+            throw new InvalidOperationException($"No handler found for command type {command.GetType().Name}");
         }
 
         async Task HandlerDelegate() => await handler.HandleAsync(command, cancellationToken);
@@ -53,6 +64,7 @@ public class InMemoryBonMediator : IBonMediator
                 (next, behavior) => () => behavior.HandleAsync(command, next, cancellationToken));
 
         await pipeline();
+        _logger.LogInformation("Successfully handled command of type {CommandType}", command.GetType().Name);
     }
 
     // Handle queries
@@ -61,11 +73,14 @@ public class InMemoryBonMediator : IBonMediator
         CancellationToken cancellationToken = default)
         where TQuery : IBonQuery<TResponse>
     {
+        _logger.LogInformation("Handling query of type {QueryType}", query.GetType().Name);
+
         var behaviors = _serviceProvider.GetServices<IBonMediatorBehavior<TQuery, TResponse>>().ToList();
         var handler = _serviceProvider.GetService<IBonQueryHandler<TQuery, TResponse>>();
         if (handler == null)
         {
-            throw new InvalidOperationException($"No handler found for query type {typeof(TQuery).Name}");
+            _logger.LogError("No handler found for query type {QueryType}", query.GetType().Name);
+            throw new InvalidOperationException($"No handler found for query type {query.GetType().Name}");
         }
 
         async Task<TResponse> HandlerDelegate() => await handler.HandleAsync(query, cancellationToken);
@@ -74,7 +89,9 @@ public class InMemoryBonMediator : IBonMediator
             .Aggregate((Func<Task<TResponse>>)HandlerDelegate,
                 (next, behavior) => () => behavior.HandleAsync(query, next, cancellationToken));
 
-        return await pipeline();
+        var response = await pipeline();
+        _logger.LogInformation("Successfully handled query of type {QueryType}", query.GetType().Name);
+        return response;
     }
 
     // Handle events
@@ -83,11 +100,13 @@ public class InMemoryBonMediator : IBonMediator
         CancellationToken cancellationToken = default)
         where TEvent : IBonEvent
     {
+        _logger.LogInformation("Publishing event of type {EventType}", eventMessage.GetType().Name);
+
         var behaviors = _serviceProvider.GetServices<IBonMediatorBehavior<TEvent>>().ToList();
         var handlers = _serviceProvider.GetServices<IBonEventHandler<TEvent>>().ToList();
         if (!handlers.Any())
         {
-            Console.WriteLine($"No event handlers found for event type {typeof(TEvent).Name}");
+            _logger.LogWarning("No event handlers found for event type {EventType}", eventMessage.GetType().Name);
             return;
         }
 
@@ -103,5 +122,6 @@ public class InMemoryBonMediator : IBonMediator
                 (next, behavior) => () => behavior.HandleAsync(eventMessage, next, cancellationToken));
 
         await pipeline();
+        _logger.LogInformation("Successfully published event of type {EventType}", eventMessage.GetType().Name);
     }
 }

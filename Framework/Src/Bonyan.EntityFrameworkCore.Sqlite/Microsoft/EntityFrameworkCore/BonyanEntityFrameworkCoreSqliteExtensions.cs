@@ -8,7 +8,9 @@ public static class BonyanEntityFrameworkCoreSqliteExtensions
   {
     return options.Configure(c =>
     {
-      c.UseSqlite(connectionStrings);
+      c.UseSqlite(connectionStrings)
+        .EnableSensitiveDataLogging()
+        .EnableDetailedErrors();;
     });
   }
 }

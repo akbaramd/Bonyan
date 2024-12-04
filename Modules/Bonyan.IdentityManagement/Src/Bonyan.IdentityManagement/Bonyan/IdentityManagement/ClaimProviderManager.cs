@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Bonyan.IdentityManagement;
 
-internal class ClaimProviderManager : IBonIdentityClaimProviderManager
+internal class ClaimProviderManager<TUser> : IBonIdentityClaimProviderManager<TUser> where TUser : IBonIdentityUser
 {
     private readonly IServiceProvider _serviceProvider;
 
@@ -13,10 +13,10 @@ internal class ClaimProviderManager : IBonIdentityClaimProviderManager
         _serviceProvider = serviceProvider;
     }
 
-    public async Task<IEnumerable<Claim>> GetClaimsAsync(IBonIdentityUser user)
+    public async Task<IEnumerable<Claim>> GetClaimsAsync(TUser user)
     {
         // Resolve all claim providers from DI
-        var claimProviders = _serviceProvider.GetServices<IBonIdentityClaimProvider>();
+        var claimProviders = _serviceProvider.GetServices<IBonIdentityClaimProvider<TUser>>();
         var claimsTasks = claimProviders.Select(provider => provider.GenerateClaimsAsync(user));
         var claimsArrays = await Task.WhenAll(claimsTasks);
 

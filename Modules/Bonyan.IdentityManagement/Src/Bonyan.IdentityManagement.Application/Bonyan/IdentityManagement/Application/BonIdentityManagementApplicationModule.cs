@@ -1,5 +1,9 @@
 using Bonyan.AutoMapper;
-using Bonyan.IdentityManagement.Application.Workers;
+using Bonyan.IdentityManagement.Application.Auth;
+using Bonyan.IdentityManagement.Application.Permissions;
+using Bonyan.IdentityManagement.Application.Permissions.Workers;
+using Bonyan.IdentityManagement.Application.Roles;
+using Bonyan.IdentityManagement.Application.Users;
 using Bonyan.IdentityManagement.Domain.Users;
 using Bonyan.Modularity;
 using Bonyan.Modularity.Abstractions;
@@ -29,11 +33,16 @@ public class BonIdentityManagementApplicationModule<TUser> : BonModule where TUs
 
     public override Task OnConfigureAsync(BonConfigurationContext context)
     {
-        context.Services.AddTransient<IBonIdentityAuthService, BonIdentityAuthService<TUser>>();
+        context.Services.AddTransient<IBonIdentityAuthAppService, BonIdentityAuthAppAppService<TUser>>();
+        context.Services.AddTransient<IBonIdentityPermissionAppService, BonIdentityPermissionAppService>();
+        context.Services.AddTransient<IBonIdentityRoleAppService, BonIdentityRoleAppService>();
+        context.Services.AddTransient<IBonIdentityUserAppService, BonIdentityUserAppService<TUser>>();
         
         Configure<BonAutoMapperOptions>(c =>
         {
-            c.AddProfile<BonUserMapper<TUser>>();
+            c.AddProfile<BonIdentityUserMapper<TUser>>();
+            c.AddProfile<BonIdentityPermissionMapper>();
+            c.AddProfile<BonIdentityRoleMapper>();
         });
         
         return base.OnConfigureAsync(context);

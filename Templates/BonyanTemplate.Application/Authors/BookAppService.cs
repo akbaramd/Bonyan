@@ -7,7 +7,5 @@ namespace BonyanTemplate.Application.Authors;
 
 public class AuthorAppService : BonCrudAppService<Domain.Authors.Authors,AuthorId,AuthorDto>,IAuthorAppService
 {
-    public AuthorAppService(IBonRepository<Domain.Authors.Authors, AuthorId> repository) : base(repository)
-    {
-    }
+   
 }

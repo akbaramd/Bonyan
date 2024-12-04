@@ -1,4 +1,4 @@
-﻿namespace Bonyan.AspNetCore.Authentication.Options
+﻿namespace Bonyan.IdentityManagement.Options
 {
     public class BonAuthenticationJwtOptions
     {

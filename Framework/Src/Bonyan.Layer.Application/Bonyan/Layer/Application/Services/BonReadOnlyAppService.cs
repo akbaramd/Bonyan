@@ -6,41 +6,31 @@ using Bonyan.Layer.Domain.Repository.Abstractions;
 namespace Bonyan.Layer.Application.Services;
 
 public abstract class BonReadonlyAppService<TEntity,TKey, TEntityDto >
-    : BonReadonlyAppService<TEntity,TKey, BonPaginateDto, TEntityDto, TEntityDto> where TEntity : class, IBonEntity<TKey> where TEntityDto : IBonEntityDto<TKey>
+    : BonReadonlyAppService<TEntity,TKey, BonPaginateDto, TEntityDto, TEntityDto> 
+    where TEntity : class, IBonEntity<TKey> where TEntityDto : class
 
 {
-    protected BonReadonlyAppService(IBonReadOnlyRepository<TEntity, TKey> repository)
-        : base(repository)
-    {
-
-    }
+   
 }
 
 public abstract class BonReadonlyAppService<TEntity, TKey, TGetListInput, TEntityDto>
     : BonReadonlyAppService<TEntity,  TKey, TGetListInput,TEntityDto, TEntityDto> 
     where TGetListInput : BonPaginateDto 
     where TEntity : class, IBonEntity<TKey> 
-    where TEntityDto : IBonEntityDto<TKey>
+    where TEntityDto : class
 
 {
-    protected BonReadonlyAppService(IBonReadOnlyRepository<TEntity, TKey> repository)
-        : base(repository)
-    {
 
-    }
 }
 
 public class BonReadonlyAppService<TEntity, TKey,TFilterDto, TDto, TDetailDto>
     : AbstractBonReadonlyAppService<TEntity, TKey,TFilterDto, TDto, TDetailDto>
     where TEntity : class, IBonEntity<TKey>
-    where TDto : IBonEntityDto<TKey>
-    where TDetailDto : IBonEntityDto<TKey>
+    where TDto : class
+    where TDetailDto : class
     where TFilterDto : BonPaginateDto
 {
-    public BonReadonlyAppService(IBonReadOnlyRepository<TEntity,TKey> repository)
-        : base(repository)
-    {
-    }
+
 
     protected override async Task<TEntity?> GetEntityByIdAsync(TKey id)
     {

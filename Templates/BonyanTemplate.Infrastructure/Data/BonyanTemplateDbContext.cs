@@ -14,11 +14,17 @@ using Microsoft.EntityFrameworkCore;
 namespace BonyanTemplate.Infrastructure.Data;
 
 public class BonyanTemplateDbContext : BonDbContext<BonyanTemplateDbContext>,
-    IBonTenantDbContext, IBonIdentityManagementDbContext<User>,IBonOutBoxDbContext
+    IBonTenantDbContext, IBonIdentityManagementDbContext<User>
 {
     public BonyanTemplateDbContext(DbContextOptions<BonyanTemplateDbContext> options) :
         base(options)
     {
+    }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        optionsBuilder.EnableSensitiveDataLogging();
+        base.OnConfiguring(optionsBuilder);
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -38,5 +44,4 @@ public class BonyanTemplateDbContext : BonDbContext<BonyanTemplateDbContext>,
     public DbSet<BonIdentityUserToken> UserTokens { get; set; }
     public DbSet<BonIdentityRole> Roles { get; set; }
     public DbSet<BonIdentityPermission> Permissions { get; set; }
-    public DbSet<BonOutboxMessage> OutboxMessages { get; set; }
 }

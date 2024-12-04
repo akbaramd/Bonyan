@@ -1,9 +1,9 @@
-﻿namespace Bonyan.IdentityManagement.Permissions;
+﻿namespace Bonyan.AspNetCore.Authorization.Permissions;
 
 public class PermissionAccessor : List<string>
 {
-    public PermissionAccessor(string[] permissions)
+    public PermissionAccessor()
     {
-        this.AddRange(permissions);
+        
     }
 }

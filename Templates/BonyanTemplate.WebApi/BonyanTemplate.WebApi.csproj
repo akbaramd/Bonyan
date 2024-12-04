@@ -19,6 +19,7 @@
         <ProjectReference Include="..\..\Framework\Src\Bonyan.EntityFrameworkCore\Bonyan.EntityFrameworkCore.csproj"/>
         <ProjectReference Include="..\..\Framework\Src\Bonyan.AspNetCore\Bonyan.AspNetCore.csproj"/>
         <ProjectReference Include="..\..\Framework\Src\Bonyan.EntityFrameworkCore.SqlServer\Bonyan.EntityFrameworkCore.SqlServer.csproj"/>
+        <ProjectReference Include="..\..\Modules\Bonyan.IdentityManagement\Src\Bonyan.IdentityManagement.WebApi\Bonyan.IdentityManagement.WebApi.csproj" />
         <ProjectReference Include="..\BonyanTemplate.Application\BonyanTemplate.Application.csproj"/>
         <ProjectReference Include="..\BonyanTemplate.Infrastructure\BonyanTemplate.Infrastructure.csproj"/>
     </ItemGroup>
@@ -29,6 +30,9 @@
         <PackageReference Include="Microsoft.Identity.Web" Version="2.15.2"/>
         <PackageReference Include="Microsoft.Identity.Web.DownstreamApi" Version="2.15.2"/>
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0"/>
+    </ItemGroup>
+    <ItemGroup>
+      <Folder Include="wwwroot\" />
     </ItemGroup>
 
 </Project>

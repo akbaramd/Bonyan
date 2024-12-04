@@ -55,6 +55,7 @@ public class BonIdentityUserToken : BonEntity<BonIdentityUserTokenId>
         if (string.IsNullOrWhiteSpace(type)) throw new ArgumentException("Token type cannot be empty.", nameof(type));
         if (string.IsNullOrWhiteSpace(value)) throw new ArgumentException("Token value cannot be empty.", nameof(value));
 
+        Id = BonIdentityUserTokenId.NewId();
         UserId = userId;
         Type = type;
         Value = value;

@@ -10,9 +10,7 @@ public class BonUserCrudAppService<TUser> : BonCrudAppService<TUser, BonUserId, 
         BonUserDto, BonUserCreateDto, BonUserUpdateDto>,
     IBonUserCrudAppService where TUser : class, IBonUser
 {
-    public BonUserCrudAppService(IBonRepository<TUser, BonUserId> repository) : base(repository)
-    {
-    }
+ 
 
     protected override IQueryable<TUser> ApplyFiltering(IQueryable<TUser> query, BonUserFilterAndPaginateDto input)
     {

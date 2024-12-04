@@ -9,9 +9,7 @@ namespace Bonyan.UserManagement.Application.Users.Services;
 public class BonUserReadOnlyAppService<TUser> : BonReadonlyAppService<TUser, BonUserId, BonUserFilterAndPaginateDto, BonUserDto>,
     IBonUserReadOnlyAppService where TUser : class, IBonUser
 {
-    public BonUserReadOnlyAppService(IBonRepository<TUser, BonUserId> repository) : base(repository)
-    {
-    }
+
 
     protected override IQueryable<TUser> ApplyFiltering(IQueryable<TUser> query, BonUserFilterAndPaginateDto input)
     {

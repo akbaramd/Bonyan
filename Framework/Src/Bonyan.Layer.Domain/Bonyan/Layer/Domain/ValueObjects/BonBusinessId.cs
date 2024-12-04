@@ -1,20 +1,23 @@
+using System;
+using System.Globalization;
+using System.ComponentModel;
+
 namespace Bonyan.Layer.Domain.ValueObjects
 {
-    public abstract class BonBusinessId<T, TKey> : BonValueObject where T : BonBusinessId<T, TKey>, new()
+    [TypeConverter(typeof(BonBusinessIdTypeConverter))]
+    public abstract class BonBusinessId<T, TKey> : BonValueObject
+        where T : BonBusinessId<T, TKey>, new()
     {
-        // The underlying value of the business ID
         public TKey Value { get; private set; }
 
-        public BonBusinessId()
+        protected BonBusinessId()
         {
-            throw new NotSupportedException("Use the appropriate factory method to create a business ID.");
         }
 
-        // Protected constructor to allow subclassing
-        public BonBusinessId(TKey value)
+        protected BonBusinessId(TKey value)
         {
             if (value == null || value.Equals(default(TKey)))
-                throw new ArgumentException($"The value of {nameof(TKey)} cannot be null or default.", nameof(value));
+                throw new ArgumentException($"The value of {nameof(value)} cannot be null or default.", nameof(value));
 
             Value = value;
         }
@@ -25,7 +28,7 @@ namespace Bonyan.Layer.Domain.ValueObjects
         public static T FromValue(TKey value)
         {
             if (value == null || value.Equals(default(TKey)))
-                throw new ArgumentException($"The value of {nameof(TKey)} cannot be null or default.", nameof(value));
+                throw new ArgumentException($"The value of {nameof(value)} cannot be null or default.", nameof(value));
 
             return NewId(value);
         }
@@ -35,7 +38,6 @@ namespace Bonyan.Layer.Domain.ValueObjects
         /// </summary>
         public static T NewId(TKey value)
         {
-            // Use reflection to create an instance of the derived class
             var instance = new T();
             instance.Value = value;
             return instance;
@@ -52,14 +54,16 @@ namespace Bonyan.Layer.Domain.ValueObjects
         {
             yield return Value;
         }
+
+     
     }
 }
-
 namespace Bonyan.Layer.Domain.ValueObjects
 {
     /// <summary>
     /// Represents a specialized implementation of BonBusinessId with a GUID as the key type.
     /// </summary>
+    [TypeConverter(typeof(BonBusinessIdTypeConverter))]
     public abstract class BonBusinessId<T> : BonBusinessId<T, Guid> where T : BonBusinessId<T>, new()
     {
         public BonBusinessId() : base(Guid.NewGuid())

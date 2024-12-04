@@ -10,17 +10,18 @@ public abstract class AbstractCrudAppService<TEntity, TKey, TPaginateDto, TGetOu
     : AbstractBonReadonlyAppService<TEntity, TKey, TPaginateDto, TGetOutputDto, TGetListOutputDto>,
         IBonCrudAppService<TKey, TPaginateDto, TCreateInput, TUpdateInput, TGetOutputDto, TGetListOutputDto>
     where TEntity : class, IBonEntity<TKey>
-    where TGetListOutputDto : IBonEntityDto<TKey>
-    where TGetOutputDto : IBonEntityDto<TKey>
+    where TGetListOutputDto : class
+    where TGetOutputDto : class
     where TCreateInput : class
     where TUpdateInput : class
     where TPaginateDto : IBonPaginateDto
 {
-    protected new IBonRepository<TEntity, TKey> Repository { get; }
+    protected new IBonRepository<TEntity, TKey> Repository =>
+        LazyServiceProvider.LazyGetRequiredService<IBonRepository<TEntity, TKey>>();
 
-    protected AbstractCrudAppService(IBonRepository<TEntity, TKey> repository) : base(repository)
+    protected AbstractCrudAppService() : base()
     {
-        Repository = repository;
+        
     }
 
     #region Create

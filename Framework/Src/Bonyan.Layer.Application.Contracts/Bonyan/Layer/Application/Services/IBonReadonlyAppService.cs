@@ -8,14 +8,14 @@ namespace Bonyan.Layer.Application.Services;
 public interface
     IBonReadonlyAppService<in TKey, in TFilterDto, TDto> : IBonReadonlyAppService<TKey, TFilterDto, TDto
     , TDto>
-    where TDto : IBonEntityDto<TKey>
+    where TDto : class
     where TFilterDto : IBonPaginateDto
 {
 }
 
 public interface IBonReadonlyAppService<in TKey, in TFilterDto, TDto, TDetailDto> : IBonApplicationService
-    where TDto : IBonEntityDto<TKey>
-    where TDetailDto : IBonEntityDto<TKey>
+    where TDto : class
+    where TDetailDto : class
     where TFilterDto : IBonPaginateDto
 {
     Task<ServiceResult<TDetailDto>> DetailAsync(TKey key);

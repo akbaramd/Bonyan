@@ -8,15 +8,16 @@ namespace Bonyan.Layer.Application.Services;
 public abstract class AbstractBonReadonlyAppService<TEntity, TKey, TFilterDto, TDto, TDetailDto>
     : BonApplicationService, IBonReadonlyAppService<TKey, TFilterDto, TDto, TDetailDto>
     where TEntity : class, IBonEntity<TKey>
-    where TDto : IBonEntityDto<TKey>
-    where TDetailDto : IBonEntityDto<TKey>
+    where TDto : class
+    where TDetailDto : class
     where TFilterDto : IBonPaginateDto
 {
-    protected IBonReadOnlyRepository<TEntity, TKey> Repository { get; }
+    protected IBonReadOnlyRepository<TEntity, TKey> Repository =>
+        LazyServiceProvider.LazyGetRequiredService<IBonReadOnlyRepository<TEntity, TKey>>();
 
-    protected AbstractBonReadonlyAppService(IBonReadOnlyRepository<TEntity, TKey> readOnlyRepository)
+    protected AbstractBonReadonlyAppService()
     {
-        Repository = readOnlyRepository;
+     
     }
 
     public virtual async Task<ServiceResult<TDetailDto>> DetailAsync(TKey key)

@@ -1,14 +1,7 @@
-﻿using System.Text;
-using Bonyan.AspNetCore.Authentication.Options;
-using Bonyan.IdentityManagement.Permissions;
+﻿using Bonyan.AspNetCore.Authorization.Permissions;
 using Bonyan.Modularity;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.IdentityModel.Tokens;
 
-namespace Bonyan.AspNetCore.Authentication
+namespace Bonyan.AspNetCore.Authorization
 {
     public class BonAuthorizationConfiguration
     {
@@ -17,12 +10,13 @@ namespace Bonyan.AspNetCore.Authentication
         public BonAuthorizationConfiguration(BonConfigurationContext context)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
+            _context.Services.AddObjectAccessor(new PermissionAccessor());
         }
 
         public  void RegisterPermissions( string[] permissions)
         {
             // Register PermissionAccessor as a singleton
-            _context.Services.AddObjectAccessor<PermissionAccessor>(new PermissionAccessor(permissions));
+            _context.Services.GetObject<PermissionAccessor>().AddRange(permissions);
 
             
         }

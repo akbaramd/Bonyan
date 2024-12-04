@@ -3,10 +3,10 @@ using System.Security.Claims;
 using System.Text;
 using System.Text.RegularExpressions;
 using AutoMapper;
-using Bonyan.AspNetCore.Authentication.Options;
 using Bonyan.IdentityManagement.Application.Dto;
 using Bonyan.IdentityManagement.Domain.Users;
 using Bonyan.IdentityManagement.Domain.Users.DomainServices;
+using Bonyan.IdentityManagement.Options;
 using Bonyan.Layer.Application.Services;
 using Bonyan.UserManagement.Domain.Users.ValueObjects;
 using Microsoft.AspNetCore.Authentication;
@@ -15,23 +15,23 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 
-namespace Bonyan.IdentityManagement.Application;
+namespace Bonyan.IdentityManagement.Application.Auth;
 
-public class BonIdentityAuthService<TUser> : BonApplicationService, IBonIdentityAuthService where TUser : class, IBonIdentityUser
+public class BonIdentityAuthAppAppService<TUser> : BonApplicationService, IBonIdentityAuthAppService where TUser : class, IBonIdentityUser
 {
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly IBonIdentityUserManager<TUser> _identityUserManager;
-    private readonly ILogger<BonIdentityAuthService<TUser>> _logger;
+    private readonly ILogger<BonIdentityAuthAppAppService<TUser>> _logger;
     private readonly BonAuthenticationJwtOptions _authenticationJwtOptions;
-    private readonly IBonIdentityClaimProviderManager _claimProviderManager;
+    private readonly IBonIdentityClaimProviderManager<TUser> _claimProviderManager;
     private readonly IMapper _mapper;
 
-    public BonIdentityAuthService(
+    public BonIdentityAuthAppAppService(
         IHttpContextAccessor httpContextAccessor,
         IBonIdentityUserManager<TUser> identityUserManager,
-        ILogger<BonIdentityAuthService<TUser>> logger,
+        ILogger<BonIdentityAuthAppAppService<TUser>> logger,
         BonAuthenticationJwtOptions jwtOptions,
-        IBonIdentityClaimProviderManager claimProviderManager,
+        IBonIdentityClaimProviderManager<TUser> claimProviderManager,
         IMapper mapper)
     {
         _httpContextAccessor = httpContextAccessor;
@@ -52,7 +52,7 @@ public class BonIdentityAuthService<TUser> : BonApplicationService, IBonIdentity
             var existingUser = await _identityUserManager.FindByUserNameAsync(createDto.UserName);
             if (existingUser.IsSuccess)
             {
-                return ServiceResult<bool>.Failure("Username already exists.");
+                return ServiceResult<bool>.Failure("UserName already exists.");
             }
 
             var existingEmail = await _identityUserManager.FindByEmailAsync(createDto.Email);
@@ -116,7 +116,6 @@ public class BonIdentityAuthService<TUser> : BonApplicationService, IBonIdentity
             }
 
             var userDto = _mapper.Map<BonIdentityUserDto>(user);
-            userDto.Roles = rolesResult.Value;
 
             return ServiceResult<BonIdentityUserDto>.Success(userDto);
         }

@@ -11,10 +11,7 @@ var application = await NovinApplication.CreateBuilder("web-api", ctx =>
     {
         ctx.AddEndpoints()
             .AddMediator(c => { c.UseMessagingForDomainEvent(); })
-            .AddEntityFrameworkCore<AppDBContext>(db =>
-            {
-                db.Configure(c => { c.UseSqlite("Data Source=./WebApp.Api.db"); });
-            })
+         
             .AddMessaging(c =>
             {
                 c.RegisterConsumer<BookCreatedEventConsumer>();

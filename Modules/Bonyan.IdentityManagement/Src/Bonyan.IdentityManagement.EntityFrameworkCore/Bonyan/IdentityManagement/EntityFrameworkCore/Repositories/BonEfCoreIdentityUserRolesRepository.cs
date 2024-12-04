@@ -1,4 +1,5 @@
-﻿using Bonyan.IdentityManagement.Domain.Users;
+﻿using Bonyan.IdentityManagement.Domain;
+using Bonyan.IdentityManagement.Domain.Users;
 using Bonyan.IdentityManagement.Domain.Users.Repositories;
 using Bonyan.Layer.Domain;
 

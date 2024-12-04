@@ -18,9 +18,6 @@
         <ProjectReference Include="..\..\Framework\Src\Bonyan.AspNetCore.MultiTenant\Bonyan.AspNetCore.MultiTenant.csproj"/>
         <ProjectReference Include="..\..\Framework\Src\Bonyan.EntityFrameworkCore.Sqlite\Bonyan.EntityFrameworkCore.Sqlite.csproj"/>
         <ProjectReference Include="..\..\Framework\Src\Bonyan.EntityFrameworkCore\Bonyan.EntityFrameworkCore.csproj"/>
-        <ProjectReference Include="..\..\Framework\Src\Bonyan.Messaging.OutBox.EntityFrameworkCore\Bonyan.Messaging.OutBox.EntityFrameworkCore.csproj" />
-        <ProjectReference Include="..\..\Framework\Src\Bonyan.Messaging.OutBox\Bonyan.Messaging.OutBox.csproj" />
-        <ProjectReference Include="..\..\Framework\Src\Bonyan.Messaging.RabbitMQ\Bonyan.Messaging.RabbitMQ.csproj" />
         <ProjectReference Include="..\..\Modules\Bonyan.IdentityManagement\Src\Bonyan.IdentityManagement.EntityFrameworkCore\Bonyan.IdentityManagement.EntityFrameworkCore.csproj" />
         <ProjectReference Include="..\..\Modules\Bonyan.TenantManagement\Src\Bonyan.TenantManagement.EntityFrameworkCore\Bonyan.TenantManagement.EntityFrameworkCore.csproj" />
         <ProjectReference Include="..\BonyanTemplate.Application\BonyanTemplate.Application.csproj" />

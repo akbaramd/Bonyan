@@ -1,101 +1,163 @@
-﻿using Bonyan.IdentityManagement.Domain.Roles.Repostories;
+﻿using Bonyan.IdentityManagement.Domain.Permissions.Repositories;
+using Bonyan.IdentityManagement.Domain.Permissions;
+using Bonyan.IdentityManagement.Domain.Permissions.ValueObjects;
+using Bonyan.IdentityManagement.Domain.Roles.Repositories;
 using Bonyan.IdentityManagement.Domain.Roles.ValueObjects;
 using Bonyan.Layer.Domain.DomainService;
-using Bonyan.Layer.Domain.Services;
-using Microsoft.Extensions.Logging;
 
 namespace Bonyan.IdentityManagement.Domain.Roles.DomainServices
 {
-    public class BonIdentityRoleManager : BonDomainService, IBonIdentityRoleManager
+    public class BonIdentityRoleManager : IBonIdentityRoleManager
     {
-        public IBonIdentityRoleRepository IdentityRoleRepository =>
-            LazyServiceProvider.LazyGetRequiredService<IBonIdentityRoleRepository>();
+        private readonly IBonIdentityRoleRepository _roleRepository;
+        private readonly IBonIdentityPermissionRepository _permissionRepository;
+        private readonly IBonIdentityRolePermissionRepository _rolePermissionRepository;
 
-        // Create a new role
-        public async Task<BonDomainResult> CreateAsync(string name, string title)
+        public BonIdentityRoleManager(
+            IBonIdentityRoleRepository roleRepository,
+            IBonIdentityPermissionRepository permissionRepository, 
+            IBonIdentityRolePermissionRepository rolePermissionRepository)
         {
-            try
+            _roleRepository = roleRepository;
+            _permissionRepository = permissionRepository;
+            _rolePermissionRepository = rolePermissionRepository;
+        }
+
+        public async Task<BonDomainResult> CreateRoleAsync(BonIdentityRole role)
+        {
+            if (await _roleRepository.ExistsAsync(x => x.Id == role.Id))
             {
-                if (await IdentityRoleRepository.ExistsAsync(x => x.Id.Value.Equals(name)))
+                return BonDomainResult.Failure("Role already exists.");
+            }
+
+            await _roleRepository.AddAsync(role, true);
+
+            return BonDomainResult.Success();
+        }
+
+        public async Task<BonDomainResult> CreateRoleWithPermissionsAsync(BonIdentityRole role, IEnumerable<BonPermissionId> permissionIds)
+        {
+            // Initialize error accumulator
+            var errorMessages = new List<string>();
+
+            // Step 1: Create the role
+            var createResult = await CreateRoleAsync(role);
+            if (!createResult.IsSuccess)
+            {
+                errorMessages.Add(createResult.ErrorMessage);
+            }
+
+            // Step 2: Assign permissions to the role
+            var permissionResult = await AssignPermissionsToRoleAsync(role, permissionIds);
+            if (!permissionResult.IsSuccess)
+            {
+                errorMessages.Add(permissionResult.ErrorMessage);
+            }
+
+            // If there were any errors, return a combined failure
+            if (errorMessages.Any())
+            {
+                return BonDomainResult.Failure(string.Join(", ", errorMessages));
+            }
+
+            // Everything succeeded, return success
+            return BonDomainResult.Success();
+        }
+
+        public async Task<BonDomainResult> UpdateRoleAsync(BonIdentityRole role)
+        {
+            if (!await _roleRepository.ExistsAsync(x => x.Id == role.Id))
+            {
+                return BonDomainResult.Failure("Role does not exist.");
+            }
+
+            await _roleRepository.UpdateAsync(role, true);
+
+            return BonDomainResult.Success();
+        }
+
+        public async Task<BonDomainResult> DeleteRoleAsync(BonIdentityRole role)
+        {
+            if (!await _roleRepository.ExistsAsync(x => x.Id == role.Id))
+            {
+                return BonDomainResult.Failure("Role does not exist.");
+            }
+
+            await _roleRepository.DeleteAsync(role, true);
+
+            return BonDomainResult.Success();
+        }
+
+        public async Task<BonDomainResult> AssignPermissionsToRoleAsync(BonIdentityRole role, IEnumerable<BonPermissionId> permissionIds)
+        {
+            var permissionsResult = await GetPermissionsAsync(permissionIds);
+            if (!permissionsResult.IsSuccess)
+            {
+                return BonDomainResult.Failure(permissionsResult.ErrorMessage);
+            }
+
+            var permissions = permissionsResult.Value;
+            // Fetch current role permissions from the database
+            var currentPermissions = await _rolePermissionRepository.FindAsync(x => x.RoleId == role.Id);
+
+            // Find permissions to add (permissions in the input that are not yet assigned)
+            var permissionsToAdd = permissions
+                .Where(p => !currentPermissions.Any(cp => cp.PermissionId == p.Id))
+                .ToList();
+
+            // Find permissions to remove (permissions currently assigned but not in the input)
+            var permissionsToRemove = currentPermissions
+                .Where(cp => !permissions.Any(p => p.Id == cp.PermissionId))
+                .ToList();
+
+            // Remove the old permissions from the role
+            await _rolePermissionRepository.DeleteRangeAsync(permissionsToRemove);
+
+            // Add the new permissions to the role
+            foreach (var permissionToAdd in permissionsToAdd)
+            {
+                await _rolePermissionRepository.AddAsync(new BonIdentityRolePermissions(role.Id, permissionToAdd.Id));
+            }
+
+            return BonDomainResult.Success();
+        }
+
+        public async Task<BonDomainResult<BonIdentityRole>> FindRoleByKeyAsync(string roleKey)
+        {
+            var role = await _roleRepository.FindOneAsync(x => x.Id.Value == roleKey);
+            if (role == null)
+            {
+                return BonDomainResult<BonIdentityRole>.Failure("Role not found.");
+            }
+
+            return BonDomainResult<BonIdentityRole>.Success(role);
+        }
+
+        private async Task<BonDomainResult<List<BonIdentityPermission>>> GetPermissionsAsync(IEnumerable<BonPermissionId> permissionIds)
+        {
+            var permissions = new List<BonIdentityPermission>();
+            var missingPermissions = new List<BonPermissionId>();
+
+            foreach (var permissionId in permissionIds)
+            {
+                var permission = await _permissionRepository.FindOneAsync(x => x.Id == permissionId);
+                if (permission == null)
                 {
-                    Logger.LogWarning($"Role with name {name} already exists.");
-                    return BonDomainResult.Failure($"Role with name {name} already exists.");
+                    missingPermissions.Add(permissionId);
                 }
-
-                var role = new BonIdentityRole(BonRoleId.NewId(name), title);
-                await IdentityRoleRepository.AddAsync(role, true);
-                return BonDomainResult.Success();
-            }
-            catch (Exception e)
-            {
-                Logger.LogError(e, "Error creating role.");
-                return BonDomainResult.Failure("Error creating role.");
-            }
-        }
-
-        // Update role details
-        public async Task<BonDomainResult> UpdateAsync(BonIdentityRole entity)
-        {
-            try
-            {
-                await IdentityRoleRepository.UpdateAsync(entity, true);
-                return BonDomainResult.Success();
-            }
-            catch (Exception e)
-            {
-                Logger.LogError(e, "Error updating role.");
-                return BonDomainResult.Failure("Error updating role.");
-            }
-        }
-
-        // Find a role by its name
-        public async Task<BonDomainResult<BonIdentityRole>> FindByNameAsync(string name)
-        {
-            try
-            {
-                var role = await IdentityRoleRepository.FindOneAsync(x => x.Id.Value.Equals(name));
-                if (role == null)
+                else
                 {
-                    return BonDomainResult<BonIdentityRole>.Failure($"Role with name {name} not found.");
+                    permissions.Add(permission);
                 }
+            }
 
-                return BonDomainResult<BonIdentityRole>.Success(role);
-            }
-            catch (Exception e)
+            if (missingPermissions.Any())
             {
-                Logger.LogError(e, "Error finding role by name.");
-                return BonDomainResult<BonIdentityRole>.Failure("Error finding role by name.");
+                var missingIds = string.Join(", ", missingPermissions.Select(p => p.Value));
+                return BonDomainResult<List<BonIdentityPermission>>.Failure($"Permissions not found: {missingIds}");
             }
-        }
 
-        // Delete a role and optionally remove it from all users
-        public async Task<BonDomainResult> DeleteAsync(BonIdentityRole identityRole)
-        {
-            try
-            {
-                await IdentityRoleRepository.DeleteAsync(identityRole, true);
-                return BonDomainResult.Success();
-            }
-            catch (Exception e)
-            {
-                Logger.LogError(e, "Error deleting identityRole.");
-                return BonDomainResult.Failure("Error deleting role.");
-            }
-        }
-
-        // Check if a role exists by name
-        public async Task<BonDomainResult<bool>> RoleExistsAsync(string roleName)
-        {
-            try
-            {
-                var exists = await IdentityRoleRepository.ExistsAsync(r => r.Id.Value == roleName);
-                return BonDomainResult<bool>.Success(exists);
-            }
-            catch (Exception e)
-            {
-                Logger.LogError(e, "Error checking if role exists.");
-                return BonDomainResult<bool>.Failure("Error checking if role exists.");
-            }
+            return BonDomainResult<List<BonIdentityPermission>>.Success(permissions);
         }
     }
 }
