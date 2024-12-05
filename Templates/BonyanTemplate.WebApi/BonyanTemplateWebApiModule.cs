@@ -27,9 +27,11 @@ public class BonyanTemplateWebApiModule : BonWebModule
     {
         context.Services.AddEndpointsApiExplorer();
 
-        PreConfigure<BonAuthorizationConfiguration>(c =>
+        PreConfigure<BonIdentityManagementOptions>(c =>
         {
             c.AddJwtAuthToSwagger();
+           
+            
         });
         
         PreConfigure<BonAuthenticationJwtOptions>(c =>
@@ -41,16 +43,6 @@ public class BonyanTemplateWebApiModule : BonWebModule
             c.RequireHttpsMetadata = true; // نیاز به HTTPS
             c.SaveToken = true; // ذخیره کردن توکن
             c.ExpirationInMinutes = 60; // تنظیم انقضای توکن (در دقیقه)
-        });
-
-        PreConfigure<BonAuthorizationConfiguration>(c =>
-        {
-            c.RegisterPermissions([
-                "book.create",
-                "book.read",
-                "book.delete",
-                "book.edit",
-            ]);
         });
         return base.OnConfigureAsync(context);
     }

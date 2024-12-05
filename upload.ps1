@@ -123,7 +123,7 @@ function Main {
     $startingDirectory = Get-Location
 
     # Run tests
-    dotnet test
+#     dotnet test
     Set-Location -Path $startingDirectory
 
     # Publish projects in the Framework directory

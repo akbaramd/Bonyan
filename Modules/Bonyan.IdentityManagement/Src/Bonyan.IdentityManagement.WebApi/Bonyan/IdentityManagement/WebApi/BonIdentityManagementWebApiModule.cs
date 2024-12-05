@@ -1,4 +1,5 @@
 using Bonyan.AspNetCore.Authorization;
+using Bonyan.AspNetCore.Authorization.Permissions;
 using Bonyan.AspNetCore.Mvc;
 using Bonyan.IdentityManagement.Application;
 using Bonyan.IdentityManagement.Application.Permissions;
@@ -8,6 +9,7 @@ using Bonyan.IdentityManagement.Application.Roles;
 using Bonyan.IdentityManagement.Domain.Permissions.ValueObjects;
 using Bonyan.IdentityManagement.Domain.Roles.ValueObjects;
 using Bonyan.IdentityManagement.Domain.Users;
+using Bonyan.IdentityManagement.Options;
 using Bonyan.Layer.Application.Dto;
 using Bonyan.Layer.Application.Services;
 using Bonyan.Layer.Domain.Repository.Abstractions;
@@ -28,28 +30,9 @@ public class BonIdentityManagementWebApiModule<TUser> : BonWebModule
         DependOn<BonIdentityManagementApplicationModule<TUser>>();
     }
 
-    private void RegisterPermissions()
-    {
-        PreConfigure<BonAuthorizationConfiguration>(config =>
-        {
-            config.RegisterPermissions(new[]
-            {
-                BonIdentityPermissionConstants.IdentityPermissionRead,
-                BonIdentityPermissionConstants.IdentityRoleRead,
-                BonIdentityPermissionConstants.IdentityRoleDelete,
-                BonIdentityPermissionConstants.IdentityRoleEdit,
-                BonIdentityPermissionConstants.IdentityRoleCreate,
-                BonIdentityPermissionConstants.IdentityUserRead,
-                BonIdentityPermissionConstants.IdentityUserDelete,
-                BonIdentityPermissionConstants.IdentityUserEdit,
-                BonIdentityPermissionConstants.IdentityUserCreate
-            });
-        });
-    }
-
     public override Task OnConfigureAsync(BonConfigurationContext context)
     {
-        RegisterPermissions();
+        context.Services.AddSingleton<IBonPermissionProvider, BonIdentityPermissionProvider>();
         return base.OnConfigureAsync(context);
     }
 

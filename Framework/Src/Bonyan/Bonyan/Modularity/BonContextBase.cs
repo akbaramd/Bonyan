@@ -29,7 +29,7 @@ namespace Bonyan.Modularity
         /// <summary>
         /// Retrieves a required configuration option, throwing an exception if not found.
         /// </summary>
-        public T RequiredOption<T>() where T : class
+        public T GetRequiredOption<T>() where T : class
         {
             var service = Services.GetRequiredService<IOptions<T>>();
             if (service.Value == null)
@@ -59,7 +59,7 @@ namespace Bonyan.Modularity
         /// <summary>
         /// Retrieves a required service, throwing an exception if not found.
         /// </summary>
-        public T RequireService<T>() where T : notnull
+        public T GetRequireService<T>() where T : notnull
         {
             return Services.GetRequiredService<T>();
         }

@@ -34,7 +34,7 @@ public class BonyanTemplateDbContext : BonDbContext<BonyanTemplateDbContext>,
         modelBuilder.Entity<Book>().HasOne(x => x.Author).WithMany().HasForeignKey(x => x.AuthorId);
         modelBuilder.Entity<Authors>().ConfigureByConvention();
         modelBuilder.ConfigureTenantManagementByConvention();
-        modelBuilder.ConfigureIdentityManagementModelBuilder<User>();
+        modelBuilder.ConfigureIdentityManagement<User>();
     }
 
     public DbSet<Book> Books { get; set; }

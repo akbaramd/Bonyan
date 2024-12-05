@@ -6,52 +6,52 @@ using Bonyan.IdentityManagement.Domain.Permissions.ValueObjects;
 using Bonyan.IdentityManagement.Domain.Roles.ValueObjects;
 using Bonyan.UnitOfWork;
 using Bonyan.Workers;
+using Microsoft.Extensions.Hosting;
 
 namespace Bonyan.IdentityManagement.Application.Permissions.Workers
 {
-    public class BonIdentityPermissionSeeder : IBonWorker
+    public class BonIdentityPermissionSeeder : BackgroundService
     {
         private readonly IBonUnitOfWorkManager _unitOfWorkManager;
-        private readonly PermissionAccessor _permissionAccessor;
+        private readonly IBonPermissionManager _permissionManager;
         private readonly IBonIdentityPermissionRepository _bonIdentityPermissionRepository;
 
         public BonIdentityPermissionSeeder(IBonUnitOfWorkManager unitOfWorkManager,
-            IBonObjectAccessor<PermissionAccessor> permissionAccessor,
-            IBonIdentityPermissionRepository bonIdentityPermissionRepository)
+            IBonIdentityPermissionRepository bonIdentityPermissionRepository, IBonPermissionManager permissionManager)
         {
             _unitOfWorkManager = unitOfWorkManager;
-            _permissionAccessor = permissionAccessor.Value;
             _bonIdentityPermissionRepository = bonIdentityPermissionRepository;
+            _permissionManager = permissionManager;
         }
 
-        public async Task ExecuteAsync(CancellationToken cancellationToken = default)
+        protected override async Task ExecuteAsync(CancellationToken cancellationToken = default)
         {
             using var uow = _unitOfWorkManager.Begin();
 
             // Fetch all permissions in the database
             var existingPermissions = await _bonIdentityPermissionRepository.FindAsync(_ => true);
 
-            // Get the keys of the permissions stored in PermissionAccessor
-            var permissionKeys = _permissionAccessor.ToHashSet();
+            // Get the keys of the permissions stored in BonPermissionAccessor
+            var permissionKeys = _permissionManager.GetAllPermissions().ToHashSet();
 
-            // Identify and remove permissions from DB that are not in the PermissionAccessor
+            // Identify and remove permissions from DB that are not in the BonPermissionAccessor
             foreach (var dbPermission in existingPermissions)
             {
-                if (!permissionKeys.Contains(dbPermission.Id.Value))
+                if (!permissionKeys.Contains(dbPermission))
                 {
-                    // If the permission is not in PermissionAccessor, delete it
+                    // If the permission is not in BonPermissionAccessor, delete it
                     await _bonIdentityPermissionRepository.DeleteAsync(dbPermission, true);
                 }
             }
 
-            // Add any permissions from PermissionAccessor that do not exist in the DB
+            // Add any permissions from BonPermissionAccessor that do not exist in the DB
             foreach (var permission in permissionKeys)
             {
-                if (!await _bonIdentityPermissionRepository.ExistsAsync(x => x.Id.Equals(BonPermissionId.NewId(permission))))
+                if (!await _bonIdentityPermissionRepository.ExistsAsync(x => x.Id.Equals(permission.Id)))
                 {
                     // If the permission does not exist, add it
                     await _bonIdentityPermissionRepository.AddAsync(
-                        new BonIdentityPermission(BonPermissionId.NewId(permission), permission), true);
+                        permission, true);
                 }
             }
 

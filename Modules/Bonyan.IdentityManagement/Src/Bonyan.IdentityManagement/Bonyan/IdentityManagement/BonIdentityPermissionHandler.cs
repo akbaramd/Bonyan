@@ -4,18 +4,18 @@ using Bonyan.IdentityManagement.Domain.Roles.Repositories;
 using Bonyan.IdentityManagement.Domain.Roles.ValueObjects;
 using Microsoft.AspNetCore.Authorization;
 
-public class PermissionHandler : AuthorizationHandler<PermissionRequirement>
+internal class BonIdentityPermissionHandler : AuthorizationHandler<BonPermissionRequirement>
 {
     private readonly IBonIdentityRoleRepository _roleRepository;
     private readonly IBonIdentityRolePermissionRepository _rolePermissionRepository;
 
-    public PermissionHandler(IBonIdentityRoleRepository roleRepository, IBonIdentityRolePermissionRepository rolePermissionRepository)
+    public BonIdentityPermissionHandler(IBonIdentityRoleRepository roleRepository, IBonIdentityRolePermissionRepository rolePermissionRepository)
     {
         _roleRepository = roleRepository;
         _rolePermissionRepository = rolePermissionRepository;
     }
 
-    protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context, PermissionRequirement requirement)
+    protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context, BonPermissionRequirement requirement)
     {
         var userRoleClaims = context.User.FindAll(ClaimTypes.Role).Select(c => c.Value);
         
@@ -26,7 +26,7 @@ public class PermissionHandler : AuthorizationHandler<PermissionRequirement>
                 await _rolePermissionRepository.FindAsync(x => x.RoleId == BonRoleId.NewId(role));
 
             // Check if role has permission
-            if (rolePermissions.Any(rp => rp.PermissionId ==BonPermissionId.NewId( requirement.Permission)))
+            if (rolePermissions.Any(rp => rp.PermissionId == requirement.Permission.Id))
             {
                 context.Succeed(requirement);
                 return;

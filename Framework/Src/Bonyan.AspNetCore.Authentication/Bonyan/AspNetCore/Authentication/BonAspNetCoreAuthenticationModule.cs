@@ -1,5 +1,4 @@
-﻿using Bonyan.AspNetCore.Authorization;
-using Bonyan.AspNetCore.Authorization.Permissions;
+﻿
 using Bonyan.Modularity;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
@@ -17,23 +16,11 @@ namespace Bonyan.AspNetCore.Authentication
         
         public override Task OnPostConfigureAsync(BonConfigurationContext context)
         {
-
             
-            var x = new BonAuthorizationConfiguration(context);
-
-            context.Services.ExecutePreConfiguredActions(x);
             var configure = context.Services.GetPreConfigureActions<AuthorizationOptions>();
+            
             context.Services.AddAuthorization(c =>
             {
-                var acc = context.Services.GetObject<PermissionAccessor>();
-
-                foreach (var permission in acc)
-                {
-                    // Create a policy with the required permissions
-                    c.AddPolicy(permission, policy =>
-                        policy.Requirements.Add(new PermissionRequirement(permission)));
-                }
-
                 configure.Configure(c);
             });
 

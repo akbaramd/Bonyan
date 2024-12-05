@@ -50,53 +50,6 @@ namespace BonyanTemplate.Application
         }
 
 
-        public override async Task OnInitializeAsync(BonInitializedContext context)
-        {
-           
-            var unitOfWork = context.RequireService<IBonUnitOfWorkManager>();
-            
-            var roleService = context.RequireService<IBonIdentityRoleAppService>();
-            var service = context.RequireService<IBonIdentityUserAppService>();
-
-            using (var uow = unitOfWork.Begin(new BonUnitOfWorkOptions()
-                   {
-                       IsTransactional = false,
-                       IsolationLevel = IsolationLevel.ReadCommitted
-                   }))
-            {
-                var adminRoleResult = await roleService.CreateAsync(new BonIdentityRoleCreateDto()
-                {
-                    Key = "admin",
-                    Title = "admin",
-                    Permissions = [
-                        BonIdentityPermissionConstants.IdentityPermissionRead,
-                        BonIdentityPermissionConstants.IdentityRoleRead,
-                        BonIdentityPermissionConstants.IdentityRoleDelete,
-                        BonIdentityPermissionConstants.IdentityRoleEdit,
-                        BonIdentityPermissionConstants.IdentityRoleCreate,
-                        BonIdentityPermissionConstants.IdentityUserRead,
-                        BonIdentityPermissionConstants.IdentityUserDelete,
-                        BonIdentityPermissionConstants.IdentityUserEdit,
-                        BonIdentityPermissionConstants.IdentityUserCreate
-                    ]
-                });
-            
-      
-                var userCreatedResult = await service.CreateAsync(new BonIdentityUserCreateDto()
-                {
-                    Password = "Aa@13567975",
-                    PhoneNumber = new BonUserPhoneNumber("09371770774"),
-                    Email = new BonUserEmail("akbarsafari00@gmail.com"),
-                    UserName = "akbarsafari00",
-                    Roles = ["admin"],
-                    Status = UserStatus.IdActive
-                });
-                await uow.CompleteAsync();
-            }
-            
-         
-
-            await base.OnInitializeAsync(context);
-        }
+        
     }
 }

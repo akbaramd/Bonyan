@@ -12,7 +12,7 @@ public static class ServiceInitializationContextExtensions
     {
         Check.NotNull(context, nameof(context));
          context
-            .RequireService<IBonWorkerManager>()
+            .GetRequireService<IBonWorkerManager>()
             .Enqueue<TWorker>();
 
         return Task.FromResult(context);
@@ -23,7 +23,7 @@ public static class ServiceInitializationContextExtensions
     {
         Check.NotNull(context, nameof(context));
         context
-            .RequireService<IBonWorkerManager>()
+            .GetRequireService<IBonWorkerManager>()
             .ScheduleRecurring<TWorker>(cronExpression);
 
         return Task.FromResult(context);

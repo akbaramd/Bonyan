@@ -9,11 +9,11 @@ namespace Microsoft.EntityFrameworkCore
 {
     public static class BonIdentityManagementEntityTypeBuilderExtensions
     {
-        public static ModelBuilder ConfigureIdentityManagementModelBuilder<TUser>(this ModelBuilder modelBuilder)
+        public static ModelBuilder ConfigureIdentityManagement<TUser>(this ModelBuilder modelBuilder)
             where TUser : class, IBonIdentityUser
         {
             // Configure User Management base conventions
-            modelBuilder.ConfigureUserManagementModelBuilder<TUser>();
+            modelBuilder.ConfigureUserManagement<TUser>();
 
             // Configure BonIdentityUser
             modelBuilder.Entity<TUser>(builder =>
@@ -26,42 +26,42 @@ namespace Microsoft.EntityFrameworkCore
             modelBuilder.Entity<BonIdentityUserToken>(builder =>
             {
                 builder.ConfigureByConvention();
-                builder.ToTable("UserTokens"); // Name the table
+                builder.ToTable("UserTokens");
                 builder.HasOne<TUser>()
                     .WithMany(x => x.Tokens)
                     .HasForeignKey(x => x.UserId)
-                    .OnDelete(DeleteBehavior.Cascade); // Ensure proper delete behavior
+                    .OnDelete(DeleteBehavior.Cascade); // Tokens are deleted when the user is deleted
             });
 
             // Configure BonIdentityRole
             modelBuilder.Entity<BonIdentityRole>(builder =>
             {
                 builder.ConfigureByConvention();
-                builder.ToTable("Roles"); // Name the table
+                builder.ToTable("Roles");
             });
 
             // Configure BonIdentityPermission
             modelBuilder.Entity<BonIdentityPermission>(builder =>
             {
                 builder.ConfigureByConvention();
-                builder.ToTable("Permissions"); // Name the table
+                builder.ToTable("Permissions");
             });
 
             // Configure BonIdentityUserRoles (Join Table)
             modelBuilder.Entity<BonIdentityUserRoles>(builder =>
             {
                 builder.ConfigureByConvention();
-                builder.ToTable("UserRoles"); // Name the join table
+                builder.ToTable("UserRoles");
 
                 builder.HasOne<TUser>()
                     .WithMany()
                     .HasForeignKey(e => e.UserId)
-                    .OnDelete(DeleteBehavior.Cascade); // Cascade delete may be adjusted as needed
+                    .OnDelete(DeleteBehavior.Cascade); // Deletes UserRoles when a user is deleted
 
                 builder.HasOne<BonIdentityRole>()
                     .WithMany()
                     .HasForeignKey(e => e.RoleId)
-                    .OnDelete(DeleteBehavior.Cascade);
+                    .OnDelete(DeleteBehavior.Cascade); // Deletes UserRoles when a role is deleted
 
                 builder.HasKey(x => new { x.RoleId, x.UserId });
             });
@@ -70,17 +70,17 @@ namespace Microsoft.EntityFrameworkCore
             modelBuilder.Entity<BonIdentityRolePermissions>(builder =>
             {
                 builder.ConfigureByConvention();
-                builder.ToTable("RolePermissions"); // Name the join table
+                builder.ToTable("RolePermissions");
 
                 builder.HasOne<BonIdentityRole>()
                     .WithMany()
                     .HasForeignKey(e => e.RoleId)
-                    .OnDelete(DeleteBehavior.Cascade);
+                    .OnDelete(DeleteBehavior.Cascade); // Deletes RolePermissions when a role is deleted
 
                 builder.HasOne<BonIdentityPermission>()
                     .WithMany()
                     .HasForeignKey(e => e.PermissionId)
-                    .OnDelete(DeleteBehavior.Cascade);
+                    .OnDelete(DeleteBehavior.Cascade); // Deletes RolePermissions when a permission is deleted
 
                 builder.HasKey(x => new { x.RoleId, x.PermissionId });
             });
@@ -101,10 +101,10 @@ namespace Microsoft.EntityFrameworkCore
             });
         }
 
-        public static ModelBuilder ConfigureIdentityManagementModelBuilder(this ModelBuilder modelBuilder)
+        public static ModelBuilder ConfigureIdentityManagement(this ModelBuilder modelBuilder)
         {
             // Configure BonIdentityManagement using BonIdentityUser as the default user type
-            modelBuilder.ConfigureIdentityManagementModelBuilder<BonIdentityUser>();
+            modelBuilder.ConfigureIdentityManagement<BonIdentityUser>();
             return modelBuilder;
         }
     }

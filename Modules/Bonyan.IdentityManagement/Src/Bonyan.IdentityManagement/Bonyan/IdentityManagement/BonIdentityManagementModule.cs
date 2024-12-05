@@ -1,5 +1,6 @@
 using System.Text;
 using Bonyan.AspNetCore.Authentication;
+using Bonyan.AspNetCore.Authorization.Permissions;
 using Bonyan.IdentityManagement.Domain;
 using Bonyan.IdentityManagement.Domain.Users;
 using Bonyan.IdentityManagement.Options;
@@ -23,6 +24,20 @@ public class BonIdentityManagementModule<TUser> : BonModule where TUser : class,
 
     public override Task OnPreConfigureAsync(BonConfigurationContext context)
     {
+        context.Services.AddSingleton<IBonPermissionManager, BonPermissionManager>();
+        
+        PreConfigure<AuthorizationOptions>(c =>
+        {
+            var permissionAccessor = context.Services.GetRequiredService<IBonPermissionManager>();
+
+            foreach (var permission in permissionAccessor.GetAllPermissions())
+            {
+                // Create a policy with the required permissions
+                c.AddPolicy(permission.Id.Value, policy =>
+                    policy.Requirements.Add(new BonPermissionRequirement(permission)));
+            }
+
+        });
         PreConfigure<AuthenticationBuilder>(c =>
         {
             var jwt = new BonAuthenticationJwtOptions();
@@ -60,7 +75,7 @@ public class BonIdentityManagementModule<TUser> : BonModule where TUser : class,
 
     public override Task OnConfigureAsync(BonConfigurationContext context)
     {
-        context.Services.AddSingleton<IAuthorizationHandler, PermissionHandler>();
+        context.Services.AddSingleton<IAuthorizationHandler, BonIdentityPermissionHandler>();
         // Register the ClaimProviderManager
         context.Services.AddTransient<IBonIdentityClaimProvider<TUser>, DefaultClaimProvider<TUser>>();
         context.Services.AddTransient<IBonIdentityClaimProviderManager<TUser>, ClaimProviderManager<TUser>>();

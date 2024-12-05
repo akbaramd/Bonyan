@@ -24,10 +24,7 @@ public class BonIdentityManagementApplicationModule<TUser> : BonModule where TUs
 
     public override Task OnPreConfigureAsync(BonConfigurationContext context)
     {
-        PreConfigure<BonWorkerConfiguration>(c =>
-        {
-            c.RegisterWorker<BonIdentityPermissionSeeder>();
-        });
+        context.Services.AddSingleton<BonIdentityPermissionSeeder>();
         return base.OnPreConfigureAsync(context);
     }
 
@@ -46,5 +43,12 @@ public class BonIdentityManagementApplicationModule<TUser> : BonModule where TUs
         });
         
         return base.OnConfigureAsync(context);
+    }
+
+    public override async Task OnPostInitializeAsync(BonInitializedContext context)
+    {
+        var seeder = context.GetRequireService<BonIdentityPermissionSeeder>();
+        await seeder.StartAsync(CancellationToken.None);
+        await base.OnPostInitializeAsync(context);
     }
 }

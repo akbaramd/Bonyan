@@ -12,6 +12,7 @@ using BonyanTemplate.Domain.Books;
 using BonyanTemplate.Domain.Users;
 using BonyanTemplate.Infrastructure.Data;
 using BonyanTemplate.Infrastructure.Data.Repositories;
+using BonyanTemplate.Infrastructure.Seeders;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -29,9 +30,9 @@ public class BonaynTempalteInfrastructureModule : BonModule
 
     public override Task OnConfigureAsync(BonConfigurationContext context)
     {
-      
-        
-     
+
+
+        context.Services.AddHostedService<BonyanTemplateDataSeeder>();
  
         context.ConfigureOptions<BonMultiTenancyOptions>(options => { options.IsEnabled = true; });
         context.Services.AddTransient<IBooksRepository, EfBookRepository>();

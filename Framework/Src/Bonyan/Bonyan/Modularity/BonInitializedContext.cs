@@ -27,7 +27,7 @@ namespace Bonyan.Modularity
         /// </summary>
         public T RequiredValidatedOption<T>(Func<T, bool> validate) where T : class, new()
         {
-            var option = RequiredOption<T>();
+            var option = GetRequiredOption<T>();
             if (!validate(option))
             {
                 throw new ConfigurationValidationException(typeof(T),
