@@ -1,7 +1,7 @@
 ﻿using Bonyan.IdentityManagement.Domain.Permissions;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Bonyan.AspNetCore.Authorization.Permissions;
+namespace Bonyan.IdentityManagement.Permissions;
 
 public class BonPermissionManager : IBonPermissionManager
 {

@@ -1,7 +1,7 @@
 ﻿using Bonyan.IdentityManagement.Domain.Permissions.Repositories;
 using Bonyan.IdentityManagement.Domain.Permissions;
 using Bonyan.IdentityManagement.Domain.Permissions.ValueObjects;
-using Bonyan.IdentityManagement.Domain.Roles.Repositories;
+using Bonyan.IdentityManagement.Domain.Roles.Repostories;
 using Bonyan.IdentityManagement.Domain.Roles.ValueObjects;
 using Bonyan.Layer.Domain.DomainService;
 

@@ -1,8 +1,10 @@
 ﻿using System.Security.Claims;
-using Bonyan.IdentityManagement.Domain.Permissions.ValueObjects;
-using Bonyan.IdentityManagement.Domain.Roles.Repositories;
+using Bonyan.IdentityManagement.Domain.Roles.Repostories;
 using Bonyan.IdentityManagement.Domain.Roles.ValueObjects;
+using Bonyan.IdentityManagement.Permissions;
 using Microsoft.AspNetCore.Authorization;
+
+namespace Bonyan.IdentityManagement;
 
 internal class BonIdentityPermissionHandler : AuthorizationHandler<BonPermissionRequirement>
 {

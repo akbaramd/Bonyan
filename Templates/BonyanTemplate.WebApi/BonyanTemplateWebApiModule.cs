@@ -1,6 +1,6 @@
 using Bonyan.AspNetCore.Authentication;
-using Bonyan.AspNetCore.Authorization;
 using Bonyan.AspNetCore.Mvc;
+using Bonyan.AspNetCore.Swagger;
 using Bonyan.IdentityManagement;
 using Bonyan.IdentityManagement.Options;
 using Bonyan.IdentityManagement.WebApi;

@@ -1,5 +1,4 @@
-﻿using Bonyan.AspNetCore.Authorization.Permissions;
-using Bonyan.Modularity;
+﻿using Bonyan.Modularity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;

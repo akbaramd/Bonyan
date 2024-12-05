@@ -1,10 +1,8 @@
-﻿using Bonyan.IdentityManagement.Domain.Users;
-using Bonyan.IdentityManagement.Domain.Roles;
-using Bonyan.IdentityManagement.Domain.Roles.ValueObjects;
+﻿using Bonyan.IdentityManagement.Domain.Roles.ValueObjects;
 using Bonyan.Layer.Domain.Entities;
 using Bonyan.UserManagement.Domain.Users.ValueObjects;
 
-namespace Bonyan.IdentityManagement.Domain
+namespace Bonyan.IdentityManagement.Domain.Users
 {
     public class BonIdentityUserRoles : BonEntity
     {

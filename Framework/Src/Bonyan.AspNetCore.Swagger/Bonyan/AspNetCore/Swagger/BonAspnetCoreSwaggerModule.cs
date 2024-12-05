@@ -1,10 +1,7 @@
 ﻿using Bonyan.Modularity;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
-namespace Bonyan.AspNetCore.Authentication
+namespace Bonyan.AspNetCore.Swagger
 {
     public class BonAspnetCoreSwaggerModule : BonWebModule
     {

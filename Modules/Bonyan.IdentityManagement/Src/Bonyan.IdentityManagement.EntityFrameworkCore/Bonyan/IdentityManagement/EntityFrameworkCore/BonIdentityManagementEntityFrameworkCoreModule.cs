@@ -1,5 +1,5 @@
 using Bonyan.IdentityManagement.Domain.Permissions.Repositories;
-using Bonyan.IdentityManagement.Domain.Roles.Repositories;
+using Bonyan.IdentityManagement.Domain.Roles.Repostories;
 using Bonyan.IdentityManagement.Domain.Users;
 using Bonyan.IdentityManagement.Domain.Users.Repositories;
 using Bonyan.IdentityManagement.EntityFrameworkCore.Repositories;

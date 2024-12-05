@@ -1,6 +1,6 @@
 ﻿using Bonyan.IdentityManagement.Domain;
 using Bonyan.IdentityManagement.Domain.Roles;
-using Bonyan.IdentityManagement.Domain.Roles.Repositories;
+using Bonyan.IdentityManagement.Domain.Roles.Repostories;
 using Bonyan.IdentityManagement.Domain.Users;
 using Bonyan.IdentityManagement.Domain.Users.Repositories;
 using Bonyan.Layer.Domain;

@@ -1,6 +1,6 @@
 ﻿using Bonyan.IdentityManagement.Domain.Permissions;
 
-namespace Bonyan.AspNetCore.Authorization.Permissions;
+namespace Bonyan.IdentityManagement.Permissions;
 
 public interface IBonPermissionProvider
 {

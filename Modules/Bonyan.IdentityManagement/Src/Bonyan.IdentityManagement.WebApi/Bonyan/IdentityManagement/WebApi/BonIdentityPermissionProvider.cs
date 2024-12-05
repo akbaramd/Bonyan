@@ -1,6 +1,6 @@
-﻿using Bonyan.AspNetCore.Authorization.Permissions;
-using Bonyan.IdentityManagement.Domain.Permissions;
+﻿using Bonyan.IdentityManagement.Domain.Permissions;
 using Bonyan.IdentityManagement.Domain.Permissions.ValueObjects;
+using Bonyan.IdentityManagement.Permissions;
 
 namespace Bonyan.IdentityManagement.WebApi;
 

@@ -1,9 +1,9 @@
 using System.Text;
 using Bonyan.AspNetCore.Authentication;
-using Bonyan.AspNetCore.Authorization.Permissions;
 using Bonyan.IdentityManagement.Domain;
 using Bonyan.IdentityManagement.Domain.Users;
 using Bonyan.IdentityManagement.Options;
+using Bonyan.IdentityManagement.Permissions;
 using Bonyan.Modularity;
 using Bonyan.Modularity.Abstractions;
 using Microsoft.AspNetCore.Authentication;
@@ -25,6 +25,8 @@ public class BonIdentityManagementModule<TUser> : BonModule where TUser : class,
     public override Task OnPreConfigureAsync(BonConfigurationContext context)
     {
         context.Services.AddSingleton<IBonPermissionManager, BonPermissionManager>();
+
+        context.Services.ExecutePreConfiguredActions(new BonIdentityManagementOptions(context));
         
         PreConfigure<AuthorizationOptions>(c =>
         {

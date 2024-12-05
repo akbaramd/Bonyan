@@ -62,7 +62,7 @@ public class BonyanTemplateDataSeeder : BackgroundService
                 adminUser.SetEmail(new BonUserEmail("admin@admin.com"));
                 adminUser.ChangeStatus(UserStatus.Active);
 
-                var userCreatedResult = await _bonIdentityUserManager.CreateAsync(adminUser, "Aa@13567975");
+                var userCreatedResult = await _bonIdentityUserManager.CreateAsync(adminUser, "Admin@123456");
 
                 if (userCreatedResult.IsSuccess)
                 {

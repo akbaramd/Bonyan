@@ -1,6 +1,7 @@
 ﻿using Bonyan.IdentityManagement.Domain.Permissions;
-using Bonyan.IdentityManagement.Domain.Roles;
 using Microsoft.AspNetCore.Authorization;
+
+namespace Bonyan.IdentityManagement.Permissions;
 
 public class BonPermissionRequirement : IAuthorizationRequirement
 {

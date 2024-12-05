@@ -1,14 +1,15 @@
 ﻿using Bonyan.IdentityManagement.Application.Dto;
+using Bonyan.IdentityManagement.Domain.Roles.DomainServices;
 using Bonyan.IdentityManagement.Domain.Roles.ValueObjects;
 using Bonyan.IdentityManagement.Domain.Users;
 using Bonyan.IdentityManagement.Domain.Users.DomainServices;
-using Bonyan.IdentityManagement.Domain.Roles.DomainServices;  // Add this
 using Bonyan.Layer.Application.Dto;
 using Bonyan.Layer.Application.Services;
 using Bonyan.UserManagement.Domain.Users.ValueObjects;
 using Microsoft.Extensions.Logging;
+// Add this
 
-namespace Bonyan.IdentityManagement.Application.Roles
+namespace Bonyan.IdentityManagement.Application.Users
 {
     public class BonIdentityUserAppService<TUser> :
         BonCrudAppService<TUser, BonUserId, BonFilterAndPaginateDto, BonIdentityUserDto, BonIdentityUserDto, BonIdentityUserCreateDto, BonIdentityUserUpdateDto>,

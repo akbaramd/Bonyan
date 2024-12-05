@@ -1,5 +1,3 @@
-using Bonyan.AspNetCore.Authorization;
-using Bonyan.AspNetCore.Authorization.Permissions;
 using Bonyan.AspNetCore.Mvc;
 using Bonyan.IdentityManagement.Application;
 using Bonyan.IdentityManagement.Application.Permissions;
@@ -10,6 +8,7 @@ using Bonyan.IdentityManagement.Domain.Permissions.ValueObjects;
 using Bonyan.IdentityManagement.Domain.Roles.ValueObjects;
 using Bonyan.IdentityManagement.Domain.Users;
 using Bonyan.IdentityManagement.Options;
+using Bonyan.IdentityManagement.Permissions;
 using Bonyan.Layer.Application.Dto;
 using Bonyan.Layer.Application.Services;
 using Bonyan.Layer.Domain.Repository.Abstractions;

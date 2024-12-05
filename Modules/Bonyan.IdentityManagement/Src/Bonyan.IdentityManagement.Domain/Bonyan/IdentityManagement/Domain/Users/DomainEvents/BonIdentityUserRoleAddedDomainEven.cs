@@ -1,6 +1,7 @@
 ﻿using Bonyan.IdentityManagement.Domain.Roles;
-using Bonyan.IdentityManagement.Domain.Users;
 using Bonyan.Layer.Domain.Events;
+
+namespace Bonyan.IdentityManagement.Domain.Users.DomainEvents;
 
 public class BonIdentityUserRoleAddedDomainEvent : BonDomainEventBase
 {

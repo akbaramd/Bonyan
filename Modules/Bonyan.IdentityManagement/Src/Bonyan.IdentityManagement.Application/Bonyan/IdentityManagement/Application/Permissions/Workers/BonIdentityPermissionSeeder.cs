@@ -1,9 +1,9 @@
-﻿using Bonyan.AspNetCore.Authorization.Permissions;
-using Bonyan.DependencyInjection;
+﻿using Bonyan.DependencyInjection;
 using Bonyan.IdentityManagement.Domain.Permissions;
 using Bonyan.IdentityManagement.Domain.Permissions.Repositories;
 using Bonyan.IdentityManagement.Domain.Permissions.ValueObjects;
 using Bonyan.IdentityManagement.Domain.Roles.ValueObjects;
+using Bonyan.IdentityManagement.Permissions;
 using Bonyan.UnitOfWork;
 using Bonyan.Workers;
 using Microsoft.Extensions.Hosting;
