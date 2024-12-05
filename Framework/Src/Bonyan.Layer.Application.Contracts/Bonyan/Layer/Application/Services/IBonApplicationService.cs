@@ -6,7 +6,7 @@ using Bonyan.Validation;
 
 namespace Bonyan.Layer.Application.Services;
 
-public interface IBonApplicationService : IBonValidationEnabled,IBonUnitOfWorkEnabled,IBonLayServiceProviderConfigurator
+public interface IBonApplicationService : IBonValidationEnabled,IBonLayServiceProviderConfigurator
 {
     public IBonCurrentUser BonCurrentUser { get;  }
     public IBonCurrentTenant BonCurrentTenant { get;  }

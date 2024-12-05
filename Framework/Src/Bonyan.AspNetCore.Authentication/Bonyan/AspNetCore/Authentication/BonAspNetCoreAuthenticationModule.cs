@@ -11,8 +11,10 @@ namespace Bonyan.AspNetCore.Authentication
         public BonAuthenticationModule()
         {
             DependOn<BonAspNetCoreModule>();
+            
         }
 
+        
         public override Task OnPostConfigureAsync(BonConfigurationContext context)
         {
 

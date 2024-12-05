@@ -17,7 +17,7 @@ public static class Extensions
         var option = CreateDbContextRegistrationOption<TDbContext>(context, optionsBuilder);
 
         RegisterDbContext<TDbContext>(context, option);
-        RegisterAdditionalDbContexts(context, option);
+        RegisterAdditionalDbContexts<TDbContext>(context, option);
         ConfigureRepositories(option);
 
         return context;
@@ -45,14 +45,17 @@ public static class Extensions
         });
     }
 
-    private static void RegisterAdditionalDbContexts(BonConfigurationContext context, BonDbContextRegistrationOptionBuilder option)
+    private static void RegisterAdditionalDbContexts<TDbContext>(BonConfigurationContext context, BonDbContextRegistrationOptionBuilder option) where TDbContext : IEfDbContext
     {
         var interfaces = option.OriginalDbContextType.GetInterfaces();
         foreach (var implementedInterface in interfaces)
         {
             if (typeof(IEfDbContext).IsAssignableFrom(implementedInterface) && implementedInterface != typeof(IEfDbContext))
             {
-                option.AdditionalDbContexts.Add(implementedInterface);
+                context.Services.Replace(ServiceDescriptor.Transient(implementedInterface, sp =>
+                {
+                    return sp.GetRequiredService<TDbContext>();
+                }));
             }
         }
 

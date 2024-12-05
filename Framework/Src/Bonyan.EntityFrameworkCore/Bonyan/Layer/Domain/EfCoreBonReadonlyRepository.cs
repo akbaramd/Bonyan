@@ -8,11 +8,12 @@ using Bonyan.Layer.Domain.Repository.Abstractions;
 using Bonyan.Layer.Domain.Specification.Abstractions;
 using Bonyan.Layer.Domain.Specifications;
 using Bonyan.MultiTenant;
+using Bonyan.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
 
 namespace Bonyan.Layer.Domain
 {
-    public abstract class EfCoreReadonlyRepository<TEntity, TDbContext> : IReadonlyEfCoreRepository<TEntity>
+    public abstract class EfCoreReadonlyRepository<TEntity, TDbContext> : IReadonlyEfCoreRepository<TEntity>,IBonUnitOfWorkEnabled
         where TEntity : class, IBonEntity
         where TDbContext : IEfDbContext
     {

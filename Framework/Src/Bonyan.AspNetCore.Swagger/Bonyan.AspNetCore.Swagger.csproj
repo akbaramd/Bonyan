@@ -5,15 +5,14 @@
         <Nullable>enable</Nullable>
         <RootNamespace/>
         <OutputType>Library</OutputType>
-        <PackageId>Bonyan.AspNetCore.Authentication</PackageId>
+        <PackageId>Bonyan.AspNetCore.Swagger</PackageId>
     </PropertyGroup>
     <Import Project="..\..\..\framework-package.props"/>
     <ItemGroup>
-        <ProjectReference Include="..\Bonyan.AspNetCore.Swagger\Bonyan.AspNetCore.Swagger.csproj" />
         <ProjectReference Include="..\Bonyan.AspNetCore\Bonyan.AspNetCore.csproj"/>
     </ItemGroup>
+    
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.Authentication" Version="2.2.0" />
-        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.8" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0"/>
     </ItemGroup>
 </Project>

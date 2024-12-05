@@ -137,7 +137,6 @@ public class BonAspNetCoreModule : BonWebModule
             return base.OnPostApplicationAsync(context);
         }
 
-        context.Application.UseUnitOfWork();
         context.Application.UseEndpoints(endpoints =>
         {
             using var scope = context.Application.Services.CreateScope();

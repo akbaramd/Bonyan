@@ -1,5 +1,7 @@
 ﻿using System.Security.Claims;
+using Bonyan.IdentityManagement.Domain.Permissions.ValueObjects;
 using Bonyan.IdentityManagement.Domain.Roles.Repositories;
+using Bonyan.IdentityManagement.Domain.Roles.ValueObjects;
 using Microsoft.AspNetCore.Authorization;
 
 public class PermissionHandler : AuthorizationHandler<PermissionRequirement>
@@ -21,10 +23,10 @@ public class PermissionHandler : AuthorizationHandler<PermissionRequirement>
         foreach (var role in userRoleClaims)
         {
             var rolePermissions = 
-                await _rolePermissionRepository.FindAsync(x => x.RoleId.Value == role);
+                await _rolePermissionRepository.FindAsync(x => x.RoleId == BonRoleId.NewId(role));
 
             // Check if role has permission
-            if (rolePermissions.Any(rp => rp.PermissionId.Value == requirement.Permission))
+            if (rolePermissions.Any(rp => rp.PermissionId ==BonPermissionId.NewId( requirement.Permission)))
             {
                 context.Succeed(requirement);
                 return;

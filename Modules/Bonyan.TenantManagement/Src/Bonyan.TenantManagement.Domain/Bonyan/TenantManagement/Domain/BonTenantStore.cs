@@ -28,7 +28,7 @@ public class BonTenantStore : IBonTenantStore
 
     public virtual async Task<BonTenantConfiguration?> FindAsync(Guid id)
     {
-      var tenant = await BonTenantRepository.FindOneAsync(x => x.Id.Value == id);
+      var tenant = await BonTenantRepository.FindOneAsync(x => x.Id == BonTenantId.NewId(id));
       if (tenant != null)
       {
         return new BonTenantConfiguration(tenant.Id.Value, tenant.Key);

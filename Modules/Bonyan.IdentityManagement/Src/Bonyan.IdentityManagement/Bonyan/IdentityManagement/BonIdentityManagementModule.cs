@@ -46,6 +46,7 @@ public class BonIdentityManagementModule<TUser> : BonModule where TUser : class,
                         ClockSkew = TimeSpan.Zero // Optional: Adjust token expiration tolerance
                     };
                 });
+
             }
             else
             {

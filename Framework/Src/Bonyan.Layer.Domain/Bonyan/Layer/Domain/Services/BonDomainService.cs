@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging.Abstractions;
 
 namespace Bonyan.Layer.Domain.Services;
 
-public abstract class BonDomainService : BonLayServiceProviderConfigurator, IBonDomainService,IBonLayServiceProviderConfigurator
+public abstract class BonDomainService : BonLayServiceProviderConfigurator, IBonDomainService
 {
 
     protected ILoggerFactory LoggerFactory => LazyServiceProvider.LazyGetRequiredService<ILoggerFactory>();

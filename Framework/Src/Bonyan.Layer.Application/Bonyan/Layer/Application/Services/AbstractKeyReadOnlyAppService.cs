@@ -2,6 +2,7 @@
 using Bonyan.Layer.Domain.Entity;
 using Bonyan.Layer.Domain.Repository.Abstractions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Bonyan.Layer.Application.Services;
 

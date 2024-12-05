@@ -124,7 +124,7 @@ namespace Bonyan.IdentityManagement.Domain.Roles.DomainServices
 
         public async Task<BonDomainResult<BonIdentityRole>> FindRoleByKeyAsync(string roleKey)
         {
-            var role = await _roleRepository.FindOneAsync(x => x.Id.Value == roleKey);
+            var role = await _roleRepository.FindOneAsync(x => x.Id == BonRoleId.NewId(roleKey));
             if (role == null)
             {
                 return BonDomainResult<BonIdentityRole>.Failure("Role not found.");

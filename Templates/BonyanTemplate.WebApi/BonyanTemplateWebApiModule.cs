@@ -19,39 +19,19 @@ public class BonyanTemplateWebApiModule : BonWebModule
         DependOn<BonyanTemplateApplicationModule>();
         DependOn<BonaynTempalteInfrastructureModule>();
         DependOn<BonIdentityManagementWebApiModule<User>>();
+        DependOn<BonAspnetCoreSwaggerModule>();
        
     }
 
     public override Task OnConfigureAsync(BonConfigurationContext context)
     {
         context.Services.AddEndpointsApiExplorer();
-        context.Services.AddSwaggerGen(options =>
+
+        PreConfigure<BonAuthorizationConfiguration>(c =>
         {
-            options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-            {
-                Name = "Authorization",
-                Scheme = "bearer",
-                BearerFormat = "JWT",
-                In = ParameterLocation.Header,
-                Description = "Enter 'Bearer' [space] and then your token in the text input below."
-            });
-
-            options.AddSecurityRequirement(new OpenApiSecurityRequirement
-            {
-                {
-                    new OpenApiSecurityScheme
-                    {
-                        Reference = new OpenApiReference
-                        {
-                            Type = ReferenceType.SecurityScheme,
-                            Id = "Bearer"
-                        }
-                    },
-                    new string[] {}
-                }
-            });
+            c.AddJwtAuthToSwagger();
         });
-
+        
         PreConfigure<BonAuthenticationJwtOptions>(c =>
         {
             c.SecretKey = "asdasdasdasdadawdawd453434534534534534534534adw"; // کلید رمزگذاری JWT
@@ -84,11 +64,7 @@ public class BonyanTemplateWebApiModule : BonWebModule
 
     public override Task OnPostApplicationAsync(BonWebApplicationContext context)
     {
-        if (context.Application.Environment.IsDevelopment())
-        {
-            context.Application.UseSwagger();
-            context.Application.UseSwaggerUI();
-        }
+        
 
         context.Application.UseHttpsRedirection();
 

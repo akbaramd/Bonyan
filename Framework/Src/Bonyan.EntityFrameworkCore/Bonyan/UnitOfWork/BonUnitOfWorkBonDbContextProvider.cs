@@ -37,7 +37,7 @@ public class BonUnitOfWorkBonDbContextProvider<TDbContext> : IBonDbContextProvid
             throw new BonException("A BonDbContext can only be created inside a unit of work!");
         }
         var dbContext = unitOfWork.ServiceProvider.GetRequiredService<TDbContext>();
-        var targetDbContextType = dbContext.GetType().FullName;
+        var targetDbContextType = unitOfWork.Id;
 
         var dbContextKey = $"{targetDbContextType}";
 

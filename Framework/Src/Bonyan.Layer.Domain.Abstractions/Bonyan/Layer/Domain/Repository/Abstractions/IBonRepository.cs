@@ -4,7 +4,7 @@
 
     namespace Bonyan.Layer.Domain.Repository.Abstractions;
 
-    public interface IBonRepository : IBonUnitOfWorkEnabled
+    public interface IBonRepository 
     {
         bool? IsChangeTrackingEnabled { get; }
         public IBonCurrentTenant? CurrentTenant { get; }

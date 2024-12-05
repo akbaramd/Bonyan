@@ -31,7 +31,7 @@ public class BonIdentityManagementEntityFrameworkCoreModule<TUser> : BonModule
         context.Services
             .AddTransient<IBonIdentityPermissionRepository, BonIdentityEfCorePermissionRepository<TUser>>();
         context.Services
-            .AddTransient<IBonIdentityPermissionReadOnlyRepository, BonIdentityEfCorePermissionRepository<TUser>>();
+            .AddTransient<IBonIdentityPermissionReadOnlyRepository, BonIdentityEfCorePermissionReadonlyRepository<TUser>>();
         
 
         context.Services
