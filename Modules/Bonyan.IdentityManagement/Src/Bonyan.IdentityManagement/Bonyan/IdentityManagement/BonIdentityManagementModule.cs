@@ -26,7 +26,7 @@ public class BonIdentityManagementModule<TUser> : BonModule where TUser : class,
     {
         context.Services.AddSingleton<IBonPermissionManager, BonPermissionManager>();
 
-        context.Services.ExecutePreConfiguredActions(new BonIdentityManagementOptions(context));
+        
         
         PreConfigure<AuthorizationOptions>(c =>
         {
@@ -77,11 +77,19 @@ public class BonIdentityManagementModule<TUser> : BonModule where TUser : class,
 
     public override Task OnConfigureAsync(BonConfigurationContext context)
     {
+        
+        
         context.Services.AddSingleton<IAuthorizationHandler, BonIdentityPermissionHandler>();
         // Register the ClaimProviderManager
         context.Services.AddTransient<IBonIdentityClaimProvider<TUser>, DefaultClaimProvider<TUser>>();
         context.Services.AddTransient<IBonIdentityClaimProviderManager<TUser>, ClaimProviderManager<TUser>>();
         
         return base.OnConfigureAsync(context);
+    }
+
+    public override Task OnPostConfigureAsync(BonConfigurationContext context)
+    {
+        context.Services.ExecutePreConfiguredActions(new BonIdentityManagementOptions(context));
+        return base.OnPostConfigureAsync(context);
     }
 }
