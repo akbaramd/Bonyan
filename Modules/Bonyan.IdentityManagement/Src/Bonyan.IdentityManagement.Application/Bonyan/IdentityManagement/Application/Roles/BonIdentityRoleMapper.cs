@@ -13,9 +13,10 @@ public class BonIdentityRoleMapper : Profile
     public BonIdentityRoleMapper()
     {
         CreateMap<BonIdentityRole, BonIdentityRoleDto>()
-            .MapBusinessId(c=>c.Id,v=>v.Id)
-            .ReverseMap()
-            .MapBusinessIdReverse(c=>c.Id,v=>v.Id);
+            .ForMember(c => c.Permissions, b => b.Ignore())
+            .ForMember(dest => dest.Permissions,
+                opt => opt.MapFrom<RolePermissionsResolver>())
+            .MapBusinessId(c => c.Id, v => v.Id);
 
 
         CreateMap<BonIdentityRoleCreateDto, BonIdentityRole>()

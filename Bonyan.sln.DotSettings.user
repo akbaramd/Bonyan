@@ -1,4 +1,7 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+	<s:String x:Key="/Default/Environment/AssemblyExplorer/XmlDocument/@EntryValue">&lt;AssemblyExplorer&gt;&#xD;
+  &lt;Assembly Path="C:\Users\ahmadi.UR-NEZAM\.nuget\packages\microsoft.entityframeworkcore.sqlserver\8.0.8\lib\net8.0\Microsoft.EntityFrameworkCore.SqlServer.dll" /&gt;&#xD;
+&lt;/AssemblyExplorer&gt;</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/CreateUnitTestDialog/TestProjectMapping/=5BD35C5F_002DF6C4_002D4AB7_002DAF24_002D893821832A06/@EntryIndexedValue">F220CCEC-45EB-4DD4-AC2F-37B912A0B708</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/CreateUnitTestDialog/TestTemplateMapping/=xUnit/@EntryIndexedValue">33ff99d8-b1ad-4ed5-a4fd-376b97c2c841</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=09f6c6c0_002Df38b_002D4a2f_002Da33e_002D76117fdd8618/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="InMemoryBonMediatorTests" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;

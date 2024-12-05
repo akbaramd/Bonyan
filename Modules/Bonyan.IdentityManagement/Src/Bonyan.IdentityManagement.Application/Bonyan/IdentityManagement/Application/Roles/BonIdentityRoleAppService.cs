@@ -22,7 +22,7 @@ public class BonIdentityRoleAppService :
     public override async Task<ServiceResult<BonIdentityRoleDto>> CreateAsync(BonIdentityRoleCreateDto input)
     {
 
-        var role = new BonIdentityRole(BonRoleId.NewId(input.Key), input.Title);
+        var role = BonIdentityRole.CreateDeletable(BonRoleId.NewId(input.Key), input.Title);
         var permissionIds = input.Permissions.Select(BonPermissionId.NewId);
         await RoleManager.CreateRoleWithPermissionsAsync(role,permissionIds);
         return  ServiceResult<BonIdentityRoleDto>.Success(MapToDto(role));
@@ -31,7 +31,7 @@ public class BonIdentityRoleAppService :
     public override async Task<ServiceResult<BonIdentityRoleDto>> UpdateAsync(BonRoleId id,
         BonIdentityRoleUpdateDto input)
     {
-        var roleResult = await RoleManager.FindRoleByKeyAsync(id.Value);
+        var roleResult = await RoleManager.FindRoleByIdAsync(id.Value);
         var role = roleResult.Value;
         role.UpdateTitle(input.Title);
         var permissionIds = input.Permissions.Select(BonPermissionId.NewId);

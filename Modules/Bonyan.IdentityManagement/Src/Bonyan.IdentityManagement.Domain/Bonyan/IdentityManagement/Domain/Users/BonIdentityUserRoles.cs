@@ -1,4 +1,5 @@
-﻿using Bonyan.IdentityManagement.Domain.Roles.ValueObjects;
+﻿using Bonyan.IdentityManagement.Domain.Roles;
+using Bonyan.IdentityManagement.Domain.Roles.ValueObjects;
 using Bonyan.Layer.Domain.Entities;
 using Bonyan.UserManagement.Domain.Users.ValueObjects;
 
@@ -8,7 +9,9 @@ namespace Bonyan.IdentityManagement.Domain.Users
     {
         public BonUserId UserId { get; private set; }
 
+        
         public BonRoleId RoleId { get; private set; }
+        public BonIdentityRole Role { get; private set; }
 
         protected BonIdentityUserRoles() { } // For ORM use
 

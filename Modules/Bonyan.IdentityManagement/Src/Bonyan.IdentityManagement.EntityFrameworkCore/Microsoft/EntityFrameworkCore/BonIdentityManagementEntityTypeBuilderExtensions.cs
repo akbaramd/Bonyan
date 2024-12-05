@@ -44,7 +44,7 @@ namespace Microsoft.EntityFrameworkCore
             modelBuilder.Entity<BonIdentityPermission>(builder =>
             {
                 builder.ConfigureByConvention();
-                builder.ToTable("Permissions");
+                builder.ToTable("Permissions"); // Use a distinct table name for permissions
             });
 
             // Configure BonIdentityUserRoles (Join Table)
@@ -54,11 +54,11 @@ namespace Microsoft.EntityFrameworkCore
                 builder.ToTable("UserRoles");
 
                 builder.HasOne<TUser>()
-                    .WithMany()
+                    .WithMany(x => x.UserRoles)
                     .HasForeignKey(e => e.UserId)
                     .OnDelete(DeleteBehavior.Cascade); // Deletes UserRoles when a user is deleted
 
-                builder.HasOne<BonIdentityRole>()
+                builder.HasOne(x => x.Role)
                     .WithMany()
                     .HasForeignKey(e => e.RoleId)
                     .OnDelete(DeleteBehavior.Cascade); // Deletes UserRoles when a role is deleted
@@ -70,15 +70,15 @@ namespace Microsoft.EntityFrameworkCore
             modelBuilder.Entity<BonIdentityRolePermissions>(builder =>
             {
                 builder.ConfigureByConvention();
-                builder.ToTable("RolePermissions");
+                builder.ToTable("RolePermissions"); // Ensure this table is distinct
 
-                builder.HasOne<BonIdentityRole>()
-                    .WithMany()
+                builder.HasOne(x => x.Role)
+                    .WithMany(x => x.RolePermissions)
                     .HasForeignKey(e => e.RoleId)
                     .OnDelete(DeleteBehavior.Cascade); // Deletes RolePermissions when a role is deleted
 
-                builder.HasOne<BonIdentityPermission>()
-                    .WithMany()
+                builder.HasOne(x => x.Permission)
+                    .WithMany(x=>x.RolePermissions)
                     .HasForeignKey(e => e.PermissionId)
                     .OnDelete(DeleteBehavior.Cascade); // Deletes RolePermissions when a permission is deleted
 

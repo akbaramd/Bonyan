@@ -1,12 +1,12 @@
-﻿using Bonyan.UserManagement.Domain.Users.Repositories;
+﻿using Bonyan.Layer.Domain.Repository.Abstractions;
 
 namespace Bonyan.IdentityManagement.Domain.Users.Repositories;
 
-public interface IBonIdentityUserRepository<TUser> : IBonUserRepository<TUser> where TUser : class, IBonIdentityUser
+public interface IBonIdentityUserRepository<TUser> : IBonRepository<TUser> where TUser : class, IBonIdentityUser
 {
 }
 
-public interface IBonIdentityUserReadOnlyRepository<TUser>: IBonUserReadOnlyRepository<TUser> where TUser : class, IBonIdentityUser
+public interface IBonIdentityUserReadOnlyRepository<TUser>: IBonReadOnlyRepository<TUser> where TUser : class, IBonIdentityUser
 {
 }
 

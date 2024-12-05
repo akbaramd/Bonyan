@@ -28,7 +28,7 @@ namespace Bonyan.AutoMapper
 
             foreach (var openType in openTypes)
             {
-                context.RegisterTransientServicesOf(openType);
+                context.RegisterTransientServicesFor(openType);
             }
             
 

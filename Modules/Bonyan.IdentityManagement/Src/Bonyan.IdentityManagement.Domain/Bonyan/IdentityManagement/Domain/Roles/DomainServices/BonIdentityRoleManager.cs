@@ -122,7 +122,7 @@ namespace Bonyan.IdentityManagement.Domain.Roles.DomainServices
             return BonDomainResult.Success();
         }
 
-        public async Task<BonDomainResult<BonIdentityRole>> FindRoleByKeyAsync(string roleKey)
+        public async Task<BonDomainResult<BonIdentityRole>> FindRoleByIdAsync(string roleKey)
         {
             var role = await _roleRepository.FindOneAsync(x => x.Id == BonRoleId.NewId(roleKey));
             if (role == null)
@@ -131,6 +131,12 @@ namespace Bonyan.IdentityManagement.Domain.Roles.DomainServices
             }
 
             return BonDomainResult<BonIdentityRole>.Success(role);
+        }
+
+        public async Task<BonDomainResult<IEnumerable<BonIdentityPermission>>> FindPermissionByRoleIdAsync(string roleKey)
+        {
+            var awa = (await _rolePermissionRepository.FindAsync(x => x.RoleId == BonRoleId.NewId(roleKey))).Select(x=>x.PermissionId).Distinct();
+            return BonDomainResult<IEnumerable<BonIdentityPermission>>.Success((await _permissionRepository.FindAsync(x => awa.Contains(x.Id))));
         }
 
         private async Task<BonDomainResult<List<BonIdentityPermission>>> GetPermissionsAsync(IEnumerable<BonPermissionId> permissionIds)
@@ -154,7 +160,7 @@ namespace Bonyan.IdentityManagement.Domain.Roles.DomainServices
             if (missingPermissions.Any())
             {
                 var missingIds = string.Join(", ", missingPermissions.Select(p => p.Value));
-                return BonDomainResult<List<BonIdentityPermission>>.Failure($"Permissions not found: {missingIds}");
+                return BonDomainResult<List<BonIdentityPermission>>.Failure($"RolePermissions not found: {missingIds}");
             }
 
             return BonDomainResult<List<BonIdentityPermission>>.Success(permissions);

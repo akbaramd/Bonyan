@@ -37,7 +37,7 @@ public class BonyanTemplateDataSeeder : BackgroundService
 
             // Create Admin Role
             var adminRoleId = BonRoleId.NewId("admin");
-            var adminRole = new BonIdentityRole(adminRoleId, "مدیر سیستم");
+            var adminRole = BonIdentityRole.CreateNonDeletable(adminRoleId, "توسعه دهنده");
 
             var adminRoleCreatedResult = await _bonIdentityRoleManager.CreateRoleWithPermissionsAsync(adminRole, new[]
             {

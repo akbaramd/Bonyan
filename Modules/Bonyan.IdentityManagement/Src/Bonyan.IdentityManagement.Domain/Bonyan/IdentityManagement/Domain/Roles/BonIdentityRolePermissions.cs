@@ -9,6 +9,8 @@ public class BonIdentityRolePermissions : BonEntity
 {
     public BonRoleId RoleId { get; private set; }
     public BonPermissionId PermissionId { get; private set; }
+    public BonIdentityPermission Permission { get; private set; }
+    public BonIdentityRole Role { get; private set; }
 
     protected BonIdentityRolePermissions() { } // For ORM use
 

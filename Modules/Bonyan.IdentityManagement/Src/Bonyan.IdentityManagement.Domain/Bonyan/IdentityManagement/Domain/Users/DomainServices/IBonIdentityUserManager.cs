@@ -1,13 +1,34 @@
 ﻿using Bonyan.IdentityManagement.Domain.Roles;
 using Bonyan.IdentityManagement.Domain.Roles.ValueObjects;
 using Bonyan.Layer.Domain.DomainService;
-using Bonyan.UserManagement.Domain.Users.DomainServices;
+using Bonyan.UserManagement.Domain.Users.Enumerations;
+using Bonyan.UserManagement.Domain.Users.ValueObjects;
 
 namespace Bonyan.IdentityManagement.Domain.Users.DomainServices;
 
-public interface IBonIdentityUserManager<TIdentityUser> : IBonUserManager<TIdentityUser>
+public interface IBonIdentityUserManager<TIdentityUser> : IBonDomainService
     where TIdentityUser : IBonIdentityUser
 {
+    
+    Task<BonDomainResult> CreateAsync(TIdentityUser entity);
+    Task<BonDomainResult> UpdateAsync(TIdentityUser entity);
+    Task<BonDomainResult<TIdentityUser>> FindByIdAsync(BonUserId id);
+    Task<BonDomainResult<TIdentityUser>> FindByUserNameAsync(string userName);
+    Task<BonDomainResult<TIdentityUser>> FindByPhoneNumberAsync(string phoneNumber);
+    Task<BonDomainResult<TIdentityUser>> FindByPhoneNumberAsync(BonUserPhoneNumber phoneNumber);
+    Task<BonDomainResult<TIdentityUser>> FindByEmailAsync(string email);
+    Task<BonDomainResult<TIdentityUser>> FindByEmailAsync(BonUserEmail email);
+
+    // Verification methods
+    Task<BonDomainResult> VerifyEmailAsync(TIdentityUser user);
+    Task<BonDomainResult> VerifyPhoneNumberAsync(TIdentityUser user);
+
+    // Status management
+    Task<BonDomainResult> ActivateUserAsync(TIdentityUser user);
+    Task<BonDomainResult> DeactivateUserAsync(TIdentityUser user);
+    Task<BonDomainResult> SuspendUserAsync(TIdentityUser user);
+    Task<BonDomainResult> ChangeUserStatusAsync(TIdentityUser user, UserStatus newStatus);
+    
     Task<BonDomainResult> AssignRolesAsync(TIdentityUser user, IEnumerable<BonRoleId> roleIds);
     Task<BonDomainResult> RemoveRoleAsync(TIdentityUser user, BonRoleId roleName);
     Task<BonDomainResult<IReadOnlyList<BonIdentityRole>>> GetUserRolesAsync(TIdentityUser user);

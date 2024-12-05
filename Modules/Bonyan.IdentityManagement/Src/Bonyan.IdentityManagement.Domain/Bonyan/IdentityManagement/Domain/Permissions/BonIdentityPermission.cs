@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Bonyan.IdentityManagement.Domain.Permissions.ValueObjects;
+using Bonyan.IdentityManagement.Domain.Roles;
 using Bonyan.IdentityManagement.Domain.Roles.ValueObjects;
 using Bonyan.Layer.Domain.Aggregate;
 using Bonyan.Layer.Domain.Entities;
@@ -9,7 +10,7 @@ namespace Bonyan.IdentityManagement.Domain.Permissions
     public class BonIdentityPermission : BonAggregateRoot<BonPermissionId> 
     {
         // Private constructor to prevent direct instantiation
-
+        private readonly List<BonIdentityRolePermissions> _permissions = new List<BonIdentityRolePermissions>();
         private BonIdentityPermission()
         {
             
@@ -19,7 +20,7 @@ namespace Bonyan.IdentityManagement.Domain.Permissions
             Id = id;
             Title = title;
         }
-
+        public IReadOnlyCollection<BonIdentityRolePermissions> RolePermissions => _permissions;
         // Static factory method to create instances
         public static BonIdentityPermission Create(BonPermissionId id, string title)
         {

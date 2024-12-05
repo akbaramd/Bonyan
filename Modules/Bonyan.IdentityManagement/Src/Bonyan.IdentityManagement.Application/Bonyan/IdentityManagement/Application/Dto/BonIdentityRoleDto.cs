@@ -7,6 +7,8 @@ namespace Bonyan.IdentityManagement.Application.Dto;
 public class BonIdentityRoleDto : BonAggregateRootDto<string>
 {
     public string Title { get; set; } = string.Empty;
+
+    public List<BonIdentityPermissionDto> Permissions { get; set; } = [];
 }
 
 

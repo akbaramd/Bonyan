@@ -8,6 +8,7 @@ public interface IBonIdentityUser : IBonUser
 {
     BonUserPassword Password { get; }
     IReadOnlyCollection<BonIdentityUserToken> Tokens { get; }
+    IReadOnlyCollection<BonIdentityUserRoles> UserRoles { get; }
 
     
     void SetPassword(string newPassword);

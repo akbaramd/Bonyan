@@ -283,12 +283,15 @@ namespace Microsoft
                     {
                         case ServiceLifetime.Singleton:
                             context.Services.AddSingleton(interfaceType, serviceType);
+                            context.Services.AddSingleton( serviceType);
                             break;
                         case ServiceLifetime.Scoped:
                             context.Services.AddScoped(interfaceType, serviceType);
+                            context.Services.AddScoped( serviceType);
                             break;
                         case ServiceLifetime.Transient:
                             context.Services.AddTransient(interfaceType, serviceType);
+                            context.Services.AddTransient( serviceType);
                             break;
                     }
                 }

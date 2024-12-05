@@ -5,7 +5,6 @@ using Bonyan.IdentityManagement.Domain.Users.Repositories;
 using Bonyan.IdentityManagement.EntityFrameworkCore.Repositories;
 using Bonyan.Modularity;
 using Bonyan.Modularity.Abstractions;
-using Bonyan.UserManagement.Domain.Users.Repositories;
 using Bonyan.UserManagement.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -36,12 +35,6 @@ public class BonIdentityManagementEntityFrameworkCoreModule<TUser> : BonModule
 
         context.Services
             .AddTransient<IBonIdentityUserRepository<TUser>, BonEfCoreIdentityUserRepository<TUser>>();
-        context.Services
-            .AddTransient<IBonUserRepository<TUser>, BonEfCoreIdentityUserRepository<TUser>>();
-        context.Services
-            .AddTransient<IBonUserReadOnlyRepository<TUser>, BonEfCoreIdentityUserReadOnlyRepository<TUser>>();
-        context.Services
-            .AddTransient<IBonUserReadOnlyRepository<TUser>, BonEfCoreIdentityUserReadOnlyRepository<TUser>>();
         
 
         context.Services

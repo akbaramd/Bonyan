@@ -98,7 +98,7 @@ public class BonIdentityManagementWebApiModule<TUser> : BonWebModule
 
     private void ConfigureRoleEndpoints(BonWebApplicationContext context)
     {
-        var group = context.Application.MapGroup("/api/identity/roles").WithTags("Roles");
+        var group = context.Application.MapGroup("/api/identity/roles").WithTags("UserRoles");
 
         group.MapGet("/paginate", async ([FromServices] IBonIdentityRoleAppService service,
             [FromQuery] int skip = 0,
