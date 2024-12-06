@@ -19,39 +19,39 @@ public class BonIdentityUserManager<TUser> : BonDomainService, IBonIdentityUserM
     
     
         // Create a new user
-    public async Task<BonDomainResult> CreateAsync(TUser entity)
+    public async Task<BonDomainResult<TUser>> CreateAsync(TUser entity)
     {
         try
         {
             if (await UserRepository.ExistsAsync(x => x.UserName.Equals(entity.UserName)))
             {
                 Logger.LogWarning($"User with username {entity.UserName} already exists.");
-                return BonDomainResult.Failure($"User with username {entity.UserName} already exists.");
+                return BonDomainResult<TUser>.Failure($"User with username {entity.UserName} already exists.");
             }
 
             entity.Id = BonUserId.NewId();
-            await UserRepository.AddAsync(entity, true);
-            return BonDomainResult.Success();
+           var res = await UserRepository.AddAsync(entity, true);
+            return BonDomainResult<TUser>.Success(res);
         }
         catch (Exception e)
         {
             Logger.LogError(e, "Error creating user.");
-            return BonDomainResult.Failure(e.Message);
+            return BonDomainResult<TUser>.Failure(e.Message);
         }
     }
 
     // Update user information
-    public async Task<BonDomainResult> UpdateAsync(TUser entity)
+    public async Task<BonDomainResult<TUser>> UpdateAsync(TUser entity)
     {
         try
         {
             await UserRepository.UpdateAsync(entity, true);
-            return BonDomainResult.Success();
+            return BonDomainResult<TUser>.Success(entity);
         }
         catch (Exception e)
         {
             Logger.LogError(e, "Error updating user.");
-            return BonDomainResult.Failure("Error updating user.");
+            return BonDomainResult<TUser>.Failure("Error updating user.");
         }
     }
     // Find user by username
@@ -254,8 +254,6 @@ public class BonIdentityUserManager<TUser> : BonDomainService, IBonIdentityUserM
     public new IBonIdentityUserRepository<TUser> UserRepository =>
         LazyServiceProvider.LazyGetRequiredService<IBonIdentityUserRepository<TUser>>();
 
-    public IBonIdentityUserRolesRepository UserRoleRepository =>
-        LazyServiceProvider.LazyGetRequiredService<IBonIdentityUserRolesRepository>();
 
     public new IBonIdentityRoleRepository RoleRepository =>
         LazyServiceProvider.LazyGetRequiredService<IBonIdentityRoleRepository>();
@@ -271,7 +269,7 @@ public class BonIdentityUserManager<TUser> : BonDomainService, IBonIdentityUserM
         throw new InvalidOperationException(message);
     }
 
-     public async Task<BonDomainResult> AssignRolesAsync(TUser user, IEnumerable<BonRoleId> roleIds)
+    public async Task<BonDomainResult<TUser>> AssignRolesAsync(TUser user, IEnumerable<BonRoleId> roleIds)
     {
         const string methodName = nameof(AssignRolesAsync);
 
@@ -280,53 +278,61 @@ public class BonIdentityUserManager<TUser> : BonDomainService, IBonIdentityUserM
 
         try
         {
-            var roles = await RoleRepository.FindAsync(r => roleIds.Contains(r.Id)); // Fetch all roles in bulk
+            // Fetch all roles in one go to validate existence
+            var roles = await RoleRepository.FindAsync(r => roleIds.Contains(r.Id));
+            var roleIdsFound = roles.Select(r => r.Id).ToHashSet();
 
-            var existingUserRoles = await UserRoleRepository.FindAsync(ur => ur.UserId == user.Id && roleIds.Contains(ur.RoleId)); 
-            var existingRoleIds = existingUserRoles.Select(ur => ur.RoleId).ToHashSet();
+            // Add roles to the user entity (logic is encapsulated in the entity)
+            foreach (var roleId in roleIds)
+            {
+                if (!roleIdsFound.Contains(roleId))
+                {
+                    Logger.LogWarning($"{methodName}: Role with ID {roleId.Value} not found.");
+                    continue;
+                }
 
-            var rolesToAdd = roles.Where(r => !existingRoleIds.Contains(r.Id)).ToList(); // Filter out already assigned roles
-            var rolesToRemove = existingUserRoles.Where(ur => !roleIds.Contains(ur.RoleId)).ToList(); // Get roles to remove
+                try
+                {
+                    user?.AssignRole(roleId); // Call the domain entity method
+                }
+                catch (InvalidOperationException ex)
+                {
+                    Logger.LogWarning($"{methodName}: {ex.Message}");
+                }
+            }
 
-            // Perform assignments and removals in parallel to improve performance
-            var addRolesTask = Task.WhenAll(rolesToAdd.Select(role => UserRoleRepository.AddAsync(new BonIdentityUserRoles(user.Id, role.Id), true)));
-            var removeRolesTask = Task.WhenAll(rolesToRemove.Select(userRole => UserRoleRepository.DeleteAsync(userRole, true)));
-
-            await Task.WhenAll(addRolesTask, removeRolesTask);
+            // Persist user changes
+            await UserRepository.UpdateAsync(user, true);
 
             Logger.LogInformation($"{methodName}: Successfully updated roles for user {user.Id}.");
-            return BonDomainResult.Success();
+            return BonDomainResult<TUser>.Success(user);
         }
         catch (Exception e)
         {
             Logger.LogError(e, $"{methodName}: Error updating roles for user {user.Id}.");
-            return BonDomainResult.Failure("Error updating roles.");
+            return BonDomainResult<TUser>.Failure("Error updating roles.");
         }
     }
 
+
     // Optimized GetUserRolesAsync with better caching of roles
-    public async Task<BonDomainResult<IReadOnlyList<BonIdentityRole>>> GetUserRolesAsync(TUser user)
+    public Task<BonDomainResult<IReadOnlyList<BonIdentityRole>>> GetUserRolesAsync(TUser user)
     {
         if (user == null) throw new ArgumentNullException(nameof(user));
 
         try
         {
-            // Fetch all roles in one go and filter valid roles
-            var userRoles = await UserRoleRepository.FindAsync(ur => ur.UserId == user.Id);
-            var roleIds = userRoles.Select(ur => ur.RoleId).ToList();
-            var roles = await RoleRepository.FindAsync(r => roleIds.Contains(r.Id));
-
-            return BonDomainResult<IReadOnlyList<BonIdentityRole>>.Success(roles.ToList());
+            return Task.FromResult(BonDomainResult<IReadOnlyList<BonIdentityRole>>.Success(user.UserRoles.Select(x=>x.Role).ToList().AsReadOnly()));
         }
         catch (Exception e)
         {
             Logger.LogError(e, "Error fetching user roles.");
-            return BonDomainResult<IReadOnlyList<BonIdentityRole>>.Failure("Error fetching user roles.");
+            return Task.FromResult(BonDomainResult<IReadOnlyList<BonIdentityRole>>.Failure("Error fetching user roles."));
         }
     }
 
     // Create user with optimized role assignment logic
-    public async Task<BonDomainResult> CreateAsync(TUser entity, string password, IEnumerable<BonRoleId> roleIds)
+    public async Task<BonDomainResult<TUser>> CreateAsync(TUser entity, string password, IEnumerable<BonRoleId> roleIds)
     {
         const string methodName = nameof(CreateAsync);
 
@@ -347,12 +353,12 @@ public class BonIdentityUserManager<TUser> : BonDomainService, IBonIdentityUserM
             }
 
             Logger.LogInformation($"{methodName}: Successfully created user {entity.Id}.");
-            return BonDomainResult.Success();
+            return BonDomainResult<TUser>.Success(roleAssignmentResult.Value);
         }
         catch (Exception e)
         {
             Logger.LogError(e, $"{methodName}: Error creating user.");
-            return BonDomainResult.Failure("Error creating user.");
+            return BonDomainResult<TUser>.Failure("Error creating user.");
         }
     }
 
@@ -366,15 +372,8 @@ public class BonIdentityUserManager<TUser> : BonDomainService, IBonIdentityUserM
 
         try
         {
-            // Check if the role is assigned
-            var userRole = await UserRoleRepository.FindOneAsync(ur => ur.UserId == user.Id && ur.RoleId == roleId);
-            if (userRole == null)
-            {
-                Logger.LogWarning($"{methodName}: User does not have the role {roleId.Value}.");
-                return BonDomainResult.Failure($"User does not have the role {roleId.Value}.");
-            }
-
-            await UserRoleRepository.DeleteAsync(userRole, true);
+            user?.RemoveRole(roleId);
+            await UserRepository.DeleteAsync(user, true);
 
             Logger.LogInformation($"{methodName}: Successfully removed role {roleId.Value} from user {user.Id}.");
             return BonDomainResult.Success();
@@ -386,13 +385,8 @@ public class BonIdentityUserManager<TUser> : BonDomainService, IBonIdentityUserM
         }
     }
 
-    public Task<BonDomainResult<IReadOnlyList<BonIdentityRole>>> GeTIdentityUserRolesAsync(TUser user)
-    {
-        throw new NotImplementedException();
-    }
-
     // Create a new user and set password
-    public async Task<BonDomainResult> CreateAsync(TUser entity, string password)
+    public async Task<BonDomainResult<TUser>> CreateAsync(TUser entity, string password)
     {
         const string methodName = nameof(CreateAsync);
 
@@ -406,7 +400,7 @@ public class BonIdentityUserManager<TUser> : BonDomainService, IBonIdentityUserM
         catch (Exception e)
         {
             Logger.LogError(e, $"{methodName}: Error creating user.");
-            return BonDomainResult.Failure("Error creating user.");
+            return BonDomainResult<TUser>.Failure("Error creating user.");
         }
     }
 

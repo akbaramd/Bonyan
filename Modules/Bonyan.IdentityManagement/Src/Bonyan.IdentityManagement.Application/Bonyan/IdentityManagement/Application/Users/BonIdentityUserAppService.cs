@@ -3,8 +3,10 @@ using Bonyan.IdentityManagement.Domain.Roles.DomainServices;
 using Bonyan.IdentityManagement.Domain.Roles.ValueObjects;
 using Bonyan.IdentityManagement.Domain.Users;
 using Bonyan.IdentityManagement.Domain.Users.DomainServices;
+using Bonyan.IdentityManagement.Domain.Users.Repositories;
 using Bonyan.Layer.Application.Dto;
 using Bonyan.Layer.Application.Services;
+using Bonyan.Layer.Domain.Repository.Abstractions;
 using Bonyan.UserManagement.Domain.Users.ValueObjects;
 using Microsoft.Extensions.Logging;
 // Add this
@@ -12,71 +14,92 @@ using Microsoft.Extensions.Logging;
 namespace Bonyan.IdentityManagement.Application.Users
 {
     public class BonIdentityUserAppService<TUser> :
-        BonCrudAppService<TUser, BonUserId, BonFilterAndPaginateDto, BonIdentityUserDto, BonIdentityUserDto, BonIdentityUserCreateDto, BonIdentityUserUpdateDto>,
+        BonApplicationService,
         IBonIdentityUserAppService where TUser : class, IBonIdentityUser
     {
         // We need to use both UserManager and RoleManager
         public IBonIdentityUserManager<TUser> UserManager => LazyServiceProvider.LazyGetRequiredService<IBonIdentityUserManager<TUser>>();
         public IBonIdentityRoleManager RoleManager => LazyServiceProvider.LazyGetRequiredService<IBonIdentityRoleManager>();  // New RoleManager
 
-        // Create a new user with roles
-        public override async Task<ServiceResult<BonIdentityUserDto>> CreateAsync(BonIdentityUserCreateDto input)
+        // Add UserRepository
+        private  IBonIdentityUserRepository<TUser> UserRepository => LazyServiceProvider.LazyGetRequiredService<IBonIdentityUserRepository<TUser>>();
+
+
+        public async Task<ServiceResult<BonIdentityUserDto>> CreateAsync(BonIdentityUserCreateDto input)
         {
-            try
+            var user = Mapper.Map<BonIdentityUserCreateDto,TUser>(input);
+
+            // Create user and assign roles
+            var createResult = await UserManager.CreateAsync(user, input.Password);
+            if (!createResult.IsSuccess)
             {
-                var user = MapCreateDtoToEntity(input);
-
-                // Create the user with password
-                var creationResult = await UserManager.CreateAsync(user, input.Password);
-                if (!creationResult.IsSuccess)
-                {
-                    return ServiceResult<BonIdentityUserDto>.Failure(creationResult.ErrorMessage);
-                }
-
-             
-                var roleAssignmentResult = await UserManager.AssignRolesAsync(user, input.Roles.Select(BonRoleId.NewId));
-
-                return ServiceResult<BonIdentityUserDto>.Success(MapToDto(user));
+                return ServiceResult<BonIdentityUserDto>.Failure(createResult.ErrorMessage);
             }
-            catch (Exception e)
+
+            var assignRolesResult = await UserManager.AssignRolesAsync(user, input.Roles.Select(x=>BonRoleId.NewId(x)));
+            if (!assignRolesResult.IsSuccess)
             {
-                Logger.LogError(e, "Error creating user.");
-                return ServiceResult<BonIdentityUserDto>.Failure("Error creating user.");
+                return ServiceResult<BonIdentityUserDto>.Failure(assignRolesResult.ErrorMessage);
             }
+
+            
+            return await DetailAsync(user.Id);
         }
 
-        // Update an existing user and roles
-        public override async Task<ServiceResult<BonIdentityUserDto>> UpdateAsync(BonUserId id, BonIdentityUserUpdateDto input)
+        public async Task<ServiceResult> DeleteAsync(BonUserId id)
         {
-            try
+            var user = await UserRepository.FindOneAsync(x=>x.Id == id);
+            if (user == null)
             {
-                var user = await Repository.FindOneAsync(x => x.Id == id);
-
-                if (user == null)
-                {
-                    return ServiceResult<BonIdentityUserDto>.Failure($"User with ID {id.Value} not found.");
-                }
-
-                MapUpdateDtoToEntity(input, user);
-
-         
-                await UserManager.AssignRolesAsync(user,input.Roles.Select(BonRoleId.NewId));
-                // Save changes
-                var updateResult = await UserManager.UpdateAsync(user);
-                if (!updateResult.IsSuccess)
-                {
-                    return ServiceResult<BonIdentityUserDto>.Failure(updateResult.ErrorMessage);
-                }
-
-                return ServiceResult<BonIdentityUserDto>.Success(MapToDto(user));
+                return ServiceResult.Failure("User not found");
             }
-            catch (Exception e)
-            {
-                Logger.LogError(e, $"Error updating user with ID {id.Value}.");
-                return ServiceResult<BonIdentityUserDto>.Failure("Error updating user.");
-            }
+
+            await UserRepository.DeleteAsync(user,true);
+
+            return ServiceResult.Success();
         }
 
-        // Map create DTO to entity
+        public async Task<ServiceResult<BonIdentityUserDto>> DetailAsync(BonUserId key)
+        {
+            var user = await UserRepository.FindOneAsync(x=>x.Id == key);
+            if (user == null)
+            {
+                return ServiceResult<BonIdentityUserDto>.Failure("User not found");
+            }
+
+            var userDto = Mapper.Map<BonIdentityUserDto>(user);
+            return ServiceResult<BonIdentityUserDto>.Success(userDto);
+        }
+
+        public async Task<ServiceResult<BonPaginatedResult<BonIdentityUserDto>>> PaginatedAsync(BonFilterAndPaginateDto paginateDto)
+        {
+            var users = await UserRepository.PaginatedAsync(x=>paginateDto.Search == null || x.UserName.Contains(paginateDto.Search),paginateDto.Take,paginateDto.Skip);
+            // map users and put in paginatedresults
+            var userDtos = Mapper.Map<List<BonIdentityUserDto>>(users.Results);
+            var res = new BonPaginatedResult<BonIdentityUserDto>(userDtos,paginateDto.Skip,paginateDto.Take,users.TotalCount);
+
+            return ServiceResult<BonPaginatedResult<BonIdentityUserDto>>.Success(res);
+        }
+
+        public async Task<ServiceResult<BonIdentityUserDto>> UpdateAsync(BonUserId key, BonIdentityUserUpdateDto input)
+        {
+            var user = await UserRepository.FindOneAsync(x=>x.Id == key);
+            if (user == null)
+            {
+                return ServiceResult<BonIdentityUserDto>.Failure("User not found");
+            }
+
+            // Update user properties from input
+            Mapper.Map(input, user);
+
+            // Assign new roles
+            var assignRolesResult = await UserManager.AssignRolesAsync(user, input.Roles.Select(x=>BonRoleId.NewId(x)));
+            if (!assignRolesResult.IsSuccess)
+            {
+                return ServiceResult<BonIdentityUserDto>.Failure(assignRolesResult.ErrorMessage);
+            }
+
+            return await DetailAsync(user.Id);
+        }
     }
 }

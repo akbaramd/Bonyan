@@ -23,7 +23,7 @@ public class BonaynTempalteInfrastructureModule : BonModule
     public BonaynTempalteInfrastructureModule()
     {
         DependOn<BonTenantManagementEntityFrameworkModule>();
-        DependOn<BonIdentityManagementEntityFrameworkCoreModule<User>>();
+        DependOn<BonIdentityManagementEntityFrameworkCoreModule>();
         DependOn<BonyanTemplateDomainModule>();
       
     }

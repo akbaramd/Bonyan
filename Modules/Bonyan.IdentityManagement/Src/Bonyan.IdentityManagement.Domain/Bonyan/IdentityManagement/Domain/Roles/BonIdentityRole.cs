@@ -19,7 +19,7 @@ namespace Bonyan.IdentityManagement.Domain.Roles
         }
 
         // Main constructor to initialize essential properties
-        public BonIdentityRole(BonRoleId id, string title, bool canBeDeleted)
+        public BonIdentityRole(BonRoleId id, string title, bool canBeDeleted = true)
         {
             Id = id ?? throw new ArgumentNullException(nameof(id));
             SetTitle(title);
@@ -139,7 +139,7 @@ namespace Bonyan.IdentityManagement.Domain.Roles
         /// </summary>
         /// <param name="title">The title to set.</param>
         /// <exception cref="ArgumentException">Thrown if the title is null or empty.</exception>
-        private void SetTitle(string title)
+        public void SetTitle(string title)
         {
             if (string.IsNullOrWhiteSpace(title))
                 throw new ArgumentException("Title cannot be null or empty.", nameof(title));

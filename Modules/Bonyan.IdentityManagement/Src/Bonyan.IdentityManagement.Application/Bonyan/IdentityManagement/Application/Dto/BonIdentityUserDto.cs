@@ -5,7 +5,7 @@ namespace Bonyan.IdentityManagement.Application.Dto;
 
 public class BonIdentityUserDto : BonUserDto
 {
-    public List<string> Roles { get; set; }
+    public List<BonIdentityRoleDto> Roles { get; set; } = [];
 }   
 
 

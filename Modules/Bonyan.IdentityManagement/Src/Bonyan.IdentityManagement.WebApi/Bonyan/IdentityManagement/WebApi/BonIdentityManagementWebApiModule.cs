@@ -17,16 +17,17 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
+using Bonyan.IdentityManagement.Application.Users;
+using Bonyan.UserManagement.Domain.Users.ValueObjects;
 
 namespace Bonyan.IdentityManagement.WebApi;
 
-public class BonIdentityManagementWebApiModule<TUser> : BonWebModule
-    where TUser : class, IBonIdentityUser
+public class BonIdentityManagementWebApiModule : BonWebModule
 {
     public BonIdentityManagementWebApiModule()
     {
         DependOn<BonAspNetCoreMvcModule>();
-        DependOn<BonIdentityManagementApplicationModule<TUser>>();
+        DependOn<BonIdentityManagementApplicationModule>();
     }
 
     public override Task OnConfigureAsync(BonConfigurationContext context)
@@ -40,6 +41,7 @@ public class BonIdentityManagementWebApiModule<TUser> : BonWebModule
         ConfigurePermissionEndpoints(context);
         ConfigureAuthEndpoints(context);
         ConfigureRoleEndpoints(context);
+        ConfigureUserEndpoints(context);
         return base.OnPostApplicationAsync(context);
     }
 
@@ -132,5 +134,43 @@ public class BonIdentityManagementWebApiModule<TUser> : BonWebModule
             await service.DeleteAsync(BonRoleId.NewId(id)))
             .Produces<ServiceResult<bool>>()
             .RequireAuthorization(BonIdentityPermissionConstants.IdentityRoleDelete);
+    }
+
+    private void ConfigureUserEndpoints(BonWebApplicationContext context)
+    {
+        var group = context.Application.MapGroup("/api/identity/users").WithTags("Users");
+
+        group.MapGet("/paginate", async ([FromServices] IBonIdentityUserAppService service,
+            [FromQuery] int skip = 0,
+            [FromQuery] int take = 10,
+            [FromQuery] string? search = null) =>
+            await service.PaginatedAsync(new BonFilterAndPaginateDto { Skip = skip, Take = take, Search = search }))
+            .Produces<ServiceResult<BonPaginatedResult<BonIdentityUserDto>>>()
+            .RequireAuthorization(BonIdentityPermissionConstants.IdentityUserRead);
+
+        group.MapGet("/detail/{id}", async ([FromServices] IBonIdentityUserAppService service,
+            [FromRoute] Guid id) =>
+            await service.DetailAsync(BonUserId.NewId(id)))
+            .Produces<ServiceResult<BonIdentityUserDto>>()
+            .RequireAuthorization(BonIdentityPermissionConstants.IdentityUserRead);
+
+        group.MapPost("/create", async ([FromServices] IBonIdentityUserAppService service,
+            [FromBody] BonIdentityUserCreateDto createDto) =>
+            await service.CreateAsync(createDto))
+            .Produces<ServiceResult<BonIdentityUserDto>>()
+            .RequireAuthorization(BonIdentityPermissionConstants.IdentityUserCreate);
+
+        group.MapPut("/update/{id}", async ([FromServices] IBonIdentityUserAppService service,
+            [FromRoute] Guid id,
+            [FromBody] BonIdentityUserUpdateDto updateDto) =>
+            await service.UpdateAsync(BonUserId.NewId(id), updateDto))
+            .Produces<ServiceResult<BonIdentityUserDto>>()
+            .RequireAuthorization(BonIdentityPermissionConstants.IdentityUserEdit);
+
+        group.MapDelete("/delete/{id}", async ([FromServices] IBonIdentityUserAppService service,
+            [FromRoute] Guid id) =>
+            await service.DeleteAsync(BonUserId.NewId(id)))
+            .Produces<ServiceResult<bool>>()
+            .RequireAuthorization(BonIdentityPermissionConstants.IdentityUserDelete);
     }
 }

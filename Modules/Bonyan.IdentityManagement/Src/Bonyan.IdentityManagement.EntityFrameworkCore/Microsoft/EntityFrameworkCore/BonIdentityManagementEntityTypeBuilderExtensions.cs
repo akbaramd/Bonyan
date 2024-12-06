@@ -20,6 +20,11 @@ namespace Microsoft.EntityFrameworkCore
             {
                 builder.ConfigureByConvention();
                 builder.ConfigurePassword();
+
+                builder.HasMany(x => x.UserRoles)
+                    .WithOne()
+                    .HasForeignKey(x => x.UserId)
+                    .OnDelete(DeleteBehavior.Cascade);
             });
 
             // Configure BonIdentityUserToken
@@ -38,6 +43,7 @@ namespace Microsoft.EntityFrameworkCore
             {
                 builder.ConfigureByConvention();
                 builder.ToTable("Roles");
+                
             });
 
             // Configure BonIdentityPermission
@@ -52,7 +58,8 @@ namespace Microsoft.EntityFrameworkCore
             {
                 builder.ConfigureByConvention();
                 builder.ToTable("UserRoles");
-
+                builder
+                    .HasKey(r => new { r.UserId, r.RoleId });
                 builder.HasOne<TUser>()
                     .WithMany(x => x.UserRoles)
                     .HasForeignKey(e => e.UserId)
@@ -71,7 +78,7 @@ namespace Microsoft.EntityFrameworkCore
             {
                 builder.ConfigureByConvention();
                 builder.ToTable("RolePermissions"); // Ensure this table is distinct
-
+                    builder.HasKey(r => new { r.PermissionId, r.RoleId });;
                 builder.HasOne(x => x.Role)
                     .WithMany(x => x.RolePermissions)
                     .HasForeignKey(e => e.RoleId)

@@ -8,22 +8,24 @@ namespace Bonyan.IdentityManagement.Domain.Users
     public class BonIdentityUserRoles : BonEntity
     {
         public BonUserId UserId { get; private set; }
-
-        
         public BonRoleId RoleId { get; private set; }
-        public BonIdentityRole Role { get; private set; }
 
-        protected BonIdentityUserRoles() { } // For ORM use
+        // Navigation property back to role
+        public BonIdentityRole Role { get; private set; } = default!;
 
-        public BonIdentityUserRoles(BonUserId user, BonRoleId role)
+        // Navigation property back to user
+
+        protected BonIdentityUserRoles() { } // For EF Core use
+
+        public BonIdentityUserRoles(BonUserId userId, BonRoleId roleId)
         {
-            UserId = user;
-            RoleId = role;
+            UserId = userId;
+            RoleId = roleId;
         }
 
         public override object GetKey()
         {
-            return new {UserId,RoleId};
+            return new { UserId, RoleId };
         }
     }
 }

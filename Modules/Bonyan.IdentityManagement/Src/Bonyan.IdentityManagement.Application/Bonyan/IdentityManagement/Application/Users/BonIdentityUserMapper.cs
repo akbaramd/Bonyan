@@ -10,12 +10,16 @@ public class BonIdentityUserMapper<TUser> : Profile where TUser : IBonIdentityUs
 {
     public BonIdentityUserMapper()
     {
-        CreateMap<TUser, BonIdentityUserDto>();
+        CreateMap<TUser, BonIdentityUserDto>()
+        .ForMember(x=>x.Roles,b=>b.MapFrom(n=>n.UserRoles.Select(x=>x.Role)));
+        
         CreateMap<BonIdentityUserRegistererDto, TUser>().ReverseMap();
         
         CreateMap<BonIdentityUserCreateDto, TUser>()
             .ForMember(x=>x.Status,b=>b.MapFrom(n=>BonEnumeration.FromId<UserStatus>(n.Status)));
-        CreateMap<BonIdentityUserUpdateDto, TUser>();
+            
+        CreateMap<BonIdentityUserUpdateDto, TUser>()
+        .ForMember(x=>x.Status,b=>b.MapFrom(n=>BonEnumeration.FromId<UserStatus>(n.Status)));
 
     }
 }

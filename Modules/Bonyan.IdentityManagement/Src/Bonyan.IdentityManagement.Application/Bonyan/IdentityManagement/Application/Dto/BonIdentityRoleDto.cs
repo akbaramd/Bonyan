@@ -4,7 +4,7 @@ using Bonyan.Layer.Application.Dto;
 
 namespace Bonyan.IdentityManagement.Application.Dto;
 
-public class BonIdentityRoleDto : BonAggregateRootDto<string>
+public class BonIdentityRoleDto : BonAggregateRootDto<BonRoleId>
 {
     public string Title { get; set; } = string.Empty;
 

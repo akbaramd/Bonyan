@@ -3,6 +3,6 @@ using Bonyan.Validation;
 
 namespace Bonyan.Layer.Domain.DomainService;
 
-public interface IBonDomainService : IBonUnitOfWorkEnabled
+public interface IBonDomainService 
 {
 }

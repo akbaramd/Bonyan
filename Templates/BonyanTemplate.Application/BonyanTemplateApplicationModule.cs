@@ -28,7 +28,7 @@ namespace BonyanTemplate.Application
         public BonyanTemplateApplicationModule()
         {
             DependOn<BonTenantManagementApplicationModule>();
-            DependOn<BonIdentityManagementApplicationModule<User>>();
+            DependOn<BonIdentityManagementApplicationModule>();
             DependOn<BonyanTemplateDomainModule>();
             DependOn<BonWorkersHangfireModule>();
         }
@@ -43,9 +43,9 @@ namespace BonyanTemplate.Application
                 options.AddProfile<BookMapper>();
                 options.AddProfile<AuthorMapper>();
             });
-
+            
             PreConfigure<BonWorkerConfiguration>(c => { c.RegisterWorker<BookOutOfStockNotifierWorker>(); });
-
+                
             return base.OnConfigureAsync(context);
         }
 

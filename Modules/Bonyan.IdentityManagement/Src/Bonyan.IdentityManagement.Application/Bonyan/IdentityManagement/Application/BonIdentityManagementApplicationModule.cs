@@ -13,12 +13,12 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Bonyan.IdentityManagement.Application;
 
-public class BonIdentityManagementApplicationModule<TUser> : BonModule where TUser : class, IBonIdentityUser
+public class BonIdentityManagementApplicationModule : BonModule 
 {
     public BonIdentityManagementApplicationModule()
     {
-        DependOn<BonUserManagementApplicationModule<TUser>>();
-        DependOn<BonIdentityManagementModule<TUser>>();
+        DependOn<BonUserManagementApplicationModule<BonIdentityUser>>();
+        DependOn<BonIdentityManagementModule<BonIdentityUser>>();
         DependOn<BonWorkersModule>();
     }
 
@@ -30,14 +30,14 @@ public class BonIdentityManagementApplicationModule<TUser> : BonModule where TUs
 
     public override Task OnConfigureAsync(BonConfigurationContext context)
     {
-        context.Services.AddTransient<IBonIdentityAuthAppService, BonIdentityAuthAppAppService<TUser>>();
+        context.Services.AddTransient<IBonIdentityAuthAppService, BonIdentityAuthAppAppService<BonIdentityUser>>();
         context.Services.AddTransient<IBonIdentityPermissionAppService, BonIdentityPermissionAppService>();
         context.Services.AddTransient<IBonIdentityRoleAppService, BonIdentityRoleAppService>();
-        context.Services.AddTransient<IBonIdentityUserAppService, BonIdentityUserAppService<TUser>>();
+        context.Services.AddTransient<IBonIdentityUserAppService, BonIdentityUserAppService<BonIdentityUser>>();
         
         Configure<BonAutoMapperOptions>(c =>
         {
-            c.AddProfile<BonIdentityUserMapper<TUser>>();
+            c.AddProfile<BonIdentityUserMapper<BonIdentityUser>>();
             c.AddProfile<BonIdentityPermissionMapper>();
             c.AddProfile<BonIdentityRoleMapper>();
         });

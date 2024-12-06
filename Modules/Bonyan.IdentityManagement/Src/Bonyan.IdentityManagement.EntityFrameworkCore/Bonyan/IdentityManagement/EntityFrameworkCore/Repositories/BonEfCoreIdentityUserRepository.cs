@@ -14,7 +14,10 @@ public class BonEfCoreIdentityUserRepository<TUser> : EfCoreBonRepository<TUser,
     public new IBonDbContextProvider<IBonIdentityManagementDbContext<TUser>> BonDbContextProvider => LazyServiceProvider.LazyGetRequiredService<IBonDbContextProvider<IBonIdentityManagementDbContext<TUser>>>();
     protected override IQueryable<TUser> PrepareQuery(DbSet<TUser> dbSet)
     {
-        return base.PrepareQuery(dbSet).Include(x=>x.Tokens).Include(x=>x.UserRoles);
+        return base.PrepareQuery(dbSet)
+            .Include(x=>x.Tokens)
+            .Include(x=>x.UserRoles)
+            .ThenInclude(x=>x.Role);
     }
 }
 public class BonEfCoreIdentityUserReadOnlyRepository<TUser> : EfCoreReadonlyRepository<TUser,BonUserId,IBonIdentityManagementDbContext<TUser>>,IBonIdentityUserReadOnlyRepository<TUser> where TUser : class, IBonIdentityUser
@@ -22,7 +25,10 @@ public class BonEfCoreIdentityUserReadOnlyRepository<TUser> : EfCoreReadonlyRepo
     public new IBonDbContextProvider<IBonIdentityManagementDbContext<TUser>> BonDbContextProvider => LazyServiceProvider.LazyGetRequiredService<IBonDbContextProvider<IBonIdentityManagementDbContext<TUser>>>();
     protected override IQueryable<TUser> PrepareQuery(DbSet<TUser> dbSet)
     {
-        return base.PrepareQuery(dbSet).Include(x=>x.Tokens).Include(x=>x.UserRoles);
+        return base.PrepareQuery(dbSet)
+            .Include(x=>x.Tokens)
+            .Include(x=>x.UserRoles)
+            .ThenInclude(x=>x.Role);
         
     }
 }

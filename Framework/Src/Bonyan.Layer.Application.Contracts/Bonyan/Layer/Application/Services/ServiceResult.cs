@@ -109,12 +109,12 @@ namespace Bonyan.Layer.Application.Services
     [Serializable]
     public class ServiceResult<T> : ServiceResult
     {
-        public T Value { get; }
+        public T Result { get; }
 
         private ServiceResult(T value, bool isSuccess, string errorMessage = null, string errorCode = null, List<string> validationErrors = null, Dictionary<string, string> validationDetails = null)
             : base(isSuccess, errorMessage, errorCode, validationErrors, validationDetails)
         {
-            Value = value;
+            Result = value;
         }
 
         // Factory methods
@@ -152,7 +152,7 @@ namespace Bonyan.Layer.Application.Services
             if (mapper == null) throw new ArgumentNullException(nameof(mapper));
 
             return IsSuccess
-                ? ServiceResult<TU>.Success(mapper(Value))
+                ? ServiceResult<TU>.Success(mapper(Result))
                 : ServiceResult<TU>.Failure(ErrorMessage, ErrorCode, ValidationErrors as List<string>, ValidationDetails);
         }
 
@@ -160,7 +160,7 @@ namespace Bonyan.Layer.Application.Services
         {
             if (binder == null) throw new ArgumentNullException(nameof(binder));
 
-            return IsSuccess ? await binder(Value) : ServiceResult<TU>.Failure(ErrorMessage, ErrorCode, ValidationErrors as List<string>, ValidationDetails);
+            return IsSuccess ? await binder(Result) : ServiceResult<TU>.Failure(ErrorMessage, ErrorCode, ValidationErrors as List<string>, ValidationDetails);
         }
 
         // Implicit conversions
@@ -182,14 +182,14 @@ namespace Bonyan.Layer.Application.Services
         public override string ToString()
         {
             return IsSuccess
-                ? $"Success: {Value}"
+                ? $"Success: {Result}"
                 : base.ToString();
         }
 
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             base.GetObjectData(info, context);
-            info.AddValue(nameof(Value), Value);
+            info.AddValue(nameof(Result), Result);
         }
     }
 }

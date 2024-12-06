@@ -10,8 +10,8 @@ public interface IBonIdentityUserManager<TIdentityUser> : IBonDomainService
     where TIdentityUser : IBonIdentityUser
 {
     
-    Task<BonDomainResult> CreateAsync(TIdentityUser entity);
-    Task<BonDomainResult> UpdateAsync(TIdentityUser entity);
+    Task<BonDomainResult<TIdentityUser>> CreateAsync(TIdentityUser entity);
+    Task<BonDomainResult<TIdentityUser>> UpdateAsync(TIdentityUser entity);
     Task<BonDomainResult<TIdentityUser>> FindByIdAsync(BonUserId id);
     Task<BonDomainResult<TIdentityUser>> FindByUserNameAsync(string userName);
     Task<BonDomainResult<TIdentityUser>> FindByPhoneNumberAsync(string phoneNumber);
@@ -29,11 +29,11 @@ public interface IBonIdentityUserManager<TIdentityUser> : IBonDomainService
     Task<BonDomainResult> SuspendUserAsync(TIdentityUser user);
     Task<BonDomainResult> ChangeUserStatusAsync(TIdentityUser user, UserStatus newStatus);
     
-    Task<BonDomainResult> AssignRolesAsync(TIdentityUser user, IEnumerable<BonRoleId> roleIds);
+    Task<BonDomainResult<TIdentityUser>> AssignRolesAsync(TIdentityUser user, IEnumerable<BonRoleId> roleIds);
     Task<BonDomainResult> RemoveRoleAsync(TIdentityUser user, BonRoleId roleName);
     Task<BonDomainResult<IReadOnlyList<BonIdentityRole>>> GetUserRolesAsync(TIdentityUser user);
     
-    Task<BonDomainResult> CreateAsync(TIdentityUser entity, string password);
+    Task<BonDomainResult<TIdentityUser>> CreateAsync(TIdentityUser entity, string password);
     Task<BonDomainResult> ChangePasswordAsync(TIdentityUser entity, string currentPassword, string newPassword);
     Task<BonDomainResult> ResetPasswordAsync(TIdentityUser entity, string newPassword);
     

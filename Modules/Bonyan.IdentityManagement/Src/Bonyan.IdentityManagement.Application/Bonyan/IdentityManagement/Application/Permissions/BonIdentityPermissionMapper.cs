@@ -10,8 +10,6 @@ public class BonIdentityPermissionMapper : Profile
     public BonIdentityPermissionMapper()
     {
         CreateMap<BonIdentityPermission, BonIdentityPermissionDto>()
-            .MapBusinessId(c=>c.Id,v=>v.Id)
-            .ReverseMap()
-            .MapBusinessIdReverse(c=>c.Id,v=>v.Id);
+            .ReverseMap();
     }
 }

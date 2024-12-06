@@ -1,4 +1,5 @@
 ﻿using Bonyan.IdentityManagement.Domain.Roles;
+using Bonyan.IdentityManagement.Domain.Roles.ValueObjects;
 using Bonyan.IdentityManagement.Domain.Users.ValueObjects;
 using Bonyan.UserManagement.Domain.Users;
 
@@ -17,4 +18,7 @@ public interface IBonIdentityUser : IBonUser
     void SetToken(string tokenType, string newValue, DateTime? expiration = null);
     void RemoveToken(string tokenType);
     bool IsTokenExpired(string tokenType);
+
+    public void AssignRole(BonRoleId roleId);
+    public void RemoveRole(BonRoleId roleId);
 }

@@ -44,4 +44,6 @@ public class BonyanTemplateDbContext : BonDbContext<BonyanTemplateDbContext>,
     public DbSet<BonIdentityUserToken> UserTokens { get; set; }
     public DbSet<BonIdentityRole> Roles { get; set; }
     public DbSet<BonIdentityPermission> Permissions { get; set; }
+    public DbSet<BonIdentityUserRoles> UserRoles { get; set; }
+    public DbSet<BonIdentityRolePermissions> RolePermissions { get; set; }
 }

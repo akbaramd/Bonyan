@@ -18,11 +18,9 @@ public class BonyanTemplateWebApiModule : BonWebModule
     {
         DependOn<BonyanTemplateApplicationModule>();
         DependOn<BonaynTempalteInfrastructureModule>();
-        DependOn<BonIdentityManagementWebApiModule<User>>();
+        DependOn<BonIdentityManagementWebApiModule>();
         DependOn<BonAspnetCoreSwaggerModule>();
-       
     }
-
     public override Task OnConfigureAsync(BonConfigurationContext context)
     {
         context.Services.AddEndpointsApiExplorer();
@@ -30,8 +28,6 @@ public class BonyanTemplateWebApiModule : BonWebModule
         PreConfigure<BonIdentityManagementOptions>(c =>
         {
             c.AddJwtAuthToSwagger();
-           
-            
         });
         
         PreConfigure<BonAuthenticationJwtOptions>(c =>

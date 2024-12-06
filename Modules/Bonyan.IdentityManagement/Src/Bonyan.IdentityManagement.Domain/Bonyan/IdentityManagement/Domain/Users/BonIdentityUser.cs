@@ -17,7 +17,7 @@ public class BonIdentityUser : BonUser, IBonIdentityUser
 
     // Properties
     public BonUserPassword Password { get; private set; }
-    public bool CanBeDelete { get; private set; } = true;
+    public bool CanBeDeleted { get; private set; } = true;
 
     public IReadOnlyCollection<BonIdentityUserToken> Tokens => _tokens;
     public IReadOnlyCollection<BonIdentityUserRoles> UserRoles => _roles;
@@ -151,7 +151,7 @@ public class BonIdentityUser : BonUser, IBonIdentityUser
     /// </summary>
     public void MarkAsNonDeletable()
     {
-        CanBeDelete = false;
+        CanBeDeleted = false;
     }
 
     /// <summary>
@@ -159,7 +159,7 @@ public class BonIdentityUser : BonUser, IBonIdentityUser
     /// </summary>
     public void MarkAsDeletable()
     {
-        CanBeDelete = true;
+        CanBeDeleted = true;
     }
 
 }

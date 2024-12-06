@@ -14,6 +14,8 @@ public class
 {
     protected override IQueryable<BonIdentityRole> PrepareQuery(DbSet<BonIdentityRole> dbSet)
     {
-        return base.PrepareQuery(dbSet).Include(x=>x.RolePermissions);
+        return base.PrepareQuery(dbSet)
+            .Include(x=>x.RolePermissions)
+            .ThenInclude(x=>x.Permission);
     }
 }

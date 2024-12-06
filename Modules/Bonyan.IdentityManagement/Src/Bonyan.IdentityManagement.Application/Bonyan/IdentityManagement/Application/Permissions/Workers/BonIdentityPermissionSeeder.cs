@@ -47,7 +47,7 @@ namespace Bonyan.IdentityManagement.Application.Permissions.Workers
             // Add any permissions from BonPermissionAccessor that do not exist in the DB
             foreach (var permission in permissionKeys)
             {
-                if (!await _bonIdentityPermissionRepository.ExistsAsync(x => x.Id.Equals(permission.Id)))
+                if (!await _bonIdentityPermissionRepository.ExistsAsync(x => x.Id == permission.Id))
                 {
                     // If the permission does not exist, add it
                     await _bonIdentityPermissionRepository.AddAsync(

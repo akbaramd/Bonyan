@@ -1,5 +1,5 @@
-﻿using Bonyan.IdentityManagement.Domain.Permissions.Repositories;
-using Bonyan.IdentityManagement.Domain.Permissions;
+﻿using Bonyan.IdentityManagement.Domain.Permissions;
+using Bonyan.IdentityManagement.Domain.Permissions.Repositories;
 using Bonyan.IdentityManagement.Domain.Permissions.ValueObjects;
 using Bonyan.IdentityManagement.Domain.Roles.Repostories;
 using Bonyan.IdentityManagement.Domain.Roles.ValueObjects;
@@ -11,18 +11,18 @@ namespace Bonyan.IdentityManagement.Domain.Roles.DomainServices
     {
         private readonly IBonIdentityRoleRepository _roleRepository;
         private readonly IBonIdentityPermissionRepository _permissionRepository;
-        private readonly IBonIdentityRolePermissionRepository _rolePermissionRepository;
 
         public BonIdentityRoleManager(
             IBonIdentityRoleRepository roleRepository,
-            IBonIdentityPermissionRepository permissionRepository, 
-            IBonIdentityRolePermissionRepository rolePermissionRepository)
+            IBonIdentityPermissionRepository permissionRepository)
         {
             _roleRepository = roleRepository;
             _permissionRepository = permissionRepository;
-            _rolePermissionRepository = rolePermissionRepository;
         }
 
+        /// <summary>
+        /// Creates a role.
+        /// </summary>
         public async Task<BonDomainResult> CreateRoleAsync(BonIdentityRole role)
         {
             if (await _roleRepository.ExistsAsync(x => x.Id == role.Id))
@@ -31,39 +31,12 @@ namespace Bonyan.IdentityManagement.Domain.Roles.DomainServices
             }
 
             await _roleRepository.AddAsync(role, true);
-
             return BonDomainResult.Success();
         }
 
-        public async Task<BonDomainResult> CreateRoleWithPermissionsAsync(BonIdentityRole role, IEnumerable<BonPermissionId> permissionIds)
-        {
-            // Initialize error accumulator
-            var errorMessages = new List<string>();
-
-            // Step 1: Create the role
-            var createResult = await CreateRoleAsync(role);
-            if (!createResult.IsSuccess)
-            {
-                errorMessages.Add(createResult.ErrorMessage);
-            }
-
-            // Step 2: Assign permissions to the role
-            var permissionResult = await AssignPermissionsToRoleAsync(role, permissionIds);
-            if (!permissionResult.IsSuccess)
-            {
-                errorMessages.Add(permissionResult.ErrorMessage);
-            }
-
-            // If there were any errors, return a combined failure
-            if (errorMessages.Any())
-            {
-                return BonDomainResult.Failure(string.Join(", ", errorMessages));
-            }
-
-            // Everything succeeded, return success
-            return BonDomainResult.Success();
-        }
-
+        /// <summary>
+        /// Updates an existing role.
+        /// </summary>
         public async Task<BonDomainResult> UpdateRoleAsync(BonIdentityRole role)
         {
             if (!await _roleRepository.ExistsAsync(x => x.Id == role.Id))
@@ -72,10 +45,12 @@ namespace Bonyan.IdentityManagement.Domain.Roles.DomainServices
             }
 
             await _roleRepository.UpdateAsync(role, true);
-
             return BonDomainResult.Success();
         }
 
+        /// <summary>
+        /// Deletes a role.
+        /// </summary>
         public async Task<BonDomainResult> DeleteRoleAsync(BonIdentityRole role)
         {
             if (!await _roleRepository.ExistsAsync(x => x.Id == role.Id))
@@ -83,45 +58,100 @@ namespace Bonyan.IdentityManagement.Domain.Roles.DomainServices
                 return BonDomainResult.Failure("Role does not exist.");
             }
 
+            role.Delete(); // Domain behavior ensures the role can be deleted
             await _roleRepository.DeleteAsync(role, true);
 
             return BonDomainResult.Success();
         }
 
-        public async Task<BonDomainResult> AssignPermissionsToRoleAsync(BonIdentityRole role, IEnumerable<BonPermissionId> permissionIds)
+        /// <summary>
+        /// Creates a role with associated permissions.
+        /// </summary>
+        public async Task<BonDomainResult> CreateRoleWithPermissionsAsync(BonIdentityRole role, IEnumerable<BonPermissionId> permissionIds)
         {
-            var permissionsResult = await GetPermissionsAsync(permissionIds);
-            if (!permissionsResult.IsSuccess)
+            var createRoleResult = await CreateRoleAsync(role);
+            if (!createRoleResult.IsSuccess)
             {
-                return BonDomainResult.Failure(permissionsResult.ErrorMessage);
+                return createRoleResult;
             }
 
-            var permissions = permissionsResult.Value;
-            // Fetch current role permissions from the database
-            var currentPermissions = await _rolePermissionRepository.FindAsync(x => x.RoleId == role.Id);
-
-            // Find permissions to add (permissions in the input that are not yet assigned)
-            var permissionsToAdd = permissions
-                .Where(p => !currentPermissions.Any(cp => cp.PermissionId == p.Id))
-                .ToList();
-
-            // Find permissions to remove (permissions currently assigned but not in the input)
-            var permissionsToRemove = currentPermissions
-                .Where(cp => !permissions.Any(p => p.Id == cp.PermissionId))
-                .ToList();
-
-            // Remove the old permissions from the role
-            await _rolePermissionRepository.DeleteRangeAsync(permissionsToRemove);
-
-            // Add the new permissions to the role
-            foreach (var permissionToAdd in permissionsToAdd)
-            {
-                await _rolePermissionRepository.AddAsync(new BonIdentityRolePermissions(role.Id, permissionToAdd.Id));
-            }
-
-            return BonDomainResult.Success();
+            var assignResult = await AssignPermissionsToRoleAsync(role, permissionIds);
+            return assignResult.IsSuccess
+                ? BonDomainResult.Success()
+                : BonDomainResult.Failure(assignResult.ErrorMessage);
         }
 
+        /// <summary>
+        /// Assigns permissions to a role using the role's domain behavior.
+        /// </summary>
+        public async Task<BonDomainResult> AssignPermissionsToRoleAsync(BonIdentityRole role, IEnumerable<BonPermissionId> permissionIds)
+        {
+            try
+            {
+                // Retrieve valid permissions
+                var permissionsResult = await GetPermissionsAsync(permissionIds);
+                if (!permissionsResult.IsSuccess)
+                {
+                    return BonDomainResult.Failure(permissionsResult.ErrorMessage);
+                }
+
+                var permissions = permissionsResult.Value;
+
+                // Use domain behavior to assign permissions
+                foreach (var permission in permissions)
+                {
+                    role.AssignPermission(permission.Id);
+                }
+
+                // Persist changes
+                await _roleRepository.UpdateAsync(role, true);
+                return BonDomainResult.Success();
+            }
+            catch (Exception ex)
+            {
+                return BonDomainResult.Failure($"Error assigning permissions: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Removes a permission from a role.
+        /// </summary>
+        public async Task<BonDomainResult> RemovePermissionFromRoleAsync(BonIdentityRole role, BonPermissionId permissionId)
+        {
+            try
+            {
+                role.RemovePermission(permissionId);
+
+                // Persist changes
+                await _roleRepository.UpdateAsync(role, true);
+                return BonDomainResult.Success();
+            }
+            catch (Exception ex)
+            {
+                return BonDomainResult.Failure($"Error removing permission: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Retrieves permissions from the database.
+        /// </summary>
+        private async Task<BonDomainResult<List<BonIdentityPermission>>> GetPermissionsAsync(IEnumerable<BonPermissionId> permissionIds)
+        {
+            var permissions = await _permissionRepository.FindAsync(p => permissionIds.Contains(p.Id));
+            var missingPermissions = permissionIds.Except(permissions.Select(p => p.Id)).ToList();
+
+            if (missingPermissions.Any())
+            {
+                var missingIds = string.Join(", ", missingPermissions.Select(p => p.Value));
+                return BonDomainResult<List<BonIdentityPermission>>.Failure($"Permissions not found: {missingIds}");
+            }
+
+            return BonDomainResult<List<BonIdentityPermission>>.Success(permissions.ToList());
+        }
+
+        /// <summary>
+        /// Finds a role by its ID.
+        /// </summary>
         public async Task<BonDomainResult<BonIdentityRole>> FindRoleByIdAsync(string roleKey)
         {
             var role = await _roleRepository.FindOneAsync(x => x.Id == BonRoleId.NewId(roleKey));
@@ -131,39 +161,6 @@ namespace Bonyan.IdentityManagement.Domain.Roles.DomainServices
             }
 
             return BonDomainResult<BonIdentityRole>.Success(role);
-        }
-
-        public async Task<BonDomainResult<IEnumerable<BonIdentityPermission>>> FindPermissionByRoleIdAsync(string roleKey)
-        {
-            var awa = (await _rolePermissionRepository.FindAsync(x => x.RoleId == BonRoleId.NewId(roleKey))).Select(x=>x.PermissionId).Distinct();
-            return BonDomainResult<IEnumerable<BonIdentityPermission>>.Success((await _permissionRepository.FindAsync(x => awa.Contains(x.Id))));
-        }
-
-        private async Task<BonDomainResult<List<BonIdentityPermission>>> GetPermissionsAsync(IEnumerable<BonPermissionId> permissionIds)
-        {
-            var permissions = new List<BonIdentityPermission>();
-            var missingPermissions = new List<BonPermissionId>();
-
-            foreach (var permissionId in permissionIds)
-            {
-                var permission = await _permissionRepository.FindOneAsync(x => x.Id == permissionId);
-                if (permission == null)
-                {
-                    missingPermissions.Add(permissionId);
-                }
-                else
-                {
-                    permissions.Add(permission);
-                }
-            }
-
-            if (missingPermissions.Any())
-            {
-                var missingIds = string.Join(", ", missingPermissions.Select(p => p.Value));
-                return BonDomainResult<List<BonIdentityPermission>>.Failure($"RolePermissions not found: {missingIds}");
-            }
-
-            return BonDomainResult<List<BonIdentityPermission>>.Success(permissions);
         }
     }
 }
