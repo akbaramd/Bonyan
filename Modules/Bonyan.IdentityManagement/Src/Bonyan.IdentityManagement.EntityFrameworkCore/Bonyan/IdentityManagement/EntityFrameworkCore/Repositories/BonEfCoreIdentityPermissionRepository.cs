@@ -8,13 +8,13 @@ namespace Bonyan.IdentityManagement.EntityFrameworkCore.Repositories;
 
 public class BonIdentityEfCorePermissionRepository<TUser> : EfCoreBonRepository<BonIdentityPermission,BonPermissionId, IBonIdentityManagementDbContext<TUser>>
     , IBonIdentityPermissionRepository
-     where TUser : class, IBonIdentityUser
+     where TUser : BonIdentityUser
 {
    
 }
 
 public class BonIdentityEfCorePermissionReadonlyRepository<TUser> : EfCoreReadonlyRepository<BonIdentityPermission,BonPermissionId, IBonIdentityManagementDbContext<TUser>>
-    , IBonIdentityPermissionReadOnlyRepository where TUser : class, IBonIdentityUser
+    , IBonIdentityPermissionReadOnlyRepository where TUser : BonIdentityUser
 {
    
 }

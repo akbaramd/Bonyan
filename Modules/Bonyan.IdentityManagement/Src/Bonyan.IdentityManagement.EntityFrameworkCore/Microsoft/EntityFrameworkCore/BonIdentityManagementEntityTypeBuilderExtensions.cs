@@ -10,7 +10,7 @@ namespace Microsoft.EntityFrameworkCore
     public static class BonIdentityManagementEntityTypeBuilderExtensions
     {
         public static ModelBuilder ConfigureIdentityManagement<TUser>(this ModelBuilder modelBuilder)
-            where TUser : class, IBonIdentityUser
+            where TUser : BonIdentityUser
         {
             // Configure User Management base conventions
             modelBuilder.ConfigureUserManagement<TUser>();
@@ -25,6 +25,15 @@ namespace Microsoft.EntityFrameworkCore
                     .WithOne()
                     .HasForeignKey(x => x.UserId)
                     .OnDelete(DeleteBehavior.Cascade);
+
+                // Configure UserProfile
+                builder.OwnsOne(user => user.Profile, profile =>
+                {
+                    profile.Property(p => p.FirstName).HasColumnName("FirstName");
+                    profile.Property(p => p.LastName).HasColumnName("LastName");
+                    profile.Property(p => p.DateOfBirth).HasColumnName("DateOfBirth").IsRequired(false);
+                    profile.Property(p => p.NationalCode).HasColumnName("NationalCode").IsRequired(false);
+                });
             });
 
             // Configure BonIdentityUserToken
@@ -99,7 +108,7 @@ namespace Microsoft.EntityFrameworkCore
         /// Configures the password value object.
         /// </summary>
         private static void ConfigurePassword<TUser>(this EntityTypeBuilder<TUser> entity)
-            where TUser : class, IBonIdentityUser
+            where TUser : BonIdentityUser
         {
             entity.OwnsOne(user => user.Password, password =>
             {

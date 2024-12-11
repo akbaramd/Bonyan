@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Bonyan.IdentityManagement;
 
-internal class ClaimProviderManager<TUser> : IBonIdentityClaimProviderManager<TUser> where TUser : IBonIdentityUser
+internal class ClaimProviderManager<TUser> : IBonIdentityClaimProviderManager<TUser> where TUser : BonIdentityUser
 {
     private readonly IServiceProvider _serviceProvider;
 

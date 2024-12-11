@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Bonyan.IdentityManagement.EntityFrameworkCore;
 
 public interface IBonIdentityManagementDbContext<TUser> : IBonUserManagementDbContext<TUser>
-    where TUser : class, IBonIdentityUser 
+    where TUser : BonIdentityUser 
 {
     public DbSet<BonIdentityUserToken> UserTokens { get; set; }
     public DbSet<BonIdentityRole> Roles { get; set; }

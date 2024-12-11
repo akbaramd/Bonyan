@@ -7,7 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Bonyan.IdentityManagement.Domain;
 
-public class BonIdentityManagementDomainModule<TUser> : Modularity.Abstractions.BonModule where TUser : class, IBonIdentityUser
+public class BonIdentityManagementDomainModule<TUser> : Modularity.Abstractions.BonModule where TUser : BonIdentityUser
 {
     public BonIdentityManagementDomainModule()
     {

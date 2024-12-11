@@ -3,7 +3,7 @@ using Bonyan.IdentityManagement.Domain.Users;
 
 namespace Bonyan.IdentityManagement;
 
-public interface IBonIdentityClaimProviderManager<TUser> where TUser : IBonIdentityUser
+public interface IBonIdentityClaimProviderManager<TUser> where TUser : BonIdentityUser
 {
     /// <summary>
     /// Aggregates claims from all registered providers.

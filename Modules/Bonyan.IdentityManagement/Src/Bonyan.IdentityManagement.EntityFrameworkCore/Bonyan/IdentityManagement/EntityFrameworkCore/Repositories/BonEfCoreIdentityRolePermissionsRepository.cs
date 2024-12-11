@@ -9,7 +9,7 @@ namespace Bonyan.IdentityManagement.EntityFrameworkCore.Repositories;
 
 public class BonEfCoreIdentityRolePermissionsRepository<TUser> :
     EfCoreBonRepository<BonIdentityRolePermissions,IBonIdentityManagementDbContext<TUser>>,IBonIdentityRolePermissionRepository
-    where TUser : class, IBonIdentityUser
+    where TUser : BonIdentityUser
 {
   
 }

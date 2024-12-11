@@ -6,7 +6,7 @@ using Bonyan.UserManagement.Domain.Users.Enumerations;
 
 namespace Bonyan.IdentityManagement.Application.Users;
 
-public class BonIdentityUserMapper<TUser> : Profile where TUser : IBonIdentityUser
+public class BonIdentityUserMapper<TUser> : Profile where TUser : BonIdentityUser
 {
     public BonIdentityUserMapper()
     {

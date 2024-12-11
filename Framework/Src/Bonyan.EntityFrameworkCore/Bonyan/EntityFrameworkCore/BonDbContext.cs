@@ -53,7 +53,7 @@ public class BonDbContext<TDbContext> : DbContext , IBonDbContext<TDbContext> wh
   public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new())
   {
     var entries = ChangeTracker.Entries()
-      .Where(e => e.Entity is IBonCreationAuditable || e.Entity is IBonModificationAuditable || e.Entity is IBonSoftDeleteAuditable)
+      .Where(e => e.Entity is IBonAggregateRoot )
       .ToList();
 
     foreach (var entry in entries)

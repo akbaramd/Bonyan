@@ -6,7 +6,7 @@ using Bonyan.Security.Claims;
 namespace Bonyan.IdentityManagement;
 
 internal class DefaultClaimProvider<TUser> 
-    : IBonIdentityClaimProvider<TUser> where TUser:IBonIdentityUser
+    : IBonIdentityClaimProvider<TUser> where TUser:BonIdentityUser
 {
 private readonly IBonIdentityUserManager<TUser> _identityUserManager;
 

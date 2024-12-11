@@ -7,7 +7,7 @@ using Bonyan.UserManagement.Domain.Users.ValueObjects;
 namespace Bonyan.IdentityManagement.Domain.Users.DomainServices;
 
 public interface IBonIdentityUserManager<TIdentityUser> : IBonDomainService
-    where TIdentityUser : IBonIdentityUser
+    where TIdentityUser : BonIdentityUser
 {
     
     Task<BonDomainResult<TIdentityUser>> CreateAsync(TIdentityUser entity);

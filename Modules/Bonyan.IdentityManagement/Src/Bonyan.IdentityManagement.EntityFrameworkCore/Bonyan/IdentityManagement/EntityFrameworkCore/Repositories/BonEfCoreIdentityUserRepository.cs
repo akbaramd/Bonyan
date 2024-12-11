@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Bonyan.IdentityManagement.EntityFrameworkCore.Repositories;
 
-public class BonEfCoreIdentityUserRepository<TUser> : EfCoreBonRepository<TUser,BonUserId,IBonIdentityManagementDbContext<TUser>>,IBonIdentityUserRepository<TUser> where TUser : class, IBonIdentityUser
+public class BonEfCoreIdentityUserRepository<TUser> : EfCoreBonRepository<TUser,BonUserId,IBonIdentityManagementDbContext<TUser>>,IBonIdentityUserRepository<TUser> where TUser : BonIdentityUser
 {
     
     public new IBonDbContextProvider<IBonIdentityManagementDbContext<TUser>> BonDbContextProvider => LazyServiceProvider.LazyGetRequiredService<IBonDbContextProvider<IBonIdentityManagementDbContext<TUser>>>();
@@ -20,7 +20,7 @@ public class BonEfCoreIdentityUserRepository<TUser> : EfCoreBonRepository<TUser,
             .ThenInclude(x=>x.Role);
     }
 }
-public class BonEfCoreIdentityUserReadOnlyRepository<TUser> : EfCoreReadonlyRepository<TUser,BonUserId,IBonIdentityManagementDbContext<TUser>>,IBonIdentityUserReadOnlyRepository<TUser> where TUser : class, IBonIdentityUser
+public class BonEfCoreIdentityUserReadOnlyRepository<TUser> : EfCoreReadonlyRepository<TUser,BonUserId,IBonIdentityManagementDbContext<TUser>>,IBonIdentityUserReadOnlyRepository<TUser> where TUser : BonIdentityUser
 {
     public new IBonDbContextProvider<IBonIdentityManagementDbContext<TUser>> BonDbContextProvider => LazyServiceProvider.LazyGetRequiredService<IBonDbContextProvider<IBonIdentityManagementDbContext<TUser>>>();
     protected override IQueryable<TUser> PrepareQuery(DbSet<TUser> dbSet)

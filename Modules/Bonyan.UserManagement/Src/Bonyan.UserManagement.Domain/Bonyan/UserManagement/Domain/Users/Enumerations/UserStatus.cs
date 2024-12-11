@@ -12,7 +12,7 @@ namespace Bonyan.UserManagement.Domain.Users.Enumerations
         public static readonly UserStatus Suspended = new(IdSuspended, nameof(Suspended));
         public static readonly UserStatus Inactive = new(IdInactive, nameof(Inactive));
         public static readonly UserStatus Deactivated = new(IdDeactivated, nameof(Deactivated));
-        public static readonly UserStatus Banned = new(IdBanned, nameof(Banned));
+        public static readonly UserStatus Locked = new(IdBanned, nameof(Locked));
         public static readonly UserStatus PendingDeletion = new(IdPendingDeletion, nameof(PendingDeletion));
         public static readonly UserStatus PendingApproval = new(IdPendingApproval, nameof(PendingApproval));
         public static readonly UserStatus Archived = new(IdArchived, nameof(Archived));

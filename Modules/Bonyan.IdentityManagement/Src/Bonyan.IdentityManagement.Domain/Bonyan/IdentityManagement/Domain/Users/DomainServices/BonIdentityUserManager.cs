@@ -8,11 +8,13 @@ using Bonyan.IdentityManagement.Domain.Users;
 using Bonyan.Layer.Domain.Services;
 using Bonyan.UserManagement.Domain.Users.Enumerations;
 using Bonyan.UserManagement.Domain.Users.ValueObjects;
+using System.Diagnostics.CodeAnalysis;
+using Bonyan.Layer.Domain.Exceptions;
 
 namespace Bonyan.IdentityManagement.Domain.Users.DomainServices;
 
 public class BonIdentityUserManager<TUser> : BonDomainService, IBonIdentityUserManager<TUser>
-    where TUser : class, IBonIdentityUser
+    where TUser : BonIdentityUser
 {
     
     
@@ -21,6 +23,8 @@ public class BonIdentityUserManager<TUser> : BonDomainService, IBonIdentityUserM
         // Create a new user
     public async Task<BonDomainResult<TUser>> CreateAsync(TUser entity)
     {
+        if (entity == null) throw new BonDomainException("User entity cannotbe null.", "NullEntity");
+
         try
         {
             if (await UserRepository.ExistsAsync(x => x.UserName.Equals(entity.UserName)))
@@ -36,13 +40,15 @@ public class BonIdentityUserManager<TUser> : BonDomainService, IBonIdentityUserM
         catch (Exception e)
         {
             Logger.LogError(e, "Error creating user.");
-            return BonDomainResult<TUser>.Failure(e.Message);
+            return BonDomainResult<TUser>.Failure("Error creating user.");
         }
     }
 
     // Update user information
     public async Task<BonDomainResult<TUser>> UpdateAsync(TUser entity)
     {
+        if (entity == null) throw new BonDomainException("User entity cannotbe null.", "NullEntity");
+
         try
         {
             await UserRepository.UpdateAsync(entity, true);
@@ -57,25 +63,29 @@ public class BonIdentityUserManager<TUser> : BonDomainService, IBonIdentityUserM
     // Find user by username
     public async Task<BonDomainResult<TUser>> FindByIdAsync(BonUserId id)
     {
+        if (id == null) throw new BonDomainException("User ID cannotbe null.", "NullId");
+
         try
         {
             var user = await UserRepository.FindOneAsync(x => x.Id == id);
             if (user == null)
             {
-                return BonDomainResult<TUser>.Failure($"User with username {id} not found.");
+                return BonDomainResult<TUser>.Failure($"User with ID {id} not found.");
             }
 
             return BonDomainResult<TUser>.Success(user);
         }
         catch (Exception e)
         {
-            Logger.LogError(e, "Error finding user by username.");
-            return BonDomainResult<TUser>.Failure("Error finding user by username.");
+            Logger.LogError(e, "Error finding user by ID.");
+            return BonDomainResult<TUser>.Failure("Error finding user by ID.");
         }
     }
     // Find user by username
     public async Task<BonDomainResult<TUser>> FindByUserNameAsync(string userName)
     {
+        if (string.IsNullOrWhiteSpace(userName)) throw new BonDomainException("Username cannot be null or empty.", "NullOrEmptyUserName");
+
         try
         {
             var user = await UserRepository.FindOneAsync(x => x.UserName.Equals(userName));
@@ -96,6 +106,8 @@ public class BonIdentityUserManager<TUser> : BonDomainService, IBonIdentityUserM
     // Find user by phone number (string)
     public async Task<BonDomainResult<TUser>> FindByPhoneNumberAsync(string phoneNumber)
     {
+        if (string.IsNullOrWhiteSpace(phoneNumber)) throw new BonDomainException("Phone number cannot be null or empty.", "NullOrEmptyPhoneNumber");
+
         try
         {
             var user = await UserRepository.FindOneAsync(x =>
@@ -138,6 +150,8 @@ public class BonIdentityUserManager<TUser> : BonDomainService, IBonIdentityUserM
     // Find user by email (string)
     public async Task<BonDomainResult<TUser>> FindByEmailAsync(string email)
     {
+        if (string.IsNullOrWhiteSpace(email)) throw new BonDomainException("Email cannot be null or empty.", "NullOrEmptyEmail");
+
         try
         {
             var user = await UserRepository.FindOneAsync(x => x.Email != null && x.Email.Address.Equals(email));
@@ -178,6 +192,8 @@ public class BonIdentityUserManager<TUser> : BonDomainService, IBonIdentityUserM
     // Verify email
     public async Task<BonDomainResult> VerifyEmailAsync(TUser user)
     {
+        if (user == null) throw new BonDomainException("User cannot benull.", "NullUser");
+
         try
         {
             if (user.Email == null)
@@ -199,6 +215,8 @@ public class BonIdentityUserManager<TUser> : BonDomainService, IBonIdentityUserM
     // Verify phone number
     public async Task<BonDomainResult> VerifyPhoneNumberAsync(TUser user)
     {
+        if (user == null) throw new BonDomainException("User cannot benull.", "NullUser");
+
         try
         {
             if (user.PhoneNumber == null)
@@ -238,6 +256,8 @@ public class BonIdentityUserManager<TUser> : BonDomainService, IBonIdentityUserM
     // Change user status
     public async Task<BonDomainResult> ChangeUserStatusAsync(TUser user, UserStatus newStatus)
     {
+        if (user == null) throw new BonDomainException("User cannot benull.", "NullUser");
+
         try
         {
             user.ChangeStatus(newStatus);
@@ -251,30 +271,34 @@ public class BonIdentityUserManager<TUser> : BonDomainService, IBonIdentityUserM
         }
     }
     
-    public new IBonIdentityUserRepository<TUser> UserRepository =>
+    public IBonIdentityUserRepository<TUser> UserRepository =>
         LazyServiceProvider.LazyGetRequiredService<IBonIdentityUserRepository<TUser>>();
 
 
-    public new IBonIdentityRoleRepository RoleRepository =>
+    public IBonIdentityRoleRepository RoleRepository =>
         LazyServiceProvider.LazyGetRequiredService<IBonIdentityRoleRepository>();
 
     private async Task<BonIdentityRole?> FindRoleAsync(BonRoleId roleId)
     {
-        return await RoleRepository.FindOneAsync(x => x.Id == roleId);
-    }
+        if (roleId == null) throw new BonDomainException("Role IDcannot be null.", "NullRoleId");
 
-    private void LogAndThrow(string message, string methodName)
-    {
-        Logger.LogError($"{methodName}: {message}");
-        throw new InvalidOperationException(message);
+        try
+        {
+            return await RoleRepository.FindOneAsync(x => x.Id == roleId);
+        }
+        catch (Exception e)
+        {
+            Logger.LogError(e, "Error finding role.");
+            return null;
+        }
     }
 
     public async Task<BonDomainResult<TUser>> AssignRolesAsync(TUser user, IEnumerable<BonRoleId> roleIds)
     {
         const string methodName = nameof(AssignRolesAsync);
 
-        if (user == null) LogAndThrow("User cannot be null.", methodName);
-        if (roleIds == null || !roleIds.Any()) LogAndThrow("RoleIds cannot be null or empty.", methodName);
+        if (user == null) throw new BonDomainException("User cannot benull.", "NullUser");
+        if (roleIds == null || !roleIds.Any()) throw new BonDomainException("RoleIds cannot be null or empty.", "NullOrEmptyRoleIds");
 
         try
         {
@@ -293,7 +317,7 @@ public class BonIdentityUserManager<TUser> : BonDomainService, IBonIdentityUserM
 
                 try
                 {
-                    user?.AssignRole(roleId); // Call the domain entity method
+                    user.AssignRole(roleId); // Call the domain entity method
                 }
                 catch (InvalidOperationException ex)
                 {
@@ -367,12 +391,12 @@ public class BonIdentityUserManager<TUser> : BonDomainService, IBonIdentityUserM
     {
         const string methodName = nameof(RemoveRoleAsync);
 
-        if (user == null) LogAndThrow("User cannot be null.", methodName);
-        if (roleId == null) LogAndThrow("RoleId cannot be null.", methodName);
+        if (user == null) throw new BonDomainException("User cannot benull.", "NullUser");
+        if (roleId == null) throw new BonDomainException("RoleIdcannot be null.", "NullRoleId");
 
         try
         {
-            user?.RemoveRole(roleId);
+            user.RemoveRole(roleId);
             await UserRepository.DeleteAsync(user, true);
 
             Logger.LogInformation($"{methodName}: Successfully removed role {roleId.Value} from user {user.Id}.");
@@ -409,9 +433,9 @@ public class BonIdentityUserManager<TUser> : BonDomainService, IBonIdentityUserM
     {
         const string methodName = nameof(ChangePasswordAsync);
 
-        if (user == null) LogAndThrow("User cannot be null.", methodName);
-        if (string.IsNullOrWhiteSpace(currentPassword)) LogAndThrow("Current password cannot be null.", methodName);
-        if (string.IsNullOrWhiteSpace(newPassword)) LogAndThrow("New password cannot be null.", methodName);
+        if (user == null) throw new BonDomainException("User cannot benull.", "NullUser");
+        if (string.IsNullOrWhiteSpace(currentPassword)) throw new BonDomainException("Current password cannot be null.", "NullOrEmptyCurrentPassword");
+        if (string.IsNullOrWhiteSpace(newPassword)) throw new BonDomainException("New password cannot be null.", "NullOrEmptyNewPassword");
 
         try
         {
@@ -439,8 +463,8 @@ public class BonIdentityUserManager<TUser> : BonDomainService, IBonIdentityUserM
     {
         const string methodName = nameof(ResetPasswordAsync);
 
-        if (user == null) LogAndThrow("User cannot be null.", methodName);
-        if (string.IsNullOrWhiteSpace(newPassword)) LogAndThrow("New password cannot be null.", methodName);
+        if (user == null) throw new BonDomainException("User cannot benull.", "NullUser");
+        if (string.IsNullOrWhiteSpace(newPassword)) throw new BonDomainException("New password cannot be null.", "NullOrEmptyNewPassword");
 
         try
         {
@@ -462,9 +486,9 @@ public class BonIdentityUserManager<TUser> : BonDomainService, IBonIdentityUserM
     {
         const string methodName = nameof(SetTokenAsync);
 
-        if (user == null) LogAndThrow("User cannot be null.", methodName);
-        if (string.IsNullOrWhiteSpace(tokenType)) LogAndThrow("TokenType is required.", methodName);
-        if (string.IsNullOrWhiteSpace(tokenValue)) LogAndThrow("TokenValue is required.", methodName);
+        if (user == null) throw new BonDomainException("User cannot benull.", "NullUser");
+        if (string.IsNullOrWhiteSpace(tokenType)) throw new BonDomainException("TokenType is required.", "NullOrEmptyTokenType");
+        if (string.IsNullOrWhiteSpace(tokenValue)) throw new BonDomainException("TokenValue is required.", "NullOrEmptyTokenValue");
 
         try
         {
@@ -486,8 +510,8 @@ public class BonIdentityUserManager<TUser> : BonDomainService, IBonIdentityUserM
     {
         const string methodName = nameof(RemoveTokenAsync);
 
-        if (user == null) LogAndThrow("User cannot be null.", methodName);
-        if (string.IsNullOrWhiteSpace(tokenType)) LogAndThrow("TokenType is required.", methodName);
+        if (user == null) throw new BonDomainException("User cannot benull.", "NullUser");
+        if (string.IsNullOrWhiteSpace(tokenType)) throw new BonDomainException("TokenType is required.", "NullOrEmptyTokenType");
 
         try
         {
@@ -509,8 +533,8 @@ public class BonIdentityUserManager<TUser> : BonDomainService, IBonIdentityUserM
     {
         const string methodName = nameof(FindByTokenAsync);
 
-        if (string.IsNullOrWhiteSpace(tokenType)) LogAndThrow("TokenType is required.", methodName);
-        if (string.IsNullOrWhiteSpace(tokenValue)) LogAndThrow("TokenValue is required.", methodName);
+        if (string.IsNullOrWhiteSpace(tokenType)) throw new BonDomainException("TokenType is required.", "NullOrEmptyTokenType");
+        if (string.IsNullOrWhiteSpace(tokenValue)) throw new BonDomainException("TokenValue is required.", "NullOrEmptyTokenValue");
 
         try
         {
@@ -528,6 +552,73 @@ public class BonIdentityUserManager<TUser> : BonDomainService, IBonIdentityUserM
         {
             Logger.LogError(e, $"{methodName}: Error finding user by token.");
             return BonDomainResult<TUser>.Failure("Error finding user by token.");
+        }
+    }
+
+    public async Task<BonDomainResult> BanUserAsync(TUser user, DateTime until)
+    {
+        const string methodName = nameof(BanUserAsync);
+
+        if (user == null) throw new BonDomainException("User cannot be null.", "NullUser");
+        if (until <= DateTime.Now) throw new BonDomainException("Ban date must be in the future.", "InvalidBanDate");
+
+        try
+        {
+            user.LockAccountUntil(until);
+            await UpdateAsync(user);
+
+            Logger.LogInformation($"{methodName}: Successfully banned user {user.Id} until {until}.");
+            return BonDomainResult.Success();
+        }
+        catch (Exception e)
+        {
+            Logger.LogError(e, $"{methodName}: Error banning user {user.Id}.");
+            return BonDomainResult.Failure("Error banning user.");
+        }
+    }
+
+    // Unban a user
+    public async Task<BonDomainResult> UnbanUserAsync(TUser user)
+    {
+        const string methodName = nameof(UnbanUserAsync);
+
+        if (user == null) throw new BonDomainException("User cannot be null.", "NullUser");
+
+        try
+        {
+            user.UnlockAccount();
+            await UpdateAsync(user);
+
+            Logger.LogInformation($"{methodName}: Successfully unbanned user {user.Id}.");
+            return BonDomainResult.Success();
+        }
+        catch (Exception e)
+        {
+            Logger.LogError(e, $"{methodName}: Error unbanning user {user.Id}.");
+            return BonDomainResult.Failure("Error unbanning user.");
+        }
+    }
+
+    // Additional user management behavior
+    public async Task<BonDomainResult> UpdateUserProfileAsync(TUser user, UserProfile profile)
+    {
+        const string methodName = nameof(UpdateUserProfileAsync);
+
+        if (user == null) throw new BonDomainException("User cannot be null.", "NullUser");
+        if (profile == null) throw new BonDomainException("Profile cannot be null.", "NullProfile");
+
+        try
+        {
+            user.UpdateProfile(profile);
+            await UpdateAsync(user);
+
+            Logger.LogInformation($"{methodName}: Successfully updated profile for user {user.Id}.");
+            return BonDomainResult.Success();
+        }
+        catch (Exception e)
+        {
+            Logger.LogError(e, $"{methodName}: Error updating profile for user {user.Id}.");
+            return BonDomainResult.Failure("Error updating profile.");
         }
     }
 

@@ -15,7 +15,7 @@ namespace Bonyan.IdentityManagement.Application.Users
 {
     public class BonIdentityUserAppService<TUser> :
         BonApplicationService,
-        IBonIdentityUserAppService where TUser : class, IBonIdentityUser
+        IBonIdentityUserAppService where TUser : BonIdentityUser
     {
         // We need to use both UserManager and RoleManager
         public IBonIdentityUserManager<TUser> UserManager => LazyServiceProvider.LazyGetRequiredService<IBonIdentityUserManager<TUser>>();

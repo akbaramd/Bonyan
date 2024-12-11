@@ -17,7 +17,7 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace Bonyan.IdentityManagement.Application.Auth;
 
-public class BonIdentityAuthAppAppService<TUser> : BonApplicationService, IBonIdentityAuthAppService where TUser : class, IBonIdentityUser
+public class BonIdentityAuthAppAppService<TUser> : BonApplicationService, IBonIdentityAuthAppService where TUser : BonIdentityUser
 {
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly IBonIdentityUserManager<TUser> _identityUserManager;

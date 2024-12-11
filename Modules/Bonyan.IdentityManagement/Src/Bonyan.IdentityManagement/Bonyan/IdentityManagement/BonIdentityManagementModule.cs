@@ -14,7 +14,7 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace Bonyan.IdentityManagement;
 
-public class BonIdentityManagementModule<TUser> : BonModule where TUser : class, IBonIdentityUser
+public class BonIdentityManagementModule<TUser> : BonModule where TUser : BonIdentityUser
 {
     public BonIdentityManagementModule()
     {
