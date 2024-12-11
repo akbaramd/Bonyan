@@ -87,7 +87,7 @@ namespace Novin.AspNetCore.Novin.AspNetCore.Mediator
             {
                 var query = await context.Request.ReadFromJsonAsync<TQuery>();
                 var mediator = context.RequestServices.GetRequiredService<IBonMediator>();
-                var response = await mediator.QueryAsync<TQuery, TResponse>(query, context.RequestAborted);
+                var response = await mediator.QueryAsync(query, context.RequestAborted);
                 return Results.Ok(response);
             })
             .Accepts<TQuery>("application/json")
@@ -140,7 +140,7 @@ namespace Novin.AspNetCore.Novin.AspNetCore.Mediator
             {
                 var command = await context.Request.ReadFromJsonAsync<TCommand>();
                 var mediator = context.RequestServices.GetRequiredService<IBonMediator>();
-                var response = await mediator.SendAsync<TCommand, TResponse>(command, context.RequestAborted);
+                var response = await mediator.SendAsync(command, context.RequestAborted);
                 return Results.Ok(response);
             })
             .Accepts<TCommand>("application/json")

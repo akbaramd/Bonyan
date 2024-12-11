@@ -13,15 +13,14 @@ public interface IBonMediator
     /// <param name="command">The command to send.</param>
     /// <param name="cancellationToken">The cancellation token.</param>
     /// <returns>The response from the handler.</returns>
-    Task<TResponse> SendAsync<TCommand, TResponse>(
-        TCommand command,
-        CancellationToken cancellationToken = default)
-        where TCommand : IBonCommand<TResponse>;
-    
-    Task SendAsync<TCommand>(
-        TCommand command,
-        CancellationToken cancellationToken = default)
-        where TCommand : IBonCommand?;
+    Task<TResponse> SendAsync<TResponse>(
+        IBonCommand<TResponse> command,
+        CancellationToken cancellationToken = default);
+
+    Task SendAsync(
+        IBonCommand command,
+        CancellationToken cancellationToken = default);
+
     /// <summary>
     /// Sends a query to a single handler and expects a response.
     /// </summary>
@@ -30,10 +29,9 @@ public interface IBonMediator
     /// <param name="query">The query to send.</param>
     /// <param name="cancellationToken">The cancellation token.</param>
     /// <returns>The response from the handler.</returns>
-    Task<TResponse> QueryAsync<TQuery, TResponse>(
-        TQuery query,
-        CancellationToken cancellationToken = default)
-        where TQuery : IBonQuery<TResponse>;
+    Task<TResponse> QueryAsync<TResponse>(
+        IBonQuery<TResponse> query,
+        CancellationToken cancellationToken = default);
     
     /// <summary>
     /// Publishes an event to multiple subscribers.
@@ -42,8 +40,7 @@ public interface IBonMediator
     /// <param name="eventMessage">The event to publish.</param>
     /// <param name="cancellationToken">The cancellation token.</param>
     /// <returns>A task that represents the asynchronous operation.</returns>
-    Task PublishAsync<TEvent>(
-        TEvent eventMessage,
-        CancellationToken cancellationToken = default)
-        where TEvent : IBonEvent;
+    Task PublishAsync(
+        IBonEvent eventMessage,
+        CancellationToken cancellationToken = default);
 }

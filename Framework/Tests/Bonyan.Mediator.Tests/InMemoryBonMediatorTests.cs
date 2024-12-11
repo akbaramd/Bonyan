@@ -27,7 +27,7 @@ public class InMemoryBonMediatorTests
         var command = new SampleCommand { Payload = TestStrings.TestCommandPayload };
 
         // Act
-        var result = await mediator.SendAsync<SampleCommand, string>(command);
+        var result = await mediator.SendAsync(command);
 
         // Assert
         Assert.Equal(TestStrings.TestCommandHandled, result);
@@ -41,7 +41,7 @@ public class InMemoryBonMediatorTests
         var command = new SampleCommand { Payload = TestStrings.TestCommandPayload };
 
         // Act
-        var result = await mediator.SendAsync<SampleCommand, string>(command);
+        var result = await mediator.SendAsync(command);
 
         // Assert
         Assert.Equal(TestStrings.TestCommandHandled, result);
@@ -60,7 +60,7 @@ public class InMemoryBonMediatorTests
         var query = new SampleQuery { Query = TestStrings.TestQueryPayload };
 
         // Act
-        var result = await mediator.QueryAsync<SampleQuery, string>(query);
+        var result = await mediator.QueryAsync(query);
 
         // Assert
         Assert.Equal(TestStrings.TestQueryResult, result);
@@ -105,7 +105,7 @@ public class InMemoryBonMediatorTests
         var command = new SampleCommand { Payload = "UnregisteredCommand" };
 
         // Act & Assert
-        await Assert.ThrowsAsync<InvalidOperationException>(() => mediator.SendAsync<UnregisteredCommand, string>(new UnregisteredCommand()));
+        await Assert.ThrowsAsync<InvalidOperationException>(() => mediator.SendAsync(new UnregisteredCommand()));
     }
 
     [Fact]
@@ -116,7 +116,7 @@ public class InMemoryBonMediatorTests
         var query = new UnregisteredQuery { Query = "UnregisteredQuery" };
 
         // Act & Assert
-        await Assert.ThrowsAsync<InvalidOperationException>(() => mediator.QueryAsync<UnregisteredQuery, string>(query));
+        await Assert.ThrowsAsync<InvalidOperationException>(() => mediator.QueryAsync(query));
     }
 
     [Fact]
