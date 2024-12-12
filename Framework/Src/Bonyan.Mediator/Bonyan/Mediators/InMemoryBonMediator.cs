@@ -97,7 +97,7 @@ namespace Bonyan.Mediators
             return response;
         }
 
-        private async Task HandleEventAsync<TEvent>(
+        private Task PublishEventAsync<TEvent>(
             TEvent eventMessage,
             CancellationToken cancellationToken = default)
             where TEvent : IBonEvent
@@ -109,23 +109,36 @@ namespace Bonyan.Mediators
             if (!handlers.Any())
             {
                 _logger.LogWarning("No event handlers found for event type {EventType}", eventMessage.GetType().Name);
-                return;
+                return Task.CompletedTask;
             }
 
             // Pipeline for publishing events
-            async Task HandlerDelegate()
+            Task HandlerDelegate()
             {
-                var tasks = handlers.Select(handler => handler.HandleAsync(eventMessage, cancellationToken));
-                await Task.WhenAll(tasks);
+                foreach (var handler in handlers)
+                {
+                    // Fire-and-forget each handler execution
+                    Task.Run(() => handler.HandleAsync(eventMessage, cancellationToken))
+                        .ContinueWith(task =>
+                        {
+                            if (task.IsFaulted)
+                            {
+                                _logger.LogError(task.Exception, "Error in event handler {HandlerType} for event {EventType}",
+                                    handler.GetType().Name, eventMessage.GetType().Name);
+                            }
+                        });
+                }
+
+                return Task.CompletedTask; // Return immediately
             }
 
             var pipeline = behaviors.Reverse<IBonMediatorBehavior<TEvent>>()
                 .Aggregate((Func<Task>)HandlerDelegate,
                     (next, behavior) => () => behavior.HandleAsync(eventMessage, next, cancellationToken));
 
-            await pipeline();
-            _logger.LogInformation("Successfully published event of type {EventType}", eventMessage.GetType().Name);
+            return pipeline(); // Execute the pipeline
         }
+
 
         // Public Methods Using Reflection to Call Private Methods
         public async Task<TResponse> SendAsync<TResponse>(IBonCommand<TResponse> command, CancellationToken cancellationToken = default)
@@ -145,7 +158,7 @@ namespace Bonyan.Mediators
                 ?.MakeGenericMethod(command.GetType());
 
             if (method == null)
-                throw new InvalidOperationException($"Unable to find the method {nameof(HandleCommandWithResponseAsync)}");
+                throw new InvalidOperationException($"Unable to find the method {nameof(HandleCommandAsync)}");
 
             await (Task)method.Invoke(this, new object[] { command, cancellationToken });
         }
@@ -163,11 +176,11 @@ namespace Bonyan.Mediators
 
         public async Task PublishAsync(IBonEvent eventMessage, CancellationToken cancellationToken = default)
         {
-            var method = GetType().GetMethod(nameof(HandleEventAsync), BindingFlags.NonPublic | BindingFlags.Instance)
+            var method = GetType().GetMethod(nameof(PublishEventAsync), BindingFlags.NonPublic | BindingFlags.Instance)
                 ?.MakeGenericMethod(eventMessage.GetType());
 
             if (method == null)
-                throw new InvalidOperationException($"Unable to find the method {nameof(HandleEventAsync)}");
+                throw new InvalidOperationException($"Unable to find the method {nameof(PublishEventAsync)}");
 
             await (Task)method.Invoke(this, new object[] { eventMessage, cancellationToken });
         }

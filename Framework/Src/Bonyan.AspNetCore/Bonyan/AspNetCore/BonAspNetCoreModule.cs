@@ -19,6 +19,7 @@ public class BonAspNetCoreModule : BonWebModule
     public BonAspNetCoreModule()
     {
         DependOn<BonLayerDomainModule>();
+ 
     }
 
     /// <summary>
