@@ -51,61 +51,72 @@ public class BonDbContext<TDbContext> : DbContext, IBonDbContext<TDbContext> whe
         }
     }
 
-    public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new())
-    {
-        var entries = ChangeTracker.Entries()
-            .Where(e => e.Entity is IBonAggregateRoot)
-            .ToList();
+public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new())
+{
+    var entries = ChangeTracker.Entries()
+        .Where(e => e.Entity is IBonAggregateRoot)
+        .ToList();
 
-        foreach (var entry in entries)
+    foreach (var entry in entries)
+    {
+        if (entry.State == EntityState.Added && entry.Entity is IBonCreationAuditable creationAuditableEntity)
         {
-            if (entry.State == EntityState.Added && entry.Entity is IBonCreationAuditable creationAuditableEntity)
+            creationAuditableEntity.CreatedDate = DateTime.UtcNow;
+        }
+
+        if (entry.State == EntityState.Modified)
+        {
+            if (entry.Entity is IBonModificationAuditable updateAuditableEntity)
             {
-                creationAuditableEntity.CreatedDate = DateTime.UtcNow;
+                updateAuditableEntity.ModifiedDate = DateTime.UtcNow;
             }
 
-            if (entry.State == EntityState.Modified)
+            if (entry.Entity is IBonSoftDeleteAuditable softDeletableEntity)
             {
-                if (entry.Entity is IBonModificationAuditable updateAuditableEntity)
+                if (softDeletableEntity.IsDeleted)
                 {
-                    updateAuditableEntity.ModifiedDate = DateTime.UtcNow;
+                    softDeletableEntity.DeletedDate = DateTime.UtcNow;
                 }
-
-                if (entry.Entity is IBonSoftDeleteAuditable softDeletableEntity)
+                else
                 {
-                    if (softDeletableEntity.IsDeleted)
-                    {
-                        softDeletableEntity.DeletedDate = DateTime.UtcNow;
-                    }
-                    else
-                    {
-                        entry.Property(nameof(IBonSoftDeleteAuditable.DeletedDate)).IsModified = false;
-                        entry.Property(nameof(IBonSoftDeleteAuditable.IsDeleted)).IsModified = false;
-                    }
+                    entry.Property(nameof(IBonSoftDeleteAuditable.DeletedDate)).IsModified = false;
+                    entry.Property(nameof(IBonSoftDeleteAuditable.IsDeleted)).IsModified = false;
                 }
             }
         }
+    }
 
-        // Collect domain events
-        var domainEvents = ChangeTracker.Entries()
-            .Where(e => e.Entity is IBonAggregateRoot aggregateRoot && aggregateRoot.DomainEvents.Any())
-            .SelectMany(e => ((IBonAggregateRoot)e.Entity).DomainEvents)
-            .ToList();
-
-        // Save changes to the database
-        var result = await base.SaveChangesAsync(cancellationToken);
-
-        // Publish domain events after the save is successful
-        if (DomainEventDispatcher != null)
+    // Collect domain events
+    var domainEvents = entries
+        .Where(e => e.Entity is IBonAggregateRoot aggregateRoot && aggregateRoot.DomainEvents.Any())
+        .Select(e => new
         {
-            foreach (var domainEvent in domainEvents)
+            AggregateRoot = (IBonAggregateRoot)e.Entity,
+            Events = ((IBonAggregateRoot)e.Entity).DomainEvents.ToList()
+        })
+        .ToList();
+
+    // Save changes to the database
+    var result = await base.SaveChangesAsync(cancellationToken);
+
+    // Publish domain events after the save is successful
+    if (DomainEventDispatcher != null)
+    {
+        foreach (var entry in domainEvents)
+        {
+            foreach (var domainEvent in entry.Events)
             {
                 await DomainEventDispatcher.DispatchAsync(domainEvent, cancellationToken);
             }
-        }
 
-        return result;
+            // Clear the events after dispatching
+            entry.AggregateRoot.ClearEvents();
+        }
     }
+
+    return result;
+}
+
 
     public Task<int> SaveChangesOnDbContextAsync(bool acceptAllChangesOnSuccess,
         CancellationToken cancellationToken = default)

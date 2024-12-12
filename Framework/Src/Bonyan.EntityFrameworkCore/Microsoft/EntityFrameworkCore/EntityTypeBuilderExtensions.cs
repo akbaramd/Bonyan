@@ -1,3 +1,4 @@
+using Bonyan.Layer.Domain.Aggregate.Abstractions;
 using Bonyan.Layer.Domain.Audit.Abstractions;
 using Bonyan.Layer.Domain.Enumerations;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -17,10 +18,18 @@ namespace Microsoft.EntityFrameworkCore
             b.ConfigureBusinessIdProperties();
             b.ConfigureEnumerationProperties();
             b.TryConfigureMultiTenant();
+            b.IgnoreDomainEventProperties();
             return b;
         }
 
-
+        private static void IgnoreDomainEventProperties(this EntityTypeBuilder b)
+        {
+            if (b.Metadata.ClrType.IsAssignableTo(typeof(IBonAggregateRoot)))
+            {
+                // Assuming `DomainEvents` is the property name in `IBonAggregateRoot`
+                b.Ignore(nameof(IBonAggregateRoot.DomainEvents));
+            }
+        }
         public static void TryConfigureMultiTenant(this EntityTypeBuilder b)
         {
             if (b.Metadata.ClrType.IsAssignableTo(typeof(IBonMultiTenant)))
