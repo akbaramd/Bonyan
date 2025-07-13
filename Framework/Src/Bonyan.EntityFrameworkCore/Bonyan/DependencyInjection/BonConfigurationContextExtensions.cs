@@ -2,6 +2,7 @@
 using Bonyan.EntityFrameworkCore.Abstractions;
 using Bonyan.EntityFrameworkCore.Builders;
 using Bonyan.Modularity;
+using Bonyan.Plugins;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;

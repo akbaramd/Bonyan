@@ -21,7 +21,7 @@ public class BonUnitOfWork : IBonUnitOfWork
 
     public IBonUnitOfWork? Outer { get; private set; }
 
-    public bool IsReserved { get; set; }
+    public bool IsReserved { get; set; }        
 
     public bool IsDisposed { get; private set; }
 

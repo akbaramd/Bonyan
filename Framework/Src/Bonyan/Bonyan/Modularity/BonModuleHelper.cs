@@ -8,7 +8,7 @@ internal static class BonyanModuleHelper
     public static List<Type> FindAllModuleTypes(Type startupModuleType)
     {
         var moduleTypes = new List<Type>();
-        Console.WriteLine( "Loaded Bonyan modules:");
+       
         AddModuleAndDependenciesRecursively(moduleTypes, startupModuleType);
         return moduleTypes;
     }

@@ -19,7 +19,8 @@ public class FilePlugInSource : IPlugInSource
 
         foreach (var filePath in FilePaths)
         {
-            var assembly = AssemblyLoadContext.Default.LoadFromAssemblyPath(filePath);
+            var absolutePath = Path.GetFullPath(filePath); // Convert to absolute path
+            var assembly = AssemblyLoadContext.Default.LoadFromAssemblyPath(absolutePath);
 
             try
             {

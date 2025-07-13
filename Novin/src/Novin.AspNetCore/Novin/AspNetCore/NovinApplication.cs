@@ -19,7 +19,7 @@ namespace Novin.AspNetCore.Novin.AspNetCore
         {
           
 
-            var applicationBuilder = BonyanApplication.CreateModularBuilder<NovinModule>(serviceName, c =>
+            var applicationBuilder = BonyanApplication.CreateModularBuilder<NovinModule>(serviceName,c =>
             {
                 var context = new NovinConfigurationContext(c);
                 

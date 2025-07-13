@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Bonyan.IdentityManagement.Domain.Permissions.DomainEvents;
 using Bonyan.IdentityManagement.Domain.Permissions.ValueObjects;
 using Bonyan.IdentityManagement.Domain.Roles;
 using Bonyan.IdentityManagement.Domain.Roles.ValueObjects;
@@ -19,6 +20,8 @@ namespace Bonyan.IdentityManagement.Domain.Permissions
         {
             Id = id;
             Title = title;
+            
+            AddDomainEvent(new PermissionCreatedEvent(){Name = Title});
         }
         public IReadOnlyCollection<BonIdentityRolePermissions> RolePermissions => _permissions;
         // Static factory method to create instances

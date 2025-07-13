@@ -1,3 +1,4 @@
+using Bonyan.Plugins;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
@@ -18,7 +19,7 @@ namespace Bonyan.Modularity
         }
 
         public BonServiceManager ServiceManager { get; set; }
-        
+        public PlugInSourceList PlugInSources { get; } = new PlugInSourceList();
 
         /// <summary>
         /// Configures options of type <typeparamref name="TOptions"/> using an action.

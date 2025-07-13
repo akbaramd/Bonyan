@@ -15,7 +15,7 @@ public interface IBonUnitOfWork : IDatabaseApiContainer, ITransactionApiContaine
 
     IBonUnitOfWorkOptions Options { get; }
 
-    IBonUnitOfWork? Outer { get; }
+    IBonUnitOfWork? Outer { get; }  
 
     bool IsReserved { get; }
 

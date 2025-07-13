@@ -1,4 +1,5 @@
-﻿using Bonyan.Core;
+﻿using System.Linq;
+using Bonyan.Core;
 using Bonyan.Exceptions;
 using Bonyan.Modularity.Abstractions;
 using Bonyan.Plugins;
@@ -43,21 +44,81 @@ public class BonModuleLoader : IBonModuleLoader
         Type startupModuleType,
         PlugInSourceList plugInSources)
     {
+        Console.WriteLine("Loading Bonyan modules:");
+        
         //All modules starting from the startup module
+        Console.WriteLine("  Core modules:");
         foreach (var moduleType in BonyanModuleHelper.FindAllModuleTypes(startupModuleType))
         {
             modules.Add(CreateModuleDescriptor(services, moduleType));
         }
 
         //Plugin modules
-        foreach (var moduleType in plugInSources.GetAllModules())
+        var pluginModules = plugInSources.GetAllModules();
+        if (pluginModules.Any())
         {
-            if (modules.Any(m => m.ModuleType == moduleType))
+            Console.WriteLine("  Plugin modules:");
+            ShowPluginInformation(plugInSources);
+            
+            foreach (var moduleType in pluginModules)
             {
-                continue;
-            }
+                if (modules.Any(m => m.ModuleType == moduleType))
+                {
+                    continue;
+                }
 
-            modules.Add(CreateModuleDescriptor(services, moduleType, isLoadedAsPlugIn: true));
+                modules.Add(CreateModuleDescriptor(services, moduleType, isLoadedAsPlugIn: true));
+                Console.WriteLine($"    - {moduleType.FullName} (Plugin)");
+            }
+        }
+
+        Console.WriteLine($"Total modules loaded: {modules.Count}");
+    }
+
+    /// <summary>
+    /// Shows information about loaded plugins from JSON manifests.
+    /// </summary>
+    private void ShowPluginInformation(PlugInSourceList plugInSources)
+    {
+        var jsonManifests = new List<PluginManifest>();
+
+        // Collect all JSON manifests from different plugin sources
+        foreach (var pluginSource in plugInSources)
+        {
+            if (pluginSource is JsonPluginSource jsonSource)
+            {
+                jsonManifests.AddRange(jsonSource.Manifests);
+            }
+            else if (pluginSource is FolderPlugInSource folderSource)
+            {
+                jsonManifests.AddRange(folderSource.DiscoveredManifests);
+            }
+        }
+
+        if (jsonManifests.Any())
+        {
+            Console.WriteLine("    Discovered plugin manifests:");
+            foreach (var manifest in jsonManifests)
+            {
+                Console.WriteLine($"      📦 {manifest.Name} v{manifest.Version}");
+                if (manifest.Authors.Any())
+                {
+                    Console.WriteLine($"         Authors: {string.Join(", ", manifest.Authors)}");
+                }
+                if (!string.IsNullOrEmpty(manifest.Description))
+                {
+                    Console.WriteLine($"         Description: {manifest.Description}");
+                }
+                Console.WriteLine($"         Entry Point: {manifest.EntryPoint}");
+                if (manifest.AdditionalFiles.Any())
+                {
+                    Console.WriteLine($"         Additional Files: {string.Join(", ", manifest.AdditionalFiles)}");
+                }
+                if (manifest.Tags.Any())
+                {
+                    Console.WriteLine($"         Tags: {string.Join(", ", manifest.Tags)}");
+                }
+            }
         }
     }
 
@@ -101,6 +162,4 @@ public class BonModuleLoader : IBonModuleLoader
             bonModule.AddDependency(dependedModule);
         }
     }
-
-  
 }

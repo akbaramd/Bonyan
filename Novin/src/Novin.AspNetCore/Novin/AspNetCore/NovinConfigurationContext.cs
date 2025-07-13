@@ -1,4 +1,5 @@
 ﻿using Bonyan.Modularity;
+using Bonyan.Plugins;
 
 namespace Novin.AspNetCore.Novin.AspNetCore;
 
@@ -10,7 +11,7 @@ public class NovinConfigurationContext
     }
 
     public BonConfigurationContext BonContext { get; set; }
-    
+
 }
 
 public class NovinApplicationContext

@@ -1,3 +1,4 @@
+using System.Linq;
 using Bonyan.Modularity;
 using Bonyan.Modularity.Abstractions;
 using Bonyan.Plugins;
@@ -18,6 +19,8 @@ public class BonModularityApplication<TModule> : IBonModularityApplication where
     private readonly IBonModuleLoader _moduleLoader;
     private readonly IAssemblyFinder _assemblyFinder;
     private readonly ITypeFinder _typeFinder;
+    private readonly PlugInSourceList _plugInSources;
+    private readonly Action<BonConfigurationContext>? _creationContext;
 
     /// <summary>
     /// Gets the service provider for dependency resolution.
@@ -28,6 +31,11 @@ public class BonModularityApplication<TModule> : IBonModularityApplication where
     /// Gets all loaded modules.
     /// </summary>
     public IReadOnlyList<BonModuleDescriptor> Modules { get; }
+
+    /// <summary>
+    /// Gets the plugin sources used by the application.
+    /// </summary>
+    public PlugInSourceList PlugInSources => _plugInSources;
 
     /// <summary>
     /// Initializes a new instance of <see cref="BonModularityApplication{TModule}"/>.
@@ -42,19 +50,21 @@ public class BonModularityApplication<TModule> : IBonModularityApplication where
     {
         _serviceCollection = serviceCollection ?? throw new ArgumentNullException(nameof(serviceCollection));
         _serviceName = serviceName ?? throw new ArgumentNullException(nameof(serviceName));
+        _creationContext = creationContext;
 
         // Initialize core services
         _moduleLoader = new BonModuleLoader();
         _assemblyFinder = new AssemblyFinder(this);
         _typeFinder = new TypeFinder(_assemblyFinder);
+        _plugInSources = new PlugInSourceList();
 
-        // Configure application options
-        // Load modules
-        Modules = _moduleLoader.LoadModules(_serviceCollection, typeof(TModule),new PlugInSourceList());
+        // Initialize plugin sources from creation context FIRST
+        InitializePluginSources();
+
+        // Load modules with properly populated plugin sources
+        Modules = _moduleLoader.LoadModules(_serviceCollection, typeof(TModule), _plugInSources);
         
-        
-        ConfigureModulesAsync(creationContext).GetAwaiter().GetType();
- 
+        ConfigureModulesAsync(_creationContext).GetAwaiter().GetResult();
 
         RegisterCoreServices();
     }
@@ -67,7 +77,12 @@ public class BonModularityApplication<TModule> : IBonModularityApplication where
         // Register additional services and execute configuration phases
         _serviceCollection.AddBonyan(_serviceName, context =>
         {
-          
+            // Ensure plugin sources are available in the configuration context
+            if (!context.PlugInSources.Any() && _plugInSources.Any())
+            {
+                context.PlugInSources.AddRange(_plugInSources);
+            }
+            
             action?.Invoke(context);
             
             InitializeModuleServices();
@@ -134,6 +149,7 @@ public class BonModularityApplication<TModule> : IBonModularityApplication where
     {
         _serviceCollection.AddObjectAccessor(_moduleLoader);
         _serviceCollection.AddObjectAccessor<IAssemblyFinder>(_assemblyFinder);
+        _serviceCollection.AddObjectAccessor(_plugInSources);
 
         _serviceCollection.TryAddSingleton(_moduleLoader);
         _serviceCollection.TryAddSingleton<IBonModuleContainer>(this);
@@ -142,6 +158,7 @@ public class BonModularityApplication<TModule> : IBonModularityApplication where
         _serviceCollection.TryAddSingleton<IBonModularityApplication>(this);
         _serviceCollection.TryAddSingleton<IAssemblyFinder>(_assemblyFinder);
         _serviceCollection.TryAddSingleton<ITypeFinder>(_typeFinder);
+        _serviceCollection.TryAddSingleton(_plugInSources);
     }
 
     /// <summary>
@@ -156,5 +173,22 @@ public class BonModularityApplication<TModule> : IBonModularityApplication where
                 module.Instance.Services = _serviceCollection;
             }
         }
+    }
+
+    /// <summary>
+    /// Initializes plugin sources from the creation context.
+    /// </summary>
+    private void InitializePluginSources()
+    {
+        if (_creationContext == null) return;
+
+        // Create a temporary context to populate plugin sources
+        var tempContext = new BonConfigurationContext(_serviceCollection);
+        
+        // Invoke the creation context to populate plugin sources
+        _creationContext(tempContext);
+        
+        // Copy the populated plugin sources to our instance
+        _plugInSources.AddRange(tempContext.PlugInSources);
     }
 }

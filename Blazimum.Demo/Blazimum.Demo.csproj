@@ -12,4 +12,8 @@
       <ProjectReference Include="..\Modules\Bonyan.Ui.Blazimum\Src\Bonyan.Ui.Blazimum\Bonyan.Ui.Blazimum.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Plugins\" />
+    </ItemGroup>
+
 </Project>

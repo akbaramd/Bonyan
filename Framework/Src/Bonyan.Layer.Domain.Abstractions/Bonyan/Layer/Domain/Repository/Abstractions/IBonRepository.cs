@@ -22,12 +22,12 @@
     // IRepository without specifying the key type (uses IEntity directly).
     public interface IBonRepository<TEntity> : IBonReadOnlyRepository<TEntity>, IBonUnitOfWorkEnabled where TEntity : class, IBonEntity
     {
-        Task<TEntity> AddAsync(TEntity entity, bool autoSave = false);
-        Task UpdateAsync(TEntity entity, bool autoSave = false);
-        Task DeleteAsync(TEntity entity, bool autoSave = false);
-        
-        // Bulk operations
-        Task AddRangeAsync(IEnumerable<TEntity> entities, bool autoSave = false);
-        Task UpdateRangeAsync(IEnumerable<TEntity> entities, bool autoSave = false);
-        Task DeleteRangeAsync(IEnumerable<TEntity> entities, bool autoSave = false);
+            Task<TEntity> AddAsync(TEntity entity, bool autoSave = false);
+            Task UpdateAsync(TEntity entity, bool autoSave = false);
+            Task DeleteAsync(TEntity entity, bool autoSave = false);
+            
+            // Bulk operations
+            Task AddRangeAsync(IEnumerable<TEntity> entities, bool autoSave = false);
+            Task UpdateRangeAsync(IEnumerable<TEntity> entities, bool autoSave = false);
+            Task DeleteRangeAsync(IEnumerable<TEntity> entities, bool autoSave = false);
     }

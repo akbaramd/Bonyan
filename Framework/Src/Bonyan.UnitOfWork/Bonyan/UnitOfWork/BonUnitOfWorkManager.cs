@@ -13,7 +13,7 @@ public class BonUnitOfWorkManager : IBonUnitOfWorkManager
 
     private readonly IServiceScopeFactory _serviceScopeFactory;
     private readonly IBonAmbientBonUnitOfWork _bonAmbientBonUnitOfWork;
-
+    private readonly SemaphoreSlim _semaphore = new SemaphoreSlim(1,1);
     public BonUnitOfWorkManager(
         IBonAmbientBonUnitOfWork bonAmbientBonUnitOfWork,
         IServiceScopeFactory serviceScopeFactory)
@@ -26,6 +26,8 @@ public class BonUnitOfWorkManager : IBonUnitOfWorkManager
     {
         Check.NotNull(options, nameof(options));
 
+         _semaphore.Wait();
+        
         var currentUow = Current;
         if (currentUow != null && !requiresNew)
         {
@@ -112,4 +114,6 @@ public class BonUnitOfWorkManager : IBonUnitOfWorkManager
             throw;
         }
     }
+    
+    
 }

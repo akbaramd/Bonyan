@@ -8,6 +8,7 @@ internal static class AssemblyHelper
     public static List<Assembly> LoadAssemblies(string folderPath, SearchOption searchOption)
     {
         return GetAssemblyFiles(folderPath, searchOption)
+            .Select(Path.GetFullPath) // Convert to absolute path
             .Select(AssemblyLoadContext.Default.LoadFromAssemblyPath)
             .ToList();
     }
