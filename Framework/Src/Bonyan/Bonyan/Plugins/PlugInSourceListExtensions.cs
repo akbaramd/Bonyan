@@ -8,11 +8,15 @@ public static class PlugInSourceListExtensions
     public static void AddFolder(
         [NotNull] this PlugInSourceList list,
         [NotNull] string folder,
-        SearchOption searchOption = SearchOption.TopDirectoryOnly)
+        bool autoDiscoverJson = true,
+        SearchOption searchOption = SearchOption.AllDirectories)
     {
         Check.NotNull(list, nameof(list));
 
-        list.Add(new FolderPlugInSource(folder, searchOption));
+        list.Add(new FolderPlugInSource(folder, searchOption)
+        {
+            AutoDiscoverJsonManifests = autoDiscoverJson
+        });
     }
 
     public static void AddTypes(

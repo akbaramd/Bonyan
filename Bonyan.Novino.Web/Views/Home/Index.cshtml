@@ -1,0 +1,60 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>
+
+<!-- Test Asset System -->
+<div class="mt-5">
+    <h3>Asset System Test</h3>
+    
+    @{
+        var assetManager = Context.RequestServices.GetService<Assets.IAssetManager>();
+        if (assetManager != null)
+        {
+            <p class="alert alert-success">✓ Asset Manager is registered and available</p>
+            
+            try
+            {
+                var headAssets = assetManager.GetAssets(Assets.AssetLocation.Head);
+                <p>Head Assets Count: @headAssets.Count()</p>
+                
+                var footerAssets = assetManager.GetAssets(Assets.AssetLocation.Footer);
+                <p>Footer Assets Count: @footerAssets.Count()</p>
+                
+                if (headAssets.Any())
+                {
+                    <h4>Head Assets:</h4>
+                    <ul>
+                        @foreach (var asset in headAssets)
+                        {
+                            <li>@asset.Name (@asset.Type) - Priority: @asset.Priority</li>
+                        }
+                    </ul>
+                }
+                
+                if (footerAssets.Any())
+                {
+                    <h4>Footer Assets:</h4>
+                    <ul>
+                        @foreach (var asset in footerAssets)
+                        {
+                            <li>@asset.Name (@asset.Type) - Priority: @asset.Priority</li>
+                        }
+                    </ul>
+                }
+            }
+            catch (Exception ex)
+            {
+                <p class="alert alert-danger">Error getting assets: @ex.Message</p>
+            }
+        }
+        else
+        {
+            <p class="alert alert-danger">✗ Asset Manager is not registered</p>
+        }
+    }
+</div>

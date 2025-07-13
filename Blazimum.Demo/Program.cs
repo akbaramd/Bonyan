@@ -3,7 +3,7 @@ using Bonyan.Plugins;
 
 var builder = BonyanApplication.CreateModularBuilder<BlazimumDemoModule>("demo-app", c =>
 {
-    c.PlugInSources.AddFolder("./plugins",SearchOption.AllDirectories);
+    c.PlugInSources.AddFolder("./Plugins");
 },args: args);
 
 var app = await builder.BuildAsync();

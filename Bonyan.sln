@@ -63,11 +63,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{27D73726
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Bonyan.UserManagement", "Bonyan.UserManagement", "{B64363C6-D3A6-43FF-85C0-9D6BBFD3AE25}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.UserManagement.Application", "Modules\Bonyan.UserManagement\Src\Bonyan.UserManagement.Application\Bonyan.UserManagement.Application.csproj", "{B1470FE0-2268-40F8-ACE7-68CF9FE84AC1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.Module.UserManagement.Application", "Modules\Bonyan.UserManagement\Src\Bonyan.Module.UserManagement.Application\Bonyan.Module.UserManagement.Application.csproj", "{B1470FE0-2268-40F8-ACE7-68CF9FE84AC1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.UserManagement.Domain", "Modules\Bonyan.UserManagement\Src\Bonyan.UserManagement.Domain\Bonyan.UserManagement.Domain.csproj", "{48B16554-F38D-4B43-8BE3-552A1B93A945}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.Module.UserManagement.Domain", "Modules\Bonyan.UserManagement\Src\Bonyan.Module.UserManagement.Domain\Bonyan.Module.UserManagement.Domain.csproj", "{48B16554-F38D-4B43-8BE3-552A1B93A945}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.UserManagement.EntityFrameworkCore", "Modules\Bonyan.UserManagement\Src\Bonyan.UserManagement.EntityFrameworkCore\Bonyan.UserManagement.EntityFrameworkCore.csproj", "{D1B0B867-74E2-4F5D-8DCC-64B77564706C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.Module.UserManagement.EntityFrameworkCore", "Modules\Bonyan.UserManagement\Src\Bonyan.Module.UserManagement.EntityFrameworkCore\Bonyan.Module.UserManagement.EntityFrameworkCore.csproj", "{D1B0B867-74E2-4F5D-8DCC-64B77564706C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Bonyan.IdentityManagement", "Bonyan.IdentityManagement", "{38F11F8E-B4B2-464C-94D6-9E5EF792D619}"
 EndProject
@@ -77,17 +77,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Src", "Src", "{9BBAFE09-501
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Src", "Src", "{238A4AD4-E78A-46B9-822E-78B71A2D9150}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.IdentityManagement.Domain", "Modules\Bonyan.IdentityManagement\Src\Bonyan.IdentityManagement.Domain\Bonyan.IdentityManagement.Domain.csproj", "{61A5A8E0-9E42-412D-96D4-9C4353BA03B5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.Module.IdentityManagement.Domain", "Modules\Bonyan.IdentityManagement\Src\Bonyan.Module.IdentityManagement.Domain\Bonyan.Module.IdentityManagement.Domain.csproj", "{61A5A8E0-9E42-412D-96D4-9C4353BA03B5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.IdentityManagement.Application", "Modules\Bonyan.IdentityManagement\Src\Bonyan.IdentityManagement.Application\Bonyan.IdentityManagement.Application.csproj", "{DFC29578-4213-4AC3-BDE5-E590A8DAFDE7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.Module.IdentityManagement.Application", "Modules\Bonyan.IdentityManagement\Src\Bonyan.Module.IdentityManagement.Application\Bonyan.Module.IdentityManagement.Application.csproj", "{DFC29578-4213-4AC3-BDE5-E590A8DAFDE7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.IdentityManagement.EntityFrameworkCore", "Modules\Bonyan.IdentityManagement\Src\Bonyan.IdentityManagement.EntityFrameworkCore\Bonyan.IdentityManagement.EntityFrameworkCore.csproj", "{4774F77A-3AD2-4FB2-B144-B20292710892}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.Module.IdentityManagement.EntityFrameworkCore", "Modules\Bonyan.IdentityManagement\Src\Bonyan.Module.IdentityManagement.EntityFrameworkCore\Bonyan.Module.IdentityManagement.EntityFrameworkCore.csproj", "{4774F77A-3AD2-4FB2-B144-B20292710892}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.TenantManagement.Application", "Modules\Bonyan.TenantManagement\Src\Bonyan.TenantManagement.Application\Bonyan.TenantManagement.Application.csproj", "{8D2D5378-DF29-47FB-B30B-D79A5A9CA826}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.Module.TenantManagement.Application", "Modules\Bonyan.TenantManagement\Src\Bonyan.Module.TenantManagement.Application\Bonyan.Module.TenantManagement.Application.csproj", "{8D2D5378-DF29-47FB-B30B-D79A5A9CA826}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.TenantManagement.Domain", "Modules\Bonyan.TenantManagement\Src\Bonyan.TenantManagement.Domain\Bonyan.TenantManagement.Domain.csproj", "{2C36BC1D-53E5-4C6D-A651-E0B3BDEC62A6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.Module.TenantManagement.Domain", "Modules\Bonyan.TenantManagement\Src\Bonyan.Module.TenantManagement.Domain\Bonyan.Module.TenantManagement.Domain.csproj", "{2C36BC1D-53E5-4C6D-A651-E0B3BDEC62A6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.TenantManagement.EntityFrameworkCore", "Modules\Bonyan.TenantManagement\Src\Bonyan.TenantManagement.EntityFrameworkCore\Bonyan.TenantManagement.EntityFrameworkCore.csproj", "{3BAD587F-6541-4DFD-8AAD-20120F75CF92}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.Module.TenantManagement.EntityFrameworkCore", "Modules\Bonyan.TenantManagement\Src\Bonyan.Module.TenantManagement.EntityFrameworkCore\Bonyan.Module.TenantManagement.EntityFrameworkCore.csproj", "{3BAD587F-6541-4DFD-8AAD-20120F75CF92}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Templates", "Templates", "{62C5B786-B72F-4815-AF3E-B1E15E1FCCEC}"
 EndProject
@@ -99,19 +99,19 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BonyanTemplate.Application"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BonyanTemplate.WebApi", "Templates\BonyanTemplate.WebApi\BonyanTemplate.WebApi.csproj", "{475E86B9-64EB-4354-A88D-A98FACDF0A77}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.UserManagement.Application.Contracts", "Modules\Bonyan.UserManagement\Src\Bonyan.UserManagement.Application.Contracts\Bonyan.UserManagement.Application.Contracts.csproj", "{2CB442EC-D509-4645-8765-16ECFED0DB0C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.Module.UserManagement.Application.Contracts", "Modules\Bonyan.UserManagement\Src\Bonyan.Module.UserManagement.Application.Contracts\Bonyan.Module.UserManagement.Application.Contracts.csproj", "{2CB442EC-D509-4645-8765-16ECFED0DB0C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.AspNetCore.Mvc", "Framework\Src\Bonyan.AspNetCore.Mvc\Bonyan.AspNetCore.Mvc.csproj", "{F97C91B8-9AE4-446E-816B-18B583C57239}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.AspNetCore.Authentication", "Framework\Src\Bonyan.AspNetCore.Authentication\Bonyan.AspNetCore.Authentication.csproj", "{257670E8-C6DB-4D25-BFE3-C5BC1D096F29}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.IdentityManagement", "Modules\Bonyan.IdentityManagement\Src\Bonyan.IdentityManagement\Bonyan.IdentityManagement.csproj", "{12E29FD1-2409-4014-B139-5C7A387EE4D5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.Module.IdentityManagement", "Modules\Bonyan.IdentityManagement\Src\Bonyan.Module.IdentityManagement\Bonyan.Module.IdentityManagement.csproj", "{12E29FD1-2409-4014-B139-5C7A387EE4D5}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Bonyan.Ui.Blazimum", "Bonyan.Ui.Blazimum", "{91E63F8C-5E54-47AB-8838-07CC2BB66E3A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Src", "Src", "{36A348FA-61C3-401B-9FEF-836DEEFEA5C1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.Ui.Blazimum", "Modules\Bonyan.Ui.Blazimum\Src\Bonyan.Ui.Blazimum\Bonyan.Ui.Blazimum.csproj", "{264069A2-32F8-4AE8-9055-32720FB45744}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.Module.Ui.Blazimum", "Modules\Bonyan.Ui.Blazimum\Src\Bonyan.Module.Ui.Blazimum\Bonyan.Module.Ui.Blazimum.csproj", "{264069A2-32F8-4AE8-9055-32720FB45744}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Demos", "Demos", "{58A58BEF-A085-4BB1-9BBB-3479C2869166}"
 EndProject
@@ -143,13 +143,21 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Src", "Src", "{7356FE81-D4B
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{C4D30F06-39C2-4546-B316-8107F8B72B76}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Novin.AspNetCore", "Novin\src\Novin.AspNetCore\Novin.AspNetCore.csproj", "{839A985C-439D-4A8A-9111-41EF99EA7085}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.IdentityManagement.WebApi", "Modules\Bonyan.IdentityManagement\Src\Bonyan.IdentityManagement.WebApi\Bonyan.IdentityManagement.WebApi.csproj", "{A743E50A-10E8-47D6-8D48-FE135FAA98A9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.Module.IdentityManagement.WebApi", "Modules\Bonyan.IdentityManagement\Src\Bonyan.Module.IdentityManagement.WebApi\Bonyan.Module.IdentityManagement.WebApi.csproj", "{A743E50A-10E8-47D6-8D48-FE135FAA98A9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.AspNetCore.Swagger", "Framework\Src\Bonyan.AspNetCore.Swagger\Bonyan.AspNetCore.Swagger.csproj", "{A9491C0A-9D34-4906-9776-B9831FED641E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blazimum.Demo.Plugin.Test", "Blazimum.Demo.Plugin.Test\Blazimum.Demo.Plugin.Test.csproj", "{C8DA873D-9275-4C5C-A8ED-C2F7B96B158C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.AspNetCore.Authentication.Jwt", "Framework\Src\Bonyan.AspNetCore.Authentication.Jwt\Bonyan.AspNetCore.Authentication.Jwt.csproj", "{0653F691-888E-418C-BB23-C21FC85E9823}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.AspNetCore.Authentication.Cookie", "Framework\Src\Bonyan.AspNetCore.Authentication.Cookie\Bonyan.AspNetCore.Authentication.Cookie.csproj", "{895FC7A6-C242-4526-A521-18471BDEA921}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Bonyan.Ui.Novino", "Bonyan.Ui.Novino", "{4087532A-E447-4723-A8C9-51423D030E4D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.Module.Ui.Novino.Core", "Modules\Bonyan.Ui.Novino\src\Bonyan.Module.Ui.Novino.Core\Bonyan.Module.Ui.Novino.Core.csproj", "{7CB52F87-2787-4FE1-B0CA-8D10DAF5075F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.Novino.Web", "Bonyan.Novino.Web\Bonyan.Novino.Web.csproj", "{0DCDCB06-ADC2-48B3-B9D5-A6ADB6B55A6A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -365,10 +373,6 @@ Global
 		{414BC22A-06DF-4788-ACC2-B76A944F07D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{414BC22A-06DF-4788-ACC2-B76A944F07D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{414BC22A-06DF-4788-ACC2-B76A944F07D0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{839A985C-439D-4A8A-9111-41EF99EA7085}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{839A985C-439D-4A8A-9111-41EF99EA7085}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{839A985C-439D-4A8A-9111-41EF99EA7085}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{839A985C-439D-4A8A-9111-41EF99EA7085}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A743E50A-10E8-47D6-8D48-FE135FAA98A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A743E50A-10E8-47D6-8D48-FE135FAA98A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A743E50A-10E8-47D6-8D48-FE135FAA98A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -381,6 +385,22 @@ Global
 		{C8DA873D-9275-4C5C-A8ED-C2F7B96B158C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C8DA873D-9275-4C5C-A8ED-C2F7B96B158C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C8DA873D-9275-4C5C-A8ED-C2F7B96B158C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0653F691-888E-418C-BB23-C21FC85E9823}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0653F691-888E-418C-BB23-C21FC85E9823}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0653F691-888E-418C-BB23-C21FC85E9823}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0653F691-888E-418C-BB23-C21FC85E9823}.Release|Any CPU.Build.0 = Release|Any CPU
+		{895FC7A6-C242-4526-A521-18471BDEA921}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{895FC7A6-C242-4526-A521-18471BDEA921}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{895FC7A6-C242-4526-A521-18471BDEA921}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{895FC7A6-C242-4526-A521-18471BDEA921}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7CB52F87-2787-4FE1-B0CA-8D10DAF5075F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7CB52F87-2787-4FE1-B0CA-8D10DAF5075F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7CB52F87-2787-4FE1-B0CA-8D10DAF5075F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7CB52F87-2787-4FE1-B0CA-8D10DAF5075F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0DCDCB06-ADC2-48B3-B9D5-A6ADB6B55A6A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0DCDCB06-ADC2-48B3-B9D5-A6ADB6B55A6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0DCDCB06-ADC2-48B3-B9D5-A6ADB6B55A6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0DCDCB06-ADC2-48B3-B9D5-A6ADB6B55A6A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -451,10 +471,14 @@ Global
 		{414BC22A-06DF-4788-ACC2-B76A944F07D0} = {58A58BEF-A085-4BB1-9BBB-3479C2869166}
 		{7356FE81-D4BD-4B0A-BA5A-C6714B635C17} = {BEB69ADD-013A-4748-AD35-7247AEA8C28E}
 		{C4D30F06-39C2-4546-B316-8107F8B72B76} = {BEB69ADD-013A-4748-AD35-7247AEA8C28E}
-		{839A985C-439D-4A8A-9111-41EF99EA7085} = {7356FE81-D4BD-4B0A-BA5A-C6714B635C17}
 		{A743E50A-10E8-47D6-8D48-FE135FAA98A9} = {238A4AD4-E78A-46B9-822E-78B71A2D9150}
 		{A9491C0A-9D34-4906-9776-B9831FED641E} = {31BFDED6-5439-4D9A-ABBA-882C07DE7024}
 		{C8DA873D-9275-4C5C-A8ED-C2F7B96B158C} = {58A58BEF-A085-4BB1-9BBB-3479C2869166}
+		{0653F691-888E-418C-BB23-C21FC85E9823} = {31BFDED6-5439-4D9A-ABBA-882C07DE7024}
+		{895FC7A6-C242-4526-A521-18471BDEA921} = {31BFDED6-5439-4D9A-ABBA-882C07DE7024}
+		{4087532A-E447-4723-A8C9-51423D030E4D} = {8F4DD793-A915-480F-B1C5-F24562389C24}
+		{7CB52F87-2787-4FE1-B0CA-8D10DAF5075F} = {4087532A-E447-4723-A8C9-51423D030E4D}
+		{0DCDCB06-ADC2-48B3-B9D5-A6ADB6B55A6A} = {7356FE81-D4BD-4B0A-BA5A-C6714B635C17}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CACE9943-7714-471F-BCCD-CC6CA1DA43C5}

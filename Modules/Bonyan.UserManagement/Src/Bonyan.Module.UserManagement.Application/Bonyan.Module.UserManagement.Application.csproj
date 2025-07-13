@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <PackageId>Bonyan.Module.UserManagement.Application</PackageId>
+        <RootNamespace/>
+    </PropertyGroup>
+    <Import Project="..\..\..\..\module-package.props"/>
+    <ItemGroup>
+        <ProjectReference Include="..\..\..\..\Framework\Src\Bonyan.Layer.Application\Bonyan.Layer.Application.csproj" />
+        <ProjectReference Include="..\Bonyan.Module.UserManagement.Application.Contracts\Bonyan.Module.UserManagement.Application.Contracts.csproj" />
+        <ProjectReference Include="..\Bonyan.Module.UserManagement.Domain\Bonyan.Module.UserManagement.Domain.csproj" />
+    </ItemGroup>
+
+</Project>

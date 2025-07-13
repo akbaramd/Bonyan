@@ -31,7 +31,7 @@ namespace Bonyan.Messaging.OutBox
         {
             return await _context.OutboxMessages
                 .AsNoTracking()
-                .OrderBy(m => m.CreatedDate) // Optional: Order by creation time
+                .OrderBy(m => m.CreatedAt) // Optional: Order by creation time
                 .ToListAsync(cancellationToken);
         }
 

@@ -8,8 +8,8 @@
 
     <ItemGroup>
         <ProjectReference Include="..\..\Framework\Src\Bonyan.Layer.Domain\Bonyan.Layer.Domain.csproj"/>
-        <ProjectReference Include="..\..\Modules\Bonyan.IdentityManagement\Src\Bonyan.IdentityManagement.Domain\Bonyan.IdentityManagement.Domain.csproj" />
-        <ProjectReference Include="..\..\Modules\Bonyan.TenantManagement\Src\Bonyan.TenantManagement.Domain\Bonyan.TenantManagement.Domain.csproj" />
+        <ProjectReference Include="..\..\Modules\Bonyan.IdentityManagement\Src\Bonyan.Module.IdentityManagement.Domain\Bonyan.Module.IdentityManagement.Domain.csproj" />
+        <ProjectReference Include="..\..\Modules\Bonyan.TenantManagement\Src\Bonyan.Module.TenantManagement.Domain\Bonyan.Module.TenantManagement.Domain.csproj" />
     </ItemGroup>
 
 </Project>

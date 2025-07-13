@@ -1,0 +1,61 @@
+@using Menus
+@using Microsoft.Extensions.DependencyInjection
+
+@{
+    var serviceProvider = Context.RequestServices;
+    var userMenuItems = serviceProvider.GetMenuItems("user-menu", User);
+}
+
+@if (userMenuItems.Any())
+{
+    @foreach (var item in userMenuItems)
+    {
+        @if (item.HasChildren)
+        {
+            <!-- User dropdown menu -->
+            <div class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle text-dark" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    @if (!string.IsNullOrEmpty(item.Icon))
+                    {
+                        <i class="@item.Icon me-1"></i>
+                    }
+                    @item.Title
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    @foreach (var child in item.GetVisibleChildren(User))
+                    {
+                        <li>
+                            <a class="dropdown-item" href="@child.Url">
+                                @if (!string.IsNullOrEmpty(child.Icon))
+                                {
+                                    <i class="@child.Icon me-2"></i>
+                                }
+                                @child.Title
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        }
+        else
+        {
+            <!-- Regular user menu item (like login/register buttons) -->
+            <div class="d-inline-block">
+                <a class="@(string.IsNullOrEmpty(item.CssClass) ? "nav-link text-dark" : item.CssClass)" 
+                   href="@item.Url"
+                   target="@(string.IsNullOrEmpty(item.Target) ? null : item.Target)">
+                    @if (!string.IsNullOrEmpty(item.Icon))
+                    {
+                        <i class="@item.Icon me-1"></i>
+                    }
+                    @item.Title
+                </a>
+            </div>
+        }
+    }
+}
+else
+{
+    <!-- Fallback to default login partial if no menu items -->
+    <partial name="_LoginPartial" />
+} 

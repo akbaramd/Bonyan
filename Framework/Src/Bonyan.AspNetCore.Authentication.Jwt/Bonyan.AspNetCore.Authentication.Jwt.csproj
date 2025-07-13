@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <RootNamespace/>
+        <OutputType>Library</OutputType>
+        <PackageId>Bonyan.AspNetCore.Authentication.Jwt</PackageId>
+    </PropertyGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\Bonyan.AspNetCore.Authentication\Bonyan.AspNetCore.Authentication.csproj" />
+    </ItemGroup>
+    <Import Project="..\..\..\framework-package.props"/>
+</Project>

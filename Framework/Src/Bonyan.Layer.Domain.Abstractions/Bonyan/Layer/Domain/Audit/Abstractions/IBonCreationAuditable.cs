@@ -2,5 +2,5 @@
 
 public interface IBonCreationAuditable
 {
-    DateTime CreatedDate { get; set; }
+    DateTime CreatedAt { get; set; }
 }

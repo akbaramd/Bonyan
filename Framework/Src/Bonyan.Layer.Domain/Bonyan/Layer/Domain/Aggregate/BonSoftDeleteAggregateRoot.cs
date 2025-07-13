@@ -6,11 +6,11 @@ public abstract class BonSoftDeleteAggregateRoot<TId> : BonAggregateRoot<TId>,
     IBonSoftDeleteAggregateRoot<TId>
 {
     public bool IsDeleted { get; set; }
-    public DateTime? DeletedDate { get; set; }
+    public DateTime? DeletedAt { get; set; }
 }
 
 public abstract class BonSoftDeleteAggregateRoot : BonAggregateRoot, IBonSoftDeleteAggregateRoot
 {
     public bool IsDeleted { get; set; }
-    public DateTime? DeletedDate { get; set; }
+    public DateTime? DeletedAt { get; set; }
 }

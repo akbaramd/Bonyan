@@ -9,7 +9,7 @@
     <ItemGroup>
       <ProjectReference Include="..\Framework\Src\Bonyan.AspNetCore.Components\Bonyan.AspNetCore.Components.csproj" />
       <ProjectReference Include="..\Framework\Src\Bonyan.AspNetCore\Bonyan.AspNetCore.csproj" />
-      <ProjectReference Include="..\Modules\Bonyan.Ui.Blazimum\Src\Bonyan.Ui.Blazimum\Bonyan.Ui.Blazimum.csproj" />
+      <ProjectReference Include="..\Modules\Bonyan.Ui.Blazimum\Src\Bonyan.Module.Ui.Blazimum\Bonyan.Module.Ui.Blazimum.csproj" />
     </ItemGroup>
 
     <ItemGroup>

@@ -1,0 +1,70 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>@ViewData["Title"] - Bonyan.Novino.Web</title>
+    
+    <!-- CSS Assets in Head -->
+    <css-assets location="Head"></css-assets>
+    <js-assets location="Head"></js-assets>
+</head>
+<body>
+<header>
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <div class="container-fluid">
+            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Bonyan.Novino.Web</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                <!-- Dynamic Main Navigation Menu -->
+                <ul class="navbar-nav flex-grow-1">
+                    <partial name="_MenuPartial" model="@("main-navigation")" />
+                </ul>
+                
+                <!-- Dynamic User Menu -->
+                <div class="navbar-nav">
+                    <partial name="_UserMenuPartial" />
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>
+<div class="container">
+    <main role="main" class="pb-3">
+        @RenderBody()
+    </main>
+</div>
+
+<footer class="border-top footer text-muted">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                &copy; 2025 - Bonyan.Novino.Web
+            </div>
+            <div class="col-md-6 text-end">
+                <!-- Dynamic Footer Menu -->
+                @{
+                    var serviceProvider = Context.RequestServices;
+                    var footerMenuItems = serviceProvider.GetMenuItems("footer-menu", User);
+                }
+                @if (footerMenuItems.Any())
+                {
+                    @foreach (var item in footerMenuItems)
+                    {
+                        <a href="@item.Url" class="text-muted text-decoration-none me-3">@item.Title</a>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- JavaScript Assets in Footer -->
+<js-assets location="Footer"></js-assets>
+
+@await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

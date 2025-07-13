@@ -63,5 +63,10 @@ namespace Bonyan.Modularity
         {
             return Services.GetRequiredService<T>();
         }
+        
+        public IEnumerable<T> GetServices<T>() where T : notnull
+        {
+            return Services.GetServices<T>();
+        }
     }
 }

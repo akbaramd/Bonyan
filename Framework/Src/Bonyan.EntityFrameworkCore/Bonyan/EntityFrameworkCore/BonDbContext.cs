@@ -61,25 +61,25 @@ public override async Task<int> SaveChangesAsync(CancellationToken cancellationT
     {
         if (entry.State == EntityState.Added && entry.Entity is IBonCreationAuditable creationAuditableEntity)
         {
-            creationAuditableEntity.CreatedDate = DateTime.UtcNow;
+            creationAuditableEntity.CreatedAt = DateTime.UtcNow;
         }
 
         if (entry.State == EntityState.Modified)
         {
             if (entry.Entity is IBonModificationAuditable updateAuditableEntity)
             {
-                updateAuditableEntity.ModifiedDate = DateTime.UtcNow;
+                updateAuditableEntity.ModifiedAt = DateTime.UtcNow;
             }
 
             if (entry.Entity is IBonSoftDeleteAuditable softDeletableEntity)
             {
                 if (softDeletableEntity.IsDeleted)
                 {
-                    softDeletableEntity.DeletedDate = DateTime.UtcNow;
+                    softDeletableEntity.DeletedAt = DateTime.UtcNow;
                 }
                 else
                 {
-                    entry.Property(nameof(IBonSoftDeleteAuditable.DeletedDate)).IsModified = false;
+                    entry.Property(nameof(IBonSoftDeleteAuditable.DeletedAt)).IsModified = false;
                     entry.Property(nameof(IBonSoftDeleteAuditable.IsDeleted)).IsModified = false;
                 }
             }

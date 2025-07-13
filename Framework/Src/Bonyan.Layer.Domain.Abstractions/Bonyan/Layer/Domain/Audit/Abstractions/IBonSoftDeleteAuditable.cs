@@ -3,5 +3,5 @@
 public interface IBonSoftDeleteAuditable
 {
     bool IsDeleted { get; set;}
-    DateTime? DeletedDate { get; set;}
+    DateTime? DeletedAt { get; set;}
 }

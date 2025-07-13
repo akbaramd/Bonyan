@@ -8,47 +8,47 @@ namespace Bonyan.Layer.Domain.Aggregate;
 public abstract class BonFullAggregateRoot : BonAggregateRoot, IBonFullAggregateRoot
 {
     public bool IsDeleted { get; set; }
-    public DateTime? DeletedDate { get; set; } // Made private set for encapsulation
+    public DateTime? DeletedAt { get; set; } // Made private set for encapsulation
 
-    public DateTime CreatedDate { get; set; } // Private set to enforce control
-    public DateTime? ModifiedDate { get; set; } // Nullable for optional modification tracking
+    public DateTime CreatedAt { get; set; } // Private set to enforce control
+    public DateTime? ModifiedAt { get; set; } // Nullable for optional modification tracking
 
     protected BonFullAggregateRoot()
     {
-        CreatedDate = DateTime.UtcNow;
+        CreatedAt = DateTime.UtcNow;
         IsDeleted = false;
     }
 
     /// <summary>
-    /// Marks the entity as deleted and sets the DeletedDate.
+    /// Marks the entity as deleted and sets the DeletedAt.
     /// </summary>
     public void SoftDelete()
     {
         if (!IsDeleted)
         {
             IsDeleted = true;
-            DeletedDate = DateTime.UtcNow;
+            DeletedAt = DateTime.UtcNow;
         }
     }
 
     /// <summary>
-    /// Restores a soft-deleted entity by unsetting IsDeleted and DeletedDate.
+    /// Restores a soft-deleted entity by unsetting IsDeleted and DeletedAt.
     /// </summary>
     public void Restore()
     {
         if (IsDeleted)
         {
             IsDeleted = false;
-            DeletedDate = null;
+            DeletedAt = null;
         }
     }
 
     /// <summary>
-    /// Updates the ModifiedDate, typically called whenever the entity is modified.
+    /// Updates the ModifiedAt, typically called whenever the entity is modified.
     /// </summary>
     public void UpdateModifiedDate()
     {
-        ModifiedDate = DateTime.UtcNow;
+        ModifiedAt = DateTime.UtcNow;
     }
 }
 
@@ -59,59 +59,59 @@ public abstract class BonFullAggregateRoot : BonAggregateRoot, IBonFullAggregate
 public abstract class BonFullAggregateRoot<TId> : BonAggregateRoot<TId>, IBonFullAggregateRoot<TId>
 {
     public bool IsDeleted { get; set; }
-    public DateTime? DeletedDate { get; set; } // Made private set for encapsulation
+    public DateTime? DeletedAt { get; set; } // Made private set for encapsulation
 
-    public DateTime CreatedDate { get; set; } // Private set to enforce control
-    public DateTime? ModifiedDate { get; set; } // Nullable for optional modification tracking
+    public DateTime CreatedAt { get; set; } // Private set to enforce control
+    public DateTime? ModifiedAt { get; set; } // Nullable for optional modification tracking
 
     protected BonFullAggregateRoot () {}
     protected BonFullAggregateRoot(TId id)
 
     {
-        CreatedDate = DateTime.UtcNow;
+        CreatedAt = DateTime.UtcNow;
         IsDeleted = false;
     }
 
     /// <summary>
-    /// Marks the entity as deleted and sets the DeletedDate.
+    /// Marks the entity as deleted and sets the DeletedAt.
     /// </summary>
     public void SoftDelete()
     {
         if (!IsDeleted)
         {
             IsDeleted = true;
-            DeletedDate = DateTime.UtcNow;
+            DeletedAt = DateTime.UtcNow;
         }
     }
 
     /// <summary>
-    /// Restores a soft-deleted entity by unsetting IsDeleted and DeletedDate.
+    /// Restores a soft-deleted entity by unsetting IsDeleted and DeletedAt.
     /// </summary>
     public void Restore()
     {
         if (IsDeleted)
         {
             IsDeleted = false;
-            DeletedDate = null;
+            DeletedAt = null;
         }
     }
 
     /// <summary>
-    /// Updates the ModifiedDate, typically called whenever the entity is modified.
+    /// Updates the ModifiedAt, typically called whenever the entity is modified.
     /// </summary>
     public void UpdateModifiedDate()
     {
-        ModifiedDate = DateTime.UtcNow;
+        ModifiedAt = DateTime.UtcNow;
     }
 
     /// <summary>
-    /// Sets the CreatedDate only if it has not been set previously.
+    /// Sets the CreatedAt only if it has not been set previously.
     /// </summary>
     protected void SetCreationDate(DateTime creationDate)
     {
-        if (CreatedDate == default)
+        if (CreatedAt == default)
         {
-            CreatedDate = creationDate;
+            CreatedAt = creationDate;
         }
     }
 }

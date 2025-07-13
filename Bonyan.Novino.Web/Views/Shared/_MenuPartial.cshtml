@@ -1,0 +1,62 @@
+@using Menus
+@using Microsoft.Extensions.DependencyInjection
+@model string
+
+@{
+    var menuLocation = Model ?? "main-navigation";
+    var serviceProvider = Context.RequestServices;
+    var menuItems = serviceProvider.GetMenuItems(menuLocation, User);
+}
+
+@if (menuItems.Any())
+{
+    @foreach (var item in menuItems)
+    {
+        @if (item.HasChildren)
+        {
+            <!-- Dropdown menu item -->
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle text-dark" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    @if (!string.IsNullOrEmpty(item.Icon))
+                    {
+                        <i class="@item.Icon"></i>
+                    }
+                    @item.Title
+                </a>
+                <ul class="dropdown-menu">
+                    @foreach (var child in item.GetVisibleChildren(User))
+                    {
+                        <li>
+                            <a class="dropdown-item" href="@child.Url" target="@(string.IsNullOrEmpty(child.Target) ? null : child.Target)">
+                                @if (!string.IsNullOrEmpty(child.Icon))
+                                {
+                                    <i class="@child.Icon me-2"></i>
+                                }
+                                @child.Title
+                            </a>
+                        </li>
+                        @if (child != item.GetVisibleChildren(User).Last())
+                        {
+                            <li><hr class="dropdown-divider"></li>
+                        }
+                    }
+                </ul>
+            </li>
+        }
+        else
+        {
+            <!-- Regular menu item -->
+            <li class="nav-item">
+                <a class="@(string.IsNullOrEmpty(item.CssClass) ? "nav-link text-dark" : item.CssClass)" 
+                   href="@item.Url"
+                   target="@(string.IsNullOrEmpty(item.Target) ? null : item.Target)">
+                    @if (!string.IsNullOrEmpty(item.Icon))
+                    {
+                        <i class="@item.Icon me-1"></i>
+                    }
+                    @item.Title
+                </a>
+            </li>
+        }
+    }
+} 

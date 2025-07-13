@@ -2,5 +2,5 @@
 
 public interface IBonModificationAuditable
 {
-    DateTime? ModifiedDate { get;set;  }
+    DateTime? ModifiedAt { get;set;  }
 }

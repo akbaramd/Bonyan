@@ -5,14 +5,14 @@ namespace Bonyan.Layer.Application.Dto;
 public abstract class BonFullAuditableAggregateRootDto : BonModificationAuditableAggregateRootDto, IBonFullAuditable
 {
     public bool IsDeleted { get; set; }
-    public DateTime? DeletedDate { get; set; }
+    public DateTime? DeletedAt { get; set; }
 
     public void SoftDelete()
     {
         if (!IsDeleted)
         {
             IsDeleted = true;
-            DeletedDate = DateTime.UtcNow;
+            DeletedAt = DateTime.UtcNow;
         }
     }
 
@@ -21,7 +21,7 @@ public abstract class BonFullAuditableAggregateRootDto : BonModificationAuditabl
         if (IsDeleted)
         {
             IsDeleted = false;
-            DeletedDate = null;
+            DeletedAt = null;
         }
     }
 }
@@ -30,14 +30,14 @@ public abstract class BonFullAuditableAggregateRootDto<TId> : BonModificationAud
     IBonFullAuditable
 {
     public bool IsDeleted { get; set; }
-    public DateTime? DeletedDate { get; set; }
+    public DateTime? DeletedAt { get; set; }
 
     public void SoftDelete()
     {
         if (!IsDeleted)
         {
             IsDeleted = true;
-            DeletedDate = DateTime.UtcNow;
+            DeletedAt = DateTime.UtcNow;
         }
     }
 
@@ -46,7 +46,7 @@ public abstract class BonFullAuditableAggregateRootDto<TId> : BonModificationAud
         if (IsDeleted)
         {
             IsDeleted = false;
-            DeletedDate = null;
+            DeletedAt = null;
         }
     }
 }

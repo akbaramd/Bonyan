@@ -46,9 +46,9 @@ namespace Microsoft.EntityFrameworkCore
             {
                 if (b.Metadata.ClrType.IsAssignableTo(typeof(IBonCreationAuditable)))
                 {
-                    b.Property(nameof(IBonCreationAuditable.CreatedDate))
+                    b.Property(nameof(IBonCreationAuditable.CreatedAt))
                         .IsRequired()
-                        .HasColumnName(nameof(IBonCreationAuditable.CreatedDate));
+                        .HasColumnName(nameof(IBonCreationAuditable.CreatedAt));
                 }
             }
             catch (Exception ex)
@@ -66,9 +66,9 @@ namespace Microsoft.EntityFrameworkCore
             {
                 if (b.Metadata.ClrType.IsAssignableTo(typeof(IBonModificationAuditable)))
                 {
-                    b.Property(nameof(IBonModificationAuditable.ModifiedDate))
+                    b.Property(nameof(IBonModificationAuditable.ModifiedAt))
                         .IsRequired(false)
-                        .HasColumnName(nameof(IBonModificationAuditable.ModifiedDate));
+                        .HasColumnName(nameof(IBonModificationAuditable.ModifiedAt));
                 }
             }
             catch (Exception ex)
@@ -91,9 +91,9 @@ namespace Microsoft.EntityFrameworkCore
                         .HasDefaultValue(false)
                         .HasColumnName(nameof(IBonSoftDeleteAuditable.IsDeleted));
 
-                    b.Property(nameof(IBonSoftDeleteAuditable.DeletedDate))
+                    b.Property(nameof(IBonSoftDeleteAuditable.DeletedAt))
                         .IsRequired(false)
-                        .HasColumnName(nameof(IBonSoftDeleteAuditable.DeletedDate));
+                        .HasColumnName(nameof(IBonSoftDeleteAuditable.DeletedAt));
                 }
             }
             catch (Exception ex)

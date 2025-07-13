@@ -5,9 +5,9 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Bonyan.AspNetCore.Authentication
 {
-    public class BonAuthenticationModule : BonWebModule
+    public class BonAspnetCoreAuthenticationModule : BonWebModule
     {
-        public BonAuthenticationModule()
+        public BonAspnetCoreAuthenticationModule()
         {
             DependOn<BonAspNetCoreModule>();
             
