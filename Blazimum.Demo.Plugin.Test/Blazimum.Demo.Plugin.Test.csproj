@@ -1,0 +1,73 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Blazimum.Demo\Blazimum.Demo.csproj" />
+      <ProjectReference Include="..\Framework\Src\Bonyan.Layer.Domain\Bonyan.Layer.Domain.csproj" />
+      <ProjectReference Include="..\Framework\Src\Bonyan.Messaging\Bonyan.Messaging.csproj" />
+      <ProjectReference Include="..\Framework\Src\Bonyan\Bonyan.csproj" />
+    </ItemGroup>
+
+    <Target Name="GeneratePluginJson" BeforeTargets="Build">
+        <PropertyGroup>
+            <PluginJsonPath>$(MSBuildProjectDirectory)\plugin.json</PluginJsonPath>
+            <PluginJsonContent>{
+  "name": "$(MSBuildProjectName)",
+  "version": "1.0.0",
+  "description": "Auto-generated plugin for $(MSBuildProjectName)",
+  "authors": ["Auto-generated"],
+  "entryPoint": "$(MSBuildProjectName).dll",
+  "additionalFiles": [],
+  "dependencies": {
+    "Bonyan": "&gt;=1.0.0"
+  },
+  "tags": ["plugin", "auto-generated"]
+}</PluginJsonContent>
+        </PropertyGroup>
+        
+        <!-- Generate plugin.json if it doesn't exist -->
+        <Message Text="Checking for plugin.json at: $(PluginJsonPath)" Importance="normal" />
+        <WriteLinesToFile 
+            File="$(PluginJsonPath)" 
+            Lines="$(PluginJsonContent)" 
+            Overwrite="false" 
+            Condition="!Exists('$(PluginJsonPath)')" />
+        <Message Text="Generated plugin.json for $(MSBuildProjectName)" Importance="high" Condition="!Exists('$(PluginJsonPath)')" />
+    </Target>
+
+    <Target Name="CopyToPlugins" AfterTargets="Build">
+        <PropertyGroup>
+            <PluginsFolder>$(MSBuildProjectDirectory)\..\Blazimum.Demo\Plugins\$(MSBuildProjectName)</PluginsFolder>
+            <PluginJsonPath>$(MSBuildProjectDirectory)\plugin.json</PluginJsonPath>
+        </PropertyGroup>
+        
+        <!-- Create the plugins folder if it doesn't exist -->
+        <MakeDir Directories="$(PluginsFolder)" />
+        
+        <!-- Copy plugin.json to plugins folder -->
+        <Copy SourceFiles="$(PluginJsonPath)" DestinationFolder="$(PluginsFolder)" Condition="Exists('$(PluginJsonPath)')" />
+        
+        <!-- Copy all DLL files from output directory to plugins folder -->
+        <ItemGroup>
+            <DllFiles Include="$(OutputPath)*.dll" />
+        </ItemGroup>
+        
+        <Copy SourceFiles="@(DllFiles)" DestinationFolder="$(PluginsFolder)" />
+        
+        <!-- Copy PDB files for debugging (optional) -->
+        <ItemGroup>
+            <PdbFiles Include="$(OutputPath)*.pdb" />
+        </ItemGroup>
+        
+        <Copy SourceFiles="@(PdbFiles)" DestinationFolder="$(PluginsFolder)" ContinueOnError="true" />
+        
+        <Message Text="Plugin files copied to: $(PluginsFolder)" Importance="high" />
+        <Message Text="Plugin manifest copied: $(PluginJsonPath)" Importance="high" Condition="Exists('$(PluginJsonPath)')" />
+    </Target>
+
+</Project>

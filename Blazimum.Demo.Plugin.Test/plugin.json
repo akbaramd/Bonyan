@@ -1,0 +1,12 @@
+{
+  "name": "Blazimum.Demo.Plugin.Test",
+  "version": "1.0.0",
+  "description": "A test plugin for the Blazimum Demo application demonstrating JSON-based plugin loading.",
+  "authors": ["Plugin Developer"],
+  "entryPoint": "Blazimum.Demo.Plugin.Test.dll",
+  "additionalFiles": [],
+  "dependencies": {
+    "Bonyan": ">=1.0.0"
+  },
+  "tags": ["demo", "test", "blazimum"]
+}
