@@ -1,5 +1,6 @@
 using System.Text;
 using Bonyan.AspNetCore.Authentication;
+using Bonyan.AspNetCore.Localization;
 using Bonyan.IdentityManagement.Domain;
 using Bonyan.IdentityManagement.Domain.Roles;
 using Bonyan.IdentityManagement.Domain.Users;
@@ -11,7 +12,9 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+
 
 namespace Bonyan.IdentityManagement;
 
@@ -21,10 +24,19 @@ public class BonIdentityManagementModule<TUser,TRole> : BonModule where TUser : 
     {
         DependOn<BonAspnetCoreAuthenticationModule>();
         DependOn<BonIdentityManagementDomainModule<TUser,TRole>>();
+        DependOn<AbpLocalizationModule>();
     }
 
     public override Task OnPreConfigureAsync(BonConfigurationContext context)
     {
+        // Register localization resource for this module
+        PreConfigure<AbpLocalizationOptions>(options =>
+        {
+            options.Resources
+                .Add<BonIdentityManagementResource>("en")
+                .AddVirtualJson("/Localization/IdentityManagement");
+        });
+
         context.Services.AddSingleton<IBonPermissionManager<TUser,TRole>, BonPermissionManager<TUser,TRole>>();
 
         // Register permission definition providers
@@ -68,3 +80,7 @@ public class BonIdentityManagementModule<TUser,TRole> : BonModule where TUser : 
         return base.OnPostConfigureAsync(context);
     }
 }
+
+// Marker resource class for localization
+[LocalizationResourceName("IdentityManagement")]
+public class BonIdentityManagementResource { }

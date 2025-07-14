@@ -15,7 +15,8 @@ namespace Bonyan.Novino.Web.Menus
         public override IEnumerable<string> SupportedLocations => new[]
         {
             "sidebar-main",
-            "sidebar-system"
+            "sidebar-system",
+            "topbar-user"
         };
 
         public override async Task<IEnumerable<MenuItem>> GetMenuItemsAsync(string location, ClaimsPrincipal? user = null)
@@ -26,6 +27,7 @@ namespace Bonyan.Novino.Web.Menus
             {
                 "sidebar-main" => GetSidebarMainItems(user),
                 "sidebar-system" => GetSidebarSystemItems(user),
+                "topbar-user" => GetTopbarUserItems(user),
                 _ => Enumerable.Empty<MenuItem>()
             };
         }
@@ -120,6 +122,42 @@ namespace Bonyan.Novino.Web.Menus
                     }
                 }
             };
+
+            return items;
+        }
+
+        private IEnumerable<MenuItem> GetTopbarUserItems(ClaimsPrincipal? user)
+        {
+            var items = new List<MenuItem>();
+
+            if (user?.Identity?.IsAuthenticated == true)
+            {
+                items.AddRange(new[]
+                {
+                    new MenuItem("پروفایل", "/Account/Profile", "mdi mdi-account-circle", 1)
+                    {
+                        CssClass = "dropdown-item"
+                    },
+                    new MenuItem("تنظیمات", "/Account/Settings", "mdi mdi-cog-outline", 2)
+                    {
+                        CssClass = "dropdown-item"
+                    },
+                    new MenuItem("خروج", "/Account/Logout", "mdi mdi-logout", 3)
+                    {
+                        CssClass = "dropdown-item text-danger"
+                    }
+                });
+            }
+            else
+            {
+                items.AddRange(new[]
+                {
+                    new MenuItem("ورود", "/Account/Login", "mdi mdi-login", 1)
+                    {
+                        CssClass = "dropdown-item"
+                    }
+                });
+            }
 
             return items;
         }

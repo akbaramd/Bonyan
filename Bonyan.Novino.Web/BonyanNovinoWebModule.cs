@@ -66,6 +66,7 @@ public class BonyanNovinoWebModule : BonWebModule
         // Register sidebar menu locations
         context.Services.AddMenuLocation("sidebar-main", "Sidebar Main", "Main sidebar navigation menu");
         context.Services.AddMenuLocation("sidebar-system", "Sidebar System", "System sidebar navigation menu");
+        context.Services.AddMenuLocation("topbar-user", "Topbar User", "Topbar user dropdown menu");
         
         // Register web menu provider
         context.Services.AddMenuProvider<WebMainMenuProvider>();

@@ -36,7 +36,7 @@ public class TenantConfigurationProvider : ITenantConfigurationProvider
             if (tenant == null)
             {
                 throw new BusinessException(
-                    code: "Volo.BonyanIo.MultiTenancy:010001",
+                    code: "Bonyan.BonyanIo.MultiTenancy:010001",
                     message: "TenantNotFoundMessage",
                     details: "TenantNotFoundDetails"
                 );
@@ -45,7 +45,7 @@ public class TenantConfigurationProvider : ITenantConfigurationProvider
             if (!tenant.IsActive)
             {
                 throw new BusinessException(
-                    code: "Volo.BonyanIo.MultiTenancy:010002",
+                    code: "Bonyan.BonyanIo.MultiTenancy:010002",
                     message:"TenantNotActiveMessage",
                     details: "TenantNotActiveDetails"
                 );

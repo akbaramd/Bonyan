@@ -17,6 +17,9 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddTransient<IBonCachedServiceProviderBase, BonLazyServiceProvider>();
             services.AddTransient<IBonLazyServiceProvider, BonLazyServiceProvider>();
             services.AddSingleton<ICorrelationIdProvider, DefaultCorrelationIdProvider>();
+            services.AddOptions();
+            services.AddLogging();
+            services.AddLocalization();
             
             var context = new BonConfigurationContext(services);
             context.ServiceManager = new BonServiceManager()

@@ -168,11 +168,38 @@ namespace Bonyan.Novino.Web.Controllers
         }
 
         /// <summary>
-        /// Handles user logout
+        /// Displays logout confirmation page
+        /// </summary>
+        [HttpGet]
+        public IActionResult Logout(string returnUrl = null)
+        {
+            // Prevent open redirect attacks
+            if (!string.IsNullOrEmpty(returnUrl) && !Url.IsLocalUrl(returnUrl))
+            {
+                returnUrl = null;
+            }
+
+            // If user is not authenticated, redirect to login
+            if (User.Identity?.IsAuthenticated != true)
+            {
+                return RedirectToAction("Login");
+            }
+
+            var model = new LogoutViewModel
+            {
+                ReturnUrl = returnUrl ?? "/",
+                UserName = User.Identity.Name ?? "کاربر ناشناس"
+            };
+
+            return View(model);
+        }
+
+        /// <summary>
+        /// Handles user logout confirmation
         /// </summary>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Logout()
+        public async Task<IActionResult> Logout(LogoutViewModel model)
         {
             try
             {
