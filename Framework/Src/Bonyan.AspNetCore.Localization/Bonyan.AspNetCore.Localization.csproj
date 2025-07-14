@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <RootNamespace/>
+        <PackageId>Bonyan.AspNetCore.Localization</PackageId>
+    </PropertyGroup>
+    <Import Project="..\..\..\framework-package.props"/>
+    <ItemGroup>
+        <ProjectReference Include="..\Bonyan.AspNetCore.Localization.Abstractions\Bonyan.AspNetCore.Localization.Abstractions.csproj" />
+        <ProjectReference Include="..\Bonyan.VirtualFileSystem\Bonyan.VirtualFileSystem.csproj" />
+        <ProjectReference Include="..\Bonyan\Bonyan.csproj"/>
+        <ProjectReference Include="..\Bonyan.AspNetCore\Bonyan.AspNetCore.csproj"/>
+        <ProjectReference Include="..\Bonyan.Localization\Bonyan.Localization.csproj"/>
+    </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Microsoft.Extensions.Localization" Version="8.0.18"/>
+        <PackageReference Include="Microsoft.AspNetCore.Localization" Version="2.1.1"/>
+    </ItemGroup>
+    <ItemGroup>
+      <Folder Include="Bonyan\Localization\" />
+    </ItemGroup>
+</Project> 
