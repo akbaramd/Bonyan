@@ -1,0 +1,7 @@
+{
+  "culture": "fi",
+  "texts": {
+    "DisplayName:Bon.Localization.DefaultLanguage": "Oletuskieli",
+    "Description:Bon.Localization.DefaultLanguage": "Sovelluksen oletuskieli."
+  }
+}

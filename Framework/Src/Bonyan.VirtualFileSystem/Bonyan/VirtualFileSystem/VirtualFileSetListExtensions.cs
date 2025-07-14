@@ -50,7 +50,7 @@ public static class VirtualFileSetListExtensions
 
         if (info == null)
         {
-            return new AbpEmbeddedFileProvider(assembly, baseNamespace);
+            return new BonEmbeddedFileProvider(assembly, baseNamespace);
         }
 
         if (baseFolder == null)

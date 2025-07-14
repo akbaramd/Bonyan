@@ -9,7 +9,7 @@
     </PropertyGroup>
     <Import Project="..\..\..\framework-package.props"/>
     <ItemGroup>
-        <ProjectReference Include="..\Bonyan.AspNetCore.Localization.Abstractions\Bonyan.AspNetCore.Localization.Abstractions.csproj" />
+        <ProjectReference Include="..\Bonyan.Localization.Abstractions\Bonyan.Localization.Abstractions.csproj" />
         <ProjectReference Include="..\Bonyan.AspNetCore\Bonyan.AspNetCore.csproj"/>
     </ItemGroup>
 </Project>

@@ -1,7 +1,6 @@
-﻿using System.IO;
-using System.Text;
+﻿using System.Text;
 
-namespace Volo.Abp.Internal;
+namespace Bonyan.Internal;
 
 public static class Utf8Helper
 {

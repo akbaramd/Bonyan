@@ -5,10 +5,10 @@ namespace Bonyan.AspNetCore.Tracing;
 
 public class BonCorrelationIdMiddleware : IMiddleware
 {
-    private readonly AbpCorrelationIdOptions _options;
+    private readonly BonCorrelationIdOptions _options;
     private readonly ICorrelationIdProvider _correlationIdProvider;
 
-    public BonCorrelationIdMiddleware(IOptions<AbpCorrelationIdOptions> options,
+    public BonCorrelationIdMiddleware(IOptions<BonCorrelationIdOptions> options,
         ICorrelationIdProvider correlationIdProvider)
     {
         _options = options.Value;
@@ -39,7 +39,7 @@ public class BonCorrelationIdMiddleware : IMiddleware
 
     protected virtual void CheckAndSetCorrelationIdOnResponse(
         HttpContext httpContext,
-        AbpCorrelationIdOptions options,
+        BonCorrelationIdOptions options,
         string? correlationId)
     {
         httpContext.Response.OnStarting(() =>

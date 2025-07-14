@@ -1,0 +1,7 @@
+{
+  "culture": "hu",
+  "texts": {
+    "DisplayName:Bon.Localization.DefaultLanguage": "Alapértelmezett nyelv",
+    "Description:Bon.Localization.DefaultLanguage": "Az alkalmazás alapértelmezett nyelve."
+  }
+}

@@ -151,19 +151,17 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.AspNetCore.Authentic
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.AspNetCore.Authentication.Cookie", "Framework\Src\Bonyan.AspNetCore.Authentication.Cookie\Bonyan.AspNetCore.Authentication.Cookie.csproj", "{895FC7A6-C242-4526-A521-18471BDEA921}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.Localization", "Framework\Src\Bonyan.Localization\Bonyan.Localization.csproj", "{00000000-0000-0000-0000-000000000000}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Bonyan.Ui.Novino", "Bonyan.Ui.Novino", "{4087532A-E447-4723-A8C9-51423D030E4D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.Module.Ui.Novino.Core", "Modules\Bonyan.Ui.Novino\src\Bonyan.Module.Ui.Novino.Core\Bonyan.Module.Ui.Novino.Core.csproj", "{7CB52F87-2787-4FE1-B0CA-8D10DAF5075F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.Novino.Web", "Bonyan.Novino.Web\Bonyan.Novino.Web.csproj", "{0DCDCB06-ADC2-48B3-B9D5-A6ADB6B55A6A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.AspNetCore.Localization.Abstractions", "Framework\Src\Bonyan.AspNetCore.Localization.Abstractions\Bonyan.AspNetCore.Localization.Abstractions.csproj", "{349A1D5B-5F6F-47E2-B30F-E4ABE2CD9ADB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.Localization.Abstractions", "Framework\Src\Bonyan.Localization.Abstractions\Bonyan.Localization.Abstractions.csproj", "{349A1D5B-5F6F-47E2-B30F-E4ABE2CD9ADB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.VirtualFileSystem", "Framework\Src\Bonyan.VirtualFileSystem\Bonyan.VirtualFileSystem.csproj", "{248ACF6A-4E6F-42A6-AC10-045A1BAD1D59}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.AspNetCore.Localization", "Framework\Src\Bonyan.AspNetCore.Localization\Bonyan.AspNetCore.Localization.csproj", "{4456F691-CDFF-467C-A31B-C939D0FAD657}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.Localization", "Framework\Src\Bonyan.Localization\Bonyan.Localization.csproj", "{4456F691-CDFF-467C-A31B-C939D0FAD657}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

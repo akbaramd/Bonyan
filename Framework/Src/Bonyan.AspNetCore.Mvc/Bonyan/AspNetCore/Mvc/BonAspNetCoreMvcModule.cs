@@ -1,6 +1,6 @@
-﻿using Bonyan.Modularity;
+﻿using Bonyan.AspNetCore.Mvc.Localization;
+using Bonyan.Modularity;
 using Microsoft.Extensions.Localization;
-using Volo.Abp.AspNetCore.Mvc.Localization;
 
 namespace Bonyan.AspNetCore.Mvc;
 

@@ -1,0 +1,7 @@
+{
+  "culture": "it",
+  "texts": {
+    "DisplayName:Bon.Localization.DefaultLanguage": "Lingua di default",
+    "Description:Bon.Localization.DefaultLanguage": "La lingua predefinita dell'applicazione."
+  }
+}

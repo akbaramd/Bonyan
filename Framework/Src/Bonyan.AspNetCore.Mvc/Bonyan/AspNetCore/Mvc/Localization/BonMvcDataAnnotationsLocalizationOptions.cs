@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reflection;
+﻿using System.Reflection;
 using JetBrains.Annotations;
 
-namespace Volo.Abp.AspNetCore.Mvc.Localization;
+namespace Bonyan.AspNetCore.Mvc.Localization;
 
 public class BonMvcDataAnnotationsLocalizationOptions
 {

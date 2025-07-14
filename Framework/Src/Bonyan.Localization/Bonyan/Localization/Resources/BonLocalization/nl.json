@@ -1,0 +1,7 @@
+{
+  "culture": "nl",
+  "texts": {
+    "DisplayName:Bon.Localization.DefaultLanguage": "Standaard taal",
+    "Description:Bon.Localization.DefaultLanguage": "De standaardtaal van de applicatie."
+  }
+}

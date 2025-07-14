@@ -1,7 +1,0 @@
-{
-  "culture": "pl-PL",
-  "texts": {
-    "DisplayName:Abp.Localization.DefaultLanguage": "Domyślny język",
-    "Description:Abp.Localization.DefaultLanguage": "Domyślny język aplikacji."
-  }
-}

@@ -1,7 +1,0 @@
-{
-  "culture": "el",
-  "texts": {
-    "DisplayName:Abp.Localization.DefaultLanguage": "Προεπιλεγμένη γλώσσα",
-    "Description:Abp.Localization.DefaultLanguage": "Η προεπιλεγμένη γλώσσα της εφαρμογής."
-  }
-}

@@ -1,107 +1,217 @@
-# Bonyan.Localization
+# Bonyan.AspNetCore.Localization
 
-Core localization module for the Bonyan framework that provides contracts, options, and extensions that all modules can use to configure their localization needs.
+ASP.NET Core specific localization module for the Bonyan framework that provides DI registration, service collection configuration, and ASP.NET Core integration for localization features.
 
-## Purpose
+## Architecture
 
-This module serves as the foundation for localization in the Bonyan framework. It provides:
+This module depends on `Bonyan.Localization` (core module) and provides the actual implementation for:
+- Service registration in DI container
+- ASP.NET Core integration
+- Request localization middleware
+- Resource file handling
 
-- **Contracts**: Interfaces that define localization operations
-- **Options**: Configuration classes for localization settings
-- **Extensions**: Fluent API for easy configuration
-- **Module Support**: Infrastructure for modules to register their localization needs
+## Features
 
-## Key Components
+- **Easy Configuration**: Simple configuration through options pattern
+- **Multiple Culture Support**: Support for multiple cultures with easy configuration
+- **Resource Management**: Centralized resource management
+- **Extension Methods**: Fluent API for configuration
+- **Service Integration**: Seamless integration with Bonyan framework
+- **Request Localization**: Automatic request culture detection
+- **View Localization**: Support for view localization
+- **Data Annotations Localization**: Support for data annotations localization
 
-### BonLocalizationOptions
-Main configuration class that allows modules to:
-- Register module-specific localization info
-- Configure resource paths
-- Define resource files and keys
-- Add custom configurators
+## Installation
 
-### ModuleLocalizationInfo
-Allows individual modules to define:
-- Their specific resource paths
-- Resource file mappings
-- Resource keys
+This module depends on `Bonyan.Localization` and should be added to your ASP.NET Core application. The core localization module (`Bonyan.Localization`) is used by all modules that need localization support.
 
-### IBonLocalizationManager
-Core interface for localization operations:
-- Get localized strings
-- Culture-specific operations
-- Culture management
+## Configuration
 
-### IBonLocalizationService
-Simplified interface for common localization tasks:
-- Short `L()` method for getting localized strings
-- Culture management
-
-## Usage in Modules
-
-### Basic Module Configuration
+### Basic Configuration
 
 ```csharp
-public class MyModule : BonModule
+// In your module configuration
+public override Task OnConfigureAsync(BonConfigurationContext context)
 {
-    public override Task OnPreConfigureAsync(BonConfigurationContext context)
+    context.Services.Configure<BonLocalizationOptions>(options =>
     {
-        PreConfigure<BonLocalizationOptions>(options =>
-        {
-            // Add module-specific localization
-            options.AddModuleLocalization("MyModule", moduleInfo =>
-            {
-                moduleInfo.SetResourcePath("MyModule/Resources")
-                         .AddCulture("en-US")
-                         .AddCulture("fa-IR")
-                         .AddResourceFile("Shared", "SharedResource")
-                         .AddResourceKey("WelcomeMessage");
-            });
-        });
-        
-        return base.OnPreConfigureAsync(context);
-    }
+        options.SupportedCultures = new[] { "en-US", "fa-IR", "ar-SA" };
+        options.SupportedUICultures = new[] { "en-US", "fa-IR", "ar-SA" };
+        options.DefaultCulture = "fa-IR";
+        options.DefaultUICulture = "fa-IR";
+        options.ResourcesPath = "Resources";
+    });
+    
+    return base.OnConfigureAsync(context);
 }
 ```
 
 ### Using Extension Methods
 
 ```csharp
-PreConfigure<BonLocalizationOptions>(options =>
+// In Program.cs or Startup.cs
+services.AddBonLocalization(options =>
 {
     options.AddSupportedCulture("en-US")
            .AddSupportedCulture("fa-IR")
+           .AddSupportedCulture("ar-SA")
            .SetDefaultCulture("fa-IR")
-           .AddModuleLocalization("MyModule", moduleInfo =>
-           {
-               moduleInfo.SetResourcePath("MyModule/Resources")
-                        .AddCulture("en-US")
-                        .AddCulture("fa-IR");
-           });
+           .SetResourcesPath("Localization");
 });
 ```
 
-## Module Integration
+### Application Configuration
 
-Modules can use this core module to:
+```csharp
+// In Program.cs or Startup.cs
+app.UseBonLocalization();
+```
 
-1. **Register their localization needs** - Define what cultures they support
-2. **Specify resource paths** - Tell where their resource files are located
-3. **Define resource keys** - Document what keys they use
-4. **Configure cultures** - Set which cultures they support
+## Usage
 
-The actual localization implementation (DI registration, ASP.NET Core integration) is handled by `Bonyan.AspNetCore.Localization` module.
+### In Controllers
+
+```csharp
+public class HomeController : Controller
+{
+    private readonly IBonLocalizationService _localizationService;
+    
+    public HomeController(IBonLocalizationService localizationService)
+    {
+        _localizationService = localizationService;
+    }
+    
+    public IActionResult Index()
+    {
+        var welcomeMessage = _localizationService.L("WelcomeMessage");
+        var greetingMessage = _localizationService.L("GreetingMessage", "Hello {0}!", User.Identity.Name);
+        
+        return View();
+    }
+}
+```
+
+### In Views
+
+```csharp
+@inject IBonLocalizationService LocalizationService
+
+<h1>@LocalizationService.L("WelcomeTitle")</h1>
+<p>@LocalizationService.L("WelcomeMessage")</p>
+```
+
+### Using String Localizer
+
+```csharp
+public class MyService
+{
+    private readonly IStringLocalizer<MyService> _localizer;
+    
+    public MyService(IStringLocalizer<MyService> localizer)
+    {
+        _localizer = localizer;
+    }
+    
+    public string GetMessage(string key)
+    {
+        return _localizer[key];
+    }
+}
+```
+
+## Resource Files
+
+Create resource files in your `Resources` folder (or custom path):
+
+### SharedResource.resx (Default)
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="WelcomeMessage" xml:space="preserve">
+    <value>Welcome to our application!</value>
+  </data>
+  <data name="GreetingMessage" xml:space="preserve">
+    <value>Hello {0}!</value>
+  </data>
+</root>
+```
+
+### SharedResource.fa-IR.resx (Persian)
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="WelcomeMessage" xml:space="preserve">
+    <value>به برنامه ما خوش آمدید!</value>
+  </data>
+  <data name="GreetingMessage" xml:space="preserve">
+    <value>سلام {0}!</value>
+  </data>
+</root>
+```
+
+## Advanced Configuration
+
+### Custom Configurators
+
+```csharp
+services.AddBonLocalization(options =>
+{
+    options.AddConfigurator(services =>
+    {
+        // Add custom localization services
+        services.AddSingleton<ICustomLocalizationProvider, CustomLocalizationProvider>();
+    });
+});
+```
+
+### Disabling Features
+
+```csharp
+services.AddBonLocalization(options =>
+{
+    options.DisableRequestLocalization();
+    options.DisableDataAnnotationsLocalization();
+});
+```
+
+## Services
+
+### IBonLocalizationService
+
+Main service for localization operations:
+
+- `L(string name)` - Get localized string
+- `L(string name, params object[] arguments)` - Get localized string with parameters
+- `L(string name, string defaultValue)` - Get localized string with default value
+- `GetLocalizer<T>()` - Get string localizer for specific type
+- `GetCurrentCulture()` - Get current culture
+- `SetCulture(string culture)` - Set current culture
+
+### IBonLocalizationManager
+
+Lower-level localization management:
+
+- `GetString(string name)` - Get localized string
+- `GetLocalizer<T>()` - Get string localizer
+- `AddLocalizationProvider<T>()` - Add custom localization provider
+
+## Options
+
+### BonLocalizationOptions
+
+- `SupportedCultures` - Array of supported cultures
+- `SupportedUICultures` - Array of supported UI cultures
+- `DefaultCulture` - Default culture
+- `DefaultUICulture` - Default UI culture
+- `ResourcesPath` - Path to resource files
+- `EnableRequestLocalization` - Enable request localization
+- `EnableViewLocalization` - Enable view localization
+- `EnableDataAnnotationsLocalization` - Enable data annotations localization
 
 ## Dependencies
 
+- Microsoft.Extensions.Localization
+- Microsoft.AspNetCore.Localization
 - Bonyan (Core framework)
-- Bonyan.Collections (For TypeList support)
-
-## Note
-
-This module does NOT handle:
-- Service registration (handled by Bonyan.AspNetCore.Localization)
-- ASP.NET Core integration (handled by Bonyan.AspNetCore.Localization)
-- Resource file loading (handled by ASP.NET Core)
-
-It only provides the contracts and configuration infrastructure that all modules can use. 
+- Bonyan.AspNetCore (ASP.NET Core integration)
+- Bonyan.Localization (Core localization module) 

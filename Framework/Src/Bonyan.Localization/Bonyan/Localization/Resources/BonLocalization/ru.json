@@ -1,0 +1,7 @@
+{
+  "culture": "ru",
+  "texts": {
+    "DisplayName:Bon.Localization.DefaultLanguage": "Язык по умолчанию",
+    "Description:Bon.Localization.DefaultLanguage": "Язык приложения по умолчанию."
+  }
+}

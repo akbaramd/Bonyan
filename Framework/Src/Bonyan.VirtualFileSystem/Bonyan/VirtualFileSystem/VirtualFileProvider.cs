@@ -7,10 +7,10 @@ namespace Bonyan.VirtualFileSystem;
 public class VirtualFileProvider : IVirtualFileProvider
 {
     private readonly IFileProvider _hybridFileProvider;
-    private readonly AbpVirtualFileSystemOptions _options;
+    private readonly BonVirtualFileSystemOptions _options;
 
     public VirtualFileProvider(
-        IOptions<AbpVirtualFileSystemOptions> options,
+        IOptions<BonVirtualFileSystemOptions> options,
         IDynamicFileProvider dynamicFileProvider)
     {
         _options = options.Value;

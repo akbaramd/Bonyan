@@ -1,11 +1,11 @@
 using System.Text;
 using Bonyan.AspNetCore.Authentication;
-using Bonyan.AspNetCore.Localization;
 using Bonyan.IdentityManagement.Domain;
 using Bonyan.IdentityManagement.Domain.Roles;
 using Bonyan.IdentityManagement.Domain.Users;
 using Bonyan.IdentityManagement.Options;
 using Bonyan.IdentityManagement.Permissions;
+using Bonyan.Localization;
 using Bonyan.Modularity;
 using Bonyan.Modularity.Abstractions;
 using Microsoft.AspNetCore.Authentication;
@@ -24,13 +24,13 @@ public class BonIdentityManagementModule<TUser,TRole> : BonModule where TUser : 
     {
         DependOn<BonAspnetCoreAuthenticationModule>();
         DependOn<BonIdentityManagementDomainModule<TUser,TRole>>();
-        DependOn<AbpLocalizationModule>();
+        DependOn<BonLocalizationModule>();
     }
 
     public override Task OnPreConfigureAsync(BonConfigurationContext context)
     {
         // Register localization resource for this module
-        PreConfigure<AbpLocalizationOptions>(options =>
+        PreConfigure<BonLocalizationOptions>(options =>
         {
             options.Resources
                 .Add<BonIdentityManagementResource>("en")
