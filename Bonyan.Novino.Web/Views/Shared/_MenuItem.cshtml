@@ -1,0 +1,42 @@
+@model MenuItem
+
+@{
+    var hasChildren = Model.Children?.Any() == true;
+    var menuId = $"sidebar{Model.Title.Replace(" ", "")}";
+    var isActive = Context.Request.Path.StartsWithSegments(Model.Url ?? "");
+}
+
+<li class="nav-item">
+    @if (hasChildren)
+    {
+        <a class="nav-link menu-link @(isActive ? "active" : "")" 
+           href="#@menuId" 
+           data-bs-toggle="collapse" 
+           role="button"
+           aria-expanded="@(isActive ? "true" : "false")" 
+           aria-controls="@menuId">
+            <i class="@Model.Icon"></i> 
+            <span>@Model.Title</span>
+        </a>
+        <div class="collapse menu-dropdown @(isActive ? "show" : "")" id="@menuId">
+            <ul class="nav nav-sm flex-column">
+                @foreach (var child in Model.Children.OrderBy(x => x.Order))
+                {
+                    <li class="nav-item">
+                        <a href="@child.Url" class="nav-link @(Context.Request.Path.StartsWithSegments(child.Url ?? "") ? "active" : "")">
+                            <i class="@child.Icon"></i> 
+                            <span>@child.Title</span>
+                        </a>
+                    </li>
+                }
+            </ul>
+        </div>
+    }
+    else
+    {
+        <a href="@Model.Url" class="nav-link @(isActive ? "active" : "")">
+            <i class="@Model.Icon"></i> 
+            <span>@Model.Title</span>
+        </a>
+    }
+</li> 

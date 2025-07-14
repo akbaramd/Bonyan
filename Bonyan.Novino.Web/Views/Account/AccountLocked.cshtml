@@ -1,0 +1,313 @@
+@{
+    ViewData["Title"] = "حساب کاربری قفل شده";
+    Layout = null;
+    
+    // Security headers
+    Context.Response.Headers.Add("X-Frame-Options", "DENY");
+    Context.Response.Headers.Add("X-Content-Type-Options", "nosniff");
+    Context.Response.Headers.Add("X-XSS-Protection", "1; mode=block");
+    Context.Response.Headers.Add("Referrer-Policy", "strict-origin-when-cross-origin");
+}
+
+<!DOCTYPE html>
+<html lang="fa" dir="rtl" data-bs-theme="light">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="description" content="حساب کاربری قفل شده - پنل مدیریت بنیان"/>
+    <meta name="robots" content="noindex, nofollow"/>
+    <title>@ViewData["Title"] - پنل مدیریت بنیان</title>
+    
+    <!-- CSS Assets in Head -->
+    <css-assets location="Head"></css-assets>
+    <js-assets location="Head"></js-assets>
+    
+    <style>
+        :root {
+            --primary-color: #4f46e5;
+            --primary-dark: #3730a3;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --text-primary: #1f2937;
+            --text-secondary: #6b7280;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f9fafb;
+            --border-color: #d1d5db;
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        [data-bs-theme="dark"] {
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --bg-primary: #1e293b;
+            --bg-secondary: #334155;
+            --border-color: #475569;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Vazirmatn', 'Tahoma', 'Arial', sans-serif;
+            margin: 0;
+            padding: 1rem;
+            line-height: 1.6;
+            color: var(--text-primary);
+            direction: rtl;
+        }
+        
+        .locked-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 1rem;
+            box-shadow: var(--shadow-xl);
+            padding: 2.5rem;
+            width: 100%;
+            max-width: 500px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            text-align: center;
+        }
+
+        [data-bs-theme="dark"] .locked-container {
+            background: rgba(30, 41, 59, 0.95);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .locked-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--warning-color) 0%, #d97706 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            color: white;
+            font-size: 2rem;
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .locked-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            letter-spacing: -0.025em;
+        }
+        
+        .locked-message {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .locked-details {
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.2);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-bottom: 2rem;
+            color: var(--warning-color);
+            font-size: 0.875rem;
+        }
+
+        .locked-details h4 {
+            margin: 0 0 0.5rem 0;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .locked-details p {
+            margin: 0;
+            opacity: 0.9;
+        }
+        
+        .btn-back {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+            border: none;
+            border-radius: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            color: white;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.2s ease;
+            margin-left: 0.75rem;
+        }
+        
+        .btn-back:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 10px 20px rgba(79, 70, 229, 0.3);
+            color: white;
+        }
+        
+        .btn-contact {
+            background: linear-gradient(135deg, var(--warning-color) 0%, #d97706 100%);
+            border: none;
+            border-radius: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            color: white;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.2s ease;
+        }
+        
+        .btn-contact:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 10px 20px rgba(245, 158, 11, 0.3);
+            color: white;
+        }
+        
+        .locked-footer {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            font-size: 0.75rem;
+        }
+        
+        @@media (max-width: 576px) {
+            .locked-container {
+                margin: 0;
+                padding: 2rem;
+                border-radius: 0;
+                min-height: 100vh;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+            }
+
+            body {
+                padding: 0;
+            }
+            
+            .btn-back, .btn-contact {
+                display: block;
+                margin: 0.5rem 0;
+                margin-left: 0;
+            }
+        }
+
+        /* Accessibility improvements */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        /* Focus indicators */
+        .btn-back:focus,
+        .btn-contact:focus {
+            outline: 2px solid var(--primary-color);
+            outline-offset: 2px;
+        }
+
+        /* High contrast mode support */
+        @@media (prefers-contrast: high) {
+            .locked-container {
+                border: 2px solid var(--text-primary);
+            }
+        }
+
+        /* Reduced motion support */
+        @@media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="locked-container">
+        <div class="locked-icon" role="img" aria-label="آیکون حساب کاربری قفل شده">
+            <i class="fas fa-lock"></i>
+        </div>
+        
+        <h1 class="locked-title">حساب کاربری موقتاً قفل شده</h1>
+        
+        <p class="locked-message">
+            حساب کاربری شما به دلیل تلاش‌های مکرر ناموفق برای ورود، موقتاً قفل شده است. 
+            این یک اقدام امنیتی برای محافظت از حساب کاربری شما در برابر دسترسی غیرمجاز است.
+        </p>
+
+        <div class="locked-details">
+            <h4><i class="fas fa-info-circle ms-2"></i>چه اتفاقی افتاد؟</h4>
+            <p>
+                پس از ۵ تلاش ناموفق متوالی برای ورود، حساب کاربری شما به مدت ۱۵ دقیقه به طور خودکار قفل می‌شود. 
+                این کار به جلوگیری از حملات brute force کمک کرده و حساب کاربری شما را امن نگه می‌دارد.
+            </p>
+        </div>
+        
+        <div class="d-flex justify-content-center flex-wrap">
+            <a href="javascript:history.back()" class="btn-back">
+                <i class="fas fa-arrow-right ms-2"></i>
+                بازگشت
+            </a>
+            <a href="mailto:support@bonyan.com?subject=حساب کاربری قفل شده - درخواست پشتیبانی" class="btn-contact">
+                <i class="fas fa-envelope ms-2"></i>
+                تماس با پشتیبانی
+            </a>
+        </div>
+
+        <div class="locked-footer">
+            <p class="mb-0">&copy; @DateTime.Now.Year پنل مدیریت بنیان. تمامی حقوق محفوظ است.</p>
+            <p class="mb-0 mt-1">برای دریافت کمک فوری، با تیم پشتیبانی ما تماس بگیرید</p>
+        </div>
+    </div>
+    
+    <!-- JavaScript Assets in Footer -->
+    <js-assets location="Footer"></js-assets>
+    
+    <script>
+        (function() {
+            'use strict';
+
+            // Theme management
+            function initializeTheme() {
+                const savedTheme = localStorage.getItem('admin-theme') || 'light';
+                document.documentElement.setAttribute('data-bs-theme', savedTheme);
+            }
+
+            // Security features
+            function initializeSecurity() {
+                // Prevent form resubmission
+                if (window.history.replaceState) {
+                    window.history.replaceState(null, null, window.location.href);
+                }
+
+                // Disable right-click context menu
+                document.addEventListener('contextmenu', function(e) {
+                    e.preventDefault();
+                });
+            }
+
+            // Initialize everything when DOM is ready
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initialize);
+            } else {
+                initialize();
+            }
+
+            function initialize() {
+                initializeTheme();
+                initializeSecurity();
+            }
+
+        })();
+    </script>
+</body>
+</html> 
