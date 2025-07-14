@@ -8,21 +8,21 @@ namespace Bonyan.IdentityManagement.Domain.Users.DomainEvents;
 public class BonIdentityUserTokenUpdatedDomainEvent : IBonDomainEvent
 {
     /// <summary>
-    /// Gets the user associated with the token.
+    /// Gets the user associated with the updated token.
     /// </summary>
-    public BonIdentityUser User { get; }
+    public readonly object User;
 
     /// <summary>
-    /// Gets the updated token.
+    /// Gets the token that was updated.
     /// </summary>
-    public BonIdentityUserToken Token { get; }
+    public readonly object Token;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="BonIdentityUserTokenUpdatedDomainEvent"/> class.
     /// </summary>
     /// <param name="user">The user associated with the updated token.</param>
-    /// <param name="token">The updated token.</param>
-    public BonIdentityUserTokenUpdatedDomainEvent(BonIdentityUser user, BonIdentityUserToken token)
+    /// <param name="token">The token that was updated.</param>
+    public BonIdentityUserTokenUpdatedDomainEvent(object user, object token)
     {
         User = user ?? throw new ArgumentNullException(nameof(user));
         Token = token ?? throw new ArgumentNullException(nameof(token));

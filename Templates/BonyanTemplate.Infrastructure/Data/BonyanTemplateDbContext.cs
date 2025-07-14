@@ -13,7 +13,7 @@ using Microsoft.EntityFrameworkCore;
 namespace BonyanTemplate.Infrastructure.Data;
 
 public class BonyanTemplateDbContext : BonDbContext<BonyanTemplateDbContext>,
-    IBonTenantDbContext,IBonIdentityManagementDbContext
+    IBonTenantDbContext,IBonIdentityManagementDbContext<User,Role>
 {
     public BonyanTemplateDbContext(DbContextOptions<BonyanTemplateDbContext> options) :
         base(options)
@@ -33,16 +33,18 @@ public class BonyanTemplateDbContext : BonDbContext<BonyanTemplateDbContext>,
         modelBuilder.Entity<Book>().HasOne(x => x.Author).WithMany().HasForeignKey(x => x.AuthorId);
         modelBuilder.Entity<Authors>().ConfigureByConvention();
         modelBuilder.ConfigureTenantManagementByConvention();
-        modelBuilder.ConfigureIdentityManagement<User>();
+        modelBuilder.ConfigureIdentityManagement<User,Role>();
     }
 
     public DbSet<Book> Books { get; set; }
     public DbSet<Authors> Authors { get; set; }
     public DbSet<BonTenant> Tenants { get; set; }
-    public DbSet<BonIdentityUser> Users { get; set; }
-    public DbSet<BonIdentityUserToken> UserTokens { get; set; }
-    public DbSet<BonIdentityRole> Roles { get; set; }
-    public DbSet<BonIdentityUserRoles> UserRoles { get; set; }
-    public DbSet<BonIdentityUserClaims> UserClaims { get; set; }
-    public DbSet<BonIdentityRoleClaims> RoleClaims { get; set; }
+
+
+    public DbSet<User> Users { get; set; }
+    public DbSet<Role> Roles { get; set; }
+    public DbSet<BonIdentityUserToken<User, Role>> UserTokens { get; set; }
+    public DbSet<BonIdentityUserRoles<User, Role>> UserRoles { get; set; }
+    public DbSet<BonIdentityUserClaims<User, Role>> UserClaims { get; set; }
+    public DbSet<BonIdentityRoleClaims<Role>> RoleClaims { get; set; }
 }

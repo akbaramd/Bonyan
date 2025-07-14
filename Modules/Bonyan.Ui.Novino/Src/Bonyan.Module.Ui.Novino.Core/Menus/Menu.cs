@@ -43,6 +43,16 @@ namespace Menus
         public string? ProviderId { get; set; }
 
         /// <summary>
+        /// Gets or sets the required permissions (authorities) to view this menu
+        /// </summary>
+        public List<string> Authority { get; set; } = new();
+
+        /// <summary>
+        /// Gets or sets whether authentication is required to view this menu
+        /// </summary>
+        public bool RequiresAuthentication { get; set; } = false;
+
+        /// <summary>
         /// Gets the sorted menu items by order
         /// </summary>
         public IEnumerable<MenuItem> SortedItems => Items.OrderBy(x => x.Order);
@@ -147,6 +157,11 @@ namespace Menus
         public List<string> RequiredRoles { get; set; } = new();
 
         /// <summary>
+        /// Gets or sets the required permissions (authorities) to view this menu item
+        /// </summary>
+        public List<string> Authority { get; set; } = new();
+
+        /// <summary>
         /// Gets or sets whether authentication is required to view this menu item
         /// </summary>
         public bool RequiresAuthentication { get; set; } = false;
@@ -247,6 +262,19 @@ namespace Menus
                     .ToList();
 
                 if (!RequiredPermissions.Any(permission => userPermissions.Contains(permission)))
+                    return false;
+            }
+
+            // Check authority requirements (permissions)
+            if (Authority.Any() && user != null)
+            {
+                // Check if user has required authorities/permissions
+                var userPermissions = user.Claims
+                    .Where(c => c.Type == "permission")
+                    .Select(c => c.Value)
+                    .ToList();
+
+                if (!Authority.Any(authority => userPermissions.Contains(authority)))
                     return false;
             }
 

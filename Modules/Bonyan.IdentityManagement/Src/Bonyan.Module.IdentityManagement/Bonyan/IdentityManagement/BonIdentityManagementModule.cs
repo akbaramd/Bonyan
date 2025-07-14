@@ -1,6 +1,7 @@
 using System.Text;
 using Bonyan.AspNetCore.Authentication;
 using Bonyan.IdentityManagement.Domain;
+using Bonyan.IdentityManagement.Domain.Roles;
 using Bonyan.IdentityManagement.Domain.Users;
 using Bonyan.IdentityManagement.Options;
 using Bonyan.IdentityManagement.Permissions;
@@ -14,27 +15,27 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace Bonyan.IdentityManagement;
 
-public class BonIdentityManagementModule<TUser> : BonModule where TUser : BonIdentityUser
+public class BonIdentityManagementModule<TUser,TRole> : BonModule where TUser : BonIdentityUser<TUser,TRole> where TRole : BonIdentityRole<TRole>
 {
     public BonIdentityManagementModule()
     {
         DependOn<BonAspnetCoreAuthenticationModule>();
-        DependOn<BonIdentityManagementDomainModule<TUser>>();
+        DependOn<BonIdentityManagementDomainModule<TUser,TRole>>();
     }
 
     public override Task OnPreConfigureAsync(BonConfigurationContext context)
     {
-        context.Services.AddSingleton<IBonPermissionManager, BonPermissionManager>();
+        context.Services.AddSingleton<IBonPermissionManager<TUser,TRole>, BonPermissionManager<TUser,TRole>>();
 
         // Register permission definition providers
         context.Services.AddTransient<IBonPermissionDefinitionProvider, BonIdentityManagementPermissionDefinitionProvider>();
         
         // Register dynamic policy provider
-        context.Services.AddSingleton<IAuthorizationPolicyProvider, BonPermissionPolicyProvider>();
+        context.Services.AddSingleton<IAuthorizationPolicyProvider, BonPermissionPolicyProvider<TUser,TRole>>();
         
         PreConfigure<AuthorizationOptions>(c =>
         {
-            var permissionAccessor = context.Services.GetRequiredService<IBonPermissionManager>();
+            var permissionAccessor = context.Services.GetRequiredService<IBonPermissionManager<TUser,TRole>>();
 
             foreach (var permission in permissionAccessor.GetAllPermissions())
             {
@@ -50,11 +51,11 @@ public class BonIdentityManagementModule<TUser> : BonModule where TUser : BonIde
     public override Task OnConfigureAsync(BonConfigurationContext context)
     {
         // Register permission-based authorization handler
-        context.Services.AddSingleton<IAuthorizationHandler, BonIdentityPermissionHandler>();
+        context.Services.AddSingleton<IAuthorizationHandler, BonIdentityPermissionHandler<TUser,TRole>>();
         
         // Register the ClaimProviderManager
-        context.Services.AddTransient<IBonIdentityClaimProvider<TUser>, DefaultClaimProvider<TUser>>();
-        context.Services.AddTransient<IBonIdentityClaimProviderManager<TUser>, ClaimProviderManager<TUser>>();
+        context.Services.AddTransient<IBonIdentityClaimProvider<TUser,TRole>, DefaultClaimProvider<TUser,TRole>>();
+        context.Services.AddTransient<IBonIdentityClaimProviderManager<TUser,TRole>, ClaimProviderManager<TUser,TRole>>();
         
         return base.OnConfigureAsync(context);
     }

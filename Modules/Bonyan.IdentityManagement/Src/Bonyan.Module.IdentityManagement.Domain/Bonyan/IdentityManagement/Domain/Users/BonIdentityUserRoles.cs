@@ -5,15 +5,16 @@ using Bonyan.UserManagement.Domain.Users.ValueObjects;
 
 namespace Bonyan.IdentityManagement.Domain.Users
 {
-    public class BonIdentityUserRoles : BonEntity
+    public class BonIdentityUserRoles<TUser,TRole> : BonEntity
+        where TUser : BonIdentityUser<TUser,TRole> where TRole : BonIdentityRole<TRole>
     {
         public BonUserId UserId { get; private set; }
         public BonRoleId RoleId { get; private set; }
 
         // Navigation property back to role
-        public BonIdentityRole Role { get; private set; } = default!;
-
+        public TRole Role { get; private set; } = default!;
         // Navigation property back to user
+        public TUser User { get; private set; } = default!;
 
         protected BonIdentityUserRoles() { } // For EF Core use
 

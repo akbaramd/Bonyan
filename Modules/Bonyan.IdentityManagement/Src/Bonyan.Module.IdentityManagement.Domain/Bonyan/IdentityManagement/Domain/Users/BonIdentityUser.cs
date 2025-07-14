@@ -1,4 +1,5 @@
-﻿using Bonyan.IdentityManagement.Domain.Roles.ValueObjects;
+﻿using Bonyan.IdentityManagement.Domain.Roles;
+using Bonyan.IdentityManagement.Domain.Roles.ValueObjects;
 using Bonyan.IdentityManagement.Domain.Users.DomainEvents;
 using Bonyan.IdentityManagement.Domain.Users.DomainServices;
 using Bonyan.IdentityManagement.Domain.Users.ValueObjects;
@@ -12,11 +13,11 @@ namespace Bonyan.IdentityManagement.Domain.Users;
 /// Represents an identity user in the domain.
 /// Implements DDD principles and encapsulates behaviors for roles, tokens, and password management.
 /// </summary>
-public class BonIdentityUser : BonUser
+public class BonIdentityUser<TUser,TRole> : BonUser where TUser : BonIdentityUser<TUser,TRole> where TRole : BonIdentityRole<TRole>
 {
-    private readonly List<BonIdentityUserToken> _tokens = new List<BonIdentityUserToken>();
-    private readonly List<BonIdentityUserRoles> _roles = new List<BonIdentityUserRoles>();
-    private readonly List<BonIdentityUserClaims> _claims = new List<BonIdentityUserClaims>();
+    private readonly List<BonIdentityUserToken<TUser,TRole>> _tokens = new List<BonIdentityUserToken<TUser,TRole>>();
+    private readonly List<BonIdentityUserRoles<TUser,TRole>> _roles = new List<BonIdentityUserRoles<TUser,TRole>>();
+    private readonly List<BonIdentityUserClaims<TUser,TRole>> _claims = new List<BonIdentityUserClaims<TUser,TRole>>();
 
     // Properties
     public BonUserPassword Password { get; private set; }
@@ -26,9 +27,9 @@ public class BonIdentityUser : BonUser
     public DateTime? AccountLockedUntil { get; private set; }
     public UserProfile Profile { get; private set; }
 
-    public IReadOnlyCollection<BonIdentityUserToken> Tokens => _tokens;
-    public IReadOnlyCollection<BonIdentityUserRoles> UserRoles => _roles;
-    public IReadOnlyCollection<BonIdentityUserClaims> UserClaims => _claims;
+    public IReadOnlyCollection<BonIdentityUserToken<TUser,TRole>> Tokens => _tokens;
+    public IReadOnlyCollection<BonIdentityUserRoles<TUser,TRole>> UserRoles => _roles;
+    public IReadOnlyCollection<BonIdentityUserClaims<TUser,TRole>> UserClaims => _claims;
 
     // Parameterless constructor for EF Core
     protected BonIdentityUser() { }
@@ -101,7 +102,7 @@ public class BonIdentityUser : BonUser
         }
         else
         {
-            token = new BonIdentityUserToken(Id, tokenType, newValue, expiration);
+            token = new BonIdentityUserToken<TUser,TRole>(Id, tokenType, newValue, expiration);
             _tokens.Add(token);
             AddDomainEvent(new BonIdentityUserTokenAddedDomainEvent(this, token));
         }
@@ -140,7 +141,7 @@ public class BonIdentityUser : BonUser
         if (_roles.Any(r => r.RoleId == roleId))
             throw new InvalidOperationException($"User already has the role with ID {roleId.Value}.");
 
-        var role = new BonIdentityUserRoles(Id, roleId);
+        var role = new BonIdentityUserRoles<TUser,TRole>(Id, roleId);
         _roles.Add(role);
         AddDomainEvent(new BonIdentityUserRoleAddedDomainEvent(this, roleId));
     }
@@ -173,7 +174,7 @@ public class BonIdentityUser : BonUser
         var existingClaim = _claims.FirstOrDefault(c => c.ClaimType == claimType && c.ClaimValue == claimValue);
         if (existingClaim == null)
         {
-            var claim = new BonIdentityUserClaims(claimId, Id, claimType, claimValue, issuer);
+            var claim = new BonIdentityUserClaims<TUser,TRole>(claimId, Id, claimType, claimValue, null, issuer);
             _claims.Add(claim);
         }
     }
@@ -226,7 +227,7 @@ public class BonIdentityUser : BonUser
     /// <summary>
     /// Gets all claims of a specific type.
     /// </summary>
-    public IEnumerable<BonIdentityUserClaims> GetClaimsByType(string claimType)
+    public IEnumerable<BonIdentityUserClaims<TUser,TRole>> GetClaimsByType(string claimType)
     {
         if (string.IsNullOrEmpty(claimType))
             throw new ArgumentException("Claim type cannot be null or empty.", nameof(claimType));

@@ -1,5 +1,6 @@
 using Bonyan.AspNetCore.Mvc;
 using Bonyan.IdentityManagement.Application;
+using Bonyan.IdentityManagement.Domain.Roles;
 using Bonyan.IdentityManagement.Domain.Roles.ValueObjects;
 using Bonyan.IdentityManagement.Domain.Users;
 using Bonyan.Layer.Application.Dto;
@@ -14,12 +15,12 @@ using Bonyan.UserManagement.Domain.Users.ValueObjects;
 
 namespace Bonyan.IdentityManagement.WebApi;
 
-public class BonIdentityManagementWebApiModule : BonWebModule
+public class BonIdentityManagementWebApiModule<TUser,TRole> : Modularity.Abstractions.BonModule where TUser : BonIdentityUser<TUser,TRole> where TRole : BonIdentityRole<TRole>
 {
     public BonIdentityManagementWebApiModule()
     {
         DependOn<BonAspNetCoreMvcModule>();
-        DependOn<BonIdentityManagementApplicationModule>();
+        DependOn<BonIdentityManagementApplicationModule<TUser,TRole>>();
     }
 
     public override Task OnConfigureAsync(BonConfigurationContext context)
@@ -27,11 +28,7 @@ public class BonIdentityManagementWebApiModule : BonWebModule
         return base.OnConfigureAsync(context);
     }
 
-    public override Task OnPostApplicationAsync(BonWebApplicationContext context)
-    {
-  
-        return base.OnPostApplicationAsync(context);
-    }
+
 
 
 

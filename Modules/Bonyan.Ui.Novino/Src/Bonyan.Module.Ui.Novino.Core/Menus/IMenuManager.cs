@@ -1,11 +1,13 @@
 using System.Security.Claims;
+using Bonyan.IdentityManagement.Domain.Roles;
+using Bonyan.IdentityManagement.Domain.Users;
 
 namespace Menus
 {
     /// <summary>
     /// Defines a contract for the menu manager that orchestrates menu providers and locations
     /// </summary>
-    public interface IMenuManager
+    public interface IMenuManager<TUser, TRole> where TUser : BonIdentityUser<TUser, TRole> where TRole : BonIdentityRole<TRole>
     {
         /// <summary>
         /// Gets all registered menu providers

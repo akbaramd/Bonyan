@@ -17,7 +17,7 @@ public class BonyanTemplateWebApiModule : BonWebModule
     {
         DependOn<BonyanTemplateApplicationModule>();
         DependOn<BonaynTempalteInfrastructureModule>();
-        DependOn<BonIdentityManagementWebApiModule>();
+        DependOn<BonIdentityManagementWebApiModule<User,Role>>();
         DependOn<BonAspnetCoreSwaggerModule>();
     }
     public override Task OnConfigureAsync(BonConfigurationContext context)

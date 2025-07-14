@@ -1,4 +1,5 @@
 ﻿using System.Security.Claims;
+using Bonyan.IdentityManagement.Domain.Roles;
 using Bonyan.IdentityManagement.Domain.Users;
 using Bonyan.IdentityManagement.Permissions;
 using Microsoft.Extensions.Logging;
@@ -8,11 +9,11 @@ namespace Bonyan.IdentityManagement
     /// <summary>
     /// Default implementation of claim provider that generates standard claims for users
     /// </summary>
-    public class DefaultClaimProvider<TUser> : IBonIdentityClaimProvider<TUser> where TUser : BonIdentityUser
+    public class DefaultClaimProvider<TUser,TRole> : IBonIdentityClaimProvider<TUser,TRole> where TUser : BonIdentityUser<TUser,TRole> where TRole : BonIdentityRole<TRole>
     {
-        private readonly ILogger<DefaultClaimProvider<TUser>> _logger;
+        private readonly ILogger<DefaultClaimProvider<TUser,TRole>> _logger;
 
-        public DefaultClaimProvider(ILogger<DefaultClaimProvider<TUser>> logger)
+        public DefaultClaimProvider(ILogger<DefaultClaimProvider<TUser,TRole>> logger)
         {
             _logger = logger;
         }

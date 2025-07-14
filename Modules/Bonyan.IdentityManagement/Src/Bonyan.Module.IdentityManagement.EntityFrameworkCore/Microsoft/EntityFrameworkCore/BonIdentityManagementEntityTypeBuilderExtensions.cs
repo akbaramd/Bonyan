@@ -1,6 +1,7 @@
 ﻿using Bonyan.IdentityManagement.Domain;
 using Bonyan.IdentityManagement.Domain.Roles;
 using Bonyan.IdentityManagement.Domain.Users;
+using Bonyan.UserManagement.Domain.Users.Enumerations;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,35 +9,19 @@ namespace Microsoft.EntityFrameworkCore
 {
     public static class BonIdentityManagementEntityTypeBuilderExtensions
     {
-        public static ModelBuilder ConfigureIdentityManagement<TUser>(this ModelBuilder modelBuilder)
-            where TUser : BonIdentityUser
+        public static ModelBuilder ConfigureIdentityManagement<TUser,TRole>(this ModelBuilder modelBuilder)
+            where TUser : BonIdentityUser<TUser,TRole> where TRole : BonIdentityRole<TRole>
         {
             // Configure User Management base conventions
-            modelBuilder.ConfigureUserManagement<TUser>();
-
-            // Configure BonIdentityUser
-            modelBuilder.Entity<TUser>(builder =>
+            modelBuilder.ConfigureUserManagement<TUser>(builder =>
             {
-                builder.ConfigureByConvention();
-                builder.ConfigurePassword();
+                builder.ConfigurePassword<TUser,TRole>();
 
                 // Performance: Add indexes for commonly queried columns
                 builder.HasIndex(x => x.UserName)
                     .HasDatabaseName("IX_Users_UserName")
                     .IsUnique();
 
-                builder.HasIndex(x => x.Email)
-                    .HasDatabaseName("IX_Users_Email")
-                    .IsUnique()
-                    .HasFilter("Email IS NOT NULL"); // Cross-DB compatible partial index
-
-                builder.HasIndex(x => x.PhoneNumber)
-                    .HasDatabaseName("IX_Users_PhoneNumber")
-                    .IsUnique()
-                    .HasFilter("PhoneNumber IS NOT NULL");
-
-                builder.HasIndex(x => x.Status)
-                    .HasDatabaseName("IX_Users_Status");
 
                 builder.HasIndex(x => x.CreatedAt)
                     .HasDatabaseName("IX_Users_CreatedAt");
@@ -83,16 +68,10 @@ namespace Microsoft.EntityFrameworkCore
                 builder.Property(x => x.UserName)
                     .HasMaxLength(256)
                     .IsRequired();
-
-                builder.Property(x => x.Email)
-                    .HasMaxLength(256);
-
-                builder.Property(x => x.PhoneNumber)
-                    .HasMaxLength(50);
             });
 
             // Configure BonIdentityUserToken
-            modelBuilder.Entity<BonIdentityUserToken>(builder =>
+            modelBuilder.Entity<BonIdentityUserToken<TUser,TRole>>(builder =>
             {
                 builder.ConfigureByConvention();
                 builder.ToTable("UserTokens");
@@ -127,7 +106,7 @@ namespace Microsoft.EntityFrameworkCore
             });
 
             // Configure BonIdentityRole
-            modelBuilder.Entity<BonIdentityRole>(builder =>
+            modelBuilder.Entity<TRole>(builder =>
             {
                 builder.ConfigureByConvention();
                 builder.ToTable("Roles");
@@ -156,7 +135,7 @@ namespace Microsoft.EntityFrameworkCore
 
 
             // Configure BonIdentityUserRoles (Join Table)
-            modelBuilder.Entity<BonIdentityUserRoles>(builder =>
+            modelBuilder.Entity<BonIdentityUserRoles<TUser,TRole>>(builder =>
             {
                 builder.ConfigureByConvention();
                 builder.ToTable("UserRoles");
@@ -185,7 +164,7 @@ namespace Microsoft.EntityFrameworkCore
             });
 
             // Configure BonIdentityUserClaims
-            modelBuilder.Entity<BonIdentityUserClaims>(builder =>
+            modelBuilder.Entity<BonIdentityUserClaims<TUser,TRole>>(builder =>
             {
                 builder.ConfigureByConvention();
                 builder.ToTable("UserClaims");
@@ -227,7 +206,7 @@ namespace Microsoft.EntityFrameworkCore
             });
 
             // Configure BonIdentityRoleClaims
-            modelBuilder.Entity<BonIdentityRoleClaims>(builder =>
+            modelBuilder.Entity<BonIdentityRoleClaims<TRole>>(builder =>
             {
                 builder.ConfigureByConvention();
                 builder.ToTable("RoleClaims");
@@ -274,8 +253,8 @@ namespace Microsoft.EntityFrameworkCore
         /// <summary>
         /// Configures the password value object.
         /// </summary>
-        private static void ConfigurePassword<TUser>(this EntityTypeBuilder<TUser> entity)
-            where TUser : BonIdentityUser
+        private static void ConfigurePassword<TUser,TRole>(this EntityTypeBuilder<TUser> entity)
+            where TUser : BonIdentityUser<TUser,TRole> where TRole : BonIdentityRole<TRole>
         {
             entity.OwnsOne(user => user.Password, password =>
             {
@@ -290,11 +269,6 @@ namespace Microsoft.EntityFrameworkCore
             });
         }
 
-        public static ModelBuilder ConfigureIdentityManagement(this ModelBuilder modelBuilder)
-        {
-            // Configure BonIdentityManagement using BonIdentityUser as the default user type
-            modelBuilder.ConfigureIdentityManagement<BonIdentityUser>();
-            return modelBuilder;
-        }
+       
     }
 }

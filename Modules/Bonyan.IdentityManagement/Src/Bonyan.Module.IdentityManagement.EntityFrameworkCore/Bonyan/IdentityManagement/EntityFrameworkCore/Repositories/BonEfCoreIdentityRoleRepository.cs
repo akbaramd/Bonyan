@@ -8,11 +8,13 @@ using Microsoft.EntityFrameworkCore;
 namespace Bonyan.IdentityManagement.EntityFrameworkCore.Repositories;
 
 public class
-    BonIdentityEfCoreRoleRepository<TUser> :
-    EfCoreBonRepository<BonIdentityRole, BonRoleId, IBonIdentityManagementDbContext<TUser>>,
-    IBonIdentityRoleRepository, IBonIdentityRoleReadOnlyRepository where TUser : BonIdentityUser
+    BonIdentityEfCoreRoleRepository<TUser, TRole> :
+    EfCoreBonRepository<TRole, BonRoleId, IBonIdentityManagementDbContext<TUser, TRole>>,
+    IBonIdentityRoleRepository<TRole>, IBonIdentityRoleReadOnlyRepository<TRole> 
+    where TUser : BonIdentityUser<TUser, TRole>
+    where TRole : BonIdentityRole<TRole>
 {
-    protected override IQueryable<BonIdentityRole> PrepareQuery(DbSet<BonIdentityRole> dbSet)
+    protected override IQueryable<TRole> PrepareQuery(DbSet<TRole> dbSet)
     {
         return base.PrepareQuery(dbSet)
             .Include(x=>x.RoleClaims);

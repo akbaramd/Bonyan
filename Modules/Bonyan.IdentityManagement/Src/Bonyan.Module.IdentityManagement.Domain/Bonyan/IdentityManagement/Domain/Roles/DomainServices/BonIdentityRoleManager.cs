@@ -4,14 +4,15 @@ using Bonyan.Layer.Domain.DomainService;
 
 namespace Bonyan.IdentityManagement.Domain.Roles.DomainServices
 {
-    public class BonIdentityRoleManager : IBonIdentityRoleManager
+    public class BonIdentityRoleManager<TRole> : IBonIdentityRoleManager<TRole> 
+        where TRole : BonIdentityRole<TRole>
     {
-        private readonly IBonIdentityRoleRepository _roleRepository;
-        private readonly IBonIdentityRoleClaimsRepository _roleClaimsRepository;
+        private readonly IBonIdentityRoleRepository<TRole> _roleRepository;
+        private readonly IBonIdentityRoleClaimsRepository<TRole> _roleClaimsRepository;
 
         public BonIdentityRoleManager(
-            IBonIdentityRoleRepository roleRepository,
-            IBonIdentityRoleClaimsRepository roleClaimsRepository)
+            IBonIdentityRoleRepository<TRole> roleRepository,
+            IBonIdentityRoleClaimsRepository<TRole> roleClaimsRepository)
         {
             _roleRepository = roleRepository;
             _roleClaimsRepository = roleClaimsRepository;
@@ -20,7 +21,7 @@ namespace Bonyan.IdentityManagement.Domain.Roles.DomainServices
         /// <summary>
         /// Creates a role.
         /// </summary>
-        public async Task<BonDomainResult> CreateRoleAsync(BonIdentityRole role)
+        public async Task<BonDomainResult> CreateRoleAsync(TRole role)
         {
             if (await _roleRepository.ExistsAsync(x => x.Id == role.Id))
             {
@@ -34,7 +35,7 @@ namespace Bonyan.IdentityManagement.Domain.Roles.DomainServices
         /// <summary>
         /// Updates an existing role.
         /// </summary>
-        public async Task<BonDomainResult> UpdateRoleAsync(BonIdentityRole role)
+        public async Task<BonDomainResult> UpdateRoleAsync(TRole role)
         {
             if (!await _roleRepository.ExistsAsync(x => x.Id == role.Id))
             {
@@ -48,7 +49,7 @@ namespace Bonyan.IdentityManagement.Domain.Roles.DomainServices
         /// <summary>
         /// Deletes a role.
         /// </summary>
-        public async Task<BonDomainResult> DeleteRoleAsync(BonIdentityRole role)
+        public async Task<BonDomainResult> DeleteRoleAsync(TRole role)
         {
             if (!await _roleRepository.ExistsAsync(x => x.Id == role.Id))
             {
@@ -64,7 +65,7 @@ namespace Bonyan.IdentityManagement.Domain.Roles.DomainServices
         /// <summary>
         /// Creates a role with associated claims.
         /// </summary>
-        public async Task<BonDomainResult> CreateRoleWithClaimsAsync(BonIdentityRole role, IEnumerable<(string claimType, string claimValue, string? issuer)> claims)
+        public async Task<BonDomainResult> CreateRoleWithClaimsAsync(TRole role, IEnumerable<(string claimType, string claimValue, string? issuer)> claims)
         {
             var createRoleResult = await CreateRoleAsync(role);
             if (!createRoleResult.IsSuccess)
@@ -87,7 +88,7 @@ namespace Bonyan.IdentityManagement.Domain.Roles.DomainServices
         /// <summary>
         /// Adds a claim to a role using the role's domain behavior.
         /// </summary>
-        public async Task<BonDomainResult> AddClaimToRoleAsync(BonIdentityRole role, string claimType, string claimValue, string? issuer = null)
+        public async Task<BonDomainResult> AddClaimToRoleAsync(TRole role, string claimType, string claimValue, string? issuer = null)
         {
             try
             {
@@ -123,7 +124,7 @@ namespace Bonyan.IdentityManagement.Domain.Roles.DomainServices
         /// <summary>
         /// Removes a claim from a role.
         /// </summary>
-        public async Task<BonDomainResult> RemoveClaimFromRoleAsync(BonIdentityRole role, string claimType, string claimValue)
+        public async Task<BonDomainResult> RemoveClaimFromRoleAsync(TRole role, string claimType, string claimValue)
         {
             try
             {
@@ -159,7 +160,7 @@ namespace Bonyan.IdentityManagement.Domain.Roles.DomainServices
         /// <summary>
         /// Removes all claims of a specific type from a role.
         /// </summary>
-        public async Task<BonDomainResult> RemoveClaimsByTypeFromRoleAsync(BonIdentityRole role, string claimType)
+        public async Task<BonDomainResult> RemoveClaimsByTypeFromRoleAsync(TRole role, string claimType)
         {
             try
             {
@@ -184,7 +185,7 @@ namespace Bonyan.IdentityManagement.Domain.Roles.DomainServices
         /// <summary>
         /// Checks if a role has a specific claim.
         /// </summary>
-        public async Task<BonDomainResult<bool>> HasClaimAsync(BonIdentityRole role, string claimType, string claimValue)
+        public async Task<BonDomainResult<bool>> HasClaimAsync(TRole role, string claimType, string claimValue)
         {
             try
             {
@@ -210,36 +211,36 @@ namespace Bonyan.IdentityManagement.Domain.Roles.DomainServices
         /// <summary>
         /// Gets all claims of a specific type for a role.
         /// </summary>
-        public async Task<BonDomainResult<IEnumerable<BonIdentityRoleClaims>>> GetClaimsByTypeAsync(BonIdentityRole role, string claimType)
+        public async Task<BonDomainResult<IEnumerable<BonIdentityRoleClaims<TRole>>>> GetClaimsByTypeAsync(TRole role, string claimType)
         {
             try
             {
                 if (string.IsNullOrWhiteSpace(claimType))
                 {
-                    return BonDomainResult<IEnumerable<BonIdentityRoleClaims>>.Failure("Claim type cannot be null or empty.");
+                    return BonDomainResult<IEnumerable<BonIdentityRoleClaims<TRole>>>.Failure("Claim type cannot be null or empty.");
                 }
 
                 var claims = role.GetClaimsByType(claimType);
-                return BonDomainResult<IEnumerable<BonIdentityRoleClaims>>.Success(claims);
+                return BonDomainResult<IEnumerable<BonIdentityRoleClaims<TRole>>>.Success(claims);
             }
             catch (Exception ex)
             {
-                return BonDomainResult<IEnumerable<BonIdentityRoleClaims>>.Failure($"Error getting claims by type: {ex.Message}");
+                return BonDomainResult<IEnumerable<BonIdentityRoleClaims<TRole>>>.Failure($"Error getting claims by type: {ex.Message}");
             }
         }
 
         /// <summary>
         /// Finds a role by its ID.
         /// </summary>
-        public async Task<BonDomainResult<BonIdentityRole>> FindRoleByIdAsync(string roleKey)
+        public async Task<BonDomainResult<TRole>> FindRoleByIdAsync(string roleKey)
         {
             var role = await _roleRepository.FindOneAsync(x => x.Id == BonRoleId.NewId(roleKey));
             if (role == null)
             {
-                return BonDomainResult<BonIdentityRole>.Failure("Role not found.");
+                return BonDomainResult<TRole>.Failure("Role not found.");
             }
 
-            return BonDomainResult<BonIdentityRole>.Success(role);
+            return BonDomainResult<TRole>.Success(role);
         }
     }
 }

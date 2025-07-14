@@ -2,10 +2,17 @@
 using Bonyan.Modularity.Abstractions;
 using Menus;
 using Assets;
+using Bonyan.IdentityManagement;
+using Bonyan.IdentityManagement.Domain.Roles;
+using Bonyan.IdentityManagement.Domain.Users;
 using Microsoft.Extensions.DependencyInjection;
 
-public class BonUiNovinoModule : BonModule
+public class BonUiNovinoModule<TUser,TRole> : BonModule where TUser : BonIdentityUser<TUser,TRole> where TRole : BonIdentityRole<TRole>
 {
+    public BonUiNovinoModule()
+    {
+        DependOn<BonIdentityManagementModule<TUser,TRole>>();
+    }
     public override Task OnConfigureAsync(BonConfigurationContext context)
     {
         ConfigureMenuServices(context);
@@ -23,10 +30,10 @@ public class BonUiNovinoModule : BonModule
     private void ConfigureMenuServices(BonConfigurationContext context)
     {
         // Register menu services
-        context.Services.AddScoped<IMenuManager, MenuManager>();
+        context.Services.AddScoped(typeof(IMenuManager<TUser,TRole>), typeof(MenuManager<TUser,TRole>));
         
         // Configure menu services with fluent API
-        context.ConfigureMenus(config =>
+        context.ConfigureMenus<TUser, TRole>(config =>
         {
             config.AddCommonLocations();
         });
@@ -43,7 +50,7 @@ public class BonUiNovinoModule : BonModule
 
     private void InitializeMenuProviders(BonInitializedContext context)
     {
-        var menuManager = context.GetRequireService<IMenuManager>();
+        var menuManager = context.GetRequireService<IMenuManager<TUser,TRole>>();
         
         // Register all menu locations
         var menuLocations = context.GetServices<MenuLocation>();

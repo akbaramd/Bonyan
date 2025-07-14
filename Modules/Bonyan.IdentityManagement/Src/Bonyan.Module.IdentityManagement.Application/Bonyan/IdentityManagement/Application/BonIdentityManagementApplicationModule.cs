@@ -1,4 +1,5 @@
 using Bonyan.AutoMapper;
+using Bonyan.IdentityManagement.Domain.Roles;
 using Bonyan.IdentityManagement.Domain.Users;
 using Bonyan.Modularity;
 using Bonyan.Modularity.Abstractions;
@@ -8,12 +9,12 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Bonyan.IdentityManagement.Application;
 
-public class BonIdentityManagementApplicationModule : BonModule 
+public class BonIdentityManagementApplicationModule<TUser,TRole> : Modularity.Abstractions.BonModule where TUser : BonIdentityUser<TUser,TRole> where TRole : BonIdentityRole<TRole>
 {
     public BonIdentityManagementApplicationModule()
     {
-        DependOn<BonUserManagementApplicationModule<BonIdentityUser>>();
-        DependOn<BonIdentityManagementModule<BonIdentityUser>>();
+        DependOn<BonUserManagementApplicationModule<TUser>>();
+        DependOn<BonIdentityManagementModule<TUser,TRole>>();
         DependOn<BonWorkersModule>();
     }
 

@@ -1,3 +1,4 @@
+using Bonyan.IdentityManagement.Domain.Roles;
 using Bonyan.IdentityManagement.Domain.Users;
 using Bonyan.IdentityManagement.Domain.Users.Repositories;
 using Bonyan.IdentityManagement.Domain.Users.ValueObjects;
@@ -6,18 +7,22 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Bonyan.IdentityManagement.EntityFrameworkCore.Repositories;
 
-public class BonEfCoreIdentityUserClaimsRepository<TUser> : EfCoreBonRepository<BonIdentityUserClaims, BonUserClaimId, IBonIdentityManagementDbContext<TUser>>, IBonIdentityUserClaimsRepository where TUser : BonIdentityUser
+public class BonEfCoreIdentityUserClaimsRepository<TUser, TRole> : EfCoreBonRepository<BonIdentityUserClaims<TUser, TRole>, BonUserClaimId, IBonIdentityManagementDbContext<TUser, TRole>>, IBonIdentityUserClaimsRepository<TUser, TRole> 
+    where TUser : BonIdentityUser<TUser, TRole>
+    where TRole : BonIdentityRole<TRole>
 {
-    protected override IQueryable<BonIdentityUserClaims> PrepareQuery(DbSet<BonIdentityUserClaims> dbSet)
+    protected override IQueryable<BonIdentityUserClaims<TUser, TRole>> PrepareQuery(DbSet<BonIdentityUserClaims<TUser, TRole>> dbSet)
     {
         return base.PrepareQuery(dbSet)
             .Include(x => x.User);
     }
 }
 
-public class BonEfCoreIdentityUserClaimsReadOnlyRepository<TUser> : EfCoreReadonlyRepository<BonIdentityUserClaims, BonUserClaimId, IBonIdentityManagementDbContext<TUser>>, IBonIdentityUserClaimsReadOnlyRepository where TUser : BonIdentityUser
+public class BonEfCoreIdentityUserClaimsReadOnlyRepository<TUser, TRole> : EfCoreReadonlyRepository<BonIdentityUserClaims<TUser, TRole>, BonUserClaimId, IBonIdentityManagementDbContext<TUser, TRole>>, IBonIdentityUserClaimsReadOnlyRepository<TUser, TRole> 
+    where TUser : BonIdentityUser<TUser, TRole>
+    where TRole : BonIdentityRole<TRole>
 {
-    protected override IQueryable<BonIdentityUserClaims> PrepareQuery(DbSet<BonIdentityUserClaims> dbSet)
+    protected override IQueryable<BonIdentityUserClaims<TUser, TRole>> PrepareQuery(DbSet<BonIdentityUserClaims<TUser, TRole>> dbSet)
     {
         return base.PrepareQuery(dbSet)
             .Include(x => x.User);

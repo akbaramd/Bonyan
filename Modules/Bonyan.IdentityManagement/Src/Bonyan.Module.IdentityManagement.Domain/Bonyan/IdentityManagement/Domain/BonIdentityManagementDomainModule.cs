@@ -1,3 +1,4 @@
+using Bonyan.IdentityManagement.Domain.Roles;
 using Bonyan.IdentityManagement.Domain.Roles.DomainServices;
 using Bonyan.IdentityManagement.Domain.Users;
 using Bonyan.IdentityManagement.Domain.Users.DomainServices;
@@ -7,7 +8,9 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Bonyan.IdentityManagement.Domain;
 
-public class BonIdentityManagementDomainModule<TUser> : Modularity.Abstractions.BonModule where TUser : BonIdentityUser
+public class BonIdentityManagementDomainModule<TUser,TRole> : Modularity.Abstractions.BonModule 
+    where TUser : BonIdentityUser<TUser,TRole> 
+    where TRole : BonIdentityRole<TRole>
 {
     public BonIdentityManagementDomainModule()
     {
@@ -18,10 +21,11 @@ public class BonIdentityManagementDomainModule<TUser> : Modularity.Abstractions.
 
     public override Task OnConfigureAsync(BonConfigurationContext context)
     {
-        context.Services.AddTransient<BonIdentityRoleManager>();
-        context.Services.AddTransient<BonIdentityUserManager<TUser>>();
-        context.Services.AddTransient<IBonIdentityRoleManager,BonIdentityRoleManager>();
-        context.Services.AddTransient<IBonIdentityUserManager<TUser>,BonIdentityUserManager<TUser>>();
+        context.Services.AddTransient<BonIdentityUserManager<TUser,TRole>>();
+        context.Services.AddTransient<IBonIdentityRoleManager<TRole>, BonIdentityRoleManager<TRole>>();
+        context.Services.AddTransient<IBonIdentityUserManager<TUser,TRole>, BonIdentityUserManager<TUser,TRole>>();
+        
+
    
         return base.OnConfigureAsync(context);
     }

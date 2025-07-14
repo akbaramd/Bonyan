@@ -1,4 +1,6 @@
 using System.Security.Claims;
+using Bonyan.IdentityManagement.Domain.Roles;
+using Bonyan.IdentityManagement.Domain.Users;
 using Bonyan.IdentityManagement.Domain.Users.ValueObjects;
 using Bonyan.User;
 using Bonyan.UserManagement.Domain.Users.ValueObjects;
@@ -9,7 +11,9 @@ namespace Bonyan.IdentityManagement.Permissions;
 /// <summary>
 /// Interface for checking permissions in application services
 /// </summary>
-public interface IBonPermissionChecker
+public interface IBonPermissionChecker<TUser, TRole>
+    where TUser : BonIdentityUser<TUser, TRole>
+    where TRole : BonIdentityRole<TRole>
 {
     /// <summary>
     /// Checks if the current user has a specific permission
@@ -73,14 +77,16 @@ public interface IBonPermissionChecker
 /// <summary>
 /// Implementation of permission checker
 /// </summary>
-public class BonPermissionChecker : IBonPermissionChecker
+public class BonPermissionChecker<TUser, TRole> : IBonPermissionChecker<TUser, TRole>
+    where TUser : BonIdentityUser<TUser, TRole>
+    where TRole : BonIdentityRole<TRole>
 {
-    private readonly IBonPermissionManager _permissionManager;
+    private readonly IBonPermissionManager<TUser, TRole> _permissionManager;
     private readonly IBonCurrentUser _bonCurrentUser;
     private readonly IHttpContextAccessor _httpContextAccessor;
 
     public BonPermissionChecker(
-        IBonPermissionManager permissionManager,
+        IBonPermissionManager<TUser, TRole> permissionManager,
         IHttpContextAccessor httpContextAccessor, IBonCurrentUser bonCurrentUser)
     {
         _permissionManager = permissionManager;

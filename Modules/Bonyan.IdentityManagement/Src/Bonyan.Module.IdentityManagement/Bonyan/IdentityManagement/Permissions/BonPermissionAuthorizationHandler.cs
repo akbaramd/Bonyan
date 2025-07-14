@@ -1,4 +1,6 @@
 using System.Security.Claims;
+using Bonyan.IdentityManagement.Domain.Roles;
+using Bonyan.IdentityManagement.Domain.Users;
 using Bonyan.User;
 using Bonyan.UserManagement.Domain.Users.ValueObjects;
 using Microsoft.AspNetCore.Authorization;
@@ -9,15 +11,17 @@ namespace Bonyan.IdentityManagement.Permissions;
 /// <summary>
 /// Authorization handler for permission-based authorization using claims
 /// </summary>
-public class BonPermissionAuthorizationHandler : AuthorizationHandler<BonPermissionRequirement>
+public class BonPermissionAuthorizationHandler<TUser, TRole> : AuthorizationHandler<BonPermissionRequirement>
+    where TUser : BonIdentityUser<TUser, TRole>
+    where TRole : BonIdentityRole<TRole>
 {
-    private readonly IBonPermissionManager _permissionManager;
+    private readonly IBonPermissionManager<TUser, TRole> _permissionManager;
     private readonly IBonCurrentUser _bonCurrentUser;
-    private readonly ILogger<BonPermissionAuthorizationHandler> _logger;
+    private readonly ILogger<BonPermissionAuthorizationHandler<TUser, TRole>> _logger;
 
     public BonPermissionAuthorizationHandler(
-        IBonPermissionManager permissionManager,
-        ILogger<BonPermissionAuthorizationHandler> logger)
+        IBonPermissionManager<TUser, TRole> permissionManager,
+        ILogger<BonPermissionAuthorizationHandler<TUser, TRole>> logger)
     {
         _permissionManager = permissionManager;
         _logger = logger;

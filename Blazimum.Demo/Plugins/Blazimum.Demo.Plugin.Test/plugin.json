@@ -1,12 +1,12 @@
 {
   "name": "Blazimum.Demo.Plugin.Test",
   "version": "1.0.0",
-  "description": "Auto-generated plugin for Blazimum.Demo.Plugin.Test",
-  "authors": ["Akbar Ahmadi Saray"],
+  "description": "A test plugin for the Blazimum Demo application demonstrating JSON-based plugin loading.",
+  "authors": ["Plugin Developer"],
   "entryPoint": "Blazimum.Demo.Plugin.Test.dll",
   "additionalFiles": [],
   "dependencies": {
     "Bonyan": ">=1.0.0"
   },
-  "tags": ["plugin", "auto-generated"]
+  "tags": ["demo", "test", "blazimum"]
 }

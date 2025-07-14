@@ -5,17 +5,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Bonyan.IdentityManagement.EntityFrameworkCore;
 
-public interface IBonIdentityManagementDbContext<TUser> : IBonUserManagementDbContext<TUser>
-    where TUser : BonIdentityUser 
+public interface IBonIdentityManagementDbContext<TUser,TRole> : IBonUserManagementDbContext<TUser>
+    where TUser : BonIdentityUser<TUser,TRole> where TRole : BonIdentityRole<TRole>
 {
-    public DbSet<BonIdentityUserToken> UserTokens { get; set; }
-    public DbSet<BonIdentityRole> Roles { get; set; }
-    public DbSet<BonIdentityUserRoles> UserRoles { get; set; }
-    public DbSet<BonIdentityUserClaims> UserClaims { get; set; }
-    public DbSet<BonIdentityRoleClaims> RoleClaims { get; set; }
+    public DbSet<TRole> Roles { get; set; }
+    public DbSet<BonIdentityUserToken<TUser,TRole>> UserTokens { get; set; }
+    public DbSet<BonIdentityUserRoles<TUser,TRole>> UserRoles { get; set; }
+    public DbSet<BonIdentityUserClaims<TUser,TRole>> UserClaims { get; set; }
+    public DbSet<BonIdentityRoleClaims<TRole>> RoleClaims { get; set; }
 }
 
-public interface IBonIdentityManagementDbContext : IBonIdentityManagementDbContext<BonIdentityUser>
-{
-}
 

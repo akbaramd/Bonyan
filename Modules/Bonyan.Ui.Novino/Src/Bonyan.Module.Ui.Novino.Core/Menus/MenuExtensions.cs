@@ -1,6 +1,8 @@
 using Bonyan.Modularity;
 using Microsoft.Extensions.DependencyInjection;
 using System.Security.Claims;
+using Bonyan.IdentityManagement.Domain.Users;
+using Bonyan.IdentityManagement.Domain.Roles;
 
 namespace Menus
 {
@@ -15,9 +17,11 @@ namespace Menus
         /// <param name="context">The configuration context</param>
         /// <param name="configure">Optional action to configure menu options</param>
         /// <returns>The configuration context for chaining</returns>
-        public static BonConfigurationContext ConfigureMenus(this BonConfigurationContext context, Action<MenuConfiguration>? configure = null)
+        public static BonConfigurationContext ConfigureMenus<TUser, TRole>(this BonConfigurationContext context, Action<MenuConfiguration>? configure = null)
+            where TUser : BonIdentityUser<TUser, TRole> 
+            where TRole : BonIdentityRole<TRole>
         {
-            context.Services.AddSingleton<IMenuManager, MenuManager>();
+            context.Services.AddSingleton(typeof(IMenuManager<TUser, TRole>), typeof(MenuManager<TUser, TRole>));
             
             var menuConfig = new MenuConfiguration(context.Services);
             configure?.Invoke(menuConfig);
@@ -74,21 +78,25 @@ namespace Menus
         /// </summary>
         /// <param name="serviceProvider">The service provider</param>
         /// <returns>The menu manager instance</returns>
-        public static IMenuManager GetMenuManager(this IServiceProvider serviceProvider)
+        public static IMenuManager<TUser, TRole> GetMenuManager<TUser, TRole>(this IServiceProvider serviceProvider)
+            where TUser : BonIdentityUser<TUser, TRole> 
+            where TRole : BonIdentityRole<TRole>
         {
-            return serviceProvider.GetRequiredService<IMenuManager>();
+            return serviceProvider.GetRequiredService<IMenuManager<TUser, TRole>>();
         }
 
-        /// <summary>
+        /// <summary>   
         /// Gets menu items for a specific location
         /// </summary>
         /// <param name="serviceProvider">The service provider</param>
         /// <param name="location">The menu location</param>
         /// <param name="user">The current user context</param>
         /// <returns>Menu items for the specified location</returns>
-        public static IEnumerable<MenuItem> GetMenuItems(this IServiceProvider serviceProvider, string location, ClaimsPrincipal? user = null)
+        public static IEnumerable<MenuItem> GetMenuItems<TUser, TRole>(this IServiceProvider serviceProvider, string location, ClaimsPrincipal? user = null)
+            where TUser : BonIdentityUser<TUser, TRole> 
+            where TRole : BonIdentityRole<TRole>
         {
-            var menuManager = serviceProvider.GetMenuManager();
+            var menuManager = serviceProvider.GetMenuManager<TUser, TRole>();
             return menuManager.GetMenuItems(location, user);
         }
 
@@ -99,9 +107,11 @@ namespace Menus
         /// <param name="location">The menu location</param>
         /// <param name="user">The current user context</param>
         /// <returns>Menu items for the specified location</returns>
-        public static Task<IEnumerable<MenuItem>> GetMenuItemsAsync(this IServiceProvider serviceProvider, string location, ClaimsPrincipal? user = null)
+        public static Task<IEnumerable<MenuItem>> GetMenuItemsAsync<TUser, TRole>(this IServiceProvider serviceProvider, string location, ClaimsPrincipal? user = null)
+            where TUser : BonIdentityUser<TUser, TRole> 
+            where TRole : BonIdentityRole<TRole>
         {
-            var menuManager = serviceProvider.GetMenuManager();
+            var menuManager = serviceProvider.GetMenuManager<TUser, TRole>();
             return menuManager.GetMenuItemsAsync(location, user);
         }
 
@@ -110,9 +120,11 @@ namespace Menus
         /// </summary>
         /// <param name="serviceProvider">The service provider</param>
         /// <returns>All registered menu locations</returns>
-        public static IEnumerable<MenuLocation> GetMenuLocations(this IServiceProvider serviceProvider)
+        public static IEnumerable<MenuLocation> GetMenuLocations<TUser, TRole>(this IServiceProvider serviceProvider)
+            where TUser : BonIdentityUser<TUser, TRole> 
+            where TRole : BonIdentityRole<TRole>
         {
-            var menuManager = serviceProvider.GetMenuManager();
+            var menuManager = serviceProvider.GetMenuManager<TUser, TRole>();
             return menuManager.MenuLocations;
         }
 
@@ -121,9 +133,11 @@ namespace Menus
         /// </summary>
         /// <param name="serviceProvider">The service provider</param>
         /// <returns>All registered menu providers</returns>
-        public static IEnumerable<IMenuProvider> GetMenuProviders(this IServiceProvider serviceProvider)
+        public static IEnumerable<IMenuProvider> GetMenuProviders<TUser, TRole>(this IServiceProvider serviceProvider)
+            where TUser : BonIdentityUser<TUser, TRole> 
+            where TRole : BonIdentityRole<TRole>
         {
-            var menuManager = serviceProvider.GetMenuManager();
+            var menuManager = serviceProvider.GetMenuManager<TUser, TRole>();
             return menuManager.MenuProviders;
         }
     }

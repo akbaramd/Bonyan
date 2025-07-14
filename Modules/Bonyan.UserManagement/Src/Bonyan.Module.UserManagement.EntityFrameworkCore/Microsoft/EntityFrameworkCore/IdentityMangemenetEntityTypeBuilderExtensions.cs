@@ -11,7 +11,7 @@ public static class BonUserManagementEntityTypeBuilderExtensions
     /// <typeparam name="TUser">The user entity type.</typeparam>
     /// <param name="modelBuilder">The model builder.</param>
     /// <returns>The configured model builder.</returns>
-    public static ModelBuilder ConfigureUserManagement<TUser>(this ModelBuilder modelBuilder)
+    public static ModelBuilder ConfigureUserManagement<TUser>(this ModelBuilder modelBuilder,Action<EntityTypeBuilder<TUser>> action)
         where TUser : class, IBonUser
     {
         var entity = modelBuilder.Entity<TUser>();
@@ -32,7 +32,7 @@ public static class BonUserManagementEntityTypeBuilderExtensions
 
         // Configure indexes
         ConfigureIndexes(entity);
-
+        action(entity);
         return modelBuilder;
     }
 

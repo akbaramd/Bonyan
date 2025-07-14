@@ -6,10 +6,10 @@ namespace Bonyan.IdentityManagement.Domain.Users.DomainEvents;
 
 public class BonIdentityUserRoleAddedDomainEvent : BonDomainEventBase
 {
-    public BonIdentityUser User { get; }
-    public BonRoleId Role { get; }
+    public readonly object User;
+    public readonly BonRoleId Role;
 
-    public BonIdentityUserRoleAddedDomainEvent(BonIdentityUser user, BonRoleId role)
+    public BonIdentityUserRoleAddedDomainEvent(object user, BonRoleId role)
     {
         User = user ?? throw new ArgumentNullException(nameof(user));
         Role = role ?? throw new ArgumentNullException(nameof(role));

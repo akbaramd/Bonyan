@@ -14,8 +14,8 @@ using Bonyan.Layer.Domain.Exceptions;
 
 namespace Bonyan.IdentityManagement.Domain.Users.DomainServices;
 
-public class BonIdentityUserManager<TUser> : BonDomainService, IBonIdentityUserManager<TUser>
-    where TUser : BonIdentityUser
+public class BonIdentityUserManager<TUser,TRole> : BonDomainService, IBonIdentityUserManager<TUser,TRole>
+    where TUser : BonIdentityUser<TUser,TRole> where TRole : BonIdentityRole<TRole>
 {
     
     
@@ -272,17 +272,17 @@ public class BonIdentityUserManager<TUser> : BonDomainService, IBonIdentityUserM
         }
     }
     
-    public IBonIdentityUserRepository<TUser> UserRepository =>
-        LazyServiceProvider.LazyGetRequiredService<IBonIdentityUserRepository<TUser>>();
+    public IBonIdentityUserRepository<TUser,TRole> UserRepository =>
+        LazyServiceProvider.LazyGetRequiredService<IBonIdentityUserRepository<TUser,TRole>>();
 
 
-    public IBonIdentityRoleRepository RoleRepository =>
-        LazyServiceProvider.LazyGetRequiredService<IBonIdentityRoleRepository>();
+    public IBonIdentityRoleRepository<TRole> RoleRepository =>
+        LazyServiceProvider.LazyGetRequiredService<IBonIdentityRoleRepository<TRole>>();
 
-    public IBonIdentityUserClaimsRepository UserClaimsRepository =>
-        LazyServiceProvider.LazyGetRequiredService<IBonIdentityUserClaimsRepository>();
+    public IBonIdentityUserClaimsRepository<TUser,TRole> UserClaimsRepository =>
+        LazyServiceProvider.LazyGetRequiredService<IBonIdentityUserClaimsRepository<TUser,TRole>>();
 
-    private async Task<BonIdentityRole?> FindRoleAsync(BonRoleId roleId)
+    private async Task<TRole?> FindRoleAsync(BonRoleId roleId)
     {
         if (roleId == null) throw new BonDomainException("Role IDcannot be null.", "NullRoleId");
 
@@ -344,18 +344,18 @@ public class BonIdentityUserManager<TUser> : BonDomainService, IBonIdentityUserM
 
 
     // Optimized GetUserRolesAsync with better caching of roles
-    public Task<BonDomainResult<IReadOnlyList<BonIdentityRole>>> GetUserRolesAsync(TUser user)
+    public Task<BonDomainResult<IReadOnlyList<TRole>>> GetUserRolesAsync(TUser user)
     {
         if (user == null) throw new ArgumentNullException(nameof(user));
 
         try
         {
-            return Task.FromResult(BonDomainResult<IReadOnlyList<BonIdentityRole>>.Success(user.UserRoles.Select(x=>x.Role).ToList().AsReadOnly()));
+            return Task.FromResult(BonDomainResult<IReadOnlyList<TRole>>.Success(user.UserRoles.Select(x=>x.Role).OfType<TRole>().ToList().AsReadOnly()));
         }
         catch (Exception e)
         {
             Logger.LogError(e, "Error fetching user roles.");
-            return Task.FromResult(BonDomainResult<IReadOnlyList<BonIdentityRole>>.Failure("Error fetching user roles."));
+            return Task.FromResult(BonDomainResult<IReadOnlyList<TRole>>.Failure("Error fetching user roles."));
         }
     }
 
@@ -740,7 +740,7 @@ public class BonIdentityUserManager<TUser> : BonDomainService, IBonIdentityUserM
         }
     }
 
-    public async Task<BonDomainResult<IEnumerable<BonIdentityUserClaims>>> GetClaimsByTypeAsync(TUser user, string claimType)
+    public async Task<BonDomainResult<IEnumerable<BonIdentityUserClaims<TUser,TRole>>>> GetClaimsByTypeAsync(TUser user, string claimType)
     {
         const string methodName = nameof(GetClaimsByTypeAsync);
 
@@ -752,16 +752,16 @@ public class BonIdentityUserManager<TUser> : BonDomainService, IBonIdentityUserM
         {
             var claims = user.GetClaimsByType(claimType);
             Logger.LogInformation($"{methodName}: Retrieved {claims.Count()} claims of type '{claimType}' for user {user.Id}.");
-            return BonDomainResult<IEnumerable<BonIdentityUserClaims>>.Success(claims);
+            return BonDomainResult<IEnumerable<BonIdentityUserClaims<TUser,TRole>>>.Success(claims);
         }
         catch (Exception e)
         {
             Logger.LogError(e, $"{methodName}: Error getting claims by type for user {user.Id}.");
-            return BonDomainResult<IEnumerable<BonIdentityUserClaims>>.Failure("Error getting claims by type.");
+            return BonDomainResult<IEnumerable<BonIdentityUserClaims<TUser,TRole>>>.Failure("Error getting claims by type.");
         }
     }
 
-    public async Task<BonDomainResult<IEnumerable<BonIdentityUserClaims>>> GetAllClaimsAsync(TUser user)
+    public async Task<BonDomainResult<IEnumerable<BonIdentityUserClaims<TUser,TRole>>>> GetAllClaimsAsync(TUser user)
     {
         const string methodName = nameof(GetAllClaimsAsync);
 
@@ -771,12 +771,12 @@ public class BonIdentityUserManager<TUser> : BonDomainService, IBonIdentityUserM
         {
             var claims = user.UserClaims;
             Logger.LogInformation($"{methodName}: Retrieved {claims.Count()} total claims for user {user.Id}.");
-            return BonDomainResult<IEnumerable<BonIdentityUserClaims>>.Success(claims);
+            return BonDomainResult<IEnumerable<BonIdentityUserClaims<TUser,TRole>>>.Success(claims);
         }
         catch (Exception e)
         {
             Logger.LogError(e, $"{methodName}: Error getting all claims for user {user.Id}.");
-            return BonDomainResult<IEnumerable<BonIdentityUserClaims>>.Failure("Error getting all claims.");
+            return BonDomainResult<IEnumerable<BonIdentityUserClaims<TUser,TRole>>>.Failure("Error getting all claims.");
         }
     }
 }

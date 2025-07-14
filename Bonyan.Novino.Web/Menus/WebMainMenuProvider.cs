@@ -14,9 +14,8 @@ namespace Bonyan.Novino.Web.Menus
 
         public override IEnumerable<string> SupportedLocations => new[]
         {
-            "main-navigation",
-            "footer-menu",
-            "user-menu"
+            "sidebar-main",
+            "sidebar-system"
         };
 
         public override async Task<IEnumerable<MenuItem>> GetMenuItemsAsync(string location, ClaimsPrincipal? user = null)
@@ -25,105 +24,104 @@ namespace Bonyan.Novino.Web.Menus
 
             return location.ToLowerInvariant() switch
             {
-                "main-navigation" => GetMainNavigationItems(user),
-                "footer-menu" => GetFooterMenuItems(user),
-                "user-menu" => GetUserMenuItems(user),
+                "sidebar-main" => GetSidebarMainItems(user),
+                "sidebar-system" => GetSidebarSystemItems(user),
                 _ => Enumerable.Empty<MenuItem>()
             };
         }
 
-        private IEnumerable<MenuItem> GetMainNavigationItems(ClaimsPrincipal? user)
+        private IEnumerable<MenuItem> GetSidebarMainItems(ClaimsPrincipal? user)
         {
             var items = new List<MenuItem>
             {
-                new MenuItem("Home", "/", "fas fa-home", 1)
+                new MenuItem("داشبورد", "/", "ri-dashboard-2-line", 1)
                 {
-                    CssClass = "nav-link text-dark"
-                },
-                new MenuItem("Privacy", "/Home/Privacy", "fas fa-shield-alt", 2)
-                {
-                    CssClass = "nav-link text-dark"
+                    CssClass = "nav-link menu-link",
+                    Children = new List<MenuItem>
+                    {
+                        new MenuItem("نمای کلی", "/Dashboard", "ri-home-line", 1)
+                        {
+                            CssClass = "nav-link"
+                        },
+                        new MenuItem("آمار و تحلیل", "/Analytics", "ri-bar-chart-line", 2)
+                        {
+                            CssClass = "nav-link"
+                        },
+                        new MenuItem("گزارشات", "/Reports", "ri-file-chart-line", 3)
+                        {
+                            CssClass = "nav-link"
+                        }
+                    }
                 }
             };
-
-            // Add authenticated user items
-            if (user?.Identity?.IsAuthenticated == true)
-            {
-                items.Add(new MenuItem("Dashboard", "/Dashboard", "fas fa-tachometer-alt", 3)
-                {
-                    CssClass = "nav-link text-dark",
-                    RequiresAuthentication = true
-                });
-
-                // Add admin menu for admin users
-                if (user.IsInRole("Admin"))
-                {
-                    var adminItem = new MenuItem("Admin", "#", "fas fa-cog", 4)
-                    {
-                        CssClass = "nav-link text-dark",
-                        RequiredRoles = new List<string> { "Admin" }
-                    };
-                    
-                    adminItem.AddChild(new MenuItem("Users", "/Admin/Users", "fas fa-users", 1));
-                    adminItem.AddChild(new MenuItem("Settings", "/Admin/Settings", "fas fa-cogs", 2));
-                    adminItem.AddChild(new MenuItem("Logs", "/Admin/Logs", "fas fa-file-alt", 3));
-                    
-                    items.Add(adminItem);
-                }
-            }
 
             return items;
         }
 
-        private IEnumerable<MenuItem> GetFooterMenuItems(ClaimsPrincipal? user)
+        private IEnumerable<MenuItem> GetSidebarSystemItems(ClaimsPrincipal? user)
         {
-            return new List<MenuItem>
+            var items = new List<MenuItem>
             {
-                new MenuItem("Privacy", "/Home/Privacy", "", 1)
+                new MenuItem("مدیریت کاربران", "/UserManagement", "ri-user-settings-line", 1)
                 {
-                    CssClass = "footer-link"
-                },
-                new MenuItem("Terms", "/Home/Terms", "", 2)
-                {
-                    CssClass = "footer-link"
-                },
-                new MenuItem("Contact", "/Home/Contact", "", 3)
-                {
-                    CssClass = "footer-link"
-                }
-            };
-        }
-
-        private IEnumerable<MenuItem> GetUserMenuItems(ClaimsPrincipal? user)
-        {
-            if (user?.Identity?.IsAuthenticated != true)
-            {
-                return new List<MenuItem>
-                {
-                    new MenuItem("Login", "/Account/Login", "fas fa-sign-in-alt", 1)
-                    {
-                        CssClass = "btn btn-outline-primary"
-                    },
-                    new MenuItem("Register", "/Account/Register", "fas fa-user-plus", 2)
-                    {
-                        CssClass = "btn btn-primary ms-2"
-                    }
-                };
-            }
-
-            return new List<MenuItem>
-            {
-                new MenuItem($"Hello {user.Identity.Name}!", "#", "fas fa-user", 1)
-                {
-                    CssClass = "nav-link dropdown-toggle",
+                    CssClass = "nav-link menu-link",
                     Children = new List<MenuItem>
                     {
-                        new MenuItem("Profile", "/Account/Profile", "fas fa-user", 1),
-                        new MenuItem("Settings", "/Account/Settings", "fas fa-cog", 2),
-                        new MenuItem("Logout", "/Account/Logout", "fas fa-sign-out-alt", 3)
+                        new MenuItem("لیست کاربران", "/UserManagement/Users", "ri-user-list-line", 1)
+                        {
+                            CssClass = "nav-link"
+                        },
+                        new MenuItem("افزودن کاربر", "/UserManagement/Users/Create", "ri-user-add-line", 2)
+                        {
+                            CssClass = "nav-link"
+                        },
+                        new MenuItem("ویرایش کاربران", "/UserManagement/Users/Edit", "ri-user-edit-line", 3)
+                        {
+                            CssClass = "nav-link"
+                        }
+                    }
+                },
+                new MenuItem("مدیریت نقش‌ها", "/RoleManagement", "ri-shield-user-line", 2)
+                {
+                    CssClass = "nav-link menu-link",
+                    Children = new List<MenuItem>
+                    {
+                        new MenuItem("لیست نقش‌ها", "/RoleManagement/Roles", "ri-list-check", 1)
+                        {
+                            CssClass = "nav-link"
+                        },
+                        new MenuItem("افزودن نقش", "/RoleManagement/Roles/Create", "ri-add-circle-line", 2)
+                        {
+                            CssClass = "nav-link"
+                        },
+                        new MenuItem("مدیریت مجوزها", "/RoleManagement/Permissions", "ri-lock-line", 3)
+                        {
+                            CssClass = "nav-link"
+                        }
+                    }
+                },
+                new MenuItem("تنظیمات سیستم", "/System", "ri-settings-3-line", 3)
+                {
+                    CssClass = "nav-link menu-link",
+                    Children = new List<MenuItem>
+                    {
+                        new MenuItem("تنظیمات عمومی", "/System/General", "ri-settings-line", 1)
+                        {
+                            CssClass = "nav-link"
+                        },
+                        new MenuItem("امنیت", "/System/Security", "ri-shield-line", 2)
+                        {
+                            CssClass = "nav-link"
+                        },
+                        new MenuItem("پشتیبان‌گیری", "/System/Backup", "ri-database-2-line", 3)
+                        {
+                            CssClass = "nav-link"
+                        }
                     }
                 }
             };
+
+            return items;
         }
     }
 } 

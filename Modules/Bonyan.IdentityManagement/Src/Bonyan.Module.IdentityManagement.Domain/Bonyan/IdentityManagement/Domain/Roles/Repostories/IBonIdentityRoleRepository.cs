@@ -2,11 +2,13 @@
 
 namespace Bonyan.IdentityManagement.Domain.Roles.Repostories;
 
-public interface IBonIdentityRoleRepository : IBonRepository<BonIdentityRole> 
+public interface IBonIdentityRoleRepository<TRole> : IBonRepository<TRole> 
+    where TRole : BonIdentityRole<TRole>
 {
 }
 
-public interface IBonIdentityRoleReadOnlyRepository: IBonReadOnlyRepository<BonIdentityRole> 
+public interface IBonIdentityRoleReadOnlyRepository<TRole> : IBonReadOnlyRepository<TRole> 
+    where TRole : BonIdentityRole<TRole>
 {
 }
 

@@ -6,8 +6,8 @@ using Bonyan.UserManagement.Domain.Users.ValueObjects;
 
 namespace Bonyan.IdentityManagement.Domain.Users.DomainServices;
 
-public interface IBonIdentityUserManager<TIdentityUser> : IBonDomainService
-    where TIdentityUser : BonIdentityUser
+public interface IBonIdentityUserManager<TIdentityUser,TRole> : IBonDomainService
+    where TIdentityUser : BonIdentityUser<TIdentityUser,TRole> where TRole : BonIdentityRole<TRole>
 {
     
     Task<BonDomainResult<TIdentityUser>> CreateAsync(TIdentityUser entity);
@@ -31,7 +31,7 @@ public interface IBonIdentityUserManager<TIdentityUser> : IBonDomainService
     
     Task<BonDomainResult<TIdentityUser>> AssignRolesAsync(TIdentityUser user, IEnumerable<BonRoleId> roleIds);
     Task<BonDomainResult> RemoveRoleAsync(TIdentityUser user, BonRoleId roleName);
-    Task<BonDomainResult<IReadOnlyList<BonIdentityRole>>> GetUserRolesAsync(TIdentityUser user);
+    Task<BonDomainResult<IReadOnlyList<TRole>>> GetUserRolesAsync(TIdentityUser user);
     
     Task<BonDomainResult<TIdentityUser>> CreateAsync(TIdentityUser entity, string password);
     Task<BonDomainResult> ChangePasswordAsync(TIdentityUser entity, string currentPassword, string newPassword);
@@ -48,8 +48,8 @@ public interface IBonIdentityUserManager<TIdentityUser> : IBonDomainService
     Task<BonDomainResult> RemoveClaimAsync(TIdentityUser user, string claimType, string claimValue);
     Task<BonDomainResult> RemoveClaimsByTypeAsync(TIdentityUser user, string claimType);
     Task<BonDomainResult<bool>> HasClaimAsync(TIdentityUser user, string claimType, string claimValue);
-    Task<BonDomainResult<IEnumerable<BonIdentityUserClaims>>> GetClaimsByTypeAsync(TIdentityUser user, string claimType);
-    Task<BonDomainResult<IEnumerable<BonIdentityUserClaims>>> GetAllClaimsAsync(TIdentityUser user);
+    Task<BonDomainResult<IEnumerable<BonIdentityUserClaims<TIdentityUser,TRole>>>> GetClaimsByTypeAsync(TIdentityUser user, string claimType);
+    Task<BonDomainResult<IEnumerable<BonIdentityUserClaims<TIdentityUser,TRole>>>> GetAllClaimsAsync(TIdentityUser user);
 
 }
 

@@ -8,10 +8,11 @@
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Framework\Src\Bonyan.AspNetCore\Bonyan.AspNetCore.csproj" />
+    <ProjectReference Include="..\..\..\Bonyan.IdentityManagement\Src\Bonyan.Module.IdentityManagement\Bonyan.Module.IdentityManagement.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Mvc.TagHelpers" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.ViewFeatures" Version="2.2.0" />
   </ItemGroup>
-  <Import Project="..\..\..\..\module-package.props"/>
+  <Import Project="..\..\..\..\module-package.props" />
 </Project>

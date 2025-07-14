@@ -25,7 +25,7 @@ namespace BonyanTemplate.Application
         public BonyanTemplateApplicationModule()
         {
             DependOn<BonTenantManagementApplicationModule>();
-            DependOn<BonIdentityManagementApplicationModule>();
+            DependOn<BonIdentityManagementApplicationModule<User,Role>>();
             DependOn<BonyanTemplateDomainModule>();
             DependOn<BonWorkersHangfireModule>();
         }

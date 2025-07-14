@@ -8,21 +8,21 @@ namespace Bonyan.IdentityManagement.Domain.Users.DomainEvents;
 public class BonIdentityUserTokenRemovedDomainEvent : IBonDomainEvent
 {
     /// <summary>
-    /// Gets the user associated with the token.
+    /// Gets the user associated with the removed token.
     /// </summary>
-    public BonIdentityUser User { get; }
+    public readonly object User;
 
     /// <summary>
-    /// Gets the removed token.
+    /// Gets the token that was removed.
     /// </summary>
-    public BonIdentityUserToken Token { get; }
+    public readonly object Token;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="BonIdentityUserTokenRemovedDomainEvent"/> class.
     /// </summary>
     /// <param name="user">The user associated with the removed token.</param>
-    /// <param name="token">The removed token.</param>
-    public BonIdentityUserTokenRemovedDomainEvent(BonIdentityUser user, BonIdentityUserToken token)
+    /// <param name="token">The token that was removed.</param>
+    public BonIdentityUserTokenRemovedDomainEvent(object user, object token)
     {
         User = user ?? throw new ArgumentNullException(nameof(user));
         Token = token ?? throw new ArgumentNullException(nameof(token));

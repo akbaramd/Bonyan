@@ -1,3 +1,4 @@
+using Bonyan.IdentityManagement.Domain.Roles;
 using Bonyan.IdentityManagement.Domain.Users;
 using Bonyan.IdentityManagement.Domain.Users.ValueObjects;
 using Bonyan.IdentityManagement.Domain.Roles.ValueObjects;
@@ -8,7 +9,9 @@ namespace Bonyan.IdentityManagement.Permissions;
 /// <summary>
 /// Interface for managing permissions in the system
 /// </summary>
-public interface IBonPermissionManager
+public interface IBonPermissionManager<TUser, TRole>
+    where TUser : BonIdentityUser<TUser, TRole>
+    where TRole : BonIdentityRole<TRole>
 {
     /// <summary>
     /// Initializes all permissions from registered providers
@@ -111,10 +114,56 @@ public interface IBonPermissionManager
     Task<IEnumerable<string>> GetRolePermissionsAsync(BonRoleId roleId);
 
     /// <summary>
-    /// Checks if a user has a specific permission
+    /// Checks if a user has a specific permission (checks both user claims and role claims)
     /// </summary>
     /// <param name="userId">User ID</param>
     /// <param name="permission">Permission name</param>
     /// <returns>True if user has permission</returns>
     Task<bool> HasPermissionAsync(BonUserId userId, string permission);
+
+    /// <summary>
+    /// Checks if a user has a specific permission directly (only user claims)
+    /// </summary>
+    /// <param name="userId">User ID</param>
+    /// <param name="permission">Permission name</param>
+    /// <returns>True if user has permission directly</returns>
+    Task<bool> HasDirectPermissionAsync(BonUserId userId, string permission);
+
+    /// <summary>
+    /// Checks if a user has a specific permission through roles (only role claims)
+    /// </summary>
+    /// <param name="userId">User ID</param>
+    /// <param name="permission">Permission name</param>
+    /// <returns>True if user has permission through roles</returns>
+    Task<bool> HasRolePermissionAsync(BonUserId userId, string permission);
+
+    /// <summary>
+    /// Checks if a user has any of the specified permissions
+    /// </summary>
+    /// <param name="userId">User ID</param>
+    /// <param name="permissions">Permission names to check</param>
+    /// <returns>True if user has any of the permissions</returns>
+    Task<bool> HasAnyPermissionAsync(BonUserId userId, IEnumerable<string> permissions);
+
+    /// <summary>
+    /// Checks if a user has all of the specified permissions
+    /// </summary>
+    /// <param name="userId">User ID</param>
+    /// <param name="permissions">Permission names to check</param>
+    /// <returns>True if user has all permissions</returns>
+    Task<bool> HasAllPermissionsAsync(BonUserId userId, IEnumerable<string> permissions);
+
+    /// <summary>
+    /// Gets direct permissions granted to a user (only user claims)
+    /// </summary>
+    /// <param name="userId">User ID</param>
+    /// <returns>Direct user permissions</returns>
+    Task<IEnumerable<string>> GetDirectUserPermissionsAsync(BonUserId userId);
+
+    /// <summary>
+    /// Gets permissions granted to a user through roles (only role claims)
+    /// </summary>
+    /// <param name="userId">User ID</param>
+    /// <returns>Role-based permissions</returns>
+    Task<IEnumerable<string>> GetRoleBasedPermissionsAsync(BonUserId userId);
 } 

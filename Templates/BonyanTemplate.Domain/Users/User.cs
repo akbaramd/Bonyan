@@ -4,7 +4,7 @@ using Bonyan.UserManagement.Domain.Users.ValueObjects;
 
 namespace BonyanTemplate.Domain.Users;
 
-public class User : BonIdentityUser
+public class User : BonIdentityUser<User,Role>
 {
     protected User()
     {

@@ -5,7 +5,7 @@ using Bonyan.UserManagement.Domain.Users;
 namespace Bonyan.UserManagement.EntityFrameworkCore;
 
 
-public class BonUserManagementEntityFrameworkModule : Modularity.Abstractions.BonModule 
+public class BonUserManagementEntityFrameworkModule<TUser> : Modularity.Abstractions.BonModule 
 {
 
   public BonUserManagementEntityFrameworkModule()

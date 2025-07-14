@@ -6,7 +6,8 @@ namespace Bonyan.IdentityManagement.Domain.Roles;
 /// <summary>
 /// Represents a claim associated with a role in the identity system.
 /// </summary>
-public class BonIdentityRoleClaims : BonEntity<BonRoleClaimId>
+public class BonIdentityRoleClaims<TRole> : BonEntity<BonRoleClaimId>
+    where TRole : BonIdentityRole<TRole>
 {
     /// <summary>
     /// Gets the ID of the role associated with this claim.
@@ -29,7 +30,7 @@ public class BonIdentityRoleClaims : BonEntity<BonRoleClaimId>
     public string? Issuer { get; private set; }
 
     // Navigation property back to role
-    public BonIdentityRole Role { get; private set; } = default!;
+    public TRole Role { get; private set; } = default!;
 
     // Protected constructor for EF Core
     protected BonIdentityRoleClaims() { }
@@ -37,8 +38,7 @@ public class BonIdentityRoleClaims : BonEntity<BonRoleClaimId>
     /// <summary>
     /// Constructs a new role claim.
     /// </summary>
-    public BonIdentityRoleClaims(BonRoleClaimId id, BonRoleId roleId, string claimType, string claimValue, string? issuer = null) 
-        
+    public BonIdentityRoleClaims(BonRoleClaimId id, BonRoleId roleId, string claimType, string claimValue, string? issuer = null)
     {
         Id = id;
         RoleId = roleId ?? throw new ArgumentNullException(nameof(roleId));

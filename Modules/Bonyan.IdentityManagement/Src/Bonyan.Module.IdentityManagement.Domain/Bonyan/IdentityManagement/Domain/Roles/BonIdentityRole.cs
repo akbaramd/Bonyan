@@ -8,9 +8,9 @@ namespace Bonyan.IdentityManagement.Domain.Roles
     /// Represents an identity role in the domain.
     /// Encapsulates role behavior and adheres to DDD principles.
     /// </summary>
-    public class BonIdentityRole : BonAggregateRoot<BonRoleId>
+    public class BonIdentityRole<TRole> : BonAggregateRoot<BonRoleId> where TRole : BonIdentityRole<TRole>
     {
-        private readonly List<BonIdentityRoleClaims> _claims = new List<BonIdentityRoleClaims>();
+        private readonly List<BonIdentityRoleClaims<TRole>> _claims = new List<BonIdentityRoleClaims<TRole>>();
 
         // Private constructor for ORM or factory use
         protected BonIdentityRole()
@@ -39,17 +39,17 @@ namespace Bonyan.IdentityManagement.Domain.Roles
         /// <summary>
         /// Gets the claims associated with the role.
         /// </summary>
-        public IReadOnlyCollection<BonIdentityRoleClaims> RoleClaims => _claims;
+        public IReadOnlyCollection<BonIdentityRoleClaims<TRole>> RoleClaims => _claims;
 
         /// <summary>
         /// Static factory method to create a deletable role.
         /// </summary>
         /// <param name="id">The unique identifier for the role.</param>
         /// <param name="title">The title of the role.</param>
-        /// <returns>A new instance of <see cref="BonIdentityRole"/>.</returns>
-        public static BonIdentityRole CreateDeletable(BonRoleId id, string title)
+        /// <returns>A new instance of <see cref="BonIdentityRole{TRole}"/>.</returns>
+        public static TRole CreateDeletable(BonRoleId id, string title)
         {
-            return new BonIdentityRole(id, title, canBeDeleted: true);
+            return (TRole)new BonIdentityRole<TRole>(id, title, canBeDeleted: true);
         }
 
         /// <summary>
@@ -57,10 +57,10 @@ namespace Bonyan.IdentityManagement.Domain.Roles
         /// </summary>
         /// <param name="id">The unique identifier for the role.</param>
         /// <param name="title">The title of the role.</param>
-        /// <returns>A new instance of <see cref="BonIdentityRole"/>.</returns>
-        public static BonIdentityRole CreateNonDeletable(BonRoleId id, string title)
+        /// <returns>A new instance of <see cref="BonIdentityRole{TRole}"/>.</returns>
+        public static TRole CreateNonDeletable(BonRoleId id, string title)
         {
-            return new BonIdentityRole(id, title, canBeDeleted: false);
+            return (TRole)new BonIdentityRole<TRole>(id, title, canBeDeleted: false);
         }
 
         /// <summary>
@@ -93,7 +93,7 @@ namespace Bonyan.IdentityManagement.Domain.Roles
             var existingClaim = _claims.FirstOrDefault(c => c.ClaimType == claimType && c.ClaimValue == claimValue);
             if (existingClaim == null)
             {
-                var claim = new BonIdentityRoleClaims(claimId, Id, claimType, claimValue, issuer);
+                var claim = new BonIdentityRoleClaims<TRole>(claimId, Id, claimType, claimValue, issuer);
                 _claims.Add(claim);
             }
         }
@@ -154,7 +154,7 @@ namespace Bonyan.IdentityManagement.Domain.Roles
         /// </summary>
         /// <param name="claimType">The type of claims to retrieve.</param>
         /// <returns>A collection of claims with the specified type.</returns>
-        public IEnumerable<BonIdentityRoleClaims> GetClaimsByType(string claimType)
+        public IEnumerable<BonIdentityRoleClaims<TRole>> GetClaimsByType(string claimType)
         {
             if (string.IsNullOrEmpty(claimType))
                 throw new ArgumentException("Claim type cannot be null or empty.", nameof(claimType));

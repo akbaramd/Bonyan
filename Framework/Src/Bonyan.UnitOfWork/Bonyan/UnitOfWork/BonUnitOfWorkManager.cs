@@ -26,18 +26,24 @@ public class BonUnitOfWorkManager : IBonUnitOfWorkManager
     {
         Check.NotNull(options, nameof(options));
 
-         _semaphore.Wait();
-        
-        var currentUow = Current;
-        if (currentUow != null && !requiresNew)
+        _semaphore.Wait();
+        try
         {
-            return new BonChildUnitOfWork(currentUow);
+            var currentUow = Current;
+            if (currentUow != null && !requiresNew)
+            {
+                return new BonChildUnitOfWork(currentUow);
+            }
+
+            var unitOfWork = CreateNewUnitOfWork();
+            unitOfWork.Initialize(options);
+
+            return unitOfWork;
         }
-
-        var unitOfWork = CreateNewUnitOfWork();
-        unitOfWork.Initialize(options);
-
-        return unitOfWork;
+        finally
+        {
+            _semaphore.Release();
+        }
     }
 
     public IBonUnitOfWork Reserve(string reservationName, bool requiresNew = false)

@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using Bonyan.IdentityManagement.Domain.Roles;
 using Bonyan.IdentityManagement.Domain.Users;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -8,14 +9,14 @@ namespace Bonyan.IdentityManagement
     /// <summary>
     /// Manages and aggregates claims from multiple claim providers
     /// </summary>
-    public class ClaimProviderManager<TUser> : IBonIdentityClaimProviderManager<TUser> where TUser : BonIdentityUser
+    public class ClaimProviderManager<TUser,TRole> : IBonIdentityClaimProviderManager<TUser,TRole> where TUser : BonIdentityUser<TUser,TRole> where TRole : BonIdentityRole<TRole>
     {
         private readonly IServiceProvider _serviceProvider;
-        private readonly ILogger<ClaimProviderManager<TUser>> _logger;
+        private readonly ILogger<ClaimProviderManager<TUser,TRole>> _logger;
 
         public ClaimProviderManager(
             IServiceProvider serviceProvider,
-            ILogger<ClaimProviderManager<TUser>> logger)
+            ILogger<ClaimProviderManager<TUser,TRole>> logger)
         {
             _serviceProvider = serviceProvider;
             _logger = logger;
@@ -27,7 +28,7 @@ namespace Bonyan.IdentityManagement
 
             try
             {
-                var claimProviders = _serviceProvider.GetServices<IBonIdentityClaimProvider<TUser>>();
+                var claimProviders = _serviceProvider.GetServices<IBonIdentityClaimProvider<TUser,TRole>>();
 
                 foreach (var provider in claimProviders)
                 {

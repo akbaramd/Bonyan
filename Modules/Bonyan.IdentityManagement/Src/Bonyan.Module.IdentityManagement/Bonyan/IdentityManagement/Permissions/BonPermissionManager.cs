@@ -1,4 +1,5 @@
 using System.Collections.Concurrent;
+using Bonyan.IdentityManagement.Domain.Roles;
 using Bonyan.IdentityManagement.Domain.Roles.DomainServices;
 using Bonyan.IdentityManagement.Domain.Roles.ValueObjects;
 using Bonyan.IdentityManagement.Domain.Users;
@@ -13,10 +14,12 @@ namespace Bonyan.IdentityManagement.Permissions;
 /// <summary>
 /// Implementation of permission manager
 /// </summary>
-public class BonPermissionManager : IBonPermissionManager
+public class BonPermissionManager<TUser, TRole> : IBonPermissionManager<TUser, TRole>
+    where TUser : BonIdentityUser<TUser, TRole>
+    where TRole : BonIdentityRole<TRole>
 {
     private readonly IServiceProvider _serviceProvider;
-    private readonly ILogger<BonPermissionManager> _logger;
+    private readonly ILogger<BonPermissionManager<TUser, TRole>> _logger;
     private readonly ConcurrentDictionary<string, PermissionDefinition> _permissions = new();
     private readonly ConcurrentDictionary<string, PermissionGroupDefinition> _groups = new();
     private readonly object _initializationLock = new();
@@ -24,7 +27,7 @@ public class BonPermissionManager : IBonPermissionManager
 
     public BonPermissionManager(
         IServiceProvider serviceProvider,
-        ILogger<BonPermissionManager> logger)
+        ILogger<BonPermissionManager<TUser, TRole>> logger)
     {
         _serviceProvider = serviceProvider;
         _logger = logger;
@@ -139,7 +142,7 @@ public class BonPermissionManager : IBonPermissionManager
 
         try
         {
-            var userManager = _serviceProvider.GetRequiredService<IBonIdentityUserManager<BonIdentityUser>>();
+            var userManager = _serviceProvider.GetRequiredService<IBonIdentityUserManager<TUser, TRole>>();
             var userResult = await userManager.FindByIdAsync(userId);
             
             if (!userResult.IsSuccess)
@@ -163,7 +166,7 @@ public class BonPermissionManager : IBonPermissionManager
     {
         try
         {
-            var userManager = _serviceProvider.GetRequiredService<IBonIdentityUserManager<BonIdentityUser>>();
+            var userManager = _serviceProvider.GetRequiredService<IBonIdentityUserManager<TUser, TRole>>();
             var userResult = await userManager.FindByIdAsync(userId);
             
             if (!userResult.IsSuccess)
@@ -194,7 +197,7 @@ public class BonPermissionManager : IBonPermissionManager
 
         try
         {
-            var roleManager = _serviceProvider.GetRequiredService<IBonIdentityRoleManager>();
+            var roleManager = _serviceProvider.GetRequiredService<IBonIdentityRoleManager<TRole>>();
             var roleResult = await roleManager.FindRoleByIdAsync(roleId.Value);
             
             if (!roleResult.IsSuccess)
@@ -218,7 +221,7 @@ public class BonPermissionManager : IBonPermissionManager
     {
         try
         {
-            var roleManager = _serviceProvider.GetRequiredService<IBonIdentityRoleManager>();
+            var roleManager = _serviceProvider.GetRequiredService<IBonIdentityRoleManager<TRole>>();
             var roleResult = await roleManager.FindRoleByIdAsync(roleId.Value);
             
             if (!roleResult.IsSuccess)
@@ -240,9 +243,17 @@ public class BonPermissionManager : IBonPermissionManager
 
     public async Task<IEnumerable<string>> GetUserPermissionsAsync(BonUserId userId)
     {
+        var directPermissions = await GetDirectUserPermissionsAsync(userId);
+        var rolePermissions = await GetRoleBasedPermissionsAsync(userId);
+        
+        return directPermissions.Union(rolePermissions).Distinct();
+    }
+
+    public async Task<IEnumerable<string>> GetDirectUserPermissionsAsync(BonUserId userId)
+    {
         try
         {
-            var userManager = _serviceProvider.GetRequiredService<IBonIdentityUserManager<BonIdentityUser>>();
+            var userManager = _serviceProvider.GetRequiredService<IBonIdentityUserManager<TUser, TRole>>();
             var userResult = await userManager.FindByIdAsync(userId);
             
             if (!userResult.IsSuccess)
@@ -251,42 +262,59 @@ public class BonPermissionManager : IBonPermissionManager
             }
 
             var user = userResult.Value;
-            var permissions = new HashSet<string>();
-
-            // Get direct user permissions
-            var userClaimsResult = await userManager.GetClaimsByTypeAsync(user, BonClaimTypes.Permission);
-            if (userClaimsResult.IsSuccess)
+            var claimsResult = await userManager.GetClaimsByTypeAsync(user, BonClaimTypes.Permission);
+            
+            if (!claimsResult.IsSuccess)
             {
-                foreach (var claim in userClaimsResult.Value)
-                {
-                    permissions.Add(claim.ClaimValue);
-                }
+                return Enumerable.Empty<string>();
             }
 
-            // Get permissions from user roles
-            var userRolesResult = await userManager.GetUserRolesAsync(user);
-            if (userRolesResult.IsSuccess)
-            {
-                var roleManager = _serviceProvider.GetRequiredService<IBonIdentityRoleManager>();
-                
-                foreach (var role in userRolesResult.Value)
-                {
-                    var roleClaimsResult = await roleManager.GetClaimsByTypeAsync(role, BonClaimTypes.Permission);
-                    if (roleClaimsResult.IsSuccess)
-                    {
-                        foreach (var claim in roleClaimsResult.Value)
-                        {
-                            permissions.Add(claim.ClaimValue);
-                        }
-                    }
-                }
-            }
-
-            return permissions;
+            return claimsResult.Value.Select(c => c.ClaimValue);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Failed to get permissions for user '{UserId}'", userId);
+            _logger.LogError(ex, "Failed to get direct permissions for user '{UserId}'", userId);
+            return Enumerable.Empty<string>();
+        }
+    }
+
+    public async Task<IEnumerable<string>> GetRoleBasedPermissionsAsync(BonUserId userId)
+    {
+        try
+        {
+            var userManager = _serviceProvider.GetRequiredService<IBonIdentityUserManager<TUser, TRole>>();
+            var userResult = await userManager.FindByIdAsync(userId);
+            
+            if (!userResult.IsSuccess)
+            {
+                return Enumerable.Empty<string>();
+            }
+
+            var user = userResult.Value;
+            var rolesResult = await userManager.GetUserRolesAsync(user);
+            
+            if (!rolesResult.IsSuccess)
+            {
+                return Enumerable.Empty<string>();
+            }
+
+            var roleManager = _serviceProvider.GetRequiredService<IBonIdentityRoleManager<TRole>>();
+            var allPermissions = new List<string>();
+
+            foreach (var role in rolesResult.Value)
+            {
+                var roleClaimsResult = await roleManager.GetClaimsByTypeAsync(role, BonClaimTypes.Permission);
+                if (roleClaimsResult.IsSuccess)
+                {
+                    allPermissions.AddRange(roleClaimsResult.Value.Select(c => c.ClaimValue));
+                }
+            }
+
+            return allPermissions.Distinct();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to get role-based permissions for user '{UserId}'", userId);
             return Enumerable.Empty<string>();
         }
     }
@@ -295,7 +323,7 @@ public class BonPermissionManager : IBonPermissionManager
     {
         try
         {
-            var roleManager = _serviceProvider.GetRequiredService<IBonIdentityRoleManager>();
+            var roleManager = _serviceProvider.GetRequiredService<IBonIdentityRoleManager<TRole>>();
             var roleResult = await roleManager.FindRoleByIdAsync(roleId.Value);
             
             if (!roleResult.IsSuccess)
@@ -306,12 +334,12 @@ public class BonPermissionManager : IBonPermissionManager
             var role = roleResult.Value;
             var claimsResult = await roleManager.GetClaimsByTypeAsync(role, BonClaimTypes.Permission);
             
-            if (claimsResult.IsSuccess)
+            if (!claimsResult.IsSuccess)
             {
-                return claimsResult.Value.Select(c => c.ClaimValue);
+                return Enumerable.Empty<string>();
             }
 
-            return Enumerable.Empty<string>();
+            return claimsResult.Value.Select(c => c.ClaimValue);
         }
         catch (Exception ex)
         {
@@ -322,8 +350,32 @@ public class BonPermissionManager : IBonPermissionManager
 
     public async Task<bool> HasPermissionAsync(BonUserId userId, string permission)
     {
+        return await HasDirectPermissionAsync(userId, permission) || 
+               await HasRolePermissionAsync(userId, permission);
+    }
+
+    public async Task<bool> HasDirectPermissionAsync(BonUserId userId, string permission)
+    {
+        var directPermissions = await GetDirectUserPermissionsAsync(userId);
+        return directPermissions.Contains(permission);
+    }
+
+    public async Task<bool> HasRolePermissionAsync(BonUserId userId, string permission)
+    {
+        var rolePermissions = await GetRoleBasedPermissionsAsync(userId);
+        return rolePermissions.Contains(permission);
+    }
+
+    public async Task<bool> HasAnyPermissionAsync(BonUserId userId, IEnumerable<string> permissions)
+    {
         var userPermissions = await GetUserPermissionsAsync(userId);
-        return userPermissions.Contains(permission);
+        return permissions.Any(p => userPermissions.Contains(p));
+    }
+
+    public async Task<bool> HasAllPermissionsAsync(BonUserId userId, IEnumerable<string> permissions)
+    {
+        var userPermissions = await GetUserPermissionsAsync(userId);
+        return permissions.All(p => userPermissions.Contains(p));
     }
 
     private void EnsureInitialized()

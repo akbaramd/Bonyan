@@ -1,15 +1,22 @@
 using System.Collections.Concurrent;
 using System.Security.Claims;
+using Bonyan.IdentityManagement.Domain.Roles;
+using Bonyan.IdentityManagement.Domain.Users;
 using Microsoft.Extensions.Logging;
+using Bonyan.IdentityManagement.Permissions;
+using Bonyan.User;
+using Bonyan.UserManagement.Domain.Users.ValueObjects;
 
 namespace Menus
 {
     /// <summary>
     /// Default implementation of IMenuManager that orchestrates menu providers and locations
     /// </summary>
-    public class MenuManager : IMenuManager
+    public class MenuManager<TUser,TRole> : IMenuManager<TUser,TRole> where TUser : BonIdentityUser<TUser,TRole> where TRole : BonIdentityRole<TRole>
     {
-        private readonly ILogger<MenuManager> _logger;
+        private readonly ILogger<MenuManager<TUser,TRole>> _logger;
+        private readonly IBonPermissionManager<TUser,TRole>? _permissionManager;
+        private readonly IBonCurrentUser? _currentUser;
         private readonly ConcurrentDictionary<string, IMenuProvider> _providers = new();
         private readonly ConcurrentDictionary<string, MenuLocation> _locations = new();
 
@@ -23,9 +30,14 @@ namespace Menus
         /// </summary>
         public IEnumerable<MenuLocation> MenuLocations => _locations.Values;
 
-        public MenuManager(ILogger<MenuManager> logger)
+        public MenuManager(
+            ILogger<MenuManager<TUser,TRole>> logger, 
+            IBonPermissionManager<TUser,TRole>? permissionManager = null,
+            IBonCurrentUser? currentUser = null)
         {
             _logger = logger;
+            _permissionManager = permissionManager;
+            _currentUser = currentUser;
         }
 
         /// <summary>
@@ -52,6 +64,10 @@ namespace Menus
                     IsEnabled = true,
                     ProviderId = "MenuManager"
                 };
+
+                // Check menu-level authorities
+                if (!await CheckMenuAuthorityAsync(menu, user))
+                    return null;
 
                 return menu;
             }
@@ -117,10 +133,17 @@ namespace Menus
                 }
 
                 // Filter visible items and sort by order
-                var visibleItems = allMenuItems
-                    .Where(item => item.CheckIsVisible(user))
-                    .OrderBy(item => item.Order)
-                    .ToList();
+                var visibleItems = new List<MenuItem>();
+                
+                foreach (var item in allMenuItems)
+                {
+                    if (await CheckMenuItemVisibilityAsync(item, user))
+                    {
+                        visibleItems.Add(item);
+                    }
+                }
+                
+                visibleItems = visibleItems.OrderBy(item => item.Order).ToList();
 
                 // Apply menu location constraints
                 if (menuLocation != null)
@@ -165,7 +188,15 @@ namespace Menus
                     try
                     {
                         var menus = await provider.GetMenusAsync(user);
-                        allMenus.AddRange(menus);
+                        
+                        // Check menu-level authorities for each menu
+                        foreach (var menu in menus)
+                        {
+                            if (await CheckMenuAuthorityAsync(menu, user))
+                            {
+                                allMenus.Add(menu);
+                            }
+                        }
                     }
                     catch (Exception ex)
                     {
@@ -179,7 +210,7 @@ namespace Menus
                     if (!allMenus.Any(m => string.Equals(m.Location, location.Id, StringComparison.OrdinalIgnoreCase)))
                     {
                         var menu = await GetMenuAsync(location.Id, user);
-                        if (menu != null)
+                        if (menu != null && await CheckMenuAuthorityAsync(menu, user))
                         {
                             allMenus.Add(menu);
                         }
@@ -203,6 +234,58 @@ namespace Menus
         public IEnumerable<Menu> GetAllMenus(ClaimsPrincipal? user = null)
         {
             return GetAllMenusAsync(user).GetAwaiter().GetResult();
+        }
+
+        /// <summary>
+        /// Gets the menu for a specific location using the current user context
+        /// </summary>
+        /// <param name="location">The menu location</param>
+        /// <returns>The combined menu for the specified location</returns>
+        public async Task<Menu?> GetMenuForCurrentUserAsync(string location)
+        {
+            if (_currentUser?.IsAuthenticated != true)
+                return await GetMenuAsync(location, null);
+            
+            // Create a minimal ClaimsPrincipal for compatibility with existing checks
+            var claims = new List<Claim>();
+            if (_currentUser.UserName != null)
+                claims.Add(new Claim(ClaimTypes.Name, _currentUser.UserName));
+            if (_currentUser.Id != null)
+                claims.Add(new Claim(ClaimTypes.NameIdentifier, _currentUser.Id.Value.ToString()));
+            
+            foreach (var role in _currentUser.Roles)
+                claims.Add(new Claim(ClaimTypes.Role, role));
+
+            var identity = new ClaimsIdentity(claims, "current-user");
+            var principal = new ClaimsPrincipal(identity);
+            
+            return await GetMenuAsync(location, principal);
+        }
+
+        /// <summary>
+        /// Gets menu items for a specific location using the current user context
+        /// </summary>
+        /// <param name="location">The menu location</param>
+        /// <returns>Menu items for the specified location</returns>
+        public async Task<IEnumerable<MenuItem>> GetMenuItemsForCurrentUserAsync(string location)
+        {
+            if (_currentUser?.IsAuthenticated != true)
+                return await GetMenuItemsAsync(location, null);
+            
+            // Create a minimal ClaimsPrincipal for compatibility with existing checks
+            var claims = new List<Claim>();
+            if (_currentUser.UserName != null)
+                claims.Add(new Claim(ClaimTypes.Name, _currentUser.UserName));
+            if (_currentUser.Id != null)
+                claims.Add(new Claim(ClaimTypes.NameIdentifier, _currentUser.Id.Value.ToString()));
+            
+            foreach (var role in _currentUser.Roles)
+                claims.Add(new Claim(ClaimTypes.Role, role));
+
+            var identity = new ClaimsIdentity(claims, "current-user");
+            var principal = new ClaimsPrincipal(identity);
+            
+            return await GetMenuItemsAsync(location, principal);
         }
 
         /// <summary>
@@ -370,6 +453,7 @@ namespace Menus
                 RequiredPermissions = new List<string>(item.RequiredPermissions),
                 RequiredRoles = new List<string>(item.RequiredRoles),
                 RequiresAuthentication = item.RequiresAuthentication,
+                Authority = new List<string>(item.Authority),
                 Metadata = new Dictionary<string, object>(item.Metadata),
                 VisibilityCondition = item.VisibilityCondition
             };
@@ -384,6 +468,93 @@ namespace Menus
             }
 
             return clonedItem;
+        }
+
+        /// <summary>
+        /// Checks if a menu item is visible to the specified user including authority checks
+        /// </summary>
+        /// <param name="item">The menu item to check</param>
+        /// <param name="user">The user to check visibility for</param>
+        /// <returns>True if the item is visible to the user</returns>
+        private async Task<bool> CheckMenuItemVisibilityAsync(MenuItem item, ClaimsPrincipal? user = null)
+        {
+            // First check basic visibility (this includes authentication, roles, and basic permissions)
+            if (!item.CheckIsVisible(user))
+                return false;
+
+            // Check authorities using permission manager and current user if available
+            if (item.Authority.Any() && _permissionManager != null && _currentUser?.IsAuthenticated == true)
+            {
+                if (!await CheckUserHasAnyAuthorityAsync(user, item.Authority))
+                    return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Checks if a user has any of the required authorities
+        /// </summary>
+        /// <param name="user">The user to check</param>
+        /// <param name="authorities">The required authorities</param>
+        /// <returns>True if the user has any of the required authorities</returns>
+        private async Task<bool> CheckUserHasAnyAuthorityAsync(ClaimsPrincipal user, List<string> authorities)
+        {
+            if (_permissionManager == null || !authorities.Any())
+                return true;
+
+            try
+            {
+                // Use IBonCurrentUser to get the current user ID
+                if (_currentUser?.Id == null)
+                {
+                    _logger.LogWarning("Current user ID is not available for user {UserName}", user.Identity?.Name);
+                    return false;
+                }
+
+                // Convert Guid to BonUserId
+                var userId = BonUserId.NewId(_currentUser.Id.Value);
+
+                // Use the new HasAnyPermissionAsync method which is more efficient
+                var hasPermission = await _permissionManager.HasAnyPermissionAsync(userId, authorities);
+                
+                _logger.LogDebug("User {UserId} ({UserName}) permission check result: {HasPermission} for authorities: {Authorities}", 
+                    _currentUser.Id, _currentUser.UserName, hasPermission, string.Join(", ", authorities));
+                
+                return hasPermission;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error checking user authorities for user {UserId} ({UserName})", 
+                    _currentUser?.Id, _currentUser?.UserName);
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Checks if a menu has the required authorities for the specified user
+        /// </summary>
+        /// <param name="menu">The menu to check</param>
+        /// <param name="user">The user to check authorities for</param>
+        /// <returns>True if the user has access to the menu</returns>
+        private async Task<bool> CheckMenuAuthorityAsync(Menu menu, ClaimsPrincipal? user = null)
+        {
+            // Check authentication requirement using IBonCurrentUser if available, otherwise fallback to ClaimsPrincipal
+            if (menu.RequiresAuthentication)
+            {
+                var isAuthenticated = _currentUser?.IsAuthenticated ?? (user?.Identity?.IsAuthenticated == true);
+                if (!isAuthenticated)
+                    return false;
+            }
+
+            // Check authorities using permission manager if available
+            if (menu.Authority.Any() && _permissionManager != null && user != null)
+            {
+                if (!await CheckUserHasAnyAuthorityAsync(user, menu.Authority))
+                    return false;
+            }
+
+            return true;
         }
     }
 } 

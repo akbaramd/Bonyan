@@ -1,4 +1,5 @@
-﻿using Bonyan.IdentityManagement.Domain.Users.ValueObjects;
+﻿using Bonyan.IdentityManagement.Domain.Roles;
+using Bonyan.IdentityManagement.Domain.Users.ValueObjects;
 using Bonyan.Layer.Domain.Entities;
 using Bonyan.UserManagement.Domain.Users.ValueObjects;
 
@@ -7,7 +8,8 @@ namespace Bonyan.IdentityManagement.Domain.Users;
 /// <summary>
 /// Represents a token associated with a user in the identity system.
 /// </summary>
-public class BonIdentityUserToken : BonEntity<BonIdentityUserTokenId>
+public class BonIdentityUserToken<TUser,TRole> : BonEntity<BonIdentityUserTokenId>
+    where TUser : BonIdentityUser<TUser,TRole> where TRole : BonIdentityRole<TRole>
 {
     /// <summary>
     /// Gets the ID of the user associated with this token.
@@ -38,6 +40,9 @@ public class BonIdentityUserToken : BonEntity<BonIdentityUserTokenId>
     /// Gets the expiration time of the token.
     /// </summary>
     public DateTime? Expiration { get; private set; }
+
+    // Navigation property back to user
+    public TUser User { get; private set; } = default!;
 
     // Private constructor for EF Core
     private BonIdentityUserToken() { }

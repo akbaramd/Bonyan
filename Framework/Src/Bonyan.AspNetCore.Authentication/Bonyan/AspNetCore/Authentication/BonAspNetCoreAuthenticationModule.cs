@@ -1,5 +1,6 @@
 ﻿
 using Bonyan.Modularity;
+using Bonyan.Security;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 
@@ -9,6 +10,8 @@ namespace Bonyan.AspNetCore.Authentication
     {
         public BonAspnetCoreAuthenticationModule()
         {
+            
+            DependOn<BonSecurityModule>();
             DependOn<BonAspNetCoreModule>();
             
         }
