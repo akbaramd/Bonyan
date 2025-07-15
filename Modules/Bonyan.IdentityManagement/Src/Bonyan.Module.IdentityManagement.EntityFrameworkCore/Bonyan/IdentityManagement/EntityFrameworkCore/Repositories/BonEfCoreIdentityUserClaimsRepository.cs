@@ -11,20 +11,11 @@ public class BonEfCoreIdentityUserClaimsRepository<TUser, TRole> : EfCoreBonRepo
     where TUser : BonIdentityUser<TUser, TRole>
     where TRole : BonIdentityRole<TRole>
 {
-    protected override IQueryable<BonIdentityUserClaims<TUser, TRole>> PrepareQuery(DbSet<BonIdentityUserClaims<TUser, TRole>> dbSet)
-    {
-        return base.PrepareQuery(dbSet)
-            .Include(x => x.User);
-    }
 }
 
 public class BonEfCoreIdentityUserClaimsReadOnlyRepository<TUser, TRole> : EfCoreReadonlyRepository<BonIdentityUserClaims<TUser, TRole>, BonUserClaimId, IBonIdentityManagementDbContext<TUser, TRole>>, IBonIdentityUserClaimsReadOnlyRepository<TUser, TRole> 
     where TUser : BonIdentityUser<TUser, TRole>
     where TRole : BonIdentityRole<TRole>
 {
-    protected override IQueryable<BonIdentityUserClaims<TUser, TRole>> PrepareQuery(DbSet<BonIdentityUserClaims<TUser, TRole>> dbSet)
-    {
-        return base.PrepareQuery(dbSet)
-            .Include(x => x.User);
-    }
+    
 } 
