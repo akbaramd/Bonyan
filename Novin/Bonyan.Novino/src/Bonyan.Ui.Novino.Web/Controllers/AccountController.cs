@@ -6,6 +6,9 @@ using Bonyan.IdentityManagement.Domain.Users.DomainServices;
 using Bonyan.IdentityManagement.Domain.Users.ValueObjects;
 using Bonyan.IdentityManagement.Permissions;
 using Bonyan.Layer.Domain.DomainService;
+using Bonyan.Mediators;
+using Bonyan.Module.NotificationManagement.Abstractions.Types;
+using Bonyan.Module.NotificationManagement.Application.Commands;
 using Bonyan.Novino.Domain.Entities;
 using Bonyan.UserManagement.Domain.Users.Enumerations;
 using Microsoft.AspNetCore.Authentication;
@@ -27,6 +30,7 @@ namespace Bonyan.Novino.Web.Controllers
         private readonly IBonPermissionManager<Domain.Entities.User, Role> _permissionManager;
         private readonly ILogger<AccountController> _logger;
         private readonly IConfiguration _configuration;
+        private readonly IBonMediator _mediator;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
         // Security configuration
@@ -41,7 +45,7 @@ namespace Bonyan.Novino.Web.Controllers
             IBonPermissionManager<Domain.Entities.User, Role> permissionManager,
             ILogger<AccountController> logger,
             IConfiguration configuration,
-            IHttpContextAccessor httpContextAccessor)
+            IHttpContextAccessor httpContextAccessor, IBonMediator mediator)
         {
             _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
             _roleManager = roleManager ?? throw new ArgumentNullException(nameof(roleManager));
@@ -49,6 +53,7 @@ namespace Bonyan.Novino.Web.Controllers
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
             _httpContextAccessor = httpContextAccessor ?? throw new ArgumentNullException(nameof(httpContextAccessor));
+            _mediator = mediator;
         }
 
         /// <summary>
@@ -158,6 +163,8 @@ namespace Bonyan.Novino.Web.Controllers
                     return Redirect(returnUrl);
                 }
 
+                await _mediator.SendAsync(new SendNotificationCommand(NotificationChannel.InApp, user.Id.ToString(),
+                    "ورود به سامانه", "", Purpose: "Account/Login"));
                 return RedirectToAction("Index", "Home");
             }
             catch (Exception ex)

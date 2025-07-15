@@ -12,9 +12,25 @@ using Bonyan.VirtualFileSystem;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
+using Bonyan.Module.NotificationManagement.Abstractions.Options;
+using Bonyan.Module.NotificationManagement.Abstractions.Providers;
+using Bonyan.Module.NotificationManagement.Abstractions.Types;
 
 namespace Bonyan.Novino.Infrastructure;
 
+public class InAppNotificationProvider : INotificationProvider
+{
+    public string Key => "InApp";
+
+    public NotificationChannel Channel => NotificationChannel.InApp;
+
+   
+
+    public Task SendAsync(string userId, string title, string message, string? link, CancellationToken cancellationToken = default)
+    {
+        return Task.CompletedTask;
+    }
+}
 public class BonyanNovinoInfrastructureModule : BonModule
 {
     public BonyanNovinoInfrastructureModule()
@@ -23,6 +39,16 @@ public class BonyanNovinoInfrastructureModule : BonModule
         DependOn<BonIdentityManagementEntityFrameworkCoreModule<Domain.Entities.User,Role>>();
         DependOn<BonTenantManagementEntityFrameworkModule>();
         DependOn<BonNotificationManagementEntityFrameworkCoreModule>();
+    }
+
+    public override Task OnPreConfigureAsync(BonConfigurationContext context)
+    {
+        context.Services.AddKeyedSingleton<InAppNotificationProvider>("InApp");
+        Configure<NotificationManagementOptions>(options => {
+            options.Providers.Add(NotificationChannel.InApp, new List<string> { "InApp" });
+        });
+
+        return base.OnPreConfigureAsync(context);
     }
 
     public override Task OnConfigureAsync(BonConfigurationContext context)
@@ -36,6 +62,8 @@ public class BonyanNovinoInfrastructureModule : BonModule
             options.UseSqlServer(connectionString);
         });
 
+
+       
     
         return base.OnConfigureAsync(context);
     }

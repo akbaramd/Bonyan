@@ -19,6 +19,7 @@ using Bonyan.Novino.Web.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.IO;
+using Bonyan.Novino.Application;
 using Bonyan.Novino.Core;
 using Bonyan.Novino.Core.Assets;
 using Bonyan.Novino.Core.Menus;
@@ -40,6 +41,7 @@ public class BonyanNovinoWebModule : BonWebModule
         
         DependOn<BonUiNovinoModule<Domain.Entities.User,Role>>();
         DependOn<BonyanNovinoInfrastructureModule>();
+        DependOn<BonyanNovinoApplicationModule>();
     }
     
     public override Task OnConfigureAsync(BonConfigurationContext context)

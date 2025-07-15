@@ -141,6 +141,10 @@ namespace Bonyan.Novino.Web.Assets
                 var pluginsAsset = CreateJavaScriptAsset("plugins-js", "/assets/js/plugins.js", 70, AssetLocation.Footer);
                 pluginsAsset.Dependencies.AddRange(new[] { "jquery-js", "bootstrap-bundle-js", "simplebar-js", "waves-js", "feather-icons-js", "lord-icon-js" });
                 assets.Add(pluginsAsset);
+                
+                var appAsset = CreateJavaScriptAsset("plugins-js", "/assets/js/app.js", 80, AssetLocation.Footer);
+                appAsset.Dependencies.AddRange(new[] { "jquery-js", "bootstrap-bundle-js", "simplebar-js", "waves-js", "feather-icons-js", "lord-icon-js" });
+                assets.Add(appAsset);
             }
             
             return Task.FromResult<IEnumerable<Asset>>(assets);
