@@ -26,22 +26,6 @@ namespace Microsoft.EntityFrameworkCore
                 builder.HasIndex(x => x.CreatedAt)
                     .HasDatabaseName("IX_Users_CreatedAt");
 
-                // Configure relationships (one-to-many)
-                builder.HasMany(x => x.Tokens)
-                    .WithOne()
-                    .HasForeignKey(x => x.UserId)
-                    .OnDelete(DeleteBehavior.Cascade);
-
-                builder.HasMany(x => x.UserRoles)
-                    .WithOne()
-                    .HasForeignKey(x => x.UserId)
-                    .OnDelete(DeleteBehavior.Cascade);
-
-                builder.HasMany(x => x.UserClaims)
-                    .WithOne()
-                    .HasForeignKey(x => x.UserId)
-                    .OnDelete(DeleteBehavior.Cascade);
-
                 // Configure UserProfile with proper lengths
                 builder.OwnsOne(user => user.Profile, profile =>
                 {

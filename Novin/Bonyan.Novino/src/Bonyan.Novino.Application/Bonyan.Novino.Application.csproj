@@ -13,7 +13,7 @@
 
 
   <ItemGroup>
-    <PackageReference Include="Bonyan.Module.NotificationManagement.Application" Version="1.5.2" />
+    <PackageReference Include="Bonyan.Module.NotificationManagement.Application" Version="1.5.3" />
   </ItemGroup>
 
 </Project> 

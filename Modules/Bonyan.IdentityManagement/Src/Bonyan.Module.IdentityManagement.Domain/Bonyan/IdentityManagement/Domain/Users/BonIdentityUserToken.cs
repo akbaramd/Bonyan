@@ -41,9 +41,6 @@ public class BonIdentityUserToken<TUser,TRole> : BonEntity<BonIdentityUserTokenI
     /// </summary>
     public DateTime? Expiration { get; private set; }
 
-    // Navigation property back to user
-    public TUser User { get; private set; } = default!;
-
     // Private constructor for EF Core
     private BonIdentityUserToken() { }
 

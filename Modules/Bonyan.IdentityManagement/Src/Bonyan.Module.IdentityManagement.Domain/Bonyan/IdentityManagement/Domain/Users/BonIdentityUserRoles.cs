@@ -13,8 +13,6 @@ namespace Bonyan.IdentityManagement.Domain.Users
 
         // Navigation property back to role
         public TRole Role { get; private set; } = default!;
-        // Navigation property back to user
-        public TUser User { get; private set; } = default!;
 
         protected BonIdentityUserRoles() { } // For EF Core use
 

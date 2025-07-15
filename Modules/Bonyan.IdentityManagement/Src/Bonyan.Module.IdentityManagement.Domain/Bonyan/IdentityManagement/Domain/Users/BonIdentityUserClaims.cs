@@ -31,8 +31,6 @@ public class BonIdentityUserClaims<TUser,TRole> : BonEntity<BonUserClaimId>
     /// </summary>
     public string? Issuer { get; private set; }
 
-    // Navigation property back to user
-    public TUser User { get; private set; } = default!;
     public string? ClaimValueType { get; set; }
 
     // Protected constructor for EF Core
