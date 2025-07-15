@@ -22,6 +22,7 @@ public class BonyanNovinoInfrastructureModule : BonModule
         DependOn<BonyanNovinoDomainModule>();
         DependOn<BonIdentityManagementEntityFrameworkCoreModule<Domain.Entities.User,Role>>();
         DependOn<BonTenantManagementEntityFrameworkModule>();
+        DependOn<BonNotificationManagementEntityFrameworkCoreModule>();
     }
 
     public override Task OnConfigureAsync(BonConfigurationContext context)

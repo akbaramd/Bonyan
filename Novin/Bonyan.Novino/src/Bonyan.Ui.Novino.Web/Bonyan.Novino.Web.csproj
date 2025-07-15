@@ -15,13 +15,11 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.12" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.12" />
     
-    <PackageReference Include="Bonyan.AspNetCore.Authentication.Cookie" Version="1.5.3" />
-    <PackageReference Include="Bonyan.AspNetCore.Mvc" Version="1.5.3" />
-    <PackageReference Include="Bonyan.EntityFrameworkCore.SqlServer" Version="1.5.3" />
-    <PackageReference Include="Bonyan.Module.IdentityManagement.Domain" Version="1.5.3" />
-    <PackageReference Include="Bonyan.Module.IdentityManagement.EntityFrameworkCore" Version="1.5.3" />
-    <PackageReference Include="Bonyan.Module.TenantManagement.Domain" Version="1.5.3" />
-    <PackageReference Include="Bonyan.Module.TenantManagement.EntityFrameworkCore" Version="1.5.3" />
+    <PackageReference Include="Bonyan.AspNetCore.Authentication.Cookie" Version="1.5.4" />
+    <PackageReference Include="Bonyan.AspNetCore.Mvc" Version="1.5.4" />
+    <PackageReference Include="Bonyan.EntityFrameworkCore.SqlServer" Version="1.5.4" />
+    <PackageReference Include="Bonyan.Module.IdentityManagement.Domain" Version="1.5.4" />
+    <PackageReference Include="Bonyan.Module.TenantManagement.Domain" Version="1.5.4" />
     
     <ProjectReference Include="..\Bonyan.Ui.Novino.Core\Bonyan.Novino.Core.csproj" />
     <ProjectReference Include="..\Bonyan.Novino.Infrastructure\Bonyan.Novino.Infrastructure.csproj" />

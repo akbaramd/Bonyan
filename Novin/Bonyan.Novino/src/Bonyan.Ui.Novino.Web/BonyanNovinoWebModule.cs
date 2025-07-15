@@ -11,7 +11,6 @@ using Bonyan.IdentityManagement;
 using Bonyan.IdentityManagement.Domain.Users;
 using Bonyan.IdentityManagement.Domain.Users.DomainServices;
 using Bonyan.IdentityManagement.Domain.Roles.DomainServices;
-using Bonyan.IdentityManagement.EntityFrameworkCore;
 using Bonyan.IdentityManagement.Permissions;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;

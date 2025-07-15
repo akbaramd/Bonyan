@@ -2,6 +2,8 @@
 using Bonyan.IdentityManagement.Domain.Roles;
 using Bonyan.IdentityManagement.Domain.Users;
 using Bonyan.IdentityManagement.EntityFrameworkCore;
+using Bonyan.Module.NotificationManagement.Domain.Notifications;
+using Bonyan.Module.NotificationManagement.EntityFrameworkCore;
 using Bonyan.Novino.Domain.Entities;
 using Bonyan.TenantManagement.Domain;
 using Bonyan.TenantManagement.EntityFrameworkCore;
@@ -11,7 +13,7 @@ namespace Bonyan.Novino.Infrastructure.Data;
 
 public class AppDbContext : BonDbContext<AppDbContext>
     ,IBonIdentityManagementDbContext<Domain.Entities.User, Role>
-,IBonTenantDbContext
+,IBonTenantDbContext , IBonNotificationManagementDbContext
 {
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
     {
@@ -34,4 +36,5 @@ public class AppDbContext : BonDbContext<AppDbContext>
     public DbSet<BonIdentityUserClaims<Domain.Entities.User, Role>> UserClaims { get; set; }
     public DbSet<BonIdentityRoleClaims<Role>> RoleClaims { get; set; }
     public DbSet<BonTenant> Tenants { get; set; }
+    public DbSet<BonNotification> Notifications { get; set; }
 }
