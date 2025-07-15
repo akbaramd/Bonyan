@@ -11,4 +11,9 @@
     <ProjectReference Include="..\Bonyan.Novino.Domain\Bonyan.Novino.Domain.csproj" />
   </ItemGroup>
 
+
+  <ItemGroup>
+    <PackageReference Include="Bonyan.Module.NotificationManagement.Application" Version="1.5.2" />
+  </ItemGroup>
+
 </Project> 

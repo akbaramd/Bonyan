@@ -1,6 +1,7 @@
 using Bonyan.IdentityManagement.Domain.Users;
 using Bonyan.IdentityManagement.Domain.Users.DomainServices;
 using Bonyan.IdentityManagement.Domain.Users.ValueObjects;
+using Bonyan.Novino.Domain.Entities;
 using Bonyan.Novino.Web.Models;
 using Bonyan.UnitOfWork;
 using Bonyan.UserManagement.Domain.Users;
@@ -12,12 +13,12 @@ namespace Bonyan.Novino.Web.Services
 {
     public class UserSeedingService
     {
-        private readonly IBonIdentityUserManager<Models.User, Models.Role> _userManager;
+        private readonly IBonIdentityUserManager<Domain.Entities.User, Role> _userManager;
         private readonly ILogger<UserSeedingService> _logger;
         private readonly IBonUnitOfWorkManager _unitOfWorkManager;
 
         public UserSeedingService(
-            IBonIdentityUserManager<Models.User, Models.Role> userManager,
+            IBonIdentityUserManager<Domain.Entities.User, Role> userManager,
             ILogger<UserSeedingService> logger, IBonUnitOfWorkManager unitOfWorkManager)
         {
             _userManager = userManager;
@@ -39,7 +40,7 @@ namespace Bonyan.Novino.Web.Services
                 var adminProfile = new UserProfile("Admin", "User", DateTime.Now.AddYears(-29), "Administrator");
                 
                 // Create admin user
-                var adminUser = new Models.User(
+                var adminUser = new Domain.Entities.User(
                     BonUserId.NewId(),
                     "admin",
                     adminProfile

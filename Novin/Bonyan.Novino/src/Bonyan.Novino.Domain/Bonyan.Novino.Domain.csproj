@@ -7,8 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Bonyan.Module.IdentityManagement.Domain" Version="1.5.1" />
-    <PackageReference Include="Bonyan.Module.TenantManagement.Domain" Version="1.5.1" />
+    <PackageReference Include="Bonyan.Module.IdentityManagement.Domain" Version="1.5.2" />
+    <PackageReference Include="Bonyan.Module.NotificationManagement.Domain" Version="1.5.2" />
+    <PackageReference Include="Bonyan.Module.TenantManagement.Domain" Version="1.5.2" />
   </ItemGroup>
 
 </Project> 

@@ -6,6 +6,7 @@ using Bonyan.IdentityManagement.Domain.Users.DomainServices;
 using Bonyan.IdentityManagement.Domain.Users.ValueObjects;
 using Bonyan.IdentityManagement.Permissions;
 using Bonyan.Layer.Domain.DomainService;
+using Bonyan.Novino.Domain.Entities;
 using Bonyan.UserManagement.Domain.Users.Enumerations;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -21,9 +22,9 @@ namespace Bonyan.Novino.Web.Controllers
     /// </summary>
     public class AccountController : Controller
     {
-        private readonly IBonIdentityUserManager<Models.User, Models.Role> _userManager;
-        private readonly IBonIdentityRoleManager<Models.Role> _roleManager;
-        private readonly IBonPermissionManager<Models.User, Models.Role> _permissionManager;
+        private readonly IBonIdentityUserManager<Domain.Entities.User, Role> _userManager;
+        private readonly IBonIdentityRoleManager<Role> _roleManager;
+        private readonly IBonPermissionManager<Domain.Entities.User, Role> _permissionManager;
         private readonly ILogger<AccountController> _logger;
         private readonly IConfiguration _configuration;
         private readonly IHttpContextAccessor _httpContextAccessor;
@@ -35,9 +36,9 @@ namespace Bonyan.Novino.Web.Controllers
         private const int RememberMeDays = 30;
 
         public AccountController(
-            IBonIdentityUserManager<Models.User, Models.Role> userManager,
-            IBonIdentityRoleManager<Models.Role> roleManager,
-            IBonPermissionManager<Models.User, Models.Role> permissionManager,
+            IBonIdentityUserManager<Domain.Entities.User, Role> userManager,
+            IBonIdentityRoleManager<Role> roleManager,
+            IBonPermissionManager<Domain.Entities.User, Role> permissionManager,
             ILogger<AccountController> logger,
             IConfiguration configuration,
             IHttpContextAccessor httpContextAccessor)
@@ -247,7 +248,7 @@ namespace Bonyan.Novino.Web.Controllers
         /// <summary>
         /// Finds user by username or email
         /// </summary>
-        private async Task<BonDomainResult<Models.User>> FindUserAsync(string usernameOrEmail)
+        private async Task<BonDomainResult<Domain.Entities.User>> FindUserAsync(string usernameOrEmail)
         {
             // Try to find by username first
             var userResult = await _userManager.FindByUserNameAsync(usernameOrEmail);
@@ -264,7 +265,7 @@ namespace Bonyan.Novino.Web.Controllers
         /// <summary>
         /// Validates account status before login
         /// </summary>
-        private async Task<LoginResult> ValidateAccountStatusAsync(Models.User user)
+        private async Task<LoginResult> ValidateAccountStatusAsync(Domain.Entities.User user)
         {
             // Check if account is locked
             if (user.IsAccountLocked())
@@ -295,7 +296,7 @@ namespace Bonyan.Novino.Web.Controllers
         /// <summary>
         /// Verifies password with account lockout protection
         /// </summary>
-        private async Task<LoginResult> VerifyPasswordWithLockoutAsync(Models.User user, string password)
+        private async Task<LoginResult> VerifyPasswordWithLockoutAsync(Domain.Entities.User user, string password)
         {
             // Check if password is correct
             if (!user.VerifyPassword(password))
@@ -331,7 +332,7 @@ namespace Bonyan.Novino.Web.Controllers
         /// <summary>
         /// Resets failed login attempts on successful login
         /// </summary>
-        private async Task ResetFailedLoginAttemptsAsync(Models.User user)
+        private async Task ResetFailedLoginAttemptsAsync(Domain.Entities.User user)
         {
             if (user.FailedLoginAttemptCount > 0)
             {
@@ -344,7 +345,7 @@ namespace Bonyan.Novino.Web.Controllers
         /// <summary>
         /// Creates authentication session with claims
         /// </summary>
-        private async Task<LoginResult> CreateAuthenticationSessionAsync(Models.User user, bool rememberMe, string returnUrl)
+        private async Task<LoginResult> CreateAuthenticationSessionAsync(Domain.Entities.User user, bool rememberMe, string returnUrl)
         {
             try
             {
@@ -378,7 +379,7 @@ namespace Bonyan.Novino.Web.Controllers
         /// <summary>
         /// Creates user claims for authentication
         /// </summary>
-        private async Task<List<Claim>> CreateUserClaimsAsync(Models.User user)
+        private async Task<List<Claim>> CreateUserClaimsAsync(Domain.Entities.User user)
         {
             var claims = new List<Claim>
             {
@@ -441,7 +442,7 @@ namespace Bonyan.Novino.Web.Controllers
         /// <summary>
         /// Logs successful login
         /// </summary>
-        private async Task LogSuccessfulLoginAsync(Models.User user)
+        private async Task LogSuccessfulLoginAsync(Domain.Entities.User user)
         {
             var loginInfo = new
             {

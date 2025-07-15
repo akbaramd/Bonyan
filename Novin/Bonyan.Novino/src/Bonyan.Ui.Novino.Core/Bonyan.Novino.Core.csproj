@@ -7,8 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Bonyan.AspNetCore" Version="1.5.1" />
-    <PackageReference Include="Bonyan.Module.IdentityManagement" Version="1.5.1" />
+    <PackageReference Include="Bonyan.AspNetCore" Version="1.5.2" />
+    <PackageReference Include="Bonyan.Module.IdentityManagement" Version="1.5.2" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.TagHelpers" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.ViewFeatures" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Localization" Version="8.0.18" />

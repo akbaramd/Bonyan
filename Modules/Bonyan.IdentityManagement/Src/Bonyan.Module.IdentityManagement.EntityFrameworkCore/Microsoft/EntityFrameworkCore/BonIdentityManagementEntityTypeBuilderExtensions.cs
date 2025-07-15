@@ -26,7 +26,12 @@ namespace Microsoft.EntityFrameworkCore
                 builder.HasIndex(x => x.CreatedAt)
                     .HasDatabaseName("IX_Users_CreatedAt");
 
-                // Configure relationships
+                // Configure relationships (one-to-many)
+                builder.HasMany(x => x.Tokens)
+                    .WithOne()
+                    .HasForeignKey(x => x.UserId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
                 builder.HasMany(x => x.UserRoles)
                     .WithOne()
                     .HasForeignKey(x => x.UserId)
@@ -98,11 +103,6 @@ namespace Microsoft.EntityFrameworkCore
                 // Performance: Index for created date
                 builder.HasIndex(x => x.CreatedAt)
                     .HasDatabaseName("IX_UserTokens_CreatedAt");
-
-                builder.HasOne<TUser>()
-                    .WithMany(x => x.Tokens)
-                    .HasForeignKey(x => x.UserId)
-                    .OnDelete(DeleteBehavior.Cascade);
             });
 
             // Configure BonIdentityRole
@@ -120,7 +120,6 @@ namespace Microsoft.EntityFrameworkCore
                 builder.HasIndex(x => x.Title)
                     .HasDatabaseName("IX_Roles_Title")
                     .IsUnique();
-
 
                 // Performance: Index for deletable roles
                 builder.HasIndex(x => x.CanBeDeleted)
@@ -150,12 +149,6 @@ namespace Microsoft.EntityFrameworkCore
                 // Performance: Index for user-based queries
                 builder.HasIndex(x => x.UserId)
                     .HasDatabaseName("IX_UserRoles_UserId");
-
-
-                builder.HasOne<TUser>()
-                    .WithMany(x => x.UserRoles)
-                    .HasForeignKey(e => e.UserId)
-                    .OnDelete(DeleteBehavior.Cascade);
 
                 builder.HasOne(x => x.Role)
                     .WithMany()
@@ -193,16 +186,10 @@ namespace Microsoft.EntityFrameworkCore
                 builder.HasIndex(x => x.ClaimValue)
                     .HasDatabaseName("IX_UserClaims_ClaimValue");
 
-
                 // Performance: Unique constraint for user-claim combination
                 builder.HasIndex(x => new { x.UserId, x.ClaimType, x.ClaimValue })
                     .HasDatabaseName("IX_UserClaims_UserId_ClaimType_ClaimValue")
                     .IsUnique();
-
-                builder.HasOne(x => x.User)
-                    .WithMany(x => x.UserClaims)
-                    .HasForeignKey(x => x.UserId)
-                    .OnDelete(DeleteBehavior.Cascade);
             });
 
             // Configure BonIdentityRoleClaims

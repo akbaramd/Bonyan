@@ -5,9 +5,8 @@ using Bonyan.Modularity;
 using Bonyan.Modularity.Abstractions;
 using Bonyan.Novino.Application;
 using Bonyan.Novino.Domain;
-
-using Bonyan.Novino.Web.Data;
-using Bonyan.Novino.Web.Models;
+using Bonyan.Novino.Domain.Entities;
+using Bonyan.Novino.Infrastructure.Data;
 using Bonyan.TenantManagement.EntityFrameworkCore;
 using Bonyan.VirtualFileSystem;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,7 +20,7 @@ public class BonyanNovinoInfrastructureModule : BonModule
     public BonyanNovinoInfrastructureModule()
     {
         DependOn<BonyanNovinoDomainModule>();
-        DependOn<BonIdentityManagementEntityFrameworkCoreModule<Web.Models.User,Role>>();
+        DependOn<BonIdentityManagementEntityFrameworkCoreModule<Domain.Entities.User,Role>>();
         DependOn<BonTenantManagementEntityFrameworkModule>();
     }
 

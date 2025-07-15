@@ -23,9 +23,10 @@ using System.IO;
 using Bonyan.Novino.Core;
 using Bonyan.Novino.Core.Assets;
 using Bonyan.Novino.Core.Menus;
+using Bonyan.Novino.Domain.Entities;
 using Bonyan.TenantManagement.EntityFrameworkCore;
 using Bonyan.Novino.Infrastructure;
-using Bonyan.Novino.Web.Data;
+using Bonyan.Novino.Infrastructure.Data;
 using Bonyan.Novino.Web.Models;
 using Bonyan.VirtualFileSystem;
 
@@ -38,7 +39,7 @@ public class BonyanNovinoWebModule : BonWebModule
         DependOn<BonAspNetCoreMvcModule>();
         DependOn<BonAspNetCoreAuthenticationCookieModule>();
         
-        DependOn<BonUiNovinoModule<Models.User,Role>>();
+        DependOn<BonUiNovinoModule<Domain.Entities.User,Role>>();
         DependOn<BonyanNovinoInfrastructureModule>();
     }
     
@@ -104,9 +105,9 @@ public class BonyanNovinoWebModule : BonWebModule
         });
         
         // Register identity services
-        context.Services.AddScoped<IBonIdentityUserManager<Models.User, Models.Role>, BonIdentityUserManager<Models.User, Models.Role>>();
-        context.Services.AddScoped<IBonIdentityRoleManager<Models.Role>, BonIdentityRoleManager<Models.Role>>();
-        context.Services.AddScoped<IBonPermissionManager<Models.User, Models.Role>, BonPermissionManager<Models.User, Models.Role>>();
+        context.Services.AddScoped<IBonIdentityUserManager<Domain.Entities.User, Role>, BonIdentityUserManager<Domain.Entities.User, Role>>();
+        context.Services.AddScoped<IBonIdentityRoleManager<Role>, BonIdentityRoleManager<Role>>();
+        context.Services.AddScoped<IBonPermissionManager<Domain.Entities.User, Role>, BonPermissionManager<Domain.Entities.User, Role>>();
         
         // Register user seeding service
         context.Services.AddScoped<UserSeedingService>();

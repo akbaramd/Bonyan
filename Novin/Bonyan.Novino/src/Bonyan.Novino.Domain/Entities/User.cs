@@ -2,7 +2,7 @@
 using Bonyan.IdentityManagement.Domain.Users.DomainServices;
 using Bonyan.UserManagement.Domain.Users.ValueObjects;
 
-namespace Bonyan.Novino.Web.Models;
+namespace Bonyan.Novino.Domain.Entities;
 
 public class User : BonIdentityUser<User, Role>
 {
