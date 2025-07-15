@@ -4,7 +4,6 @@ using Bonyan.IdentityManagement;
 using Bonyan.IdentityManagement.Application;
 using Bonyan.Modularity;
 using Bonyan.Modularity.Abstractions;
-using Bonyan.TenantManagement.Application;
 using Bonyan.UnitOfWork;
 using Bonyan.UserManagement.Domain.Users.Enumerations;
 using Bonyan.UserManagement.Domain.Users.ValueObjects;

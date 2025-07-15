@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <PackageId>Bonyan.Module.NotificationManagement.Infrastructure</PackageId>
+    <RootNamespace />
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Bonyan.Module.NotificationManagement.Domain\Bonyan.Module.NotificationManagement.Domain.csproj" />
+    <ProjectReference Include="..\Bonyan.Module.NotificationManagement.Abstractions\Bonyan.Module.NotificationManagement.Abstractions.csproj" />
+    <ProjectReference Include="..\..\..\Framework\Src\Bonyan.EntityFrameworkCore\Bonyan.EntityFrameworkCore.csproj" />
+  </ItemGroup>
+  <Import Project="..\..\..\..\module-package.props" />
+</Project>

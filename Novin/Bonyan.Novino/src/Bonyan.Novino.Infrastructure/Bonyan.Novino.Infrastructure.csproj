@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Bonyan.Localization" Version="1.5.1" />
+    <PackageReference Include="Bonyan.Module.IdentityManagement.EntityFrameworkCore" Version="1.5.1" />
+    <PackageReference Include="Bonyan.Module.TenantManagement.EntityFrameworkCore" Version="1.5.1" />
+    <PackageReference Include="Bonyan.EntityFrameworkCore.SqlServer" Version="1.5.1" />
+    <PackageReference Include="Bonyan.VirtualFileSystem" Version="1.5.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Bonyan.Novino.Domain\Bonyan.Novino.Domain.csproj" />
+    <ProjectReference Include="..\Bonyan.Novino.Application\Bonyan.Novino.Application.csproj" />
+  </ItemGroup>
+
+</Project> 

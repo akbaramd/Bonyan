@@ -1,0 +1,49 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Src", "Src", "{7EBCD00A-50C8-4A0B-B084-E997FC9FF59F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.Novino.Core", "src\Bonyan.Ui.Novino.Core\Bonyan.Novino.Core.csproj", "{1296B704-6C11-485F-BD37-06A69EC88AD5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.Novino.Web", "src\Bonyan.Ui.Novino.Web\Bonyan.Novino.Web.csproj", "{141A88DC-7215-44A0-B102-152206E6117D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.Novino.Domain", "src\Bonyan.Novino.Domain\Bonyan.Novino.Domain.csproj", "{2A1B88DC-7215-44A0-B102-152206E6117E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.Novino.Application", "src\Bonyan.Novino.Application\Bonyan.Novino.Application.csproj", "{3B2C88DC-7215-44A0-B102-152206E6117F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.Novino.Infrastructure", "src\Bonyan.Novino.Infrastructure\Bonyan.Novino.Infrastructure.csproj", "{4C3D88DC-7215-44A0-B102-152206E61180}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{1296B704-6C11-485F-BD37-06A69EC88AD5} = {7EBCD00A-50C8-4A0B-B084-E997FC9FF59F}
+		{141A88DC-7215-44A0-B102-152206E6117D} = {7EBCD00A-50C8-4A0B-B084-E997FC9FF59F}
+		{2A1B88DC-7215-44A0-B102-152206E6117E} = {7EBCD00A-50C8-4A0B-B084-E997FC9FF59F}
+		{3B2C88DC-7215-44A0-B102-152206E6117F} = {7EBCD00A-50C8-4A0B-B084-E997FC9FF59F}
+		{4C3D88DC-7215-44A0-B102-152206E61180} = {7EBCD00A-50C8-4A0B-B084-E997FC9FF59F}
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1296B704-6C11-485F-BD37-06A69EC88AD5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1296B704-6C11-485F-BD37-06A69EC88AD5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1296B704-6C11-485F-BD37-06A69EC88AD5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1296B704-6C11-485F-BD37-06A69EC88AD5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{141A88DC-7215-44A0-B102-152206E6117D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{141A88DC-7215-44A0-B102-152206E6117D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{141A88DC-7215-44A0-B102-152206E6117D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{141A88DC-7215-44A0-B102-152206E6117D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2A1B88DC-7215-44A0-B102-152206E6117E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A1B88DC-7215-44A0-B102-152206E6117E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A1B88DC-7215-44A0-B102-152206E6117E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A1B88DC-7215-44A0-B102-152206E6117E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3B2C88DC-7215-44A0-B102-152206E6117F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3B2C88DC-7215-44A0-B102-152206E6117F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3B2C88DC-7215-44A0-B102-152206E6117F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3B2C88DC-7215-44A0-B102-152206E6117F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4C3D88DC-7215-44A0-B102-152206E61180}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C3D88DC-7215-44A0-B102-152206E61180}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C3D88DC-7215-44A0-B102-152206E61180}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4C3D88DC-7215-44A0-B102-152206E61180}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

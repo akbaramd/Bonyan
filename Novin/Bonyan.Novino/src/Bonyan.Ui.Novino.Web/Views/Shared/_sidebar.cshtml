@@ -1,0 +1,91 @@
+﻿@using Bonyan.Novino.Core.Menus
+@using Bonyan.Novino.Web.Models
+@inject IMenuManager<User, Role> MenuManager
+
+<!-- ========== App Menu ========== -->
+<div class="app-menu navbar-menu">
+    <!-- LOGO -->
+    <div class="navbar-brand-box">
+        <!-- Dark Logo-->
+        <a href="@Url.Action("Index", "Home")" class="logo logo-dark">
+            <span class="logo-sm">
+                <img src="~/assets/images/logo-sm.png" alt="" height="22">
+            </span>
+            <span class="logo-lg">
+                <img src="~/assets/images/logo-dark.png" alt="" height="17">
+            </span>
+        </a>
+        <!-- Light Logo-->
+        <a href="@Url.Action("Index", "Home")" class="logo logo-light">
+            <span class="logo-sm">
+                <img src="~/assets/images/logo-sm.png" alt="" height="22">
+            </span>
+            <span class="logo-lg">
+                <img src="~/assets/images/logo-light.png" alt="" height="17">
+            </span>
+        </a>
+        <button type="button" class="btn btn-sm p-0 fs-20 header-item float-end btn-vertical-sm-hover" id="vertical-hover">
+            <i class="ri-record-circle-line"></i>
+        </button>
+    </div>
+
+    <div class="dropdown sidebar-user m-1 rounded">
+        <button type="button" class="btn material-shadow-none" id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <span class="d-flex align-items-center gap-2">
+                <img class="rounded header-profile-user" src="/assets/images/users/avatar-1.jpg" alt="Header Avatar">
+                <span class="text-start">
+                    <span class="d-block fw-medium sidebar-user-name-text">کاربر سیستم</span>
+                    <span class="d-block fs-14 sidebar-user-name-sub-text"><i class="ri ri-circle-fill fs-10 text-success align-baseline"></i> <span class="align-middle">آنلاین</span></span>
+                </span>
+            </span>
+        </button>
+        <div class="dropdown-menu dropdown-menu-end">
+            <!-- item-->
+            <h6 class="dropdown-header">خوش آمدید!</h6>
+            <a class="dropdown-item" href="/Account/Profile"><i class="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i> <span class="align-middle">پروفایل</span></a>
+            <a class="dropdown-item" href="/Account/Settings"><i class="mdi mdi-cog-outline text-muted fs-16 align-middle me-1"></i> <span class="align-middle">تنظیمات</span></a>
+            <a class="dropdown-item" href="/Account/Logout"><i class="mdi mdi-logout text-muted fs-16 align-middle me-1"></i> <span class="align-middle">خروج</span></a>
+        </div>
+    </div>
+
+    <div id="scrollbar">
+        <div class="container-fluid">
+            <div id="two-column-menu"></div>
+            
+            <!-- Main Sidebar Menu -->
+            @{
+                var mainMenu = await MenuManager.GetMenuAsync("sidebar-main", User);
+                if (mainMenu?.Items?.Any() == true)
+                {
+                    <ul class="navbar-nav" id="navbar-nav">
+                        <li class="menu-title"><span>منوی اصلی</span></li>
+                        @foreach (var item in mainMenu.Items.OrderBy(x => x.Order))
+                        {
+                            @await Html.PartialAsync("_MenuItem", item)
+                        }
+                    </ul>
+                }
+            }
+
+            <!-- System Sidebar Menu -->
+            @{
+                var systemMenu = await MenuManager.GetMenuAsync("sidebar-system", User);
+                if (systemMenu?.Items?.Any() == true)
+                {
+                    <ul class="navbar-nav" id="navbar-nav-system">
+                        <li class="menu-title"><span>منوی سیستم</span></li>
+                        @foreach (var item in systemMenu.Items.OrderBy(x => x.Order))
+                        {
+                            @await Html.PartialAsync("_MenuItem", item)
+                        }
+                    </ul>
+                }
+            }
+        </div>
+        <!-- Sidebar -->
+    </div>
+    <div class="sidebar-background"></div>
+</div>
+<!-- Left Sidebar End -->
+<!-- Vertical Overlay-->
+<div class="vertical-overlay"></div>

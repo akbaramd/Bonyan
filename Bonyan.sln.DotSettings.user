@@ -40,6 +40,10 @@
     &lt;/TestAncestor&gt;&#xD;
   &lt;/Not&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
+	<s:Boolean x:Key="/Default/UnloadedProject/UnloadedProjects/=24c303b8_002D39d4_002D4266_002Dbf87_002Df0450c75c503_0023BonyanTemplate_002EApplication/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/UnloadedProject/UnloadedProjects/=475e86b9_002D64eb_002D4354_002Da88d_002Da98facdf0a77_0023BonyanTemplate_002EWebApi/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/UnloadedProject/UnloadedProjects/=587055ae_002D0fdc_002D435f_002D9872_002D66cee6146214_0023BonyanTemplate_002EDomain/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/UnloadedProject/UnloadedProjects/=5bebd3b1_002D8b94_002D49c3_002D8671_002D2dbc742d06d4_0023BonyanTemplate_002EInfrastructure/@EntryIndexedValue">True</s:Boolean>
 	
 	
 	

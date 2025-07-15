@@ -1,0 +1,40 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>aspnet-Bonyan.Novino.Web-2ce3d529-b73d-42ce-b408-419a287003d1</UserSecretsId>
+    
+  </PropertyGroup>
+  <ItemGroup>
+
+   
+    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.12" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.12" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.12" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.12" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.12" />
+    
+    <PackageReference Include="Bonyan.AspNetCore.Authentication.Cookie" Version="1.5.1" />
+    <PackageReference Include="Bonyan.AspNetCore.Mvc" Version="1.5.1" />
+    <PackageReference Include="Bonyan.EntityFrameworkCore.SqlServer" Version="1.5.1" />
+    <PackageReference Include="Bonyan.Module.IdentityManagement.Domain" Version="1.5.1" />
+    <PackageReference Include="Bonyan.Module.IdentityManagement.EntityFrameworkCore" Version="1.5.1" />
+    <PackageReference Include="Bonyan.Module.TenantManagement.Domain" Version="1.5.1" />
+    <PackageReference Include="Bonyan.Module.TenantManagement.EntityFrameworkCore" Version="1.5.1" />
+    
+    <ProjectReference Include="..\Bonyan.Ui.Novino.Core\Bonyan.Novino.Core.csproj" />
+    <ProjectReference Include="..\Bonyan.Novino.Infrastructure\Bonyan.Novino.Infrastructure.csproj" />
+    
+  </ItemGroup>
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Areas\Identity\Pages\_ViewStart.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Plugins\" />
+    <Folder Include="Views\Shared\" />
+  </ItemGroup>
+</Project>
