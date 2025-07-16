@@ -17,7 +17,7 @@ public abstract class BonBusinessId<T, TKey> : BonValueObject, IEquatable<BonBus
         Value = value;
     }
 
-    public TKey Value { get; private set; }
+    public TKey Value { get; set; }
 
     /// <summary>
     ///     Determines whether this instance and another specified instance have the same value.
@@ -38,7 +38,9 @@ public abstract class BonBusinessId<T, TKey> : BonValueObject, IEquatable<BonBus
         if (value == null || value.Equals(default(TKey)))
             throw new ArgumentException($"The value of {nameof(value)} cannot be null or default.", nameof(value));
 
-        return NewId(value);
+        var instance = new T();
+        instance.Value = value;
+        return instance;
     }
 
     /// <summary>
@@ -46,6 +48,9 @@ public abstract class BonBusinessId<T, TKey> : BonValueObject, IEquatable<BonBus
     /// </summary>
     public static T NewId(TKey value)
     {
+        if (value == null || value.Equals(default(TKey)))
+            throw new ArgumentException($"The value of {nameof(value)} cannot be null or default.", nameof(value));
+
         var instance = new T();
         instance.Value = value;
         return instance;
@@ -95,9 +100,9 @@ public abstract class BonBusinessId<T, TKey> : BonValueObject, IEquatable<BonBus
 /// </summary>
 public abstract class BonBusinessId<T> : BonBusinessId<T, Guid> where T : BonBusinessId<T>, new()
 {
-    public BonBusinessId() : base(Guid.NewGuid())
+    public BonBusinessId()
     {
-        // Default constructor prevents direct instantiation without valid GUID
+        // Default constructor for EF Core - Value will be set by EF Core or through factory methods
     }
 
     public BonBusinessId(Guid value) : base(value)
@@ -109,7 +114,9 @@ public abstract class BonBusinessId<T> : BonBusinessId<T, Guid> where T : BonBus
     /// </summary>
     public static T NewId()
     {
-        return FromValue(Guid.NewGuid());
+        var instance = new T();
+        instance.Value = Guid.NewGuid();
+        return instance;
     }
 
     /// <summary>
@@ -123,6 +130,8 @@ public abstract class BonBusinessId<T> : BonBusinessId<T, Guid> where T : BonBus
         if (!Guid.TryParse(value, out var parsedGuid))
             throw new ArgumentException("Invalid GUID format.", nameof(value));
 
-        return FromValue(parsedGuid);
+        var instance = new T();
+        instance.Value = parsedGuid;
+        return instance;
     }
 }

@@ -9,7 +9,6 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Framework\Src\Bonyan.EntityFrameworkCore\Bonyan.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\Bonyan.Module.NotificationManagement.Domain\Bonyan.Module.NotificationManagement.Domain.csproj" />
-    <ProjectReference Include="..\..\..\Framework\Src\Bonyan.EntityFrameworkCore\Bonyan.EntityFrameworkCore.csproj" />
   </ItemGroup>
   <Import Project="..\..\..\..\module-package.props" />
 </Project>

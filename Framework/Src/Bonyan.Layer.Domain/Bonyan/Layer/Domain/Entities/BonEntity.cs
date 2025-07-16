@@ -29,8 +29,13 @@ public abstract class BonEntity : IBonEntity, IEquatable<BonEntity>
         if (ReferenceEquals(this, other)) return true;
 
         // Compare entities by their type and key(s)
-        return GetType() == other.GetType() &&
-               Equals(GetKey(), other.GetKey());
+        var thisKey = GetKey();
+        var otherKey = other.GetKey();
+        
+        // If either key is null, entities are not equal (they're not fully initialized)
+        if (thisKey == null || otherKey == null) return false;
+        
+        return GetType() == other.GetType() && Equals(thisKey, otherKey);
     }
 
     public override bool Equals(object? obj)
@@ -66,7 +71,8 @@ public abstract class BonEntity : IBonEntity, IEquatable<BonEntity>
     /// </summary>
     public override string ToString()
     {
-        return $"{GetType().Name} [Key={GetKey()}]";
+        var key = GetKey();
+        return $"{GetType().Name} [Key={(key != null ? key.ToString() : "null")}]";
     }
 }
 
@@ -88,8 +94,10 @@ public abstract class BonEntity<TKey> : BonEntity, IBonEntity<TKey>
     /// <exception cref="InvalidOperationException">Thrown if the Id is null or default.</exception>
     public override object GetKey()
     {
+        // During EF Core entity creation, Id might be null/default temporarily
+        // Return null to indicate the entity is not yet fully initialized
         if (Id is null || Id.Equals(default(TKey)))
-            throw new InvalidOperationException($"{nameof(Id)} cannot be null or default.");
+            return null!;
 
         return Id;
     }

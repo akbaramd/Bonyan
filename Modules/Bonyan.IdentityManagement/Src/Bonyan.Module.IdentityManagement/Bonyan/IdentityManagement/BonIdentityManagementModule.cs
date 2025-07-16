@@ -26,8 +26,10 @@ public class BonIdentityManagementModule<TUser,TRole> : BonModule where TUser : 
         DependOn<BonIdentityManagementDomainModule<TUser,TRole>>();
         DependOn<BonLocalizationModule>();
     }
+    
+    
 
-    public override Task OnPreConfigureAsync(BonConfigurationContext context)
+    public override Task OnConfigureAsync(BonConfigurationContext context)
     {
         // Register localization resource for this module
         PreConfigure<BonLocalizationOptions>(options =>
@@ -57,11 +59,8 @@ public class BonIdentityManagementModule<TUser,TRole> : BonModule where TUser : 
             }
         });
 
-        return base.OnPreConfigureAsync(context);
-    }
 
-    public override Task OnConfigureAsync(BonConfigurationContext context)
-    {
+  
         // Register permission-based authorization handler
         context.Services.AddSingleton<IAuthorizationHandler, BonIdentityPermissionHandler<TUser,TRole>>();
         

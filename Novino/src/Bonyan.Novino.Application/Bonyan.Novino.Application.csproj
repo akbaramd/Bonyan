@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Modules\Bonyan.IdentityManagement\Src\Bonyan.Module.IdentityManagement.Application\Bonyan.Module.IdentityManagement.Application.csproj" />
+    <ProjectReference Include="..\..\..\Modules\Bonyan.NotificationManagement\Src\Bonyan.Module.NotificationManagement.Application\Bonyan.Module.NotificationManagement.Application.csproj" />
+    <ProjectReference Include="..\Bonyan.Novino.Domain\Bonyan.Novino.Domain.csproj" />
+  </ItemGroup>
+
+
+
+
+</Project> 

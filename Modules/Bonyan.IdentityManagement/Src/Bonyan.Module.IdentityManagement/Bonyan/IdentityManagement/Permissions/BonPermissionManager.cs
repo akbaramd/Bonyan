@@ -151,7 +151,7 @@ public class BonPermissionManager<TUser, TRole> : IBonPermissionManager<TUser, T
             }
 
             var user = userResult.Value;
-            await userManager.AddClaimAsync(user, BonClaimTypes.Permission, permission, issuer);
+            await userManager.AddClaimAsync(user, BonPermissionClaimTypes.Permission, permission, issuer);
             
             _logger.LogInformation("Granted permission '{Permission}' to user '{UserId}'", permission, userId);
         }
@@ -175,7 +175,7 @@ public class BonPermissionManager<TUser, TRole> : IBonPermissionManager<TUser, T
             }
 
             var user = userResult.Value;
-            await userManager.RemoveClaimAsync(user, BonClaimTypes.Permission, permission);
+            await userManager.RemoveClaimAsync(user, BonPermissionClaimTypes.Permission, permission);
             
             _logger.LogInformation("Revoked permission '{Permission}' from user '{UserId}'", permission, userId);
         }
@@ -206,7 +206,7 @@ public class BonPermissionManager<TUser, TRole> : IBonPermissionManager<TUser, T
             }
 
             var role = roleResult.Value;
-            await roleManager.AddClaimToRoleAsync(role, BonClaimTypes.Permission, permission, issuer);
+            await roleManager.AddClaimToRoleAsync(role, BonPermissionClaimTypes.Permission, permission, issuer);
             
             _logger.LogInformation("Granted permission '{Permission}' to role '{RoleId}'", permission, roleId);
         }
@@ -230,7 +230,7 @@ public class BonPermissionManager<TUser, TRole> : IBonPermissionManager<TUser, T
             }
 
             var role = roleResult.Value;
-            await roleManager.RemoveClaimFromRoleAsync(role, BonClaimTypes.Permission, permission);
+            await roleManager.RemoveClaimFromRoleAsync(role, BonPermissionClaimTypes.Permission, permission);
             
             _logger.LogInformation("Revoked permission '{Permission}' from role '{RoleId}'", permission, roleId);
         }
@@ -262,7 +262,7 @@ public class BonPermissionManager<TUser, TRole> : IBonPermissionManager<TUser, T
             }
 
             var user = userResult.Value;
-            var claimsResult = await userManager.GetClaimsByTypeAsync(user, BonClaimTypes.Permission);
+            var claimsResult = await userManager.GetClaimsByTypeAsync(user, BonPermissionClaimTypes.Permission);
             
             if (!claimsResult.IsSuccess)
             {
@@ -303,7 +303,7 @@ public class BonPermissionManager<TUser, TRole> : IBonPermissionManager<TUser, T
 
             foreach (var role in rolesResult.Value)
             {
-                var roleClaimsResult = await roleManager.GetClaimsByTypeAsync(role, BonClaimTypes.Permission);
+                var roleClaimsResult = await roleManager.GetClaimsByTypeAsync(role, BonPermissionClaimTypes.Permission);
                 if (roleClaimsResult.IsSuccess)
                 {
                     allPermissions.AddRange(roleClaimsResult.Value.Select(c => c.ClaimValue));
@@ -332,7 +332,7 @@ public class BonPermissionManager<TUser, TRole> : IBonPermissionManager<TUser, T
             }
 
             var role = roleResult.Value;
-            var claimsResult = await roleManager.GetClaimsByTypeAsync(role, BonClaimTypes.Permission);
+            var claimsResult = await roleManager.GetClaimsByTypeAsync(role, BonPermissionClaimTypes.Permission);
             
             if (!claimsResult.IsSuccess)
             {

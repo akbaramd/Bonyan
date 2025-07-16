@@ -41,27 +41,7 @@ namespace Bonyan.IdentityManagement.Domain.Roles
         /// </summary>
         public IReadOnlyCollection<BonIdentityRoleClaims<TRole>> RoleClaims => _claims;
 
-        /// <summary>
-        /// Static factory method to create a deletable role.
-        /// </summary>
-        /// <param name="id">The unique identifier for the role.</param>
-        /// <param name="title">The title of the role.</param>
-        /// <returns>A new instance of <see cref="BonIdentityRole{TRole}"/>.</returns>
-        public static TRole CreateDeletable(BonRoleId id, string title)
-        {
-            return (TRole)new BonIdentityRole<TRole>(id, title, canBeDeleted: true);
-        }
 
-        /// <summary>
-        /// Static factory method to create a non-deletable role.
-        /// </summary>
-        /// <param name="id">The unique identifier for the role.</param>
-        /// <param name="title">The title of the role.</param>
-        /// <returns>A new instance of <see cref="BonIdentityRole{TRole}"/>.</returns>
-        public static TRole CreateNonDeletable(BonRoleId id, string title)
-        {
-            return (TRole)new BonIdentityRole<TRole>(id, title, canBeDeleted: false);
-        }
 
         /// <summary>
         /// Updates the title of the role.

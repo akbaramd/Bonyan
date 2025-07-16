@@ -1,3 +1,4 @@
+using System.Reflection;
 using Bonyan.Layer.Domain.Aggregate.Abstractions;
 using Bonyan.Layer.Domain.Audit.Abstractions;
 using Bonyan.Layer.Domain.Enumerations;
@@ -122,17 +123,15 @@ namespace Microsoft.EntityFrameworkCore
                 var underlyingType = isNullable ? Nullable.GetUnderlyingType(propertyType) : propertyType;
 
                 if (underlyingType == null) continue;
-                // Configure the enumeration with two separate columns for Id and Name
-                builder.OwnsOne(propertyType,property.Name, c =>
-                {
-                    c.Property<int>("Id") // Map the `Id` property
-                        .HasColumnName($"{property.Name}Id")
-                        .IsRequired(!isNullable);
-
-                    c.Property<string>("Name") // Map the `Name` property
-                        .HasColumnName($"{property.Name}Name")
-                        .IsRequired(!isNullable);
-                });
+                
+                // Configure the enumeration as a simple integer with conversion
+                var converterType = typeof(EnumerationValueConverter<>).MakeGenericType(underlyingType);
+                var converter = (ValueConverter)Activator.CreateInstance(converterType)!;
+                
+                builder.Property(propertyType, property.Name)
+                    .HasConversion(converter)
+                    .HasColumnName($"{property.Name}Id")
+                    .IsRequired(!isNullable);
             }
 
             return builder;
@@ -287,6 +286,23 @@ namespace Microsoft.EntityFrameworkCore
             return type.IsGenericType &&
                    type.GetGenericTypeDefinition() == typeof(Nullable<>) &&
                    type.GetGenericArguments()[0].IsSubclassOf(typeof(BonEnumeration));
+        }
+    }
+
+    /// <summary>
+    /// Value converter for BonEnumeration types to convert between enumeration and integer.
+    /// </summary>
+    /// <typeparam name="TEnumeration">The enumeration type.</typeparam>
+    public class EnumerationValueConverter<TEnumeration> : ValueConverter<TEnumeration, int>
+        where TEnumeration : BonEnumeration
+    {
+        public EnumerationValueConverter() : base(
+            // Convert from enumeration to int (for database storage)
+            v => v.Id ,
+            // Convert from int to enumeration (for reading from database)
+            v => BonEnumeration.FromId<TEnumeration>(v) ?? BonEnumeration.FromId<TEnumeration>(0)
+        )
+        {
         }
     }
 }

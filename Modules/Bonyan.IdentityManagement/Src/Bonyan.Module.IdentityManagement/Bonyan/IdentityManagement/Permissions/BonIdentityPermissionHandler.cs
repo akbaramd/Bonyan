@@ -121,7 +121,7 @@ namespace Bonyan.IdentityManagement.Permissions
         /// </summary>
         private static bool HasDirectPermissionClaim(ClaimsPrincipal user, string permission)
         {
-            return user.HasClaim(BonClaimTypes.Permission, permission);
+            return user.HasClaim(BonPermissionClaimTypes.Permission, permission);
         }
 
         /// <summary>

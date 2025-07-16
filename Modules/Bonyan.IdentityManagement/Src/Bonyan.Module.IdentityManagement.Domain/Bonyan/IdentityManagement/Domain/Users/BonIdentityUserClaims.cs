@@ -41,6 +41,7 @@ public class BonIdentityUserClaims<TUser,TRole> : BonEntity<BonUserClaimId>
     /// </summary>
     public BonIdentityUserClaims(BonUserClaimId id, BonUserId userId, string claimType, string claimValue, string? claimValueType, string? issuer = null)
     {
+        Id = id ?? throw new ArgumentNullException(nameof(id));
         UserId = userId ?? throw new ArgumentNullException(nameof(userId));
         ClaimType = claimType ?? throw new ArgumentNullException(nameof(claimType));
         ClaimValue = claimValue ?? throw new ArgumentNullException(nameof(claimValue));
