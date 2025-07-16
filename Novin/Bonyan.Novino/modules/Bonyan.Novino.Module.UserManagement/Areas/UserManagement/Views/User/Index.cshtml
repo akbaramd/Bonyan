@@ -1,0 +1,440 @@
+@model Bonyan.Novino.Module.UserManagement.Models.UserListIndexViewModel
+@{
+    ViewData["Title"] = "مدیریت کاربران";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-flex flex-column flex-sm-row gap-2
+            align-items-start align-items-sm-center justify-content-sm-between">
+            <h4 class="mb-sm-0">
+                <span>مدیریت کاربران</span>
+            </h4>
+
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item">
+                        <a href="@Url.Action("Index", "Home", new {area = ""})">داشبورد</a>
+                    </li>
+                    <li class="breadcrumb-item active">مدیریت کاربران</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success alert-dismissible alert-solid alert-label-icon fade show" role="alert">
+                <i class="ri-check-double-line label-icon"></i><strong>موفق</strong> @TempData["SuccessMessage"]
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+        
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger alert-dismissible alert-solid alert-label-icon fade show" role="alert">
+                <i class="ri-error-warning-line label-icon"></i><strong>خطا</strong> @TempData["ErrorMessage"]
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+        
+        <div class="card">
+            <div class="card-header border-bottom-dashed">
+                <div class="row g-4 align-items-center">
+                    <div class="col">
+                        <div>
+                            <h5 class="card-title mb-0">لیست کاربران</h5>
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <div class="d-flex gap-2">
+                            <button type="button" class="btn @(Model.Filter.HasFilters ? "btn-outline-primary" : "btn-light")" data-bs-toggle="collapse" 
+                                    data-bs-target="#filterCollapse" aria-expanded="@Model.Filter.HasFilters.ToString().ToLower()">
+                                <i class="ri-filter-3-line align-bottom me-1"></i> 
+                                @if (Model.Filter.HasFilters)
+                                {
+                                    <span>فیلترها (فعال)</span>
+                                }
+                                else
+                                {
+                                    <span>فیلترها</span>
+                                }
+                            </button>
+                            @if (Model.CanCreate)
+                            {
+                                <a href="@Url.Action("Create", "User", new { area = "UserManagement" })" class="btn btn-success">
+                                    <i class="ri-add-line align-bottom me-1"></i> ایجاد کاربر جدید
+                                </a>
+                            }
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="collapse mt-3 @(Model.Filter.HasFilters ? "show" : "")" id="filterCollapse">
+                    <div class="card card-body mb-0">
+                        <form method="get" id="filterForm">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="mb-3">
+                                        <label class="form-label">جستجو</label>
+                                        <input type="text" class="form-control" name="searchTerm" 
+                                               value="@Model.Filter.SearchTerm" placeholder="جستجو در نام کاربری، ایمیل یا نام...">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="mb-3">
+                                        <label class="form-label">وضعیت</label>
+                                        <select class="form-select" name="status">
+                                            <option value="" selected="@(string.IsNullOrEmpty(Model.Filter.Status))">همه</option>
+                                            <option value="active" selected="@(Model.Filter.Status == "active")">فعال</option>
+                                            <option value="inactive" selected="@(Model.Filter.Status == "inactive")">غیرفعال</option>
+                                            <option value="locked" selected="@(Model.Filter.Status == "locked")">قفل شده</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="mb-3">
+                                        <label class="form-label">مرتب‌سازی بر اساس</label>
+                                        <select class="form-select" name="sortBy">
+                                            <option value="UserName" selected="@(Model.Filter.SortBy == "UserName")">نام کاربری</option>
+                                            <option value="Email" selected="@(Model.Filter.SortBy == "Email")">ایمیل</option>
+                                            <option value="Name" selected="@(Model.Filter.SortBy == "Name")">نام</option>
+                                            <option value="Surname" selected="@(Model.Filter.SortBy == "Surname")">نام خانوادگی</option>
+                                            <option value="Status" selected="@(Model.Filter.SortBy == "Status")">وضعیت</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="mb-3">
+                                        <label class="form-label">ترتیب</label>
+                                        <select class="form-select" name="sortOrder">
+                                            <option value="asc" selected="@(Model.Filter.SortOrder == "asc")">صعودی</option>
+                                            <option value="desc" selected="@(Model.Filter.SortOrder == "desc")">نزولی</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="mb-3 text-end">
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="ri-filter-3-line align-bottom me-1"></i> اعمال فیلترها
+                                        </button>
+                                                                    <a href="@Url.Action("Index", "User", new { area = "UserManagement" })" class="btn btn-light reset-filters">
+                                <i class="ri-refresh-line align-bottom me-1"></i> پاک کردن فیلترها
+                            </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+            @if (Model.Filter.HasFilters)
+            {
+                <div class="card-body border-bottom bg-light">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <span class="badge bg-primary">
+                                <i class="ri-filter-line me-1"></i>
+                                @Model.TotalCount نتیجه یافت شد
+                            </span>
+                        </div>
+                        <div>
+                            <a href="@Url.Action("Index", "User", new { area = "UserManagement" })" class="btn btn-outline-secondary btn-sm reset-filters">
+                                <i class="ri-refresh-line me-1"></i>
+                                پاک کردن همه فیلترها
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+            
+            <div class="card-body">
+                @if (!Model.Users.Any())
+                {
+                    <div class="text-center p-4">
+                        <lord-icon src="https://cdn.lordicon.com/nocovwne.json" trigger="loop" style="width:150px;height:150px"></lord-icon>
+                        
+                        @if (Model.Filter.HasFilters)
+                        {
+                            <h4 class="mt-4">هیچ کاربری یافت نشد!</h4>
+                            <p class="text-muted mb-4">در حال حاضر هیچ کاربری با معیارهای جستجوی شما یافت نشد.</p>
+                            <a href="@Url.Action("Index", "User", new { area = "UserManagement" })" class="btn btn-primary reset-filters">
+                                <i class="ri-refresh-line align-bottom me-1"></i> پاک کردن فیلترها
+                            </a>
+                        }
+                        else
+                        {
+                            <h4 class="mt-4">هیچ کاربری در سیستم وجود ندارد!</h4>
+                            <p class="text-muted mb-4">هنوز هیچ کاربری در سیستم ثبت نشده است.</p>
+                            
+                            @if (Model.CanCreate)
+                            {
+                                <a href="@Url.Action("Create", "User", new { area = "UserManagement" })" class="btn btn-primary">
+                                    <i class="ri-add-line align-bottom me-1"></i> ایجاد اولین کاربر
+                                </a>
+                            }
+                        }
+                    </div>
+                }
+                else
+                {
+                    <div class="table-responsive">
+                        <table class="table table-hover table-bordered table-nowrap align-middle mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th scope="col" style="width: 5%;">#</th>
+                                    <th scope="col" style="width: 15%;">نام کاربری</th>
+                                    <th scope="col" style="width: 20%;">نام و نام خانوادگی</th>
+                                    <th scope="col" style="width: 15%;">ایمیل</th>
+                                    <th scope="col" style="width: 10%;">وضعیت</th>
+                                    <th scope="col" style="width: 15%;">نقش‌ها</th>
+                                    <th scope="col" style="width: 20%;">عملیات</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var user in Model.Users)
+                                {
+                                    <tr>
+                                        <td>@((Model.Filter.Page - 1) * Model.Filter.PageSize + Model.Users.IndexOf(user) + 1)</td>
+                                        <td>
+                                            <span class="text-primary">@user.UserName</span>
+                                        </td>
+                                        <td>
+                                            <span class="fw-medium">@user.FullName</span>
+                                        </td>
+                                        <td>
+                                            <a href="mailto:@user.Email" class="text-body">@user.Email</a>
+                                        </td>
+                                        <td>
+                                            @if (user.IsActive)
+                                            {
+                                                <div class="px-2 py-1 d-inline-flex align-items-center border-success rounded-2">
+                                                    <i class="ri-checkbox-circle-line fs-14 me-1 text-success"></i>
+                                                    <span class="fw-medium text-success">فعال</span>
+                                                </div>
+                                            }
+                                            else if (user.IsLocked)
+                                            {
+                                                <div class="px-2 py-1 d-inline-flex align-items-center border-warning rounded-2">
+                                                    <i class="ri-lock-line fs-14 me-1 text-warning"></i>
+                                                    <span class="fw-medium text-warning">قفل شده</span>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="px-2 py-1 d-inline-flex align-items-center border-danger rounded-2">
+                                                    <i class="ri-close-circle-line fs-14 me-1 text-danger"></i>
+                                                    <span class="fw-medium text-danger">غیرفعال</span>
+                                                </div>
+                                            }
+                                        </td>
+                                        <td>
+                                            @if (user.Roles.Any())
+                                            {
+                                                <div class="d-flex flex-wrap gap-1">
+                                                    @foreach (var role in user.Roles)
+                                                    {
+                                                        <span class="badge bg-primary-subtle text-primary">@role</span>
+                                                    }
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <span class="text-muted">بدون نقش</span>
+                                            }
+                                        </td>
+                                        <td>
+                                            <div class="hstack gap-2 justify-content-center">
+                                                @if (Model.CanEdit)
+                                                {
+                                                    <a href="@Url.Action("Details", "User", new { id = user.Id, area = "UserManagement" })" 
+                                                        class="btn btn-sm btn-soft-info" 
+                                                        data-bs-toggle="tooltip" 
+                                                        data-bs-placement="top" 
+                                                        title="مشاهده جزئیات">
+                                                        <i class="ri-eye-fill align-bottom"></i>
+                                                    </a>
+                                                }
+                                                
+                                                @if (Model.CanEdit)
+                                                {
+                                                    <a href="@Url.Action("Edit", "User", new { id = user.Id, area = "UserManagement" })" 
+                                                        class="btn btn-sm btn-soft-warning" 
+                                                        data-bs-toggle="tooltip" 
+                                                        data-bs-placement="top" 
+                                                        title="ویرایش کاربر">
+                                                        <i class="ri-pencil-fill align-bottom"></i>
+                                                    </a>
+                                                }
+                                                
+                                                @if (Model.CanDelete)
+                                                {
+                                                    <a href="@Url.Action("Delete", "User", new { id = user.Id, area = "UserManagement" })" 
+                                                        class="btn btn-sm btn-soft-danger" 
+                                                        data-bs-toggle="tooltip" 
+                                                        data-bs-placement="top" 
+                                                        title="حذف کاربر">
+                                                        <i class="ri-delete-bin-5-fill align-bottom"></i>
+                                                    </a>
+                                                }
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                    @if (Model.TotalPages > 1)
+                    {
+                        <div class="d-flex justify-content-between align-items-center mt-3">
+                            <div class="text-muted">
+                                @if (Model.Filter.HasFilters)
+                                {
+                                    <span>نمایش @((Model.Filter.Page - 1) * Model.Filter.PageSize + 1) تا 
+                                    @(Math.Min(Model.Filter.Page * Model.Filter.PageSize, Model.TotalCount)) 
+                                    از @Model.TotalCount نتیجه</span>
+                                }
+                                else
+                                {
+                                    <span>نمایش @((Model.Filter.Page - 1) * Model.Filter.PageSize + 1) تا 
+                                    @(Math.Min(Model.Filter.Page * Model.Filter.PageSize, Model.TotalCount)) 
+                                    از @Model.TotalCount کاربر</span>
+                                }
+                            </div>
+                            <nav>
+                                <ul class="pagination mb-0">
+                                    @if (Model.HasPreviousPage)
+                                    {
+                                        <li class="page-item">
+                                            <a class="page-link" href="@Url.Action("Index", new { 
+                                                page = 1, 
+                                                searchTerm = Model.Filter.SearchTerm, 
+                                                status = Model.Filter.Status, 
+                                                sortBy = Model.Filter.SortBy, 
+                                                sortOrder = Model.Filter.SortOrder,
+                                                area = "UserManagement"
+                                            })">
+                                                <i class="ri-arrow-right-s-line"></i>
+                                            </a>
+                                        </li>
+                                    }
+                                    
+                                    @{
+                                        var startPage = Math.Max(1, Model.Filter.Page - 2);
+                                        var endPage = Math.Min(Model.TotalPages, Model.Filter.Page + 2);
+                                    }
+                                    
+                                    @for (int i = startPage; i <= endPage; i++)
+                                    {
+                                        <li class="page-item @(i == Model.Filter.Page ? "active" : "")">
+                                            <a class="page-link" href="@Url.Action("Index", new { 
+                                                page = i, 
+                                                searchTerm = Model.Filter.SearchTerm, 
+                                                status = Model.Filter.Status, 
+                                                sortBy = Model.Filter.SortBy, 
+                                                sortOrder = Model.Filter.SortOrder,
+                                                area = "UserManagement"
+                                            })">
+                                                @i
+                                            </a>
+                                        </li>
+                                    }
+                                    
+                                    @if (Model.HasNextPage)
+                                    {
+                                        <li class="page-item">
+                                            <a class="page-link" href="@Url.Action("Index", new { 
+                                                page = Model.TotalPages, 
+                                                searchTerm = Model.Filter.SearchTerm, 
+                                                status = Model.Filter.Status, 
+                                                sortBy = Model.Filter.SortBy, 
+                                                sortOrder = Model.Filter.SortOrder,
+                                                area = "UserManagement"
+                                            })">
+                                                <i class="ri-arrow-left-s-line"></i>
+                                            </a>
+                                        </li>
+                                    }
+                                </ul>
+                            </nav>
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Auto close alerts after 5 seconds
+        window.setTimeout(function() {
+            $(".alert-dismissible").fadeTo(500, 0).slideUp(500, function() {
+                $(this).remove();
+            });
+        }, 5000);
+        
+        // Initialize tooltips
+        document.addEventListener("DOMContentLoaded", function() {
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+            
+            // Handle filter form submission
+            $('#filterForm').on('submit', function(e) {
+                e.preventDefault();
+                var form = $(this);
+                var url = '@Url.Action("Index", "User", new { area = "UserManagement" })' + '?' + form.serialize();
+                window.location = url;
+            });
+            
+            // Handle reset filters
+            $('.reset-filters').on('click', function(e) {
+                e.preventDefault();
+                window.location = '@Url.Action("Index", "User", new { area = "UserManagement" })';
+            });
+            
+            // Handle filter collapse state
+            var filterCollapse = document.getElementById('filterCollapse');
+            var filterButton = document.querySelector('[data-bs-target="#filterCollapse"]');
+            
+            if (filterCollapse && filterButton) {
+                // Update button text when collapse state changes
+                filterCollapse.addEventListener('shown.bs.collapse', function() {
+                    updateFilterButtonText(true);
+                });
+                
+                filterCollapse.addEventListener('hidden.bs.collapse', function() {
+                    updateFilterButtonText(false);
+                });
+                
+                function updateFilterButtonText(isExpanded) {
+                    var icon = filterButton.querySelector('i');
+                    var textSpan = filterButton.querySelector('span');
+                    
+                    if (isExpanded) {
+                        textSpan.textContent = 'فیلترها (فعال)';
+                        filterButton.classList.add('btn-outline-primary');
+                        filterButton.classList.remove('btn-light');
+                    } else {
+                        textSpan.textContent = 'فیلترها';
+                        filterButton.classList.remove('btn-outline-primary');
+                        filterButton.classList.add('btn-light');
+                    }
+                }
+                
+                // Initialize button state
+                var hasFilters = @Json.Serialize(Model.Filter.HasFilters);
+                updateFilterButtonText(hasFilters);
+            }
+        });
+    </script>
+} 
