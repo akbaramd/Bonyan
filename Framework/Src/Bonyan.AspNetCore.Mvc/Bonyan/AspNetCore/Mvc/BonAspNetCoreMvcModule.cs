@@ -4,6 +4,9 @@ using Microsoft.Extensions.Localization;
 
 namespace Bonyan.AspNetCore.Mvc;
 
+
+
+
 public class BonAspNetCoreMvcModule : BonWebModule
 {
     public BonAspNetCoreMvcModule()
@@ -47,9 +50,18 @@ public class BonAspNetCoreMvcModule : BonWebModule
         {
             options.EndpointConfigureActions.Add(endpointContext =>
             {
-                endpointContext.Endpoints.MapControllerRoute("defaultWithArea",
-                    "{area}/{controller=Home}/{action=Index}/{id?}");
-                endpointContext.Endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
+                // 1️⃣ Default route first
+                endpointContext.Endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Home}/{action=Index}/{id?}"
+                );
+
+                // 2️⃣ Area route only after default
+                endpointContext.Endpoints.MapControllerRoute(
+                    name: "areas",
+                    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+                );
+
                 endpointContext.Endpoints.MapRazorPages();
             });
         });

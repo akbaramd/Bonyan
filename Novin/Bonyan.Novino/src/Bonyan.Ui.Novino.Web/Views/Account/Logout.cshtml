@@ -12,7 +12,7 @@
 }
 
 <!DOCTYPE html>
-<html lang="fa" dir="rtl" data-bs-theme="light">
+<html lang="fa" dir="rtl" data-layout="vertical" data-topbar="light" data-sidebar="ladylip" data-sidebar-size="lg">
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -23,276 +23,137 @@
     <!-- CSS Assets in Head -->
     <css-assets location="Head"></css-assets>
     <js-assets location="Head"></js-assets>
-    
-    <style>
-        :root {
-            --primary-color: #4f46e5;
-            --primary-dark: #3730a3;
-            --success-color: #10b981;
-            --warning-color: #f59e0b;
-            --danger-color: #ef4444;
-            --text-primary: #1f2937;
-            --text-secondary: #6b7280;
-            --bg-primary: #ffffff;
-            --bg-secondary: #f9fafb;
-            --border-color: #d1d5db;
-            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-        }
-
-        [data-bs-theme="dark"] {
-            --text-primary: #f1f5f9;
-            --text-secondary: #94a3b8;
-            --bg-primary: #1e293b;
-            --bg-secondary: #334155;
-            --border-color: #475569;
-        }
-
-        * {
-            box-sizing: border-box;
-        }
-
-        body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: 'Vazirmatn', 'Tahoma', 'Arial', sans-serif;
-            margin: 0;
-            padding: 1rem;
-            line-height: 1.6;
-            color: var(--text-primary);
-            direction: rtl;
-        }
-        
-        .logout-container {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-            border-radius: 1rem;
-            box-shadow: var(--shadow-xl);
-            padding: 2.5rem;
-            width: 100%;
-            max-width: 420px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            position: relative;
-            overflow: hidden;
-        }
-
-        [data-bs-theme="dark"] .logout-container {
-            background: rgba(30, 41, 59, 0.95);
-            border-color: rgba(255, 255, 255, 0.1);
-        }
-        
-        .logout-header {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-        
-        .logout-logo {
-            width: 64px;
-            height: 64px;
-            background: linear-gradient(135deg, var(--danger-color) 0%, #dc2626 100%);
-            border-radius: 1rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 1.5rem;
-            color: white;
-            font-size: 1.75rem;
-            box-shadow: var(--shadow-md);
-            transition: transform 0.2s ease;
-        }
-
-        .logout-logo:hover {
-            transform: scale(1.05);
-        }
-        
-        .logout-title {
-            font-size: 1.75rem;
-            font-weight: 700;
-            color: var(--text-primary);
-            margin-bottom: 0.5rem;
-            letter-spacing: -0.025em;
-        }
-        
-        .logout-subtitle {
-            color: var(--text-secondary);
-            font-size: 0.875rem;
-            margin-bottom: 0;
-        }
-
-        .user-info {
-            background: rgba(239, 68, 68, 0.1);
-            border: 1px solid rgba(239, 68, 68, 0.2);
-            border-radius: 0.5rem;
-            padding: 1rem;
-            margin-bottom: 1.5rem;
-            text-align: center;
-        }
-
-        .user-info .user-name {
-            font-weight: 600;
-            color: var(--danger-color);
-            font-size: 1rem;
-            margin-bottom: 0.25rem;
-        }
-
-        .user-info .user-role {
-            color: var(--text-secondary);
-            font-size: 0.875rem;
-        }
-        
-        .btn-group {
-            display: flex;
-            gap: 1rem;
-            margin-top: 2rem;
-        }
-        
-        .btn {
-            flex: 1;
-            padding: 0.875rem 1.5rem;
-            font-weight: 600;
-            border-radius: 0.5rem;
-            transition: all 0.2s ease;
-            font-size: 0.875rem;
-            cursor: pointer;
-            border: none;
-            text-decoration: none;
-            text-align: center;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .btn-danger {
-            background: linear-gradient(135deg, var(--danger-color) 0%, #dc2626 100%);
-            color: white;
-        }
-        
-        .btn-danger:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 10px 20px rgba(239, 68, 68, 0.3);
-        }
-        
-        .btn-secondary {
-            background: var(--bg-secondary);
-            color: var(--text-primary);
-            border: 1px solid var(--border-color);
-        }
-        
-        .btn-secondary:hover {
-            background: var(--border-color);
-            transform: translateY(-1px);
-        }
-        
-        .logout-footer {
-            text-align: center;
-            margin-top: 2rem;
-            padding-top: 1.5rem;
-            border-top: 1px solid var(--border-color);
-            color: var(--text-secondary);
-            font-size: 0.75rem;
-        }
-        
-        @@media (max-width: 576px) {
-            .logout-container {
-                margin: 0;
-                padding: 2rem;
-                border-radius: 0;
-                min-height: 100vh;
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-            }
-
-            body {
-                padding: 0;
-            }
-
-            .btn-group {
-                flex-direction: column;
-            }
-        }
-
-        /* Accessibility improvements */
-        .sr-only {
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            padding: 0;
-            margin: -1px;
-            overflow: hidden;
-            clip: rect(0, 0, 0, 0);
-            white-space: nowrap;
-            border: 0;
-        }
-
-        /* Focus indicators */
-        .btn:focus {
-            outline: 2px solid var(--primary-color);
-            outline-offset: 2px;
-        }
-
-        /* High contrast mode support */
-        @@media (prefers-contrast: high) {
-            .logout-container {
-                border: 2px solid var(--text-primary);
-            }
-        }
-
-        /* Reduced motion support */
-        @@media (prefers-reduced-motion: reduce) {
-            * {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
-            }
-        }
-    </style>
 </head>
 <body>
-    <div class="logout-container">
-        <div class="logout-header">
-            <div class="logout-logo" role="img" aria-label="لوگوی خروج از سیستم">
-                <i class="fas fa-sign-out-alt"></i>
+
+    <!-- auth-page wrapper -->
+    <div class="auth-page-wrapper auth-bg-cover py-5 d-flex justify-content-center align-items-center min-vh-100">
+        <div class="bg-overlay"></div>
+        <!-- auth-page content -->
+        <div class="auth-page-content overflow-hidden pt-lg-5">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card overflow-hidden card-bg-fill galaxy-border-none">
+                            <div class="row justify-content-center g-0">
+                                <div class="col-lg-6">
+                                    <div class="p-lg-5 p-4 auth-one-bg h-100">
+                                        <div class="bg-overlay"></div>
+                                        <div class="position-relative h-100 d-flex flex-column">
+                                            <div class="mb-4">
+                                                <a href="@Url.Action("Index", "Home")" class="d-block">
+                                                    <img src="~/assets/images/logo-light.png" alt="لوگوی بنیان" height="18">
+                                                </a>
+                                            </div>
+                                            <div class="mt-auto">
+                                                <div class="mb-3">
+                                                    <i class="ri-double-quotes-l display-4 text-success"></i>
+                                                </div>
+
+                                                <div id="qoutescarouselIndicators" class="carousel slide" data-bs-ride="carousel">
+                                                    <div class="carousel-indicators">
+                                                        <button type="button" data-bs-target="#qoutescarouselIndicators" data-bs-slide-to="0" class="active"
+                                                                aria-current="true" aria-label="اسلاید ۱"></button>
+                                                        <button type="button" data-bs-target="#qoutescarouselIndicators" data-bs-slide-to="1"
+                                                                aria-label="اسلاید ۲"></button>
+                                                        <button type="button" data-bs-target="#qoutescarouselIndicators" data-bs-slide-to="2"
+                                                                aria-label="اسلاید ۳"></button>
+                                                    </div>
+                                                    <div class="carousel-inner text-center text-white pb-5">
+                                                        <div class="carousel-item active">
+                                                            <p class="fs-15 fst-italic">" کد تمیز، طراحی زیبا و قابل شخصی‌سازی آسان. بسیار متشکریم! "</p>
+                                                        </div>
+                                                        <div class="carousel-item">
+                                                            <p class="fs-15 fst-italic">" قالب واقعاً عالی است با پشتیبانی مشتری فوق‌العاده."</p>
+                                                        </div>
+                                                        <div class="carousel-item">
+                                                            <p class="fs-15 fst-italic">" عالی! کد تمیز، طراحی زیبا و قابل شخصی‌سازی آسان. بسیار متشکریم! "</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- end carousel -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- end col -->
+
+                                <div class="col-lg-6">
+                                    <div class="p-lg-5 p-4">
+                                        <div class="text-center">
+                                            <lord-icon
+                                                src="https://cdn.lordicon.com/gsqxdxog.json"
+                                                trigger="loop"
+                                                colors="primary:#f7b84b,secondary:#f06548"
+                                                style="width:120px;height:120px">
+                                            </lord-icon>
+                                        </div>
+
+                                        <div class="mt-4 pt-2 text-center">
+                                            <h4>آیا مطمئن هستید؟</h4>
+                                            <p class="text-muted">آیا مطمئن هستید که می‌خواهید از سیستم خارج شوید؟</p>
+                                            
+                                            <div class="user-info bg-light rounded p-3 mb-4">
+                                                <div class="d-flex align-items-center">
+                                                    <img class="rounded-circle me-3" src="~/assets/images/users/avatar-1.jpg" 
+                                                         alt="User Avatar" width="48" height="48">
+                                                    <div class="text-start">
+                                                        <h6 class="mb-1">@Model.UserName</h6>
+                                                        <small class="text-muted">کاربر سیستم</small>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <form asp-action="Logout" asp-controller="Account" method="post" id="logoutForm">
+                                                <input type="hidden" asp-for="ReturnUrl" />
+                                                <input type="hidden" asp-for="IsConfirmed" value="true" />
+                                                
+                                                <div class="d-flex gap-2 justify-content-center">
+                                                    <button type="button" class="btn btn-light" id="cancelButton">
+                                                        <i class="ri-close-line me-1"></i>
+                                                        انصراف
+                                                    </button>
+                                                    <button type="submit" class="btn btn-danger" id="logoutButton">
+                                                        <i class="ri-logout-box-r-line me-1"></i>
+                                                        <span id="logoutButtonText">خروج</span>
+                                                    </button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- end col -->
+                            </div>
+                            <!-- end row -->
+                        </div>
+                        <!-- end card -->
+                    </div>
+                    <!-- end col -->
+                </div>
+                <!-- end row -->
             </div>
-            <h1 class="logout-title">تأیید خروج</h1>
-            <p class="logout-subtitle">آیا مطمئن هستید که می‌خواهید از سیستم خارج شوید؟</p>
+            <!-- end container -->
         </div>
-        
-        <div class="user-info">
-            <div class="user-name">@Model.UserName</div>
-            <div class="user-role">کاربر سیستم</div>
-        </div>
-        
-        <form asp-action="Logout" asp-controller="Account" method="post" id="logoutForm">
-            <input type="hidden" asp-for="ReturnUrl" />
-            <input type="hidden" asp-for="IsConfirmed" value="true" />
-            
-            <div class="btn-group">
-                <a href="@Model.ReturnUrl" class="btn btn-secondary" id="cancelButton">
-                    <i class="fas fa-times ms-2"></i>
-                    انصراف
-                </a>
-                <button type="submit" class="btn btn-danger" id="logoutButton">
-                    <i class="fas fa-sign-out-alt ms-2"></i>
-                    خروج
-                </button>
+        <!-- end auth page content -->
+        <!-- footer -->
+        <footer class="footer galaxy-border-none">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="text-center">
+                            <p class="mb-0">&copy; <script>document.write(new Date().getFullYear())</script> بنیان. تمامی حقوق محفوظ است.</p>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </form>
-        
-        <div class="logout-footer">
-            <p class="mb-0">&copy; @DateTime.Now.Year پنل مدیریت بنیان. تمامی حقوق محفوظ است.</p>
-            <p class="mb-0 mt-1">نسخه ۱.۰.۰</p>
-        </div>
+        </footer>
+        <!-- end Footer -->
     </div>
-    
+    <!-- end auth-page-wrapper -->
+
     <!-- JavaScript Assets in Footer -->
     <js-assets location="Footer"></js-assets>
-    
+
     <script>
         (function() {
             'use strict';
@@ -300,6 +161,7 @@
             // DOM elements
             const form = document.getElementById('logoutForm');
             const logoutButton = document.getElementById('logoutButton');
+            const logoutButtonText = document.getElementById('logoutButtonText');
             const cancelButton = document.getElementById('cancelButton');
 
             // Initialize
@@ -330,8 +192,11 @@
             function handleCancel(event) {
                 event.preventDefault();
                 
+                // Get return URL from hidden input
+                const returnUrlInput = document.querySelector('input[name="ReturnUrl"]');
+                const returnUrl = returnUrlInput ? returnUrlInput.value : null;
+                
                 // Redirect to return URL or home page
-                const returnUrl = '@Model.ReturnUrl';
                 if (returnUrl && returnUrl !== '/') {
                     window.location.href = returnUrl;
                 } else {
@@ -342,16 +207,20 @@
             function setLoadingState(loading) {
                 if (loading) {
                     logoutButton.disabled = true;
-                    logoutButton.innerHTML = '<i class="fas fa-spinner fa-spin ms-2"></i>در حال خروج...';
+                    logoutButtonText.textContent = 'در حال خروج...';
+                    logoutButton.innerHTML = '<i class="ri-loader-4-line me-1 animate-spin"></i><span>در حال خروج...</span>';
                 } else {
                     logoutButton.disabled = false;
-                    logoutButton.innerHTML = '<i class="fas fa-sign-out-alt ms-2"></i>خروج';
+                    logoutButtonText.textContent = 'خروج';
+                    logoutButton.innerHTML = '<i class="ri-logout-box-r-line me-1"></i><span>خروج</span>';
                 }
             }
 
             function handleKeyNavigation(event) {
                 if (event.key === 'Escape') {
                     handleCancel(event);
+                } else if (event.key === 'Enter' && document.activeElement === logoutButton) {
+                    form.dispatchEvent(new Event('submit'));
                 }
             }
 
@@ -366,6 +235,17 @@
                 document.addEventListener('contextmenu', function(e) {
                     e.preventDefault();
                 });
+
+                // Disable text selection
+                document.addEventListener('selectstart', function(e) {
+                    e.preventDefault();
+                });
+            }
+
+            // Theme management
+            function initializeTheme() {
+                const savedTheme = localStorage.getItem('admin-theme') || 'light';
+                document.documentElement.setAttribute('data-bs-theme', savedTheme);
             }
 
             // Initialize everything when DOM is ready
@@ -375,7 +255,10 @@
                 initialize();
             }
 
-            initializeSecurity();
+            function initialize() {
+                initializeTheme();
+                initializeSecurity();
+            }
 
         })();
     </script>

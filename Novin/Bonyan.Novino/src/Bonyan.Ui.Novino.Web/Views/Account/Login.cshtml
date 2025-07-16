@@ -1,6 +1,6 @@
 @model Bonyan.Novino.Web.Models.LoginViewModel
 @{
-    ViewData["Title"] = "ورود به سیستم";
+    ViewData["Title"] = "احراز هویت";
     Layout = null;
     
     // Security headers
@@ -12,459 +12,196 @@
 }
 
 <!DOCTYPE html>
-<html lang="fa" dir="rtl" data-bs-theme="light">
+<html lang="fa" dir="rtl" data-layout="vertical" data-topbar="light" data-sidebar="ladylip" data-sidebar-size="lg">
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <meta name="description" content="ورود به پنل مدیریت بنیان"/>
+    <meta name="description" content="احراز هویت - پنل مدیریت بنیان"/>
     <meta name="robots" content="noindex, nofollow"/>
     <title>@ViewData["Title"] - پنل مدیریت بنیان</title>
     
     <!-- CSS Assets in Head -->
     <css-assets location="Head"></css-assets>
     <js-assets location="Head"></js-assets>
-    
-    <style>
-        :root {
-            --primary-color: #4f46e5;
-            --primary-dark: #3730a3;
-            --success-color: #10b981;
-            --warning-color: #f59e0b;
-            --danger-color: #ef4444;
-            --text-primary: #1f2937;
-            --text-secondary: #6b7280;
-            --bg-primary: #ffffff;
-            --bg-secondary: #f9fafb;
-            --border-color: #d1d5db;
-            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-        }
-
-        [data-bs-theme="dark"] {
-            --text-primary: #f1f5f9;
-            --text-secondary: #94a3b8;
-            --bg-primary: #1e293b;
-            --bg-secondary: #334155;
-            --border-color: #475569;
-        }
-
-        * {
-            box-sizing: border-box;
-        }
-
-        body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: 'Vazirmatn', 'Tahoma', 'Arial', sans-serif;
-            margin: 0;
-            padding: 1rem;
-            line-height: 1.6;
-            color: var(--text-primary);
-            direction: rtl;
-        }
-        
-        .login-container {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-            border-radius: 1rem;
-            box-shadow: var(--shadow-xl);
-            padding: 2.5rem;
-            width: 100%;
-            max-width: 420px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            position: relative;
-            overflow: hidden;
-        }
-
-        [data-bs-theme="dark"] .login-container {
-            background: rgba(30, 41, 59, 0.95);
-            border-color: rgba(255, 255, 255, 0.1);
-        }
-        
-        .login-header {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-        
-        .login-logo {
-            width: 64px;
-            height: 64px;
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
-            border-radius: 1rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 1.5rem;
-            color: white;
-            font-size: 1.75rem;
-            box-shadow: var(--shadow-md);
-            transition: transform 0.2s ease;
-        }
-
-        .login-logo:hover {
-            transform: scale(1.05);
-        }
-        
-        .login-title {
-            font-size: 1.75rem;
-            font-weight: 700;
-            color: var(--text-primary);
-            margin-bottom: 0.5rem;
-            letter-spacing: -0.025em;
-        }
-        
-        .login-subtitle {
-            color: var(--text-secondary);
-            font-size: 0.875rem;
-            margin-bottom: 0;
-        }
-        
-        .form-group {
-            margin-bottom: 1.5rem;
-            position: relative;
-        }
-        
-        .form-label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 500;
-            color: var(--text-primary);
-            font-size: 0.875rem;
-        }
-        
-        .input-group {
-            position: relative;
-            display: flex;
-            align-items: center;
-        }
-        
-        .input-group-text {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            border-radius: 0 0.5rem 0.5rem 0;
-            color: var(--text-secondary);
-            padding: 0.75rem 1rem;
-            font-size: 22px;
-            transition: all 0.2s ease;
-            min-width: 48px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .form-control {
-            border: 1px solid var(--border-color);
-            border-radius: 0.5rem 0 0 0.5rem;
-            padding: 0.75rem 1rem;
-            font-size: 0.875rem;
-            transition: all 0.2s ease;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            width: 100%;
-            outline: none;
-            text-align: right;
-        }
-        
-        .form-control:focus {
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
-            background: var(--bg-primary);
-        }
-
-        .form-control.is-invalid {
-            border-color: var(--danger-color);
-            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
-        }
-
-        .form-control.is-valid {
-            border-color: var(--success-color);
-            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
-        }
-        
-        .form-check {
-            display: flex;
-            align-items: center;
-            margin-bottom: 1.5rem;
-        }
-        
-        .form-check-input {
-            margin-left: 0.75rem;
-            width: 1rem;
-            height: 1rem;
-            border: 1px solid var(--border-color);
-            border-radius: 0.25rem;
-            background: var(--bg-primary);
-            cursor: pointer;
-        }
-        
-        .form-check-input:checked {
-            background-color: var(--primary-color);
-            border-color: var(--primary-color);
-        }
-        
-        .form-check-label {
-            font-size: 0.875rem;
-            color: var(--text-primary);
-            cursor: pointer;
-            user-select: none;
-        }
-        
-        .btn-login {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
-            border: none;
-            border-radius: 0.5rem;
-            padding: 0.875rem 1.5rem;
-            font-weight: 600;
-            color: white;
-            width: 100%;
-            transition: all 0.2s ease;
-            font-size: 0.875rem;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .btn-login:hover:not(:disabled) {
-            transform: translateY(-1px);
-            box-shadow: 0 10px 20px rgba(79, 70, 229, 0.3);
-        }
-        
-        .btn-login:active:not(:disabled) {
-            transform: translateY(0);
-        }
-
-        .btn-login:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .btn-login .spinner {
-            display: none;
-            width: 16px;
-            height: 16px;
-            border: 2px solid transparent;
-            border-top: 2px solid white;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-left: 0.5rem;
-        }
-
-        @@keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        .validation-summary-errors {
-            background: rgba(239, 68, 68, 0.1);
-            border: 1px solid rgba(239, 68, 68, 0.2);
-            border-radius: 0.5rem;
-            padding: 1rem;
-            margin-bottom: 1.5rem;
-            color: var(--danger-color);
-            font-size: 0.875rem;
-        }
-        
-        .validation-summary-errors ul {
-            margin: 0;
-            padding-right: 1.25rem;
-            list-style-type: disc;
-        }
-
-        .validation-summary-errors li {
-            margin-bottom: 0.25rem;
-        }
-        
-        .field-validation-error {
-            color: var(--danger-color);
-            font-size: 0.75rem;
-            margin-top: 0.5rem;
-            display: block;
-        }
-
-        .field-validation-valid {
-            display: none;
-        }
-        
-        .login-footer {
-            text-align: center;
-            margin-top: 2rem;
-            padding-top: 1.5rem;
-            border-top: 1px solid var(--border-color);
-            color: var(--text-secondary);
-            font-size: 0.75rem;
-        }
-
-        .security-info {
-            background: rgba(16, 185, 129, 0.1);
-            border: 1px solid rgba(16, 185, 129, 0.2);
-            border-radius: 0.5rem;
-            padding: 0.75rem;
-            margin-bottom: 1.5rem;
-            color: var(--success-color);
-            font-size: 0.75rem;
-            display: flex;
-            align-items: center;
-        }
-
-        .security-info i {
-            margin-left: 0.5rem;
-            font-size: 0.875rem;
-        }
-        
-        @@media (max-width: 576px) {
-            .login-container {
-                margin: 0;
-                padding: 2rem;
-                border-radius: 0;
-                min-height: 100vh;
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-            }
-
-            body {
-                padding: 0;
-            }
-        }
-
-        /* Accessibility improvements */
-        .sr-only {
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            padding: 0;
-            margin: -1px;
-            overflow: hidden;
-            clip: rect(0, 0, 0, 0);
-            white-space: nowrap;
-            border: 0;
-        }
-
-        /* Focus indicators */
-        .form-control:focus,
-        .btn-login:focus,
-        .form-check-input:focus {
-            outline: 2px solid var(--primary-color);
-            outline-offset: 2px;
-        }
-
-        /* High contrast mode support */
-        @@media (prefers-contrast: high) {
-            .login-container {
-                border: 2px solid var(--text-primary);
-            }
-        }
-
-        /* Reduced motion support */
-        @@media (prefers-reduced-motion: reduce) {
-            * {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
-            }
-        }
-    </style>
 </head>
 <body>
-    <div class="login-container">
-        <div class="login-header">
-            <div class="login-logo" role="img" aria-label="لوگوی پنل مدیریت بنیان">
-                <i class="fas fa-cube"></i>
-            </div>
-            <h1 class="login-title">خوش آمدید</h1>
-            <p class="login-subtitle">برای ورود به حساب کاربری خود وارد شوید</p>
-        </div>
-        
-        <!-- Security Information -->
-        <div class="security-info">
-            <i class="fas fa-shield-alt"></i>
-            <span>این یک اتصال امن و رمزگذاری شده است</span>
-        </div>
-        
-        @if (!ViewData.ModelState.IsValid)
-        {
-            <div class="validation-summary-errors" role="alert" aria-live="polite">
-                <ul>
-                    @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
-                    {
-                        <li>@error.ErrorMessage</li>
-                    }
-                </ul>
-            </div>
-        }
-        
-        <form asp-action="Login" asp-controller="Account" method="post" id="loginForm" novalidate>
-            <input type="hidden" asp-for="ReturnUrl" value="@ViewData["ReturnUrl"]" />
-            
-            <div class="form-group">
-                <label asp-for="Username" class="form-label">
-                    <i class="fas fa-user ms-1"></i>
-                    نام کاربری یا ایمیل
-                </label>
-                <div class="input-group">
-                     <span class="input-group-text">
-                        <i class="la la-user" aria-hidden="true"></i>
-                    </span>
-                    <input asp-for="Username"
-                           class="form-control"
-                           placeholder="نام کاربری یا ایمیل خود را وارد کنید"
-                           autocomplete="username"
-                           aria-describedby="username-error"
-                           required/>
 
-                </div>
-                <span asp-validation-for="Username" class="field-validation-error" id="username-error"></span>
-            </div>
-            
-            <div class="form-group">
-                <label asp-for="Password" class="form-label">
-                    <i class="fas fa-lock ms-1"></i>
-                    رمز عبور
-                </label>
-                <div class="input-group">
-                    <span class="input-group-text">
-                        <i class="la la-eye" aria-hidden="true"></i>
-                    </span>
-                    <input asp-for="Password"
-                           class="form-control"
-                           placeholder="رمز عبور خود را وارد کنید"
-                           autocomplete="current-password"
-                           aria-describedby="password-error"
-                           required/>
+    <!-- auth-page wrapper -->
+    <div class="auth-page-wrapper auth-bg-cover py-5 d-flex justify-content-center align-items-center min-vh-100">
+        <div class="bg-overlay"></div>
+        <!-- auth-page content -->
+        <div class="auth-page-content overflow-hidden pt-lg-5">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card overflow-hidden card-bg-fill galaxy-border-none">
+                            <div class="row g-0">
+                                <div class="col-lg-6">
+                                    <div class="p-lg-5 p-4 auth-one-bg h-100">
+                                        <div class="bg-overlay"></div>
+                                        <div class="position-relative h-100 d-flex flex-column">
+                                            <div class="mb-4">
+                                                <a href="@Url.Action("Index", "Home")" class="d-block">
+                                                    <img src="~/assets/images/logo-light.png" alt="لوگوی بنیان" height="18">
+                                                </a>
+                                            </div>
+                                            <div class="mt-auto">
+                                                <div class="mb-3">
+                                                    <i class="ri-double-quotes-l display-4 text-success"></i>
+                                                </div>
 
+                                                <div id="qoutescarouselIndicators" class="carousel slide" data-bs-ride="carousel">
+                                                    <div class="carousel-indicators">
+                                                        <button type="button" data-bs-target="#qoutescarouselIndicators" data-bs-slide-to="0" class="active"
+                                                                aria-current="true" aria-label="اسلاید ۱"></button>
+                                                        <button type="button" data-bs-target="#qoutescarouselIndicators" data-bs-slide-to="1"
+                                                                aria-label="اسلاید ۲"></button>
+                                                        <button type="button" data-bs-target="#qoutescarouselIndicators" data-bs-slide-to="2"
+                                                                aria-label="اسلاید ۳"></button>
+                                                    </div>
+                                                    <div class="carousel-inner text-center text-white pb-5">
+                                                        <div class="carousel-item active">
+                                                            <p class="fs-15 fst-italic">" کد تمیز، طراحی زیبا و قابل شخصی‌سازی آسان. بسیار متشکریم! "</p>
+                                                        </div>
+                                                        <div class="carousel-item">
+                                                            <p class="fs-15 fst-italic">" قالب واقعاً عالی است با پشتیبانی مشتری فوق‌العاده."</p>
+                                                        </div>
+                                                        <div class="carousel-item">
+                                                            <p class="fs-15 fst-italic">" عالی! کد تمیز، طراحی زیبا و قابل شخصی‌سازی آسان. بسیار متشکریم! "</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- end carousel -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- end col -->
+
+                                <div class="col-lg-6">
+                                    <div class="p-lg-5 p-4">
+                                        <div>
+                                            <h5 class="text-primary">خوش آمدید!</h5>
+                                            <p class="text-muted">برای ادامه به بنیان وارد شوید.</p>
+                                        </div>
+
+                                        @if (!ViewData.ModelState.IsValid)
+                                        {
+                                            <div class="alert alert-danger" role="alert" aria-live="polite">
+                                                <ul class="mb-0">
+                                                    @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                                                    {
+                                                        <li>@error.ErrorMessage</li>
+                                                    }
+                                                </ul>
+                                            </div>
+                                        }
+
+                                        <div class="mt-4">
+                                            <form asp-action="Login" asp-controller="Account" method="post" id="loginForm" novalidate>
+                                                <input type="hidden" asp-for="ReturnUrl" value="@ViewData["ReturnUrl"]" />
+
+                                                <div class="mb-3">
+                                                    <label for="username" class="form-label">نام کاربری</label>
+                                                    <input asp-for="Username" type="text" class="form-control" id="username" 
+                                                           placeholder="نام کاربری خود را وارد کنید" autocomplete="username" required>
+                                                    <span asp-validation-for="Username" class="text-danger small"></span>
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <div class="float-end">
+                                                        <a href="#" class="text-muted" onclick="showPasswordReset()">فراموشی رمز عبور؟</a>
+                                                    </div>
+                                                    <label class="form-label" for="password-input">رمز عبور</label>
+                                                    <div class="position-relative auth-pass-inputgroup mb-3">
+                                                        <input asp-for="Password" type="password" class="form-control pe-5 password-input" 
+                                                               placeholder="رمز عبور خود را وارد کنید" id="password-input" 
+                                                               autocomplete="current-password" required>
+                                                        <button class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon material-shadow-none" 
+                                                                type="button" id="password-addon">
+                                                            <i class="ri-eye-fill align-middle"></i>
+                                                        </button>
+                                                    </div>
+                                                    <span asp-validation-for="Password" class="text-danger small"></span>
+                                                </div>
+
+                                                <div class="form-check">
+                                                    <input asp-for="RememberMe" class="form-check-input" type="checkbox" value="" id="auth-remember-check">
+                                                    <label class="form-check-label" for="auth-remember-check">مرا به خاطر بسپار</label>
+                                                </div>
+
+                                                <div class="mt-4">
+                                                    <button class="btn btn-success w-100" type="submit" id="loginButton">
+                                                        <span class="spinner-border spinner-border-sm me-2 d-none" id="loginSpinner"></span>
+                                                        <span id="loginButtonText">ورود</span>
+                                                    </button>
+                                                </div>
+
+                                                <div class="mt-4 text-center">
+                                                    <div class="signin-other-title">
+                                                        <h5 class="fs-14 mb-4 title">ورود با</h5>
+                                                    </div>
+
+                                                    <div>
+                                                        <button type="button" class="btn btn-primary btn-icon waves-effect waves-light">
+                                                            <i class="ri-facebook-fill fs-16"></i>
+                                                        </button>
+                                                        <button type="button" class="btn btn-danger btn-icon waves-effect waves-light">
+                                                            <i class="ri-google-fill fs-16"></i>
+                                                        </button>
+                                                        <button type="button" class="btn btn-dark btn-icon waves-effect waves-light">
+                                                            <i class="ri-github-fill fs-16"></i>
+                                                        </button>
+                                                        <button type="button" class="btn btn-info btn-icon waves-effect waves-light">
+                                                            <i class="ri-twitter-fill fs-16"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+
+                                        <div class="mt-5 text-center">
+                                            <p class="mb-0">حساب کاربری ندارید؟ 
+                                                <a href="#" class="fw-semibold text-primary text-decoration-underline" onclick="showSignUp()">ثبت نام</a>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- end col -->
+                            </div>
+                            <!-- end row -->
+                        </div>
+                        <!-- end card -->
+                    </div>
+                    <!-- end col -->
                 </div>
-                <span asp-validation-for="Password" class="field-validation-error" id="password-error"></span>
+                <!-- end row -->
             </div>
-            
-            <div class="form-check">
-                <input asp-for="RememberMe" class="form-check-input" id="rememberMe" />
-                <label asp-for="RememberMe" class="form-check-label" for="rememberMe">
-                    مرا به مدت ۳۰ روز وارد نگه دار
-                </label>
-            </div>
-            
-            <button type="submit" class="btn-login" id="loginButton">
-                <span class="spinner" id="loginSpinner"></span>
-                <i class="fas fa-sign-in-alt ms-2"></i>
-                <span id="loginButtonText">ورود</span>
-            </button>
-        </form>
-        
-        <div class="login-footer">
-            <p class="mb-0">&copy; @DateTime.Now.Year پنل مدیریت بنیان. تمامی حقوق محفوظ است.</p>
-            <p class="mb-0 mt-1">نسخه ۱.۰.۰</p>
+            <!-- end container -->
         </div>
+        <!-- end auth page content -->
+        <!-- footer -->
+        <footer class="footer galaxy-border-none">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="text-center">
+                            <p class="mb-0">&copy; <script>document.write(new Date().getFullYear())</script> بنیان. تمامی حقوق محفوظ است.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <!-- end Footer -->
     </div>
-    
+    <!-- end auth-page-wrapper -->
+
     <!-- JavaScript Assets in Footer -->
     <js-assets location="Footer"></js-assets>
-    
+
+    <!-- password-addon init -->
+    <script src="~/assets/js/pages/password-addon.init.js"></script>
+
     <script>
         (function() {
             'use strict';
@@ -529,15 +266,15 @@
 
             function validateUsername() {
                 const value = usernameInput.value.trim();
-                const errorElement = document.getElementById('username-error');
+                const errorElement = usernameInput.parentNode.querySelector('.text-danger');
 
                 if (!value) {
-                    showFieldError(usernameInput, errorElement, 'نام کاربری یا ایمیل الزامی است');
+                    showFieldError(usernameInput, errorElement, 'نام کاربری الزامی است');
                     return false;
                 }
 
                 if (value.length > 100) {
-                    showFieldError(usernameInput, errorElement, 'نام کاربری یا ایمیل نمی‌تواند بیش از ۱۰۰ کاراکتر باشد');
+                    showFieldError(usernameInput, errorElement, 'نام کاربری نمی‌تواند بیش از ۱۰۰ کاراکتر باشد');
                     return false;
                 }
 
@@ -553,7 +290,7 @@
 
             function validatePassword() {
                 const value = passwordInput.value;
-                const errorElement = document.getElementById('password-error');
+                const errorElement = passwordInput.parentNode.querySelector('.text-danger');
 
                 if (!value) {
                     showFieldError(passwordInput, errorElement, 'رمز عبور الزامی است');
@@ -613,11 +350,11 @@
             function setLoadingState(loading) {
                 if (loading) {
                     loginButton.disabled = true;
-                    loginSpinner.style.display = 'inline-block';
+                    loginSpinner.classList.remove('d-none');
                     loginButtonText.textContent = 'در حال ورود...';
                 } else {
                     loginButton.disabled = false;
-                    loginSpinner.style.display = 'none';
+                    loginSpinner.classList.add('d-none');
                     loginButtonText.textContent = 'ورود';
                 }
             }
@@ -632,6 +369,17 @@
                     }
                 }
             }
+
+            // Authentication screen navigation functions
+            window.showPasswordReset = function() {
+                // Redirect to password reset page
+                window.location.href = '@Url.Action("PasswordReset", "Account")';
+            };
+
+            window.showSignUp = function() {
+                // Redirect to signup page
+                window.location.href = '@Url.Action("SignUp", "Account")';
+            };
 
             // Theme management
             function initializeTheme() {

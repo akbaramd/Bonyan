@@ -18,8 +18,6 @@ public class BonyanNovinoApplicationModule : BonModule
 
     public override Task OnConfigureAsync(BonConfigurationContext context)
     {
-        context.Services.AddTransient<INotificationSender,NotificationSender>();
-        context.Services.AddSingleton<NotificationProviderResolver>();
         return base.OnConfigureAsync(context);
     }
 } 

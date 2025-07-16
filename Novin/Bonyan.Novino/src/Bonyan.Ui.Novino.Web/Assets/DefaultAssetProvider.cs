@@ -137,12 +137,17 @@ namespace Bonyan.Novino.Web.Assets
                 jqueryValidationUnobtrusiveAsset.Dependencies.AddRange(new[] { "jquery-js", "jquery-validation-js" });
                 assets.Add(jqueryValidationUnobtrusiveAsset);
 
+                // Password Addon JS (Footer - for authentication screens)
+                var passwordAddonAsset = CreateJavaScriptAsset("password-addon-js", "/assets/js/pages/password-addon.init.js", 67, AssetLocation.Footer);
+                passwordAddonAsset.Dependencies.Add("jquery-js");
+                assets.Add(passwordAddonAsset);
+
                 // Plugins JS (Footer - last, depends on all others)
                 var pluginsAsset = CreateJavaScriptAsset("plugins-js", "/assets/js/plugins.js", 70, AssetLocation.Footer);
                 pluginsAsset.Dependencies.AddRange(new[] { "jquery-js", "bootstrap-bundle-js", "simplebar-js", "waves-js", "feather-icons-js", "lord-icon-js" });
                 assets.Add(pluginsAsset);
                 
-                var appAsset = CreateJavaScriptAsset("plugins-js", "/assets/js/app.js", 80, AssetLocation.Footer);
+                var appAsset = CreateJavaScriptAsset("app-js", "/assets/js/app.js", 80, AssetLocation.Footer);
                 appAsset.Dependencies.AddRange(new[] { "jquery-js", "bootstrap-bundle-js", "simplebar-js", "waves-js", "feather-icons-js", "lord-icon-js" });
                 assets.Add(appAsset);
             }

@@ -12,25 +12,13 @@ using Bonyan.VirtualFileSystem;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
-using Bonyan.Module.NotificationManagement.Abstractions.Options;
 using Bonyan.Module.NotificationManagement.Abstractions.Providers;
 using Bonyan.Module.NotificationManagement.Abstractions.Types;
+using Bonyan.Novino.Infrastructure.Providers.Notifications;
 
 namespace Bonyan.Novino.Infrastructure;
 
-public class InAppNotificationProvider : INotificationProvider
-{
-    public string Key => "InApp";
 
-    public NotificationChannel Channel => NotificationChannel.InApp;
-
-   
-
-    public Task SendAsync(string userId, string title, string message, string? link, CancellationToken cancellationToken = default)
-    {
-        return Task.CompletedTask;
-    }
-}
 public class BonyanNovinoInfrastructureModule : BonModule
 {
     public BonyanNovinoInfrastructureModule()
@@ -43,10 +31,7 @@ public class BonyanNovinoInfrastructureModule : BonModule
 
     public override Task OnPreConfigureAsync(BonConfigurationContext context)
     {
-        context.Services.AddKeyedSingleton<InAppNotificationProvider>("InApp");
-        Configure<NotificationManagementOptions>(options => {
-            options.Providers.Add(NotificationChannel.InApp, new List<string> { "InApp" });
-        });
+        context.Services.AddSingleton<InAppNotificationProviders>();
 
         return base.OnPreConfigureAsync(context);
     }

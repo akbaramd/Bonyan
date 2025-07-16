@@ -31,7 +31,7 @@ public class BonUnitOfWorkBonDbContextProvider<TDbContext> : IBonDbContextProvid
 
     public virtual async Task<TDbContext> GetDbContextAsync()
     {
-        var unitOfWork = BonUnitOfWorkManager.Current;
+        var unitOfWork = BonUnitOfWorkManager.Current; 
         if (unitOfWork == null)
         {
             throw new BonException("A BonDbContext can only be created inside a unit of work!");
@@ -40,16 +40,13 @@ public class BonUnitOfWorkBonDbContextProvider<TDbContext> : IBonDbContextProvid
 
         var dbContextKey = $"{targetDbContextType}";
 
-        var databaseApi = unitOfWork.FindDatabaseApi(dbContextKey);
-
-        if (databaseApi == null)
-        {
-            databaseApi = new EfCoreBonDatabaseApi(
-                await CreateDbContextAsync(unitOfWork)
-            );
-
-            unitOfWork.AddDatabaseApi(dbContextKey, databaseApi);
-        }
+        var databaseApi = unitOfWork.GetOrAddDatabaseApi(
+            dbContextKey,
+            () => new EfCoreBonDatabaseApi(
+              (  CreateDbContextAsync(unitOfWork).GetAwaiter().GetResult())
+            ));
+        
+       
 
         return (TDbContext)((EfCoreBonDatabaseApi)databaseApi).DbContext;
     }

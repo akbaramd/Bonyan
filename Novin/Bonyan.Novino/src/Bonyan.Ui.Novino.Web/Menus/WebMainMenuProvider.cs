@@ -64,25 +64,6 @@ namespace Bonyan.Novino.Web.Menus
         {
             var items = new List<MenuItem>
             {
-                new MenuItem("مدیریت کاربران", "/UserManagement", "ri-user-settings-line", 1)
-                {
-                    CssClass = "nav-link menu-link",
-                    Children = new List<MenuItem>
-                    {
-                        new MenuItem("لیست کاربران", "/UserManagement/Users", "ri-user-list-line", 1)
-                        {
-                            CssClass = "nav-link"
-                        },
-                        new MenuItem("افزودن کاربر", "/UserManagement/Users/Create", "ri-user-add-line", 2)
-                        {
-                            CssClass = "nav-link"
-                        },
-                        new MenuItem("ویرایش کاربران", "/UserManagement/Users/Edit", "ri-user-edit-line", 3)
-                        {
-                            CssClass = "nav-link"
-                        }
-                    }
-                },
                 new MenuItem("مدیریت نقش‌ها", "/RoleManagement", "ri-shield-user-line", 2)
                 {
                     CssClass = "nav-link menu-link",

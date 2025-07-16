@@ -12,6 +12,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.Novino.Application",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.Novino.Infrastructure", "src\Bonyan.Novino.Infrastructure\Bonyan.Novino.Infrastructure.csproj", "{4C3D88DC-7215-44A0-B102-152206E61180}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.AspNetCore.Mvc", "..\..\Framework\Src\Bonyan.AspNetCore.Mvc\Bonyan.AspNetCore.Mvc.csproj", "{B9781D04-B80E-4CFA-B6CD-6CA0C0E959B0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modules", "Modules", "{7658134B-877F-4867-86A6-D08B0B307CE6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.Novino.Module.UserManagement", "modules\Bonyan.Novino.Module.UserManagement\Bonyan.Novino.Module.UserManagement.csproj", "{47A8A5F9-62EB-4D1A-A350-1E44930A1D6C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,6 +29,8 @@ Global
 		{2A1B88DC-7215-44A0-B102-152206E6117E} = {7EBCD00A-50C8-4A0B-B084-E997FC9FF59F}
 		{3B2C88DC-7215-44A0-B102-152206E6117F} = {7EBCD00A-50C8-4A0B-B084-E997FC9FF59F}
 		{4C3D88DC-7215-44A0-B102-152206E61180} = {7EBCD00A-50C8-4A0B-B084-E997FC9FF59F}
+		{7658134B-877F-4867-86A6-D08B0B307CE6} = {7EBCD00A-50C8-4A0B-B084-E997FC9FF59F}
+		{47A8A5F9-62EB-4D1A-A350-1E44930A1D6C} = {7658134B-877F-4867-86A6-D08B0B307CE6}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{1296B704-6C11-485F-BD37-06A69EC88AD5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -45,5 +53,13 @@ Global
 		{4C3D88DC-7215-44A0-B102-152206E61180}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4C3D88DC-7215-44A0-B102-152206E61180}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4C3D88DC-7215-44A0-B102-152206E61180}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B9781D04-B80E-4CFA-B6CD-6CA0C0E959B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B9781D04-B80E-4CFA-B6CD-6CA0C0E959B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B9781D04-B80E-4CFA-B6CD-6CA0C0E959B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B9781D04-B80E-4CFA-B6CD-6CA0C0E959B0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{47A8A5F9-62EB-4D1A-A350-1E44930A1D6C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{47A8A5F9-62EB-4D1A-A350-1E44930A1D6C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{47A8A5F9-62EB-4D1A-A350-1E44930A1D6C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{47A8A5F9-62EB-4D1A-A350-1E44930A1D6C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

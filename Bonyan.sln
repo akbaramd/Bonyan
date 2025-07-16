@@ -156,6 +156,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Bonyan.NotificationManagement", "Bonyan.NotificationManagement", "{5DB1481B-DD7E-4CF1-8A96-D182541C9D7A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Src", "Src", "{49B6EFE3-53B4-47B4-8AAB-DE35177DCBE6}"
+	ProjectSection(SolutionItems) = preProject
+		Modules\Bonyan.NotificationManagement\Src\Bonyan.Module.NotificationManagement.Infrastructure\obj\Debug\net8.0\.NETCoreApp,Version=v8.0.AssemblyAttributes.cs = Modules\Bonyan.NotificationManagement\Src\Bonyan.Module.NotificationManagement.Infrastructure\obj\Debug\net8.0\.NETCoreApp,Version=v8.0.AssemblyAttributes.cs
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.Module.NotificationManagement.Domain", "Modules\Bonyan.NotificationManagement\Src\Bonyan.Module.NotificationManagement.Domain\Bonyan.Module.NotificationManagement.Domain.csproj", "{D5A1074A-D75E-464C-A691-DA3530011ED4}"
 EndProject

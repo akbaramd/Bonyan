@@ -27,8 +27,10 @@ using Bonyan.Novino.Domain.Entities;
 using Bonyan.TenantManagement.EntityFrameworkCore;
 using Bonyan.Novino.Infrastructure;
 using Bonyan.Novino.Infrastructure.Data;
+using Bonyan.Novino.Module.UserManagement;
 using Bonyan.Novino.Web.Models;
 using Bonyan.VirtualFileSystem;
+using Microsoft.AspNetCore.Mvc.Razor;
 
 namespace Bonyan.Novino.Web;
 
@@ -42,6 +44,8 @@ public class BonyanNovinoWebModule : BonWebModule
         DependOn<BonUiNovinoModule<Domain.Entities.User,Role>>();
         DependOn<BonyanNovinoInfrastructureModule>();
         DependOn<BonyanNovinoApplicationModule>();
+        
+        DependOn<BonyanNovinoUserManagementModule>();
     }
     
     public override Task OnConfigureAsync(BonConfigurationContext context)
@@ -55,6 +59,9 @@ public class BonyanNovinoWebModule : BonWebModule
         
         // Configure authentication
         ConfigureAuthentication(context);
+        
+        // Configure Razor View Engine for embedded resources
+        ConfigureRazorViewEngine(context);
 
     
 
@@ -74,6 +81,9 @@ public class BonyanNovinoWebModule : BonWebModule
         Configure<BonVirtualFileSystemOptions>(options =>
         {
             options.FileSets.AddEmbedded<BonyanNovinoInfrastructureModule>("Bonyan.Novino.Web", "wwwroot/css");
+            
+            // Configure embedded views from modules
+            options.FileSets.AddEmbedded<BonyanNovinoUserManagementModule>("Bonyan.Novino.Module.UserManagement", "Areas/UserManagement");
         });
 
     }
@@ -112,6 +122,25 @@ public class BonyanNovinoWebModule : BonWebModule
         
         // Register user seeding service
         context.Services.AddScoped<UserSeedingService>();
+    }
+    
+    private void ConfigureRazorViewEngine(BonConfigurationContext context)
+    {
+        // Configure Razor View Engine to handle embedded resources from modules
+        context.Services.Configure<RazorViewEngineOptions>(options =>
+        {
+            // Add view locations for embedded resources
+            options.ViewLocationFormats.Add("/Areas/{2}/Views/{1}/{0}.cshtml");
+            options.ViewLocationFormats.Add("/Areas/{2}/Views/Shared/{0}.cshtml");
+            options.ViewLocationFormats.Add("/Views/{1}/{0}.cshtml");
+            options.ViewLocationFormats.Add("/Views/Shared/{0}.cshtml");
+        });
+    }
+
+    public override Task OnPreApplicationAsync(BonWebApplicationContext context)
+    {
+        context.Application.UseUnitOfWork();
+        return base.OnPreApplicationAsync(context);
     }
 
     public override async Task OnApplicationAsync(BonWebApplicationContext context)

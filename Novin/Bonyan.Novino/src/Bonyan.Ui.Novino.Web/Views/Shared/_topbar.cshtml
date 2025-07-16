@@ -714,8 +714,8 @@ var allNotificationsCount = (unreadNotifics?.Notifications?.Count() ?? 0) + (rea
                             <img class="rounded-circle header-profile-user" src="~/assets/images/users/avatar-1.jpg"
                                 alt="Header Avatar">
                             <span class="text-start ms-xl-2">
-                                <span class="d-none d-xl-inline-block ms-1 fw-medium user-name-text">کاربر سیستم</span>
-                                <span class="d-none d-xl-block ms-1 fs-12 user-name-sub-text">مدیر</span>
+                                <span class="d-none d-xl-inline-block ms-1 fw-medium user-name-text">@(CurrentUser.Name ?? "کاربر سیستم") @(CurrentUser.SurName ?? "کاربر سیستم")</span>
+                                <span class="d-none d-xl-block ms-1 fs-12 user-name-sub-text">@(CurrentUser.Roles?.FirstOrDefault() ?? "کاربر")</span>
                             </span>
                         </span>
                     </button>

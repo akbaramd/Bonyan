@@ -250,6 +250,83 @@ namespace Bonyan.Novino.Web.Controllers
             return View();
         }
 
+        /// <summary>
+        /// Displays password reset form
+        /// </summary>
+        [HttpGet]
+        public IActionResult PasswordReset()
+        {
+            // If user is already authenticated, redirect to dashboard
+            if (User.Identity?.IsAuthenticated == true)
+            {
+                _logger.LogInformation("Authenticated user {Username} attempted to access password reset page, redirecting to dashboard", User.Identity.Name);
+                return RedirectToAction("Index", "Home");
+            }
+
+            ViewData["Title"] = "بازیابی رمز عبور";
+            return View();
+        }
+
+        /// <summary>
+        /// Handles password reset request
+        /// </summary>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> PasswordReset(string email)
+        {
+            ViewData["Title"] = "بازیابی رمز عبور";
+
+            if (string.IsNullOrWhiteSpace(email))
+            {
+                ModelState.AddModelError(string.Empty, "ایمیل الزامی است.");
+                return View();
+            }
+
+            try
+            {
+                // Find user by email
+                var userResult = await FindUserAsync(email);
+                if (!userResult.IsSuccess || userResult.Value == null)
+                {
+                    // Don't reveal if email exists or not for security
+                    _logger.LogInformation("Password reset requested for non-existent email: {Email}", email);
+                    return RedirectToAction("PasswordResetConfirmation");
+                }
+
+                var user = userResult.Value;
+
+                // TODO: Implement password reset logic
+                // This would typically involve:
+                // 1. Generating a reset token
+                // 2. Sending email with reset link
+                // 3. Storing reset token with expiration
+
+                _logger.LogInformation("Password reset requested for user {Username}", user.UserName);
+
+                return RedirectToAction("PasswordResetConfirmation");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error during password reset for email {Email}", email);
+                ModelState.AddModelError(string.Empty, "خطایی رخ داد. لطفاً دوباره تلاش کنید.");
+                return View();
+            }
+        }
+
+        /// <summary>
+        /// Displays password reset confirmation page
+        /// </summary>
+        [HttpGet]
+        public IActionResult PasswordResetConfirmation()
+        {
+            ViewData["Title"] = "تأیید درخواست بازیابی رمز عبور";
+            return View();
+        }
+
+   
+
+
+
         #region Private Methods
 
         /// <summary>
