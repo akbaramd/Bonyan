@@ -151,6 +151,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.Localization", "Fram
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Bonyan.NotificationManagement", "Bonyan.NotificationManagement", "{5DB1481B-DD7E-4CF1-8A96-D182541C9D7A}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Src", "Src", "{49B6EFE3-53B4-47B4-8AAB-DE35177DCBE6}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.Module.NotificationManagement.Domain", "Modules\Bonyan.NotificationManagement\Src\Bonyan.Module.NotificationManagement.Domain\Bonyan.Module.NotificationManagement.Domain.csproj", "{D5A1074A-D75E-464C-A691-DA3530011ED4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.Module.NotificationManagement.Abstractions", "Modules\Bonyan.NotificationManagement\Src\Bonyan.Module.NotificationManagement.Abstractions\Bonyan.Module.NotificationManagement.Abstractions.csproj", "{1064C8A7-FC37-4312-A60F-C2B2F92F1849}"
@@ -176,6 +178,18 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Module", "Module", "{8A3FA2B5-3030-4CAB-B515-AD1005B0BC27}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.Novino.Module.UserManagement", "Novino\modules\Bonyan.Novino.Module.UserManagement\Bonyan.Novino.Module.UserManagement.csproj", "{01A270BA-70D1-4C45-929D-7F823F7A938C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UserManagement", "UserManagement", "{D5B0A206-D64F-436C-847F-DCB6812F2E13}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.Novino.Module.UserManagement.Abstractions", "Novino\modules\Bonyan.Novino.Module.UserManagement.Abstractions\Bonyan.Novino.Module.UserManagement.Abstractions.csproj", "{D7F17810-8207-49D5-8471-34F297736941}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.AspNetCore.View.ZoneComponent", "Framework\Src\Bonyan.AspNetCore.View.ZoneComponent\Bonyan.AspNetCore.View.ZoneComponent.csproj", "{E11BFEAF-7DA7-466E-AD94-26D2D4735650}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "RoleManagement", "RoleManagement", "{7ACD49E3-AB6E-4D47-B792-7CDFD8387C42}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.Novino.Module.RoleManagement.Abstractions", "Novino\modules\Bonyan.Novino.Module.RoleManagement.Abstractions\Bonyan.Novino.Module.RoleManagement.Abstractions.csproj", "{E241DBB1-02E7-44EB-8E33-B70A3CA6CB23}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.Novino.Module.RoleManagement", "Novino\modules\Bonyan.Novino.Module.RoleManagement\Bonyan.Novino.Module.RoleManagement.csproj", "{0E3AC30B-C0D1-4BB1-93B4-28269BB209A1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -459,6 +473,22 @@ Global
 		{01A270BA-70D1-4C45-929D-7F823F7A938C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{01A270BA-70D1-4C45-929D-7F823F7A938C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{01A270BA-70D1-4C45-929D-7F823F7A938C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D7F17810-8207-49D5-8471-34F297736941}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D7F17810-8207-49D5-8471-34F297736941}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D7F17810-8207-49D5-8471-34F297736941}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D7F17810-8207-49D5-8471-34F297736941}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E11BFEAF-7DA7-466E-AD94-26D2D4735650}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E11BFEAF-7DA7-466E-AD94-26D2D4735650}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E11BFEAF-7DA7-466E-AD94-26D2D4735650}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E11BFEAF-7DA7-466E-AD94-26D2D4735650}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E241DBB1-02E7-44EB-8E33-B70A3CA6CB23}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E241DBB1-02E7-44EB-8E33-B70A3CA6CB23}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E241DBB1-02E7-44EB-8E33-B70A3CA6CB23}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E241DBB1-02E7-44EB-8E33-B70A3CA6CB23}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0E3AC30B-C0D1-4BB1-93B4-28269BB209A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0E3AC30B-C0D1-4BB1-93B4-28269BB209A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0E3AC30B-C0D1-4BB1-93B4-28269BB209A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0E3AC30B-C0D1-4BB1-93B4-28269BB209A1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -546,7 +576,13 @@ Global
 		{9CAEB4A1-BE4F-4A28-8A4B-4956555C594D} = {BE1AC625-A59C-4B34-ADD6-276B5C1F4F69}
 		{9CFC2566-3807-44C6-89A4-B6339B10804E} = {BE1AC625-A59C-4B34-ADD6-276B5C1F4F69}
 		{8A3FA2B5-3030-4CAB-B515-AD1005B0BC27} = {BE1AC625-A59C-4B34-ADD6-276B5C1F4F69}
-		{01A270BA-70D1-4C45-929D-7F823F7A938C} = {8A3FA2B5-3030-4CAB-B515-AD1005B0BC27}
+		{D5B0A206-D64F-436C-847F-DCB6812F2E13} = {8A3FA2B5-3030-4CAB-B515-AD1005B0BC27}
+		{01A270BA-70D1-4C45-929D-7F823F7A938C} = {D5B0A206-D64F-436C-847F-DCB6812F2E13}
+		{D7F17810-8207-49D5-8471-34F297736941} = {D5B0A206-D64F-436C-847F-DCB6812F2E13}
+		{E11BFEAF-7DA7-466E-AD94-26D2D4735650} = {31BFDED6-5439-4D9A-ABBA-882C07DE7024}
+		{7ACD49E3-AB6E-4D47-B792-7CDFD8387C42} = {8A3FA2B5-3030-4CAB-B515-AD1005B0BC27}
+		{E241DBB1-02E7-44EB-8E33-B70A3CA6CB23} = {7ACD49E3-AB6E-4D47-B792-7CDFD8387C42}
+		{0E3AC30B-C0D1-4BB1-93B4-28269BB209A1} = {7ACD49E3-AB6E-4D47-B792-7CDFD8387C42}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CACE9943-7714-471F-BCCD-CC6CA1DA43C5}

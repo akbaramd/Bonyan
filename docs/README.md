@@ -1,4 +1,4 @@
-d# Bonyan Modular Monolithic Library
+# Bonyan Modular Monolithic Library
 
 ## Purpose
 

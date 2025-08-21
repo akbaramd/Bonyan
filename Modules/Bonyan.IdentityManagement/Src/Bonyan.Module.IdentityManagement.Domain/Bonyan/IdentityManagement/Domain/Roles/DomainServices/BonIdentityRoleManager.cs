@@ -242,5 +242,18 @@ namespace Bonyan.IdentityManagement.Domain.Roles.DomainServices
 
             return BonDomainResult<TRole>.Success(role);
         }
+
+        public async Task<BonDomainResult<IEnumerable<TRole>>> GetAllRolesAsync()
+        {
+            try
+            {
+                var roles = await _roleRepository.FindAsync(x=>true);
+                return BonDomainResult<IEnumerable<TRole>>.Success(roles);
+            }
+            catch (Exception ex)
+            {
+                return BonDomainResult<IEnumerable<TRole>>.Failure($"Error retrieving all roles: {ex.Message}");
+            }
+        }
     }
 }

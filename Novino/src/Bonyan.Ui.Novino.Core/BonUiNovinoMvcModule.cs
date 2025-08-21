@@ -1,11 +1,18 @@
-﻿using Bonyan.IdentityManagement;
+﻿using Bonyan.AspNetCore.ZoneComponent;
+using Bonyan.IdentityManagement;
 using Bonyan.IdentityManagement.Domain.Roles;
 using Bonyan.IdentityManagement.Domain.Users;
 using Bonyan.Modularity;
 using Bonyan.Modularity.Abstractions;
 using Bonyan.Novino.Core.Assets;
 using Bonyan.Novino.Core.Menus;
+using Bonyan.Ui.Novino.Core;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ViewEngines;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Microsoft.AspNetCore.Mvc.Razor;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Bonyan.Novino.Core;
 
@@ -14,6 +21,7 @@ public class BonNovinoCoreModule<TUser,TRole> : BonModule where TUser : BonIdent
     public BonNovinoCoreModule()
     {
         DependOn<BonIdentityManagementModule<TUser,TRole>>();
+        DependOn<BonAspNetCoreViewZoneComponentModule>();
     }
     public override Task OnConfigureAsync(BonConfigurationContext context)
     {
@@ -26,6 +34,7 @@ public class BonNovinoCoreModule<TUser,TRole> : BonModule where TUser : BonIdent
     {
         InitializeMenuProviders(context);
         InitializeAssetProviders(context);
+        // Nested view handlers will be initialized by NestedViewInitializer after app is built
         return base.OnInitializeAsync(context);
     }
 
@@ -69,7 +78,7 @@ public class BonNovinoCoreModule<TUser,TRole> : BonModule where TUser : BonIdent
         }
     }
 
-    private void InitializeAssetProviders(BonInitializedContext context)
+        private void InitializeAssetProviders(BonInitializedContext context)
     {
         var assetManager = context.GetRequireService<IAssetManager>();
         
@@ -80,4 +89,6 @@ public class BonNovinoCoreModule<TUser,TRole> : BonModule where TUser : BonIdent
             assetManager.RegisterProvider(provider);
         }
     }
+
+   
 }

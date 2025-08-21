@@ -106,7 +106,7 @@ namespace Bonyan.UserManagement.Domain.Users
             AddDomainEvent(new BonUserProfileUpdatedDomainEvent(this));
         }
 
-
+      
         /// <summary>
         /// Marks the user's email as verified.
         /// </summary>

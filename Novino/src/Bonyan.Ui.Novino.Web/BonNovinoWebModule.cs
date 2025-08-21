@@ -27,6 +27,7 @@ using Bonyan.Novino.Domain.Entities;
 using Bonyan.TenantManagement.EntityFrameworkCore;
 using Bonyan.Novino.Infrastructure;
 using Bonyan.Novino.Infrastructure.Data;
+using Bonyan.Novino.Module.RoleManagement;
 using Bonyan.Novino.Module.UserManagement;
 using Bonyan.Novino.Web.Models;
 using Bonyan.VirtualFileSystem;
@@ -46,6 +47,7 @@ public class BonNovinoWebModule : BonWebModule
         DependOn<BonNovinoApplicationModule>();
         
         DependOn<BonNovinoUserManagementModule>();
+        DependOn<BonNovinoRoleManagementModule>();
     }
     
     public override Task OnConfigureAsync(BonConfigurationContext context)
@@ -84,6 +86,7 @@ public class BonNovinoWebModule : BonWebModule
             
             // Configure embedded views from modules
             options.FileSets.AddEmbedded<BonNovinoUserManagementModule>("Bonyan.Novino.Module.UserManagement", "Areas/UserManagement");
+            options.FileSets.AddEmbedded<BonNovinoRoleManagementModule>("Bonyan.Novino.Module.RoleManagement", "Areas/RoleManagement");
         });
 
     }
@@ -130,10 +133,10 @@ public class BonNovinoWebModule : BonWebModule
         context.Services.Configure<RazorViewEngineOptions>(options =>
         {
             // Add view locations for embedded resources
-            options.ViewLocationFormats.Add("/Areas/{2}/Views/{1}/{0}.cshtml");
-            options.ViewLocationFormats.Add("/Areas/{2}/Views/Shared/{0}.cshtml");
-            options.ViewLocationFormats.Add("/Views/{1}/{0}.cshtml");
-            options.ViewLocationFormats.Add("/Views/Shared/{0}.cshtml");
+            options.ViewLocationFormats.Add("/Areas/{2}/Pages/{1}/{0}.cshtml");
+            options.ViewLocationFormats.Add("/Areas/{2}/Pages/Shared/{0}.cshtml");
+            options.ViewLocationFormats.Add("/Pages/{1}/{0}.cshtml");
+            options.ViewLocationFormats.Add("/Pages/Shared/{0}.cshtml");
         });
     }
 

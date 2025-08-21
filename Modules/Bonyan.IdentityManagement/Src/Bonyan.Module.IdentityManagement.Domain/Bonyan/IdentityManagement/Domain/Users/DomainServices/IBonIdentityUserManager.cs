@@ -51,5 +51,6 @@ public interface IBonIdentityUserManager<TIdentityUser,TRole> : IBonDomainServic
     Task<BonDomainResult<IEnumerable<BonIdentityUserClaims<TIdentityUser,TRole>>>> GetClaimsByTypeAsync(TIdentityUser user, string claimType);
     Task<BonDomainResult<IEnumerable<BonIdentityUserClaims<TIdentityUser,TRole>>>> GetAllClaimsAsync(TIdentityUser user);
 
+    Task<BonDomainResult> DeleteAsync(TIdentityUser user);
 }
 

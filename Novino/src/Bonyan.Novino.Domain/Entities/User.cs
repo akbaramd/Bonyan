@@ -10,6 +10,7 @@ public class User : BonIdentityUser<User, Role>
     {
         
     }
+    
     public User(BonUserId newId, string admin, UserProfile adminProfile) : base(newId, admin, adminProfile)
     {
     }

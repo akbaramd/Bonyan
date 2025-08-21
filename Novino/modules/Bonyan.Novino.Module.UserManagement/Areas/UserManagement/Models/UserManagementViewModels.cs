@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
-using Microsoft.AspNetCore.Http;
+using Bonyan.Novino.Module.UserManagement.Areas.UserManagement.Utils;
 
-namespace Bonyan.Novino.Module.UserManagement.Models
+namespace Bonyan.Novino.Module.UserManagement.Areas.UserManagement.Models
 {
     /// <summary>
     /// Enhanced filter model for user management with advanced filtering options
@@ -97,6 +97,7 @@ namespace Bonyan.Novino.Module.UserManagement.Models
 
         // Permission flags
         public bool CanCreate { get; set; }
+        public bool CanDetails { get; set; }
         public bool CanEdit { get; set; }
         public bool CanDelete { get; set; }
         public bool CanExport { get; set; }
@@ -121,8 +122,7 @@ namespace Bonyan.Novino.Module.UserManagement.Models
         public string SurName { get; set; } = string.Empty;
         public string? PhoneNumber { get; set; }
         public string? NationalCode { get; set; }
-        public DateTime? DateOfBirth { get; set; }
-        public List<UserRoleViewModel> Roles { get; set; } = new();
+        public string? DateOfBirth { get; set; }
         public List<UserClaimViewModel> Claims { get; set; } = new();
         public List<UserTokenViewModel> Tokens { get; set; } = new();
         public bool IsActive { get; set; }
@@ -159,8 +159,10 @@ namespace Bonyan.Novino.Module.UserManagement.Models
         public string PhoneStatusClass => PhoneNumberConfirmed ? "text-success" : "text-warning";
         public string CreatedAtFormatted => CreatedAt.ToString("yyyy/MM/dd HH:mm");
         public string LastLoginFormatted => LastLoginAt?.ToString("yyyy/MM/dd HH:mm") ?? "هرگز";
-        public string DateOfBirthFormatted => DateOfBirth?.ToString("yyyy/MM/dd") ?? "تعیین نشده";
-        public int Age => DateOfBirth.HasValue ? DateTime.Now.Year - DateOfBirth.Value.Year : 0;
+        public string DateOfBirthFormatted => !string.IsNullOrWhiteSpace(DateOfBirth) ? 
+            DateOfBirth : 
+            "تعیین نشده";
+        public int Age => PersianDateConverter.GetAgeFromPersianDate(DateOfBirth);
     }
 
     /// <summary>
@@ -171,7 +173,6 @@ namespace Bonyan.Novino.Module.UserManagement.Models
         public string Id { get; set; } = string.Empty;
         public string Name { get; set; } = string.Empty;
         public string DisplayName { get; set; } = string.Empty;
-        public string Description { get; set; } = string.Empty;
         public DateTime AssignedAt { get; set; }
         public bool CanBeRemoved { get; set; }
     }
@@ -185,7 +186,6 @@ namespace Bonyan.Novino.Module.UserManagement.Models
         public string ClaimType { get; set; } = string.Empty;
         public string ClaimValue { get; set; } = string.Empty;
         public string? Issuer { get; set; }
-        public DateTime CreatedAt { get; set; }
     }
 
     /// <summary>
@@ -235,12 +235,13 @@ namespace Bonyan.Novino.Module.UserManagement.Models
         [Display(Name = "شماره تلفن")]
         public string? PhoneNumber { get; set; }
 
+        [Required(ErrorMessage = "کد ملی الزامی است")]
         [StringLength(50, ErrorMessage = "کد ملی نمی‌تواند بیشتر از {1} کاراکتر باشد")]
         [Display(Name = "کد ملی")]
-        public string? NationalCode { get; set; }
+        public string NationalCode { get; set; }
 
         [Display(Name = "تاریخ تولد")]
-        public DateTime? DateOfBirth { get; set; }
+        public string? DateOfBirth { get; set; }
 
         [Display(Name = "فعال")]
         public bool IsActive { get; set; } = true;
@@ -268,6 +269,7 @@ namespace Bonyan.Novino.Module.UserManagement.Models
         public string? ConfirmPassword { get; set; }
 
         public bool IsCreate => string.IsNullOrEmpty(Id);
+        public bool ForceChangePassword { get; set; }
     }
 
     /// <summary>
@@ -343,5 +345,32 @@ namespace Bonyan.Novino.Module.UserManagement.Models
         public string EmailConfirmed { get; set; } = string.Empty;
         public string PhoneNumberConfirmed { get; set; } = string.Empty;
         public string FailedLoginAttempts { get; set; } = string.Empty;
+    }
+
+    /// <summary>
+    /// View model for user delete confirmation page
+    /// </summary>
+    public class UserDeleteViewModel
+    {
+        public string Id { get; set; } = string.Empty;
+        public string UserName { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
+        public string Name { get; set; } = string.Empty;
+        public string SurName { get; set; } = string.Empty;
+        public string? PhoneNumber { get; set; }
+        public List<string> Roles { get; set; } = new();
+        public bool IsActive { get; set; }
+        public bool IsLocked { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public bool EmailConfirmed { get; set; }
+        public bool PhoneNumberConfirmed { get; set; }
+        public bool CanBeDeleted { get; set; }
+
+        public string FullName => $"{Name} {SurName}".Trim();
+        public string Status => IsActive ? "فعال" : "غیرفعال";
+        public string StatusBadgeClass => IsActive ? "bg-success" : "bg-danger";
+        public string LockStatus => IsLocked ? "قفل شده" : "باز";
+        public string LockBadgeClass => IsLocked ? "bg-warning" : "bg-success";
+        public string CreatedAtFormatted => CreatedAt.ToString("yyyy/MM/dd HH:mm");
     }
 } 

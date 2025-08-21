@@ -160,7 +160,26 @@ public class BonIdentityUser<TUser,TRole> : BonUser where TUser : BonIdentityUse
     }
 
     /// <summary>
-    /// Adds a claim to the user.
+    /// Adds a claim to the user with auto-generated claim ID.
+    /// </summary>
+    public void AddClaim(string claimType, string claimValue, string? issuer = null)
+    {
+        if (string.IsNullOrEmpty(claimType))
+            throw new ArgumentException("Claim type cannot be null or empty.", nameof(claimType));
+        if (string.IsNullOrEmpty(claimValue))
+            throw new ArgumentException("Claim value cannot be null or empty.", nameof(claimValue));
+
+        var existingClaim = _claims.FirstOrDefault(c => c.ClaimType == claimType && c.ClaimValue == claimValue);
+        if (existingClaim == null)
+        {
+            var claimId = BonUserClaimId.NewId();
+            var claim = new BonIdentityUserClaims<TUser,TRole>(claimId, Id, claimType, claimValue, null, issuer);
+            _claims.Add(claim);
+        }
+    }
+
+    /// <summary>
+    /// Adds a claim to the user with specified claim ID.
     /// </summary>
     public void AddClaim(BonUserClaimId claimId, string claimType, string claimValue, string? issuer = null)
     {
@@ -309,6 +328,58 @@ public class BonIdentityUser<TUser,TRole> : BonUser where TUser : BonIdentityUse
     {
         AccountLockedUntil = null;
         ChangeStatus(UserStatus.Active); // Assuming UserStatus.Active is the status for an unlocked account
+    }
+
+    // User Management Methods
+
+    /// <summary>
+    /// Locks the user with an optional reason.
+    /// </summary>
+    public void Lock(string? inputReason)
+    {
+        if (Status == UserStatus.Locked)
+        {
+            throw new InvalidOperationException("User is already locked.");
+        }
+
+        // Change status to locked
+        ChangeStatus(UserStatus.Locked);
+        
+        // Store lock reason as a claim if provided
+        if (!string.IsNullOrEmpty(inputReason))
+        {
+            AddClaim("LockReason", inputReason);
+        }
+        
+        // Store lock timestamp
+        AddClaim("LockedAt", DateTime.UtcNow.ToString("O"));
+    }
+
+    /// <summary>
+    /// Unlocks the user and removes lock-related claims.
+    /// </summary>
+    public void Unlock()
+    {
+        if (Status != UserStatus.Locked)
+        {
+            throw new InvalidOperationException("User is not locked.");
+        }
+
+        // Change status to active
+        ChangeStatus(UserStatus.Active);
+        
+        // Remove lock-related claims
+        RemoveClaimsByType("LockReason");
+        RemoveClaimsByType("LockedAt");
+    }
+
+    /// <summary>
+    /// Sets a flag to force password change on next login.
+    /// </summary>
+    public void SetForceChangePassword()
+    {
+        // Add a claim to force password change on next login
+        AddClaim("ForcePasswordChange", "true");
     }
 
 }

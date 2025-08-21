@@ -15,6 +15,7 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.12" />
     <ProjectReference Include="..\..\..\Framework\Src\Bonyan.AspNetCore.Authentication.Cookie\Bonyan.AspNetCore.Authentication.Cookie.csproj" />
     <ProjectReference Include="..\..\..\Framework\Src\Bonyan.AspNetCore.Mvc\Bonyan.AspNetCore.Mvc.csproj" />
+    <ProjectReference Include="..\..\modules\Bonyan.Novino.Module.RoleManagement\Bonyan.Novino.Module.RoleManagement.csproj" />
     
 
     <ProjectReference Include="..\..\modules\Bonyan.Novino.Module.UserManagement\Bonyan.Novino.Module.UserManagement.csproj" />
@@ -23,13 +24,7 @@
     <ProjectReference Include="..\Bonyan.Novino.Infrastructure\Bonyan.Novino.Infrastructure.csproj" />
     
   </ItemGroup>
-  <ItemGroup>
-    <_ContentIncludedByDefault Remove="Areas\Identity\Pages\_ViewStart.cshtml" />
-    <_ContentIncludedByDefault Remove="Views\UserManagement\Index.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    
-  </ItemGroup>
+
   <ItemGroup>
     <Folder Include="Plugins\" />
     <Folder Include="Views\Shared\" />

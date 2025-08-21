@@ -779,4 +779,37 @@ public class BonIdentityUserManager<TUser,TRole> : BonDomainService, IBonIdentit
             return BonDomainResult<IEnumerable<BonIdentityUserClaims<TUser,TRole>>>.Failure("Error getting all claims.");
         }
     }
+
+    public async Task<BonDomainResult> DeleteAsync(TUser user)
+    {
+        const string methodName = nameof(DeleteAsync);
+
+        if (user == null)
+        {
+            Logger.LogWarning($"{methodName}: User cannot be null.");
+            return BonDomainResult.Failure("User cannot be null.");
+        }
+
+        try
+        {
+            // If the user is already deleted or marked as deleted, handle accordingly
+            if (user.IsDeleted)
+            {
+                Logger.LogInformation($"{methodName}: User {user.Id} is already deleted.");
+                return BonDomainResult.Failure("User is already deleted.");
+            }
+
+
+            // Save changes to the repository/unit of work
+            await UserRepository.DeleteAsync(user);
+
+            Logger.LogInformation($"{methodName}: User {user.Id} marked as deleted successfully.");
+            return BonDomainResult.Success();
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, $"{methodName}: Error deleting user {user?.Id}.");
+            return BonDomainResult.Failure("Error deleting user.");
+        }
+    }
 }

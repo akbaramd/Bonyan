@@ -57,5 +57,10 @@ namespace Bonyan.UserManagement.Domain.Users.ValueObjects
         }
 
         public override string ToString() => Number;
+
+        public void Unverify()
+        {
+            IsVerified = false;
+        }
     }
 }

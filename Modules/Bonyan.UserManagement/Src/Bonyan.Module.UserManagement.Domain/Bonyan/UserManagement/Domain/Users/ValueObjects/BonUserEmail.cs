@@ -47,5 +47,10 @@ namespace Bonyan.UserManagement.Domain.Users.ValueObjects
         }
 
         public override string ToString() => Address;
+
+        public void Unverify()
+        {
+            IsVerified = true;
+        }
     }
 }

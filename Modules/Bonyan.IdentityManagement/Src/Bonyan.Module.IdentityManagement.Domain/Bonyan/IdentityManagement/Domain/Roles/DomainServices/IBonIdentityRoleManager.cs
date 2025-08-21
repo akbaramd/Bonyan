@@ -88,5 +88,7 @@ namespace Bonyan.IdentityManagement.Domain.Roles.DomainServices
         /// <param name="roleKey">The ID of the role.</param>
         /// <returns>A result containing the role or an error message.</returns>
         Task<BonDomainResult<TRole>> FindRoleByIdAsync(string roleKey);
+
+        Task<BonDomainResult<IEnumerable<TRole>>> GetAllRolesAsync();
     }
 }

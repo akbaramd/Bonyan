@@ -26,8 +26,6 @@ namespace Bonyan.Novino.Web.Services
         // Constants for seeded entities
         private const string ADMIN_ROLE_ID = "admin";
         private const string ADMIN_ROLE_TITLE = "مدیریت";
-        private const string DEVELOPER_ROLE_ID = "developer";
-        private const string DEVELOPER_ROLE_TITLE = "برنامه نویس";
         private const string ADMIN_USERNAME = "admin";
         private const string DEVELOPER_USERNAME = "developer";
 
@@ -86,8 +84,6 @@ namespace Bonyan.Novino.Web.Services
             // Create or update Admin Role
             await CreateOrUpdateRoleAsync(ADMIN_ROLE_ID, ADMIN_ROLE_TITLE, false);
             
-            // Create or update Developer Role
-            await CreateOrUpdateRoleAsync(DEVELOPER_ROLE_ID, DEVELOPER_ROLE_TITLE, false);
         }
 
         /// <summary>
@@ -167,7 +163,7 @@ namespace Bonyan.Novino.Web.Services
                 "کاربر",
                 "developer@bonyan.com",
                 "developer123",
-                DEVELOPER_ROLE_ID,
+                ADMIN_ROLE_ID,
                 "برنامه نویس سیستم"
             );
         }
@@ -447,7 +443,7 @@ namespace Bonyan.Novino.Web.Services
                     await _permissionManager.RevokePermissionFromRoleAsync(adminRole.Value.Id, permissionName);
                 }
                 
-                var developerRole = await _roleManager.FindRoleByIdAsync(DEVELOPER_ROLE_ID);
+                var developerRole = await _roleManager.FindRoleByIdAsync(ADMIN_ROLE_ID);
                 if (developerRole.IsSuccess && developerRole.Value != null)
                 {
                     await _permissionManager.RevokePermissionFromRoleAsync(developerRole.Value.Id, permissionName);
