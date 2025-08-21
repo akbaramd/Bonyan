@@ -1,0 +1,221 @@
+@page "{id}"
+@using Bonyan.Novino.Module.UserManagement.Areas.UserManagement
+@using Bonyan.Novino.Module.UserManagement.Areas.UserManagement.Models
+@using Bonyan.Novino.Module.UserManagement.Areas.UserManagement.ViewModels
+@using Bonyan.Novino.Module.UserManagement.Abstractions.Zones.UserActions
+@using Bonyan.Ui.Novino.Core
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+
+@model Bonyan.Novino.Module.UserManagement.Areas.UserManagement.Pages.User.DeleteConfirmModel
+@{
+    ViewData["Title"] = "تأیید حذف کاربر";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-flex flex-column flex-sm-row gap-2
+            align-items-start align-items-sm-center justify-content-sm-between">
+            <h4 class="mb-sm-0">
+                <span>تأیید حذف کاربر</span>
+            </h4>
+
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item">
+                        <a href="@Url.Page("/Index", new { area = "" })">داشبورد</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a asp-page="/Index">مدیریت کاربران</a>
+                    </li>
+                    <li class="breadcrumb-item active">تأیید حذف</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-8 mx-auto">
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success alert-dismissible alert-solid alert-label-icon fade show" role="alert">
+                <i class="ri-check-double-line label-icon"></i><strong>موفق</strong> @TempData["SuccessMessage"]
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+        
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger alert-dismissible alert-solid alert-label-icon fade show" role="alert">
+                <i class="ri-error-warning-line label-icon"></i><strong>خطا</strong> @TempData["ErrorMessage"]
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+
+        <div class="card border-danger">
+            <div class="card-header bg-danger-subtle border-danger">
+                <div class="d-flex align-items-center">
+                    <div class="avatar-lg me-3">
+                        <div class="avatar-title bg-danger text-white rounded-circle fs-24">
+                            <i class="ri-delete-bin-5-line"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <h5 class="card-title mb-1 text-danger">تأیید حذف کاربر</h5>
+                        @if (Model.UserDetails != null)
+                        {
+                            <p class="text-muted mb-0">
+                                <strong>@Model.UserDetails.FullName</strong> (@Model.UserDetails.UserName)
+                            </p>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-body">
+                <div class="alert alert-danger">
+                    <div class="d-flex">
+                        <i class="ri-error-warning-line fs-16 align-middle me-2"></i>
+                        <div>
+                            <strong>هشدار:</strong> این عملیات غیرقابل بازگشت است. تمام اطلاعات کاربر شامل پروفایل، نقش‌ها و تنظیمات حذف خواهد شد.
+                        </div>
+                    </div>
+                </div>
+
+                <form method="post" id="deleteConfirmForm">
+                    <input type="hidden" asp-for="Input.UserId" value="@Model.UserDetails?.Id" />
+                    <input type="hidden" asp-for="Input.ExpectedUsername" value="@Model.Input.ExpectedUsername" />
+                    
+                    <div class="mb-4">
+                        <label asp-for="Input.ConfirmedUsername" class="form-label">
+                            <i class="ri-user-line me-1"></i>@Html.DisplayNameFor(m => m.Input.ConfirmedUsername)
+                        </label>
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="ri-user-line"></i>
+                            </span>
+                            <input asp-for="Input.ConfirmedUsername" class="form-control" 
+                                   placeholder="نام کاربری را برای تأیید وارد کنید" />
+                        </div>
+                        <span asp-validation-for="Input.ConfirmedUsername" class="text-danger"></span>
+                        <small class="text-muted">
+                            برای تأیید حذف، نام کاربری <strong>@Model.Input.ExpectedUsername</strong> را وارد کنید.
+                        </small>
+                    </div>
+
+                    <!-- Custom Fields Zone -->
+                    @await Html.RenderZoneAsync(Model.ZoneModel)
+
+                    @if (!ViewData.ModelState.IsValid)
+                    {
+                        <div class="alert alert-danger">
+                            <ul class="mb-0">
+                                @foreach (var modelError in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                                {
+                                    <li>@modelError.ErrorMessage</li>
+                                }
+                            </ul>
+                        </div>
+                    }
+
+                    <div class="d-flex gap-2 justify-content-end">
+                        <a asp-page="/Index" class="btn btn-light">
+                            <i class="ri-arrow-right-line align-bottom me-1"></i>انصراف
+                        </a>
+                        <button type="submit" class="btn btn-danger">
+                            <i class="ri-delete-bin-5-line align-bottom me-1"></i>حذف کاربر
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        @if (Model.UserDetails != null)
+        {
+            <div class="card">
+                <div class="card-header">
+                    <h6 class="card-title mb-0">
+                        <i class="ri-user-line me-2"></i>اطلاعات کاربر
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label text-muted">نام کاربری</label>
+                                <p class="form-control-plaintext">@Model.UserDetails.UserName</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label text-muted">ایمیل</label>
+                                <p class="form-control-plaintext">@Model.UserDetails.Email</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label text-muted">نام و نام خانوادگی</label>
+                                <p class="form-control-plaintext">@Model.UserDetails.FullName</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label text-muted">وضعیت</label>
+                                <p class="form-control-plaintext">
+                                    @if (Model.UserDetails.IsActive)
+                                    {
+                                        <span class="badge bg-success-subtle text-success">
+                                            <i class="ri-checkbox-circle-line me-1"></i>فعال
+                                        </span>
+                                    }
+                                    else if (Model.UserDetails.IsLocked)
+                                    {
+                                        <span class="badge bg-warning-subtle text-warning">
+                                            <i class="ri-lock-line me-1"></i>قفل شده
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-danger-subtle text-danger">
+                                            <i class="ri-close-circle-line me-1"></i>غیرفعال
+                                        </span>
+                                    }
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Form validation
+            document.getElementById('deleteConfirmForm').addEventListener('submit', function(e) {
+                var confirmedUsername = document.getElementById('Input_ConfirmedUsername').value;
+                var expectedUsername = '@Model.Input.ExpectedUsername';
+                
+                if (confirmedUsername !== expectedUsername) {
+                    e.preventDefault();
+                    alert('نام کاربری وارد شده صحیح نیست. لطفاً نام کاربری را دقیقاً وارد کنید.');
+                    return false;
+                }
+                
+                if (!confirm('آیا از حذف این کاربر اطمینان دارید؟ این عملیات غیرقابل بازگشت است.')) {
+                    e.preventDefault();
+                    return false;
+                }
+            });
+            
+            // Auto close alerts after 5 seconds
+            window.setTimeout(function() {
+                $(".alert-dismissible").fadeTo(500, 0).slideUp(500, function() {
+                    $(this).remove();
+                });
+            }, 5000);
+        });
+    </script>
+} 

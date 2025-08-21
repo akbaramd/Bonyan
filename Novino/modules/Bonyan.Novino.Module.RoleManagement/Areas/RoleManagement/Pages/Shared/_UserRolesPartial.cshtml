@@ -1,0 +1,313 @@
+ @model Bonyan.Novino.Module.RoleManagement.Areas.RoleManagement.ViewModels.UserRoleDetailsViewModel
+
+<div class="row">
+    <div class="col-12">
+        <!-- User Roles Card -->
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="card-title mb-0">
+                    <i class="ri-shield-user-line me-2"></i>نقش‌های کاربر
+                </h5>
+                <div class="d-flex gap-2">
+                    @if (Model.CanAssignRoles)
+                    {
+                        <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addRoleModal">
+                            <i class="ri-add-line align-bottom me-1"></i>افزودن نقش
+                        </button>
+                    }
+                    <button type="button" class="btn btn-outline-secondary btn-sm" onclick="refreshRoles()">
+                        <i class="ri-refresh-line align-bottom me-1"></i>بازنشانی
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+                @if (Model?.Roles?.Any() == true)
+                {
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>نام نقش</th>
+                                    <th>نام نمایشی</th>
+                                    <th>تاریخ تخصیص</th>
+                                    <th>وضعیت</th>
+                                    <th>عملیات</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var role in Model?.Roles ?? Enumerable.Empty<UserRoleViewModel>())
+                                {
+                                    <tr>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <div class="avatar-sm bg-primary-subtle rounded me-2">
+                                                    <div class="avatar-title">
+                                                        <i class="ri-shield-user-line text-primary"></i>
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <h6 class="mb-0">@role.RoleName</h6>
+                                                    <small class="text-muted">@role.RoleId</small>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>@role.DisplayName</td>
+                                        <td>
+                                            <span>@role.AssignedAt.ToString("yyyy/MM/dd HH:mm")</span>
+                                        </td>
+                                        <td>
+                                            @if (role.IsActive)
+                                            {
+                                                <span class="badge bg-success-subtle text-success">
+                                                    <i class="ri-checkbox-circle-line me-1"></i>فعال
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-danger-subtle text-danger">
+                                                    <i class="ri-close-circle-line me-1"></i>غیرفعال
+                                                </span>
+                                            }
+                                        </td>
+                                        <td>
+                                            <div class="d-flex gap-1">
+                                                @if (role.CanViewDetails)
+                                                {
+                                                    <button type="button" class="btn btn-sm btn-outline-info" 
+                                                            onclick="viewRoleDetails('@role.RoleId', '@role.RoleName')" 
+                                                            title="مشاهده جزئیات">
+                                                        <i class="ri-eye-line"></i>
+                                                    </button>
+                                                }
+                                                @if (role.CanRemove)
+                                                {
+                                                    <button type="button" class="btn btn-sm btn-outline-danger" 
+                                                            onclick="removeRole('@Model.UserId', '@role.RoleId', '@role.RoleName')" 
+                                                            title="حذف نقش">
+                                                        <i class="ri-delete-bin-line"></i>
+                                                    </button>
+                                                }
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+                else
+                {
+                    <div class="text-center py-4">
+                        <div class="avatar-lg mx-auto mb-3">
+                            <div class="avatar-title bg-light rounded-circle">
+                                <i class="ri-shield-user-line text-muted fs-24"></i>
+                            </div>
+                        </div>
+                        <h5 class="text-muted">هیچ نقشی تخصیص داده نشده</h5>
+                        <p class="text-muted mb-3">این کاربر هنوز هیچ نقشی ندارد.</p>
+                        @if (Model.CanAssignRoles)
+                        {
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addRoleModal">
+                                <i class="ri-add-line align-bottom me-1"></i>افزودن نقش اول
+                            </button>
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+
+        <!-- Role Statistics -->
+        <div class="row mt-3">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div class="avatar-sm bg-primary-subtle rounded">
+                                <div class="avatar-title">
+                                    <i class="ri-shield-user-line text-primary"></i>
+                                </div>
+                            </div>
+                            <div class="ms-3">
+                                <h6 class="mb-0">تعداد نقش‌ها</h6>
+                                <p class="text-muted mb-0">@(Model?.RolesCount ?? 0)</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div class="avatar-sm bg-success-subtle rounded">
+                                <div class="avatar-title">
+                                    <i class="ri-checkbox-circle-line text-success"></i>
+                                </div>
+                            </div>
+                            <div class="ms-3">
+                                <h6 class="mb-0">نقش‌های فعال</h6>
+                                <p class="text-muted mb-0">@(Model?.Roles?.Count(r => r.CanRemove) ?? 0)</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div class="avatar-sm bg-info-subtle rounded">
+                                <div class="avatar-title">
+                                    <i class="ri-time-line text-info"></i>
+                                </div>
+                            </div>
+                            <div class="ms-3">
+                                <h6 class="mb-0">آخرین تغییر</h6>
+                                <p class="text-muted mb-0">@DateTime.Now.ToString("yyyy/MM/dd")</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add Role Modal -->
+<div class="modal fade" id="addRoleModal" tabindex="-1" aria-labelledby="addRoleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addRoleModalLabel">
+                    <i class="ri-shield-user-line me-2"></i>افزودن نقش به کاربر
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="addRoleUserId" value="@(Model?.UserId ?? "")" />
+                
+                <div class="mb-3">
+                    <label class="form-label">انتخاب نقش</label>
+                    <select class="form-select" id="roleSelect" required>
+                        <option value="">انتخاب کنید...</option>
+                        <!-- Roles will be loaded dynamically -->
+                    </select>
+                </div>
+                
+                <div class="mb-3">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="isPermanent">
+                        <label class="form-check-label" for="isPermanent">
+                            نقش دائمی (غیرقابل حذف)
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label">توضیحات (اختیاری)</label>
+                    <textarea class="form-control" id="roleDescription" rows="3" placeholder="توضیحات مربوط به تخصیص این نقش..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">انصراف</button>
+                <button type="button" class="btn btn-primary" onclick="addRole()">
+                    <i class="ri-add-line align-bottom me-1"></i>افزودن نقش
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Load available roles when modal opens
+    document.getElementById('addRoleModal').addEventListener('show.bs.modal', function () {
+        loadAvailableRoles();
+    });
+
+    function loadAvailableRoles() {
+        const roleSelect = document.getElementById('roleSelect');
+        const userId = '@(Model?.UserId ?? "")';
+        
+        // Clear existing options
+        roleSelect.innerHTML = '<option value="">انتخاب کنید...</option>';
+        
+        // Load available roles from server
+        fetch(`/UserManagement/User/GetAvailableRoles/${userId}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    data.roles.forEach(role => {
+                        const option = document.createElement('option');
+                        option.value = role.id;
+                        option.textContent = role.name;
+                        roleSelect.appendChild(option);
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error loading roles:', error);
+            });
+    }
+
+    function refreshRoles() {
+        // Reload the roles tab content
+        const rolesTab = document.getElementById('user-roles');
+        if (rolesTab) {
+            location.reload();
+        }
+    }
+
+    function viewRoleDetails(roleId, roleName) {
+        // Open role details modal or navigate to role details page
+        window.open(`/RoleManagement/Role/Detail/${roleId}`, '_blank');
+    }
+
+    function removeRole(userId, roleId, roleName) {
+        if (confirm(`آیا از حذف نقش "${roleName}" از این کاربر اطمینان دارید؟`)) {
+            fetch(`/UserManagement/User/RemoveRole`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]')?.value || ''
+                },
+                body: JSON.stringify({
+                    userId: userId,
+                    roleId: roleId
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Show success message and refresh
+                    showAlert('success', 'نقش با موفقیت حذف شد');
+                    refreshRoles();
+                } else {
+                    showAlert('error', data.message || 'خطا در حذف نقش');
+                }
+            })
+            .catch(error => {
+                console.error('Error removing role:', error);
+                showAlert('error', 'خطا در حذف نقش');
+            });
+        }
+    }
+
+    function showAlert(type, message) {
+        // Create and show alert message
+        const alertDiv = document.createElement('div');
+        alertDiv.className = `alert alert-${type === 'success' ? 'success' : 'danger'} alert-dismissible fade show`;
+        alertDiv.innerHTML = `
+            ${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        `;
+        
+        // Insert at the top of the card body
+        const cardBody = document.querySelector('.card-body');
+        cardBody.insertBefore(alertDiv, cardBody.firstChild);
+        
+        // Auto remove after 5 seconds
+        setTimeout(() => {
+            alertDiv.remove();
+        }, 5000);
+    }
+</script>

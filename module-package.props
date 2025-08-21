@@ -2,7 +2,7 @@
 
   <Import Project="package.props"/>
   <ItemGroup>
-    <None Include="../../../../logo.jpg" Pack="true" PackagePath="." /> <!-- Include the NuGet icon in the package -->
+    <None Include="../../../../logo.png" Pack="true" PackagePath="." /> <!-- Include the NuGet icon in the package -->
     <None Include="../../../../docs/README.md" Pack="true" PackagePath="." /> <!-- Include the README file in the package -->
   </ItemGroup>
 </Project>

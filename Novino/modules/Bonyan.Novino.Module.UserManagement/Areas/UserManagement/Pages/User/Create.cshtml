@@ -1,0 +1,304 @@
+@page
+@model Bonyan.Novino.Module.UserManagement.Areas.UserManagement.Pages.User.CreateModel
+@{
+    ViewData["Title"] = "ایجاد کاربر جدید";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-flex flex-column flex-sm-row gap-2
+            align-items-start align-items-sm-center justify-content-sm-between">
+            <h4 class="mb-sm-0">
+                <span>ایجاد کاربر جدید</span>
+            </h4>
+
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item">
+                        <a href="@Url.Action("Index", "Home", new {area = ""})">داشبورد</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="@Url.Action("Index", "User", new {area = "UserManagement"})">مدیریت کاربران</a>
+                    </li>
+                    <li class="breadcrumb-item active">ایجاد کاربر جدید</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        @if (Model.ErrorMessage != null)
+        {
+            <div class="alert alert-danger alert-dismissible alert-solid alert-label-icon fade show" role="alert">
+                <i class="ri-error-warning-line label-icon"></i><strong>خطا</strong> @Model.ErrorMessage
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+        
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">اطلاعات کاربر جدید</h5>
+            </div>
+            <div class="card-body">
+                <form method="post" id="createUserForm">
+                    @Html.AntiForgeryToken()
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label asp-for="User.UserName" class="form-label"></label>
+                                <input asp-for="User.UserName" class="form-control" placeholder="نام کاربری را وارد کنید" />
+                                <span asp-validation-for="User.UserName" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label asp-for="User.Email" class="form-label"></label>
+                                <input asp-for="User.Email" type="email" class="form-control" placeholder="ایمیل را وارد کنید" />
+                                <span asp-validation-for="User.Email" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label asp-for="User.Name" class="form-label"></label>
+                                <input asp-for="User.Name" class="form-control" placeholder="نام را وارد کنید" />
+                                <span asp-validation-for="User.Name" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label asp-for="User.SurName" class="form-label"></label>
+                                <input asp-for="User.SurName" class="form-control" placeholder="نام خانوادگی را وارد کنید" />
+                                <span asp-validation-for="User.SurName" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label asp-for="User.PhoneNumber" class="form-label"></label>
+                                <input asp-for="User.PhoneNumber" class="form-control" placeholder="شماره تلفن را وارد کنید" />
+                                <span asp-validation-for="User.PhoneNumber" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label asp-for="User.NationalCode" class="form-label"></label>
+                                <input asp-for="User.NationalCode" class="form-control" placeholder="کد ملی را وارد کنید" />
+                                <span asp-validation-for="User.NationalCode" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">
+                                    <i class="ri-calendar-line me-1"></i>
+                                    تاریخ تولد
+                                </label>
+                                <div class="input-group">
+                                    <input type="text" 
+                                           id="DateOfBirthPicker"
+                                           class="form-control persian-datepicker" 
+                                           placeholder="تاریخ تولد را انتخاب کنید"
+                                           autocomplete="off" />
+                                    <span class="input-group-text">
+                                        <i class="ri-calendar-line"></i>
+                                    </span>
+                                </div>
+                                <input type="hidden" asp-for="User.DateOfBirth" id="DateOfBirth" />
+                                <span asp-validation-for="User.DateOfBirth" class="text-danger"></span>
+                                <small class="text-muted">تاریخ میلادی: <span id="gregorianDate"></span></small>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">رمز عبور پیش‌فرض</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" value="123456" readonly />
+                                    <span class="input-group-text">
+                                        <i class="ri-lock-line"></i>
+                                    </span>
+                                </div>
+                                <small class="text-muted">رمز عبور پیش‌فرض برای کاربر جدید: 123456</small>
+                                <input asp-for="User.Password" type="hidden" value="123456" />
+                                <input asp-for="User.ConfirmPassword" type="hidden" value="123456" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <div class="form-check form-switch">
+                                    <input asp-for="User.IsActive" class="form-check-input" checked />
+                                    <label asp-for="User.IsActive" class="form-check-label"></label>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <div class="form-check form-switch">
+                                    <input asp-for="User.EmailConfirmed" class="form-check-input" />
+                                    <label asp-for="User.EmailConfirmed" class="form-check-label"></label>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <div class="form-check form-switch">
+                                    <input asp-for="User.ForceChangePassword" class="form-check-input" checked />
+                                    <label asp-for="User.ForceChangePassword" class="form-check-label"></label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="alert alert-info">
+                                <i class="ri-information-line me-2"></i>
+                                <strong>نکته:</strong> نقش‌ها را می‌توانید پس از ایجاد کاربر در صفحه ویرایش کاربر تعیین کنید.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="d-flex gap-2 justify-content-end">
+                                <a href="@Url.Action("Index", "User", new { area = "UserManagement" })" class="btn btn-light">
+                                    <i class="ri-arrow-right-line align-bottom me-1"></i> انصراف
+                                </a>
+                                <button type="submit" class="btn btn-primary" id="submitBtn">
+                                    <i class="ri-save-line align-bottom me-1"></i> ایجاد کاربر
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <!-- Persian Date Picker CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/persian-datepicker@1.2.0/dist/css/persian-datepicker.min.css">
+    
+
+}
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            
+            // Form validation
+            const form = document.getElementById('createUserForm');
+            const submitBtn = document.getElementById('submitBtn');
+            
+            if (form && submitBtn) {
+                form.addEventListener('submit', function(e) {
+                    // Show loading state
+                    submitBtn.disabled = true;
+                    submitBtn.innerHTML = '<i class="ri-loader-4-line align-bottom me-1"></i> در حال ایجاد...';
+                });
+            }
+            
+            // Auto close alerts
+            window.setTimeout(function() {
+                $(".alert-dismissible").fadeTo(500, 0).slideUp(500, function() {
+                    $(this).remove();
+                });
+            }, 5000);
+        });
+    </script>
+    
+    <script src="https://unpkg.com/persian-date@1.1.0/dist/persian-date.min.js"></script>
+    <script src="https://unpkg.com/persian-datepicker@1.2.0/dist/js/persian-datepicker.min.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // اطمینان از بارگذاری jQuery و persian-datepicker
+            if (typeof $ === 'undefined') {
+                console.error('jQuery not loaded');
+                return;
+            }
+            
+            if (typeof $.fn.persianDatepicker === 'undefined') {
+                console.error('Persian Date Picker not loaded');
+                return;
+            }
+            
+            const hidden = document.getElementById('DateOfBirth');
+            const visible = document.getElementById('DateOfBirthPicker');
+            const gregSpan = document.getElementById('gregorianDate');
+            
+            if (!hidden || !visible || !gregSpan) {
+                console.error('Required elements not found');
+                return;
+            }
+
+            // مقدار اولیه از سرور
+            const initialPersian = hidden.value;
+            
+            // راه‌اندازی دیت‌پیکر
+            $(visible).persianDatepicker({
+                format: 'YYYY/MM/DD',
+                initialValue: false,
+                autoClose: true,
+                persianDigit: false,
+                onSelect: function (unix) {
+                    try {
+                        const p = new persianDate(unix).format('YYYY/MM/DD');
+                        hidden.value = p;
+
+                        const g = new persianDate(unix)
+                                  .toCalendar('gregorian')
+                                  .format('YYYY-MM-DD');
+                        gregSpan.textContent = g;
+                    } catch (error) {
+                        console.error('Error in date picker onSelect:', error);
+                    }
+                }
+            });
+
+            // تنظیم مقدار اولیه با delay
+            if (initialPersian) {
+                // ابتدا مقدار را در input نمایشی قرار دهیم
+                visible.value = initialPersian;
+                
+                // کمی صبر کنیم تا دیت‌پیکر کاملاً بارگذاری شود
+                setTimeout(function() {
+                    try {
+                        // تبدیل تاریخ فارسی به timestamp
+                        const parts = initialPersian.split('/');
+                        if (parts.length === 3) {
+                            const year = parseInt(parts[0]);
+                            const month = parseInt(parts[1]);
+                            const day = parseInt(parts[2]);
+                            
+                            // ایجاد تاریخ فارسی و تبدیل به timestamp
+                            const persianDateObj = new persianDate([year, month, day]);
+                            const timestamp = persianDateObj.valueOf();
+                            
+                            const pickerInstance = $(visible).data('datepicker');
+                            
+                            if (pickerInstance && pickerInstance.setDate) {
+                                pickerInstance.setDate(timestamp);
+                                
+                                // نمایش تاریخ میلادی
+                                const g = persianDateObj.toCalendar('gregorian').format('YYYY-MM-DD');
+                                gregSpan.textContent = g;
+                            }
+                        }
+                    } catch (error) {
+                        console.error('Error setting initial date:', error);
+                    }
+                }, 100); // 100ms delay
+            }
+        });
+    </script>
+} 
