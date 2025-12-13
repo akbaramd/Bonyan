@@ -1,0 +1,11 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"nuxt.isNuxtApp": false,
+		"dotnet.defaultSolution": "Bonyan.sln"
+	}
+}

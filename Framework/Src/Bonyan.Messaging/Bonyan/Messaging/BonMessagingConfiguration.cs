@@ -146,5 +146,7 @@ namespace Bonyan.Messaging
         {
             return _sagaRegistrations;
         }
+
+    
     }
 }

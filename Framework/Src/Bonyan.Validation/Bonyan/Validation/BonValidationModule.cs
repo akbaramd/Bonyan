@@ -6,7 +6,7 @@ namespace Bonyan.Validation;
 
 public class BonValidationModule : BonModule
 {
-  public override Task OnPreConfigureAsync(BonConfigurationContext context)
+  public override ValueTask OnPreConfigureAsync(BonPreConfigurationContext context, CancellationToken cancellationToken = default)
   {
     
     context.Services.AddTransient<IAttributeValidationResultProvider,DefaultAttributeValidationResultProvider>();
@@ -16,13 +16,13 @@ public class BonValidationModule : BonModule
     context.Services.AddTransient<ValidationInterceptor>();
     context.Services.OnRegistered(ValidationInterceptorRegistrar.RegisterIfNeeded);
     
-    return base.OnPreConfigureAsync(context);
+    return base.OnPreConfigureAsync(context, cancellationToken);
   }
 
-  public override Task OnConfigureAsync(BonConfigurationContext context)
+  public override ValueTask OnConfigureAsync(BonConfigurationContext context, CancellationToken cancellationToken = default)
   {
 
-    return base.OnConfigureAsync(context);
+    return base.OnConfigureAsync(context, cancellationToken);
   }
 
 }

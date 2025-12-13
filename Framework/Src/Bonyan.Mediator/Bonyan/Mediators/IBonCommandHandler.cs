@@ -20,16 +20,6 @@ public interface IBonCommandHandler<TCommand> where TCommand : IBonCommand
 }
 
 /// <summary>
-/// Handler for queries.
-/// </summary>
-/// <typeparam name="TQuery">The type of the query.</typeparam>
-/// <typeparam name="TResponse">The type of the response.</typeparam>
-public interface IBonQueryHandler<TQuery, TResponse> where TQuery : IBonQuery<TResponse>
-{
-    Task<TResponse> HandleAsync(TQuery query, CancellationToken cancellationToken = default);
-}
-
-/// <summary>
 /// Handler for events.
 /// </summary>
 /// <typeparam name="TEvent">The type of the event.</typeparam>

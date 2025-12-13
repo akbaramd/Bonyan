@@ -14,7 +14,9 @@
 	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=7020124F_002D9FFC_002D4AC3_002D8F3D_002DAAB8E0240759_002Ff_003AIStringLocalizerFactory_002Ecs_002Fl_003A_002E_002E_003F_002E_002E_003FAppData_003FRoaming_003FJetBrains_003FRider2024_002E3_003Fresharper_002Dhost_003FDecompilerCache_003Fdecompiler_003F796f38e983a9477da78080337b10287c4d18_003Fbe_003F920c159d_003FIStringLocalizerFactory_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
 	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=7020124F_002D9FFC_002D4AC3_002D8F3D_002DAAB8E0240759_002Ff_003AMemoryPoolViewBufferScope_002Ecs_002Fl_003A_002E_002E_003F_002E_002E_003FAppData_003FRoaming_003FJetBrains_003FRider2024_002E3_003Fresharper_002Dhost_003FDecompilerCache_003Fdecompiler_003Faa4f1b44ff294740bee8c037ab8cba09b0920_003Ffd_003Fc1ec2077_003FMemoryPoolViewBufferScope_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
 	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=7020124F_002D9FFC_002D4AC3_002D8F3D_002DAAB8E0240759_002Ff_003AObject_002Ecs_002Fl_003A_002E_002E_003F_002E_002E_003FAppData_003FRoaming_003FJetBrains_003FRider2024_002E3_003Fresharper_002Dhost_003FSourcesCache_003F9a6b1457cbcf17db31a383ba49ef9bcc786cf3ef77146d997eee499b27a46d_003FObject_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
+	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=7020124F_002D9FFC_002D4AC3_002D8F3D_002DAAB8E0240759_002Ff_003AOptionsServiceCollectionExtensions_002Ecs_002Fl_003A_002E_002E_003F_002E_002E_003F_002E_002E_003Fakbar_003FAppData_003FRoaming_003FJetBrains_003FRider2024_002E3_003Fresharper_002Dhost_003FDecompilerCache_003Fdecompiler_003F0308d995074f4663b87ab86169c72b7d22928_003F67_003F7d855107_003FOptionsServiceCollectionExtensions_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
 	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=7020124F_002D9FFC_002D4AC3_002D8F3D_002DAAB8E0240759_002Ff_003ARazorPage_00601_002Ecs_002Fl_003A_002E_002E_003F_002E_002E_003FAppData_003FRoaming_003FJetBrains_003FRider2024_002E3_003Fresharper_002Dhost_003FDecompilerCache_003Fdecompiler_003Fb8017ee0e7224e8eafd1f7e1bef6dec63b910_003Fee_003F4f3571a6_003FRazorPage_00601_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
+	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=7020124F_002D9FFC_002D4AC3_002D8F3D_002DAAB8E0240759_002Ff_003AResolutionExtensions_002Ecs_002Fl_003A_002E_002E_003F_002E_002E_003F_002E_002E_003Fakbar_003FAppData_003FRoaming_003FJetBrains_003FRider2025_002E2_003Fresharper_002Dhost_003FSourcesCache_003Fd937dd40b9b66bf488e04fef611a88695344cad946bb9bc9e9924e7e31b7a26_003FResolutionExtensions_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
 	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=7020124F_002D9FFC_002D4AC3_002D8F3D_002DAAB8E0240759_002Ff_003AResolveOperation_002Ecs_002Fl_003A_002E_002E_003F_002E_002E_003FAppData_003FRoaming_003FJetBrains_003FRider2024_002E3_003Fresharper_002Dhost_003FSourcesCache_003F42754a58e386aaacc2cd36eefacfa7f8aa2878e67b35bbfc8be4a2b93915_003FResolveOperation_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
 	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=7020124F_002D9FFC_002D4AC3_002D8F3D_002DAAB8E0240759_002Ff_003ATagHelperRunner_002Ecs_002Fl_003A_002E_002E_003F_002E_002E_003FAppData_003FRoaming_003FJetBrains_003FRider2024_002E3_003Fresharper_002Dhost_003FSourcesCache_003Fc4204f863edab1e6523824017f8c2188b23f49b40a2d6635d4ceca5820f0db_003FTagHelperRunner_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
 	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=7020124F_002D9FFC_002D4AC3_002D8F3D_002DAAB8E0240759_002Ff_003ATaskAwaiter_002Ecs_002Fl_003A_002E_002E_003F_002E_002E_003FAppData_003FRoaming_003FJetBrains_003FRider2024_002E3_003Fresharper_002Dhost_003FSourcesCache_003F74e4c72cd3922ed61496931f33baf4a9b5950edddb6b78bc296241285f25c3_003FTaskAwaiter_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
@@ -27,37 +29,25 @@
 &lt;/AssemblyExplorer&gt;</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/CreateUnitTestDialog/TestProjectMapping/=5BD35C5F_002DF6C4_002D4AB7_002DAF24_002D893821832A06/@EntryIndexedValue">F220CCEC-45EB-4DD4-AC2F-37B912A0B708</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/CreateUnitTestDialog/TestTemplateMapping/=xUnit/@EntryIndexedValue">33ff99d8-b1ad-4ed5-a4fd-376b97c2c841</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=09f6c6c0_002Df38b_002D4a2f_002Da33e_002D76117fdd8618/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="InMemoryBonMediatorTests" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
-  &lt;TestAncestor&gt;&#xD;
-    &lt;TestId&gt;xUnit::188731F8-26A0-4E50-ADBB-BA721345E2BB::net8.0::Bonyan.Mediator.Tests.InMemoryBonMediatorTests&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::94B42DA5-8F69-435B-AFED-2F76C4A05589::net8.0::Bonyan.Messaging.RabbitMQ.Tests.RabbitMqDispatcherTests&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::BC9023D9-EAB9-4A19-803F-94CA6793C34D::net8.0::Bonyan.StateMachine.Tests.TestStateMachineTests.TestStateMachine_InitialState_ShouldBeEmpty&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::BC9023D9-EAB9-4A19-803F-94CA6793C34D::net8.0::Bonyan.StateMachine.Tests.TestStateMachineTests.TestStateMachine_Transition_ShouldChangeStateToStarted&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::BC9023D9-EAB9-4A19-803F-94CA6793C34D::net8.0::Bonyan.StateMachine.Tests.TestStateMachineTests.TestStateMachine_Transition_ShouldChangeStateToReceived&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::BC9023D9-EAB9-4A19-803F-94CA6793C34D::net8.0::Bonyan.StateMachine.Tests.TestStateMachineTests.TestStateMachine_FinalizeAction_ShouldBeExecuted&lt;/TestId&gt;&#xD;
-  &lt;/TestAncestor&gt;&#xD;
+	
+	
+	
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=e55afdff_002D141e_002D4389_002D9aa8_002Df5e987e76dac/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="ValueObjectTest" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;Project Location="C:\Users\ahmadi.UR-NEZAM\RiderProjects\Bonyan" Presentation="&amp;lt;Framework&amp;gt;\&amp;lt;Tests&amp;gt;" /&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=0ff680c6_002Dee06_002D44c1_002D945b_002D89657c064764/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="Saga_ShouldTransitionToNextState_OnEvent" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
-  &lt;TestAncestor&gt;&#xD;
-    &lt;TestId&gt;xUnit::94B42DA5-8F69-435B-AFED-2F76C4A05589::net8.0::Bonyan.Messaging.Saga.Tests.BonMessagingSagaTests.Saga_ShouldTransitionToNextState_OnEvent&lt;/TestId&gt;&#xD;
-  &lt;/TestAncestor&gt;&#xD;
-&lt;/SessionState&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=e4e9a201_002D1149_002D461e_002Da31e_002Dfeac47034dfb/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="ValueObjectTest #2" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
-  &lt;TestAncestor&gt;&#xD;
-    &lt;TestId&gt;xUnit::94B42DA5-8F69-435B-AFED-2F76C4A05589::net8.0::Bonyan.Messaging.RabbitMQ.Tests.RabbitMqDispatcherTests&lt;/TestId&gt;&#xD;
-  &lt;/TestAncestor&gt;&#xD;
-&lt;/SessionState&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=e55afdff_002D141e_002D4389_002D9aa8_002Df5e987e76dac/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="ValueObjectTest" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
-  &lt;Not&gt;&#xD;
-    &lt;TestAncestor&gt;&#xD;
-      &lt;TestId&gt;xUnit::AFA9CF2F-B53E-47B6-B4A5-92B05CC16013::net8.0::Bonyan.Tests.Modularity.BonModularityApplicationTests.InitializeModulesAsync_Should_Invoke_Module_Initialize_Methods&lt;/TestId&gt;&#xD;
-    &lt;/TestAncestor&gt;&#xD;
-  &lt;/Not&gt;&#xD;
-&lt;/SessionState&gt;</s:String>
+	<s:Boolean x:Key="/Default/UnloadedProject/UnloadedProjects/=01a270ba_002D70d1_002D4c45_002D929d_002D7f823f7a938c_0023Bonyan_002ENovino_002EModule_002EUserManagement/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/UnloadedProject/UnloadedProjects/=0e3ac30b_002Dc0d1_002D4bb1_002D93b4_002D28269bb209a1_0023Bonyan_002ENovino_002EModule_002ERoleManagement/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/UnloadedProject/UnloadedProjects/=24c303b8_002D39d4_002D4266_002Dbf87_002Df0450c75c503_0023BonyanTemplate_002EApplication/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/UnloadedProject/UnloadedProjects/=475e86b9_002D64eb_002D4354_002Da88d_002Da98facdf0a77_0023BonyanTemplate_002EWebApi/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/UnloadedProject/UnloadedProjects/=587055ae_002D0fdc_002D435f_002D9872_002D66cee6146214_0023BonyanTemplate_002EDomain/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/UnloadedProject/UnloadedProjects/=5bebd3b1_002D8b94_002D49c3_002D8671_002D2dbc742d06d4_0023BonyanTemplate_002EInfrastructure/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/UnloadedProject/UnloadedProjects/=6e2bffb8_002D43ef_002D4670_002D92b9_002D3e20a5ab5c5c_0023Bonyan_002ENovino_002EWeb/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/UnloadedProject/UnloadedProjects/=9caeb4a1_002Dbe4f_002D4a28_002D8a4b_002D4956555c594d_0023Bonyan_002ENovino_002EDomain/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/UnloadedProject/UnloadedProjects/=9cfc2566_002D3807_002D44c6_002D89a4_002Db6339b10804e_0023Bonyan_002ENovino_002EApplication/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/UnloadedProject/UnloadedProjects/=cafeeb10_002Dc8b1_002D4971_002Db603_002Dba07ee696c34_0023Bonyan_002ENovino_002ECore/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/UnloadedProject/UnloadedProjects/=d7f17810_002D8207_002D49d5_002D8471_002D34f297736941_0023Bonyan_002ENovino_002EModule_002EUserManagement_002EAbstractions/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/UnloadedProject/UnloadedProjects/=e241dbb1_002D02e7_002D44eb_002D8e33_002Db70a3ca6cb23_0023Bonyan_002ENovino_002EModule_002ERoleManagement_002EAbstractions/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/UnloadedProject/UnloadedProjects/=f10c5d69_002D682d_002D415b_002D8d1a_002Dcc2aba9c1d2c_0023Bonyan_002ENovino_002EInfrastructure/@EntryIndexedValue">True</s:Boolean>
 	
 	
 	

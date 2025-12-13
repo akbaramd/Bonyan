@@ -21,17 +21,6 @@ public interface IBonMediator
         IBonCommand command,
         CancellationToken cancellationToken = default);
 
-    /// <summary>
-    /// Sends a query to a single handler and expects a response.
-    /// </summary>
-    /// <typeparam name="TQuery">The type of the query.</typeparam>
-    /// <typeparam name="TResponse">The type of the response.</typeparam>
-    /// <param name="query">The query to send.</param>
-    /// <param name="cancellationToken">The cancellation token.</param>
-    /// <returns>The response from the handler.</returns>
-    Task<TResponse> QueryAsync<TResponse>(
-        IBonQuery<TResponse> query,
-        CancellationToken cancellationToken = default);
     
     /// <summary>
     /// Publishes an event to multiple subscribers.

@@ -29,62 +29,63 @@ namespace Bonyan.Messaging.RabbitMQ
         }
 
         /// <summary>
-        /// Sends a message and waits for a response.
+        /// ارسال درخواست به سرویس مشخص و انتظار برای پاسخ از طریق RabbitMQ.
         /// </summary>
-        public async Task<TResponse> SendAsync<TMessage, TResponse>(
-            string serviceName,
-            TMessage message,
-            IDictionary<string, object>? headers = null,
-            string? correlationId = null,
+        public async Task<TResponse> SendAsync<TRequest, TResponse>(
+            string destinationServiceName,
+            TRequest request,
             CancellationToken cancellationToken = default)
-            where TMessage : class where TResponse : class
+            where TRequest : class, IMessageRequest<TResponse>
+            where TResponse : class
         {
-            ValidateServiceName(serviceName);
+            ValidateRequest(request);
+            ValidateServiceName(destinationServiceName);
 
-            // Generate a unique correlation ID
-            correlationId ??= Guid.NewGuid().ToString();
+            // Generate a unique correlation ID if not provided
+            request.CorrelationId ??= Guid.NewGuid().ToString();
+            request.TargetService = destinationServiceName;
 
             // Create a temporary queue for response
             var replyQueueName = Guid.NewGuid().ToString();
 
             // Register a consumer to listen for the response
-            var tcs = CreateTaskCompletionSource(correlationId);
-            RegisterTemporaryConsumer<TResponse>(replyQueueName, correlationId, tcs);
+            var tcs = CreateTaskCompletionSource(request.CorrelationId);
+            RegisterTemporaryConsumer<TResponse>(replyQueueName, request.CorrelationId, tcs);
 
             // Send the message using the producer
             await _producer.PublishAsync(
-                serviceName: serviceName,
-                message: message,
-                headers: headers,
+                serviceName: destinationServiceName,
+                message: request,
+                headers: request.Headers,
                 replyQueue: replyQueueName,
-                correlationId: correlationId,
+                correlationId: request.CorrelationId,
                 cancellationToken: cancellationToken);
 
             // Wait for the response with a timeout
-            return await WaitForResponse<TResponse>(tcs, cancellationToken, correlationId);
+            return await WaitForResponse<TResponse>(tcs, cancellationToken, request.CorrelationId);
         }
 
         /// <summary>
-        /// Sends a message without waiting for a response.
+        /// ارسال درخواست به سرویس مشخص بدون انتظار برای پاسخ از طریق RabbitMQ.
         /// </summary>
-        public Task SendAsync<TMessage>(
-            string serviceName,
-            TMessage message,
-            IDictionary<string, object>? headers = null,
-            string? correlationId = null,
+        public Task SendAsync<TRequest>(
+            string destinationServiceName,
+            TRequest request,
             CancellationToken cancellationToken = default)
-            where TMessage : class
+            where TRequest : class, IMessageRequest
         {
-            ValidateServiceName(serviceName);
+            ValidateRequest(request);
+            ValidateServiceName(destinationServiceName);
 
-            correlationId ??= Guid.NewGuid().ToString();
+            request.CorrelationId ??= Guid.NewGuid().ToString();
+            request.TargetService = destinationServiceName;
 
             return _producer.PublishAsync(
-                serviceName: serviceName,
-                message: message,
-                headers: headers,
-                correlationId: correlationId,
-                replyQueue:_serviceManager.ServiceId,
+                serviceName: destinationServiceName,
+                message: request,
+                headers: request.Headers,
+                correlationId: request.CorrelationId,
+                replyQueue: _serviceManager.ServiceId,
                 cancellationToken: cancellationToken);
         }
 
@@ -142,27 +143,30 @@ namespace Bonyan.Messaging.RabbitMQ
             return Encoding.UTF8.GetBytes(json);
         }
 
+        private void ValidateRequest<TRequest>(TRequest request)
+        {
+            if (request == null)
+                throw new ArgumentNullException(nameof(request));
+        }
+
         private void ValidateServiceName(string serviceName)
         {
             if (string.IsNullOrEmpty(serviceName))
                 throw new ArgumentException("Service name cannot be null or empty.", nameof(serviceName));
         }
 
-        public Task PublishAsync<TMessage>(
-            TMessage message,
-            IDictionary<string, object>? headers = null,
-            string? correlationId = null,
+        public Task PublishAsync(
+            IMessageEvent messageEvent,
             CancellationToken cancellationToken = default)
-            where TMessage : class
         {
-            if (message == null) throw new ArgumentNullException(nameof(message));
+            if (messageEvent == null) throw new ArgumentNullException(nameof(messageEvent));
 
             return _producer.PublishAsync(
                 "*",
-                message: message,
-                headers: headers,
-                correlationId: correlationId,
-                replyQueue:_serviceManager.ServiceId,
+                message: messageEvent,
+                headers: messageEvent.Headers,
+                correlationId: messageEvent.CorrelationId,
+                replyQueue: _serviceManager.ServiceId,
                 cancellationToken: cancellationToken);
         }
     }

@@ -1,54 +1,69 @@
 using Bonyan.AspNetCore.Security;
 using Bonyan.AspNetCore.Tracing;
 using Bonyan.ExceptionHandling;
-using Bonyan.Layer.Domain;
 using Bonyan.Modularity;
 using Bonyan.Reflection;
 using Bonyan.Security.Claims;
 using Bonyan.UnitOfWork;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
 
 namespace Bonyan.AspNetCore;
 
 /// <summary>
 /// Configures services and middleware specific to the Bonyan ASP.NET Core module.
+/// Presentation/Infrastructure Layer - should NOT depend on Domain Layer directly.
+/// If Domain services are needed, they should be accessed through Application Layer.
 /// </summary>
 public class BonAspNetCoreModule : BonWebModule
 {
     public BonAspNetCoreModule()
     {
-        DependOn<BonLayerDomainModule>();
- 
+        // No dependencies - Presentation Layer should be independent
+        // Domain Layer should be loaded separately if needed (via Application Layer)
     }
 
     /// <summary>
     /// Configures exception handling settings before the module configuration phase.
     /// </summary>
     /// <param name="context">The configuration context for services.</param>
-    public override Task OnPreConfigureAsync(BonConfigurationContext context)
+    /// <param name="cancellationToken">Cancellation token.</param>
+    public override ValueTask OnPreConfigureAsync(BonPreConfigurationContext context, CancellationToken cancellationToken = default)
     {
+        ArgumentNullException.ThrowIfNull(context);
+        cancellationToken.ThrowIfCancellationRequested();
+
         context.Services.AddAntiforgery();
-        ConfigureExceptionHandling(context);
-        return base.OnPreConfigureAsync(context);
+        // Exception handling configuration moved to OnConfigureAsync
+        return base.OnPreConfigureAsync(context, cancellationToken);
     }
 
     /// <summary>
     /// Configures services required by the ASP.NET Core module.
     /// </summary>
     /// <param name="context">The configuration context for services.</param>
-    public override Task OnConfigureAsync(BonConfigurationContext context)
+    /// <param name="cancellationToken">Cancellation token.</param>
+    public override ValueTask OnConfigureAsync(BonConfigurationContext context, CancellationToken cancellationToken = default)
     {
+        ArgumentNullException.ThrowIfNull(context);
+        cancellationToken.ThrowIfCancellationRequested();
+
         context.Services.AddLogging();
         ConfigureMiddlewares(context);
         ConfigureCoreServices(context);
+        ConfigureExceptionHandlingServices(context);
+        ConfigureExceptionHandling(context);
         
-        
-        Configure<BonEndpointRouterOptions>(options =>
+        // Configure endpoint routing options
+        // Endpoint path is configurable via options (fixes hardcoded path issue)
+        context.ConfigureOptions<BonEndpointRouterOptions>(options =>
         {
-            options.EndpointConfigureActions.Add(endpointContext =>
+            // Register default module info endpoint
+            // Note: Endpoints use DI directly, no need for EndpointRouteBuilderContext
+            options.ConfigureActions.Add(endpoints =>
             {
-                endpointContext.Endpoints.MapGet("/bonyan/modules",
+                endpoints.MapGet("/bonyan/modules",
                     ([FromServices] IBonModuleContainer container) =>
                     {
                         return container.Modules.Select(module => new
@@ -62,28 +77,31 @@ public class BonAspNetCoreModule : BonWebModule
                                 Namespace = dep.ModuleType.Namespace,
                                 Assembly = dep.ModuleType.Assembly.FullName
                             }),
-                            IsLoadedAsPlugIn = module.IsLoaded,
+                            IsLoadedAsPlugIn = module.IsPluginModule,
                             AllAssemblies = module.AllAssemblies.Select(assembly => assembly.FullName).ToList(),
                             IsActive = module.Instance != null,
-                            Timestamp = DateTime.UtcNow // Optionally include a timestamp for when this data was fetched
+                            Timestamp = DateTime.UtcNow
                         });
                     });
             });
         });
         
-        return base.OnConfigureAsync(context);
+        return base.OnConfigureAsync(context, cancellationToken);
     }
 
-    /// <summary>
-    /// Applies application-wide configurations, such as enabling authorization middleware.
-    /// </summary>
-    /// <param name="webApplicationContext">The application context used during application initialization.</param>
-    public override Task OnApplicationAsync(BonWebApplicationContext webApplicationContext)
+    public override ValueTask OnPostConfigureAsync(BonPostConfigurationContext context, CancellationToken cancellationToken = default)
     {
-        webApplicationContext.Application.UseHttpsRedirection();
-        webApplicationContext.Application.UseAntiforgery();
-        webApplicationContext.Application.UseRouting();
-        return base.OnApplicationAsync(webApplicationContext);
+        ArgumentNullException.ThrowIfNull(context);
+        cancellationToken.ThrowIfCancellationRequested();
+
+        // Register UnitOfWork middleware conditionally after all modules are configured
+        // This ensures we can check if IBonUnitOfWorkManager is registered
+        if (context.Services.IsAdded<IBonUnitOfWorkManager>())
+        {
+            context.Services.TryAddTransient<BonyanUnitOfWorkMiddleware>();
+        }
+
+        return base.OnPostConfigureAsync(context, cancellationToken);
     }
 
     /// <summary>
@@ -99,13 +117,27 @@ public class BonAspNetCoreModule : BonWebModule
     }
 
     /// <summary>
+    /// Configures exception handling services (mappers, serializers).
+    /// </summary>
+    /// <param name="context">The configuration context for services.</param>
+    private void ConfigureExceptionHandlingServices(BonConfigurationContext context)
+    {
+        // Register default exception mapper
+        context.Services.TryAddSingleton<IExceptionToHttpResultMapper, DefaultExceptionToHttpResultMapper>();
+        
+        // Register default serializer (System.Text.Json)
+        context.Services.TryAddSingleton<IExceptionResponseSerializer, SystemTextJsonExceptionResponseSerializer>();
+    }
+
+    /// <summary>
     /// Configures middleware dependencies for the application.
     /// </summary>
     /// <param name="context">The configuration context for services.</param>
     private void ConfigureMiddlewares(BonConfigurationContext context)
     {
         context.Services.AddTransient<BonyanClaimsMapMiddleware>();
-        context.Services.AddTransient<BonyanUnitOfWorkMiddleware>();
+        // Note: BonyanUnitOfWorkMiddleware is registered conditionally in OnPostConfigureAsync
+        // after all modules are configured, to check if IBonUnitOfWorkManager is available
         context.Services.AddTransient<BonCorrelationIdMiddleware>();
     }
 
@@ -120,38 +152,48 @@ public class BonAspNetCoreModule : BonWebModule
         context.Services.AddTransient<IBonCurrentPrincipalAccessor, HttpContextBonCurrentPrincipalAccessor>();
     }
 
-    public override Task OnPreApplicationAsync(BonWebApplicationContext context)
+    public override ValueTask OnPreApplicationAsync(BonWebApplicationContext context, CancellationToken cancellationToken = default)
     {
+        ArgumentNullException.ThrowIfNull(context);
+        cancellationToken.ThrowIfCancellationRequested();
+
         context.Application.UseStaticFiles();
-        return base.OnPreApplicationAsync(context);
+        return base.OnPreApplicationAsync(context, cancellationToken);
     }
 
-    
-    public override Task OnPostApplicationAsync(BonWebApplicationContext context)
+    public override ValueTask OnApplicationAsync(BonWebApplicationContext webApplicationContext, CancellationToken cancellationToken = default)
     {
-        var options = context.Application.Services
-            .GetRequiredService<IOptions<BonEndpointRouterOptions>>()
-            .Value;
+        ArgumentNullException.ThrowIfNull(webApplicationContext);
+        cancellationToken.ThrowIfCancellationRequested();
+
+        webApplicationContext.Application.UseHttpsRedirection();
+        webApplicationContext.Application.UseAntiforgery();
+        webApplicationContext.Application.UseRouting();
+        return base.OnApplicationAsync(webApplicationContext, cancellationToken);
+    }
+
+    public override ValueTask OnPostApplicationAsync(BonWebApplicationContext context, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(context);
+        cancellationToken.ThrowIfCancellationRequested();
+
+        var options = context.Application.Services.GetService<IOptions<BonEndpointRouterOptions>>()?.Value;
         
-        if (!options.EndpointConfigureActions.Any())
+        if (options == null || !options.ConfigureActions.Any())
         {
-            return base.OnPostApplicationAsync(context);
+            return base.OnPostApplicationAsync(context, cancellationToken);
         }
 
+        // Fix P0.2: Don't create scope here - endpoints create their own scopes per request
+        // Store endpoint registrations and invoke them directly
         context.Application.UseEndpoints(endpoints =>
         {
-            using var scope = context.Application.Services.CreateScope();
-            if (options.EndpointConfigureActions.Count == 0) return;
-
-            var endpointRouteBuilderContext = new EndpointRouteBuilderContext(endpoints, scope.ServiceProvider);
-
-            foreach (var configureAction in options.EndpointConfigureActions)
+            foreach (var configureAction in options.ConfigureActions)
             {
-                configureAction(endpointRouteBuilderContext);
+                configureAction(endpoints);
             }
-            
         });
         
-        return base.OnPostApplicationAsync(context);
+        return base.OnPostApplicationAsync(context, cancellationToken);
     }
 }

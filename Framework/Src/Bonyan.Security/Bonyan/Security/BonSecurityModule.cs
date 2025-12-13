@@ -8,11 +8,11 @@ namespace Bonyan.Security;
 
 public class BonSecurityModule : BonModule
 {
-  public override Task OnConfigureAsync(BonConfigurationContext context)
+  public override ValueTask OnConfigureAsync(BonConfigurationContext context, CancellationToken cancellationToken = default)
   {
     context.Services.AddSingleton<ThreadBonCurrentPrincipalAccessor>();
     context.Services.AddTransient<IBonCurrentUser, BonCurrentUser>();
-    return base.OnConfigureAsync(context);
+    return base.OnConfigureAsync(context, cancellationToken);
   }
 
 }

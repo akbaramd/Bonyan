@@ -14,7 +14,6 @@ public static class BonMediatorServiceCollectionExtensions
         // Register handlers
         context.RegisterTransientServicesFor(typeof(IBonCommandHandler<>));
         context.RegisterTransientServicesFor(typeof(IBonCommandHandler<,>));
-        context.RegisterTransientServicesFor(typeof(IBonQueryHandler<,>));
         context.RegisterTransientServicesFor(typeof(IBonEventHandler<>));
         
         

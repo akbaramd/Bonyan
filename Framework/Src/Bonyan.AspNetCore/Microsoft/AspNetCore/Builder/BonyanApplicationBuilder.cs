@@ -26,10 +26,10 @@ namespace Microsoft.AspNetCore.Builder
         /// </summary>
         public IHostBuilder Host => _builder.Host;
 
-        public Task<WebApplication> BuildAsync()
-        {
-            throw new NotImplementedException();
-        }
+        /// <summary>
+        /// Gets or sets the service information.
+        /// </summary>
+        public BonyanServiceInfo? ServiceInfo { get; set; }
 
         /// <summary>
         /// Provides access to configuration settings.
@@ -48,28 +48,35 @@ namespace Microsoft.AspNetCore.Builder
         /// <param name="builder">The underlying WebApplicationBuilder instance.</param>
         public BonyanApplicationBuilder(IWebBonModularityApplication modularApp, WebApplicationBuilder builder)
         {
-            _modularApp = modularApp;
-            _builder = builder;
+            _modularApp = modularApp ?? throw new ArgumentNullException(nameof(modularApp));
+            _builder = builder ?? throw new ArgumentNullException(nameof(builder));
         }
 
         /// <summary>
         /// Builds and initializes the modular ASP.NET Core application.
         /// </summary>
+        /// <param name="applicationContext">Optional action to configure the application context.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns>Returns a fully built and initialized WebApplication instance.</returns>
-        public async Task<WebApplication> BuildAsync(Action<BonWebApplicationContext>? context = null)
+        public async Task<WebApplication> BuildAsync(
+            Action<BonWebApplicationContext>? applicationContext = null,
+            CancellationToken cancellationToken = default)
         {
+            cancellationToken.ThrowIfCancellationRequested();
+
             var application = _builder.Build();
 
             // Asynchronously initialize modules and application, with error handling.
             try
             {
-                await _modularApp.InitializeModulesAsync(application.Services);
-                await _modularApp.InitializeApplicationAsync(application,context);
+                await _modularApp.InitializeModulesAsync(application.Services, cancellationToken);
+                await _modularApp.InitializeApplicationAsync(application, applicationContext, cancellationToken);
             }
             catch (Exception ex)
             {
-                // Log or handle initialization errors
-                throw new ApplicationException("An error occurred during module initialization.", ex);
+                throw new ApplicationException(
+                    "An error occurred during module initialization. " +
+                    "Check inner exception for details.", ex);
             }
 
             return application;

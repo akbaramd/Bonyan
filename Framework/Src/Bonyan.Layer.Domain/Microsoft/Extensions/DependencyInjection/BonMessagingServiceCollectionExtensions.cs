@@ -14,6 +14,14 @@ namespace Microsoft.Extensions.DependencyInjection
             return context;
         }
 
+        public static BonPostConfigurationContext AddDomain(this BonPostConfigurationContext context)
+        {
+            // Register the in-memory domain event bus by default
+            context.Services.AddSingleton<IBonDomainEventDispatcher, BonDomainEventDispatcher>();
+
+            return context;
+        }
+
        
     }
 }

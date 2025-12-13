@@ -7,7 +7,7 @@ namespace Bonyan.Mediator.Tests
         public string Payload { get; set; }
     }
 
-    public class SampleQuery : IBonQuery<string>
+    public class SampleQuery : IBonCommand<string>
     {
         public string Query { get; set; }
     }
@@ -30,7 +30,7 @@ namespace Bonyan.Mediator.Tests
         }
     }
 
-    public class SampleQueryHandler : IBonQueryHandler<SampleQuery, string>
+    public class SampleQueryHandler : IBonCommandHandler<SampleQuery, string>
     {
         public Task<string> HandleAsync(SampleQuery query, CancellationToken cancellationToken)
         {

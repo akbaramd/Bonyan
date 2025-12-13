@@ -10,8 +10,9 @@ namespace Microsoft.Extensions.DependencyInjection
     {
         public static IServiceCollection AddBonyan(
             
-            this IServiceCollection services, string serviceName,Action<BonConfigurationContext> configure)
+            this IServiceCollection services, string serviceKey,Action<BonConfigurationContext> configure)
         {
+            ArgumentException.ThrowIfNullOrWhiteSpace(serviceKey, nameof(serviceKey));
             
             services.AddTransient(typeof(BonAsyncDeterminationInterceptor<>));
             services.AddTransient<IBonCachedServiceProviderBase, BonLazyServiceProvider>();
@@ -24,7 +25,7 @@ namespace Microsoft.Extensions.DependencyInjection
             var context = new BonConfigurationContext(services);
             context.ServiceManager = new BonServiceManager()
             {
-                ServiceId = serviceName
+                ServiceId = serviceKey
             };
             configure.Invoke(context);
 

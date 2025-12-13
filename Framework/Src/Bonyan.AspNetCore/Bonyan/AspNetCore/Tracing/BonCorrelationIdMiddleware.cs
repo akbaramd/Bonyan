@@ -15,7 +15,7 @@ public class BonCorrelationIdMiddleware : IMiddleware
         _correlationIdProvider = correlationIdProvider;
     }
 
-    public async  Task InvokeAsync(HttpContext context, RequestDelegate next)
+    public async Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
         var correlationId = GetCorrelationIdFromRequest(context);
         using (_correlationIdProvider.Change(correlationId))

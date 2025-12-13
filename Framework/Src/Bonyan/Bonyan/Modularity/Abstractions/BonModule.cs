@@ -1,5 +1,6 @@
 using System.Reflection;
 using Bonyan.DependencyInjection;
+using Bonyan.Modularity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -26,12 +27,13 @@ namespace Bonyan.Modularity.Abstractions
         /// </summary>
         private bool _disposed;
 
-        public virtual Task OnPreConfigureAsync(BonConfigurationContext context) => Task.CompletedTask;
-        public virtual Task OnConfigureAsync(BonConfigurationContext context) => Task.CompletedTask;
-        public virtual Task OnPostConfigureAsync(BonConfigurationContext context) => Task.CompletedTask;
-        public virtual Task OnPreInitializeAsync(BonInitializedContext context) => Task.CompletedTask;
-        public virtual Task OnInitializeAsync(BonInitializedContext context) => Task.CompletedTask;
-        public virtual Task OnPostInitializeAsync(BonInitializedContext context) => Task.CompletedTask;
+        public virtual ValueTask OnPreConfigureAsync(BonPreConfigurationContext context, CancellationToken cancellationToken = default) => ValueTask.CompletedTask;
+        public virtual ValueTask OnConfigureAsync(BonConfigurationContext context, CancellationToken cancellationToken = default) => ValueTask.CompletedTask;
+        public virtual ValueTask OnPostConfigureAsync(BonPostConfigurationContext context, CancellationToken cancellationToken = default) => ValueTask.CompletedTask;
+        public virtual ValueTask OnPreInitializeAsync(BonInitializedContext context, CancellationToken cancellationToken = default) => ValueTask.CompletedTask;
+        public virtual ValueTask OnInitializeAsync(BonInitializedContext context, CancellationToken cancellationToken = default) => ValueTask.CompletedTask;
+        public virtual ValueTask OnPostInitializeAsync(BonInitializedContext context, CancellationToken cancellationToken = default) => ValueTask.CompletedTask;
+        public virtual ValueTask OnShutdownAsync(BonShutdownContext context, CancellationToken cancellationToken = default) => ValueTask.CompletedTask;
 
         /// <summary>
         /// Checks if the provided type is a valid Bonyan module type.
@@ -104,60 +106,11 @@ namespace Bonyan.Modularity.Abstractions
             }
         }
 
-        protected void Configure<TOptions>(Action<TOptions> configureOptions)
-            where TOptions : class
-        {
-            Services.Configure(configureOptions);
-        }
-
-        protected void Configure<TOptions>(string name, Action<TOptions> configureOptions)
-            where TOptions : class
-        {
-            Services.Configure(name, configureOptions);
-        }
-
-        protected void Configure<TOptions>(IConfiguration configuration)
-            where TOptions : class
-        {
-            Services.Configure<TOptions>(configuration);
-        }
-
-        protected void Configure<TOptions>(string name, IConfiguration configuration)
-            where TOptions : class
-        {
-            Services.Configure<TOptions>(name, configuration);
-        }
-
-        protected void PreConfigure<TOptions>(Action<TOptions> configureOptions)
-            where TOptions : class
-        {
-            Services.PreConfigure(configureOptions);
-        }
-
-        protected void PostConfigure<TOptions>(Action<TOptions> configureOptions)
-            where TOptions : class
-        {
-            Services.PostConfigure(configureOptions);
-        }
-
-        protected TOptions? GetOption<TOptions>()
-            where TOptions : class
-        {
-            return Services.GetService<IOptions<TOptions>>()?.Value;
-        }
-
-   
-        protected BonPreConfigureActionList<TOptions> GetPreConfigure<TOptions>()
-            where TOptions : class
-        {
-            return Services.GetPreConfigureActions<TOptions>();
-        }
-
-        protected void PostConfigureAll<TOptions>(Action<TOptions> configureOptions)
-            where TOptions : class
-        {
-            Services.PostConfigureAll(configureOptions);
-        }
+        // Note: PreConfigure, Configure, and PostConfigure methods are now available through their respective contexts:
+        // - PreConfigure: Use context.PreConfigure<TOptions>() in OnPreConfigureAsync
+        // - Configure: Use context.ConfigureOptions<TOptions>() in OnConfigureAsync
+        // - PostConfigure: Use context.PostConfigure<TOptions>() in OnPostConfigureAsync
+        // This ensures proper phase separation and prevents misuse.
         /// <summary>
         /// Disposes of the resources used by this module.
         /// </summary>

@@ -8,7 +8,7 @@ public record GetNotificationsQuery(
     string UserId,
     bool? IsRead = null,
     int Skip = 0,
-    int Take = 20) : IBonQuery<GetNotificationsResult>;
+    int Take = 20) : IBonCommand<GetNotificationsResult>;
 
 public record GetNotificationsResult(
     IEnumerable<BonNotification> Notifications,

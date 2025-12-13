@@ -32,7 +32,7 @@ namespace Bonyan.Mediators
             if (handler == null)
             {
                 _logger.LogError("No handler found for command type {CommandType}", command.GetType().Name);
-                throw new InvalidOperationException($"No handler found for command type {command.GetType().Name}");
+                throw new InvalidOperationException($"No Handler found for command type {command.GetType().Name}");
             }
 
             async Task<TResponse> HandlerDelegate() => await handler.HandleAsync(command, cancellationToken);
@@ -58,7 +58,7 @@ namespace Bonyan.Mediators
             if (handler == null)
             {
                 _logger.LogError("No handler found for command type {CommandType}", command.GetType().Name);
-                throw new InvalidOperationException($"No handler found for command type {command.GetType().Name}");
+                throw new InvalidOperationException($"No Handler found for command type {command.GetType().Name}");
             }
 
             async Task HandlerDelegate() => await handler.HandleAsync(command, cancellationToken);
@@ -69,32 +69,6 @@ namespace Bonyan.Mediators
 
             await pipeline();
             _logger.LogInformation("Successfully handled command of type {CommandType}", command.GetType().Name);
-        }
-
-        private async Task<TResponse> HandleQueryAsync<TQuery, TResponse>(
-            TQuery query,
-            CancellationToken cancellationToken = default)
-            where TQuery : IBonQuery<TResponse>
-        {
-            _logger.LogInformation("Handling query of type {QueryType}", query.GetType().Name);
-
-            var behaviors = _serviceProvider.GetServices<IBonMediatorBehavior<TQuery, TResponse>>().ToList();
-            var handler = _serviceProvider.GetService<IBonQueryHandler<TQuery, TResponse>>();
-            if (handler == null)
-            {
-                _logger.LogError("No handler found for query type {QueryType}", query.GetType().Name);
-                throw new InvalidOperationException($"No handler found for query type {query.GetType().Name}");
-            }
-
-            async Task<TResponse> HandlerDelegate() => await handler.HandleAsync(query, cancellationToken);
-
-            var pipeline = behaviors.Reverse<IBonMediatorBehavior<TQuery, TResponse>>()
-                .Aggregate((Func<Task<TResponse>>)HandlerDelegate,
-                    (next, behavior) => () => behavior.HandleAsync(query, next, cancellationToken));
-
-            var response = await pipeline();
-            _logger.LogInformation("Successfully handled query of type {QueryType}", query.GetType().Name);
-            return response;
         }
 
         private async Task HandleEventAsync<TEvent>(
@@ -150,16 +124,6 @@ namespace Bonyan.Mediators
             await (Task)method.Invoke(this, new object[] { command, cancellationToken });
         }
 
-        public async Task<TResponse> QueryAsync<TResponse>(IBonQuery<TResponse> query, CancellationToken cancellationToken = default)
-        {
-            var method = GetType().GetMethod(nameof(HandleQueryAsync), BindingFlags.NonPublic | BindingFlags.Instance)
-                ?.MakeGenericMethod(query.GetType(), typeof(TResponse));
-
-            if (method == null)
-                throw new InvalidOperationException($"Unable to find the method {nameof(HandleQueryAsync)}");
-
-            return await (Task<TResponse>)method.Invoke(this, new object[] { query, cancellationToken });
-        }
 
         public async Task PublishAsync(IBonEvent eventMessage, CancellationToken cancellationToken = default)
         {

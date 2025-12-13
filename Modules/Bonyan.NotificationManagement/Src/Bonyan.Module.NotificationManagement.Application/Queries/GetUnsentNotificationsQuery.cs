@@ -4,4 +4,4 @@ using Bonyan.Module.NotificationManagement.Domain.Notifications;
 
 namespace Bonyan.Module.NotificationManagement.Application.Queries;
 
-public record GetUnsentNotificationsQuery : IBonQuery<IEnumerable<BonNotification>>; 
+public record GetUnsentNotificationsQuery : IBonCommand<IEnumerable<BonNotification>>; 

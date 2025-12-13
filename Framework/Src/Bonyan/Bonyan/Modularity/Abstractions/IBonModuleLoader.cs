@@ -9,6 +9,8 @@ public interface IBonModuleLoader
     BonModuleDescriptor[] LoadModules(
         [NotNull] IServiceCollection services,
         [NotNull] Type startupModuleType,
+        [NotNull] string serviceKey,
+        [NotNull] string serviceTitle,
         [NotNull] PlugInSourceList plugInSources
     );
 }

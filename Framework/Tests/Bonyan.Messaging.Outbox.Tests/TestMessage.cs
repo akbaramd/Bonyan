@@ -2,23 +2,23 @@
 
 namespace Bonyan.Messaging.Outbox.Tests;
 
-public class TestCommand
+public class TestCommand : MessageRequestBase<TestResponse>
 {
-    public string Content { get; set; }
+    public string Content { get; set; } = string.Empty;
 }
 
 public class TestResponse
 {
-    public string Content { get; set; }
+    public string Content { get; set; } = string.Empty;
 }
 public class NotHandledResponse
 {
-    public string Content { get; set; }
+    public string Content { get; set; } = string.Empty;
 }
 
-public class TestEvent
+public class TestEvent : MessageEventBase
 {
-    public string Content { get; set; }
+    public string Content { get; set; } = string.Empty;
 }
 
 public class TestEventConsumer : IBonMessageConsumer<TestEvent>

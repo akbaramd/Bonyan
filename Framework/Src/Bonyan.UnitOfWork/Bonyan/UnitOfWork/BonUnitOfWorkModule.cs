@@ -6,7 +6,7 @@ namespace Bonyan.UnitOfWork;
 
 public class BonUnitOfWorkModule : BonModule
 {
-    public override Task OnConfigureAsync(BonConfigurationContext context)
+    public override ValueTask OnConfigureAsync(BonConfigurationContext context, CancellationToken cancellationToken = default)
     {
         context.Services.AddTransient<BonUnitOfWorkInterceptor>();
         context.Services.AddTransient<IBonUnitOfWork, BonUnitOfWork>();
@@ -18,6 +18,6 @@ public class BonUnitOfWorkModule : BonModule
         context.Services.AddSingleton<IBonUnitOfWorkAccessor, BonAmbientBonUnitOfWork>();
         
         context.Services.OnRegistered(UnitOfWorkInterceptorRegistrar.RegisterIfNeeded);
-        return base.OnConfigureAsync(context);
+        return base.OnConfigureAsync(context, cancellationToken);
     }
 }

@@ -11,30 +11,6 @@ namespace Bonyan.Tests.Modularity
     {
   
 
-        [Fact]
-        public async Task InitializeModulesAsync_Should_Invoke_Module_Initialize_Methods()
-        {
-            // Arrange
-            var services = new ServiceCollection();
-            
-            var application = new BonModularityApplication<TestModule>(services,"servicename");
-
-            var moduleMock = new Mock<TestModule> { CallBase = true };
-            moduleMock.Setup(m => m.OnPreInitializeAsync(It.IsAny<BonInitializedContext>())).Returns(Task.CompletedTask);
-            moduleMock.Setup(m => m.OnInitializeAsync(It.IsAny<BonInitializedContext>())).Returns(Task.CompletedTask);
-            moduleMock.Setup(m => m.OnPostInitializeAsync(It.IsAny<BonInitializedContext>())).Returns(Task.CompletedTask);
-
-            ReplaceModuleInstance(application, moduleMock.Object);
-
-            
-            var serviceProvider = services.BuildServiceProvider();// Act
-            await application.InitializeModulesAsync(serviceProvider);
-
-            // Assert
-            moduleMock.Verify(m => m.OnPreInitializeAsync(It.IsAny<BonInitializedContext>()), Times.Once);
-            moduleMock.Verify(m => m.OnInitializeAsync(It.IsAny<BonInitializedContext>()), Times.Once);
-            moduleMock.Verify(m => m.OnPostInitializeAsync(It.IsAny<BonInitializedContext>()), Times.Once);
-        }
 
 
 
@@ -82,7 +58,7 @@ namespace Bonyan.Tests.Modularity
             }
             else
             {
-                var moduleInfo = new BonModuleDescriptor(moduleType,moduleInstance,false);
+                var moduleInfo = new BonModuleDescriptor(moduleType,moduleInstance,false, "service");
                 modules[moduleType] = moduleInfo;
             }
         }

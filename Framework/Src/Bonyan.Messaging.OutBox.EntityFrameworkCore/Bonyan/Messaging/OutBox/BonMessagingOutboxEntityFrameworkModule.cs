@@ -13,9 +13,9 @@ namespace Bonyan.Messaging.OutBox
             DependOn<BonEntityFrameworkModule>();
         }
 
-      public override Task OnPreConfigureAsync(BonConfigurationContext context)
+      public override ValueTask OnPreConfigureAsync(BonPreConfigurationContext context, CancellationToken cancellationToken = default)
       {
-          PreConfigure<BonMessagingConfiguration>(c =>
+          context.PreConfigure<BonMessagingConfiguration>(c =>
           {
               c.AddOutbox(c =>
               {

@@ -1,5 +1,6 @@
 ﻿using Bonyan.Mediators;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace Bonyan.Mediator.Tests;
 
@@ -11,12 +12,22 @@ public class InMemoryBonMediatorTests
     {
         var services = new ServiceCollection();
 
-        // Initialize modular application
-        var application = new BonModularityApplication<TestModule>(services,"servicename");
-        application.ConfigureModulesAsync().GetAwaiter().GetResult();
-        application.InitializeModulesAsync(application.ServiceProvider).GetAwaiter().GetResult();
+        // Add logging
+        services.AddLogging(builder => builder.AddConsole());
 
-        _serviceProvider = application.ServiceProvider;
+        // Register mediator
+        services.AddTransient<IBonMediator, InMemoryBonMediator>();
+
+        // Register handlers
+        services.AddTransient<IBonCommandHandler<SampleCommand, string>, SampleCommandHandler>();
+        services.AddTransient<IBonCommandHandler<SampleQuery, string>, SampleQueryHandler>();
+        services.AddTransient<IBonEventHandler<SampleEvent>, SampleEventHandler>();
+
+        // Register behaviors
+        services.AddTransient(typeof(IBonMediatorBehavior<>), typeof(SampleEventMediatorBehavior<>));
+        services.AddTransient(typeof(IBonMediatorBehavior<,>), typeof(SampleCommandMediatorBehavior<,>));
+
+        _serviceProvider = services.BuildServiceProvider();
     }
 
     [Fact]
@@ -53,14 +64,14 @@ public class InMemoryBonMediatorTests
     }
 
     [Fact]
-    public async Task QueryAsync_ShouldHandleQuery()
+    public async Task SendAsync_ShouldHandleQueryAsCommand()
     {
         // Arrange
         var mediator = _serviceProvider.GetRequiredService<IBonMediator>();
         var query = new SampleQuery { Query = TestStrings.TestQueryPayload };
 
         // Act
-        var result = await mediator.QueryAsync(query);
+        var result = await mediator.SendAsync(query);
 
         // Assert
         Assert.Equal(TestStrings.TestQueryResult, result);
@@ -109,14 +120,14 @@ public class InMemoryBonMediatorTests
     }
 
     [Fact]
-    public async Task QueryAsync_ShouldThrowExceptionIfNoHandlerFound()
+    public async Task SendAsync_ShouldThrowExceptionIfNoHandlerFoundForQuery()
     {
         // Arrange
         var mediator = _serviceProvider.GetRequiredService<IBonMediator>();
         var query = new UnregisteredQuery { Query = "UnregisteredQuery" };
 
         // Act & Assert
-        await Assert.ThrowsAsync<InvalidOperationException>(() => mediator.QueryAsync(query));
+        await Assert.ThrowsAsync<InvalidOperationException>(() => mediator.SendAsync(query));
     }
 
     [Fact]
@@ -140,7 +151,7 @@ public class UnregisteredCommand : IBonCommand<string>
     public string Payload { get; set; }
 }
 
-public class UnregisteredQuery : IBonQuery<string>
+public class UnregisteredQuery : IBonCommand<string>
 {
     public string Query { get; set; }
 }

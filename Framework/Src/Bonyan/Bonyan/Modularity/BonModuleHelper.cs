@@ -13,46 +13,37 @@ internal static class BonyanModuleHelper
         return moduleTypes;
     }
 
+    /// <summary>
+    /// Finds depended module types using static metadata (attributes) only.
+    /// This avoids instantiating modules just to read dependencies, supporting microkernel isolation.
+    /// </summary>
+    /// <param name="moduleType">The module type to find dependencies for.</param>
+    /// <returns>List of module types this module depends on.</returns>
     public static List<Type> FindDependedModuleTypes(Type moduleType)
     {
         BonModule.CheckBonyanModuleType(moduleType);
 
         var dependencies = new List<Type>();
 
-        // Retrieve dependencies from custom attributes
+        // Retrieve dependencies from custom attributes (static metadata - no instantiation)
         var dependencyDescriptors = moduleType
-            .GetCustomAttributes()
+            .GetCustomAttributes(inherit: true)
             .OfType<IDependedTypesProvider>();
 
         foreach (var descriptor in dependencyDescriptors)
         {
             foreach (var dependedModuleType in descriptor.GetDependedTypes())
             {
-                dependencies.AddIfNotContains(dependedModuleType);
-            }
-        }
-
-        // Initialize the module instance and extract DependedModules
-        IBonModule? moduleInstance = null;
-        try
-        {
-            moduleInstance = Activator.CreateInstance(moduleType) as IBonModule;
-            if (moduleInstance != null)
-            {
-                var instanceDependencies = moduleInstance.DependedModules;
-                foreach (var dependedModuleType in instanceDependencies)
+                if (dependedModuleType != null)
                 {
                     dependencies.AddIfNotContains(dependedModuleType);
                 }
             }
         }
-        finally
-        {
-            if (moduleInstance is IDisposable disposable)
-            {
-                disposable.Dispose();
-            }
-        }
+
+        // Note: Removed module instantiation for reading DependedModules property.
+        // Modules should declare dependencies via [DependsOn] attributes for static metadata.
+        // This supports microkernel architecture: plug-ins remain isolated, no side effects from constructors.
 
         return dependencies;
     }
@@ -91,7 +82,7 @@ internal static class BonyanModuleHelper
         }
 
         moduleTypes.Add(moduleType);
-        Console.WriteLine($"{new string(' ', depth * 2)}- {moduleType.FullName}");
+        // Note: Logging removed from helper - should be done by caller (BonModuleLoader) with proper ILogger
 
         foreach (var dependedModuleType in FindDependedModuleTypes(moduleType))
         {

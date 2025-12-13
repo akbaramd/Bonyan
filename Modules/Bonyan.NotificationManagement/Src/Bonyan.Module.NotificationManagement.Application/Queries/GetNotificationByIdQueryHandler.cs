@@ -6,7 +6,7 @@ using Bonyan.Module.NotificationManagement.Domain.Notifications.Repositories;
 
 namespace Bonyan.Module.NotificationManagement.Application.Queries;
 
-public class GetNotificationByIdQueryHandler : IBonQueryHandler<GetNotificationByIdQuery, BonNotification?>
+public class GetNotificationByIdQueryHandler : IBonCommandHandler<GetNotificationByIdQuery, BonNotification?>
 {
     private readonly IBonNotificationReadOnlyRepository _repository;
 

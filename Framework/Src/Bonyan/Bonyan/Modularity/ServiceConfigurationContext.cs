@@ -5,12 +5,26 @@ using Microsoft.Extensions.Options;
 namespace Bonyan.Modularity
 {
     /// <summary>
-    /// Context for configuring services, allowing options setup and configuration binding.
+    /// Context for main configuration phase.
+    /// Only allows Configure operations - no PreConfigure or PostConfigure.
+    /// This ensures Configure is only accessible during OnConfigureAsync phase.
     /// </summary>
     public class BonConfigurationContext : BonContextBase
     {
-        public IServiceCollection 
-            Services { get; }
+        /// <summary>
+        /// Gets the service collection for registering services.
+        /// </summary>
+        public new IServiceCollection Services { get; }
+
+        /// <summary>
+        /// Gets or sets the service manager.
+        /// </summary>
+        public BonServiceManager? ServiceManager { get; set; }
+
+        /// <summary>
+        /// Gets the plugin sources list.
+        /// </summary>
+        public PlugInSourceList PlugInSources { get; } = new PlugInSourceList();
 
         public BonConfigurationContext(IServiceCollection services)
             : base(services.BuildServiceProvider())
@@ -18,17 +32,39 @@ namespace Bonyan.Modularity
             Services = services;
         }
 
-        public BonServiceManager ServiceManager { get; set; }
-        public PlugInSourceList PlugInSources { get; } = new PlugInSourceList();
-
         /// <summary>
         /// Configures options of type <typeparamref name="TOptions"/> using an action.
+        /// This method is only available in OnConfigureAsync phase.
         /// </summary>
         /// <typeparam name="TOptions">The type of options to configure.</typeparam>
         /// <param name="configureOptions">The action to configure options.</param>
         public void ConfigureOptions<TOptions>(Action<TOptions> configureOptions) where TOptions : class
         {
             Services.Configure(configureOptions);
+        }
+
+        /// <summary>
+        /// Executes all pre-configured actions and returns the configured options instance.
+        /// This is useful when you need to read pre-configured options in the configure phase.
+        /// </summary>
+        /// <typeparam name="TOptions">The type of options.</typeparam>
+        /// <param name="options">The options instance to configure.</param>
+        /// <returns>The configured options instance.</returns>
+        public TOptions ExecutePreConfiguredActions<TOptions>(TOptions options) 
+            where TOptions : class
+        {
+            return Services.ExecutePreConfiguredActions(options);
+        }
+
+        /// <summary>
+        /// Executes all pre-configured actions and returns a new configured options instance.
+        /// </summary>
+        /// <typeparam name="TOptions">The type of options.</typeparam>
+        /// <returns>A new configured options instance.</returns>
+        public TOptions ExecutePreConfiguredActions<TOptions>() 
+            where TOptions : class, new()
+        {
+            return Services.ExecutePreConfiguredActions<TOptions>();
         }
 
         /// <summary>

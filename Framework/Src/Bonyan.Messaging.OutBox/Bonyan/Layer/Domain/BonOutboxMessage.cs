@@ -46,25 +46,26 @@ namespace Bonyan.Layer.Domain
         public string ReplyQueueName
         {
             get => _replyQueueName;
-            private set => _replyQueueName = value ?? throw new ArgumentNullException(nameof(ReplyQueueName), "Headers cannot be null.");
+            private set => _replyQueueName = value ?? string.Empty;
         }
 
         // Private constructor for EF Core
         private BonOutboxMessage() { }
 
         // Constructor for creating a new instance
-        private BonOutboxMessage(string destination, string payload, string messageType, string headers, string replyQueueName, string? correlationId = null)
+        private BonOutboxMessage(string destination, string payload, string messageType, string headers, string? replyQueueName, string? correlationId = null)
         {
+            Id = Guid.NewGuid(); // Generate a new ID
             Destination = destination;
             Payload = payload;
             MessageType = messageType;
             Headers = headers;
-            ReplyQueueName = replyQueueName;
-            CorrelationId = correlationId;
+            ReplyQueueName = replyQueueName ?? string.Empty;
+            CorrelationId = correlationId ?? Guid.NewGuid().ToString();
         }
 
         // Static factory method for creating a new instance
-        public static BonOutboxMessage Create(string destination, string payload, string messageType, string headers, string replyQueueName, string? correlationId = null)
+        public static BonOutboxMessage Create(string destination, string payload, string messageType, string headers, string? replyQueueName, string? correlationId = null)
         {
             return new BonOutboxMessage(destination, payload, messageType, headers, replyQueueName, correlationId);
         }

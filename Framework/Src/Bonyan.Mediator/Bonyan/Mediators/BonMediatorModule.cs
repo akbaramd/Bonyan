@@ -6,7 +6,7 @@ namespace Bonyan.Mediators
 {
     public class BonMediatorModule : BonModule
     {
-        public override Task OnPostConfigureAsync(BonConfigurationContext context)
+        public override ValueTask OnConfigureAsync(BonConfigurationContext context, CancellationToken cancellationToken = default)  
         {
             
             context.AddMediator(c =>
@@ -14,7 +14,7 @@ namespace Bonyan.Mediators
                 context.Services.ExecutePreConfiguredActions(c);
             });
 
-            return base.OnPostConfigureAsync(context);
+            return base.OnConfigureAsync(context, cancellationToken);
         }
     }
 }

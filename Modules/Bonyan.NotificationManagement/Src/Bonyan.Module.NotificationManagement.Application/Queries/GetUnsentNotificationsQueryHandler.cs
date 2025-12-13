@@ -7,7 +7,7 @@ using Bonyan.Module.NotificationManagement.Domain.Notifications.Repositories;
 
 namespace Bonyan.Module.NotificationManagement.Application.Queries;
 
-public class GetUnsentNotificationsQueryHandler : IBonQueryHandler<GetUnsentNotificationsQuery, IEnumerable<BonNotification>>
+public class GetUnsentNotificationsQueryHandler : IBonCommandHandler<GetUnsentNotificationsQuery, IEnumerable<BonNotification>>
 {
     private readonly IBonNotificationReadOnlyRepository _repository;
 

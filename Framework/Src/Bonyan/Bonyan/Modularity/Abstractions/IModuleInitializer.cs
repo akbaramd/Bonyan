@@ -2,5 +2,5 @@ namespace Bonyan.Modularity.Abstractions;
 
 public interface IBonModuleInitializer
 {
-    Task InitializeModulesAsync(IServiceProvider serviceProvider);
+    Task InitializeModulesAsync(IServiceProvider serviceProvider, CancellationToken cancellationToken = default);
 }

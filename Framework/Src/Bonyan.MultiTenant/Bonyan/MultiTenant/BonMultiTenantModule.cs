@@ -12,19 +12,19 @@ public class BonMultiTenantModule : BonModule
   {
     DependOn<BonSecurityModule>();
   }
-  public override Task OnConfigureAsync(BonConfigurationContext context)
+  public override ValueTask OnConfigureAsync(BonConfigurationContext context, CancellationToken cancellationToken = default)
   {
     context.Services.AddTransient<ITenantResolver,TenantResolver>();
     context.Services.AddTransient<IBonTenantStore,BonDefaultTenantStore>();
     context.Services.AddTransient<ITenantConfigurationProvider,TenantConfigurationProvider>();
     context.Services.AddSingleton<ICurrentTenantAccessor>(AsyncLocalCurrentTenantAccessor.Instance);
     context.Services.AddSingleton<IBonCurrentTenant, BonCurrentTenant>();
-    return base.OnConfigureAsync(context);
+    return base.OnConfigureAsync(context, cancellationToken);
   }
 
-  public override Task OnPostConfigureAsync(BonConfigurationContext context)
+  public override ValueTask OnPostConfigureAsync(BonPostConfigurationContext context, CancellationToken cancellationToken = default)
   {
-    return base.OnPostConfigureAsync(context);
+    return base.OnPostConfigureAsync(context, cancellationToken);
   }
   
 

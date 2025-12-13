@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 using JetBrains.Annotations;
 
 namespace Bonyan.AspNetCore.Mvc.Localization;

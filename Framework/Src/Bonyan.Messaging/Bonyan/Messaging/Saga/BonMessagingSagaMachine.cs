@@ -68,7 +68,7 @@ namespace Bonyan.Messaging.Saga
         /// </summary>
         public BonMessagingEventHandler<TInstance, TEvent> Publish<TEventMessage>(
             Func<TInstance, BonMessageContext<TEvent>, TEventMessage> eventFactory)
-            where TEventMessage : class
+            where TEventMessage : class, IMessageEvent
         {
             Then(async (instance, context, eventData) =>
             {
@@ -88,12 +88,12 @@ namespace Bonyan.Messaging.Saga
         
         
         /// <summary>
-        /// Sends a message to a specific service, ensuring the correlation ID is included and handled.
+        /// Sends a message to a specific service without expecting a response, ensuring the correlation ID is included and handled.
         /// </summary>
         public BonMessagingEventHandler<TInstance, TEvent> Send<TMessage>(
             string serviceName,
             Func<TInstance, BonMessageContext<TEvent>, TMessage> messageFactory)
-            where TMessage : class
+            where TMessage : class, IMessageRequest
         {
             Then(async (instance, context, eventData) =>
             {
@@ -104,9 +104,33 @@ namespace Bonyan.Messaging.Saga
                 if (message == null)
                     throw new InvalidOperationException("Message factory produced a null message.");
 
-                await ctx.SendAsync(
-                    serviceName,
-                    message);
+                await ctx.SendAsync(serviceName, message);
+            });
+
+            return this;
+        }
+
+        /// <summary>
+        /// Sends a message to a specific service and waits for a response, ensuring the correlation ID is included and handled.
+        /// </summary>
+        public BonMessagingEventHandler<TInstance, TEvent> Send<TMessage, TResponse>(
+            string serviceName,
+            Func<TInstance, BonMessageContext<TEvent>, TMessage> messageFactory,
+            Action<TInstance, BonMessageContext<TEvent>, TResponse> responseHandler)
+            where TMessage : class, IMessageRequest<TResponse>
+            where TResponse : class
+        {
+            Then(async (instance, context, eventData) =>
+            {
+                if (context is not BonMessageContext<TEvent> ctx)
+                    throw new InvalidOperationException("Invalid context type.");
+
+                var message = messageFactory(instance, ctx);
+                if (message == null)
+                    throw new InvalidOperationException("Message factory produced a null message.");
+
+                var response = await ctx.SendAsync<TMessage, TResponse>(serviceName, message);
+                responseHandler(instance, ctx, response);
             });
 
             return this;

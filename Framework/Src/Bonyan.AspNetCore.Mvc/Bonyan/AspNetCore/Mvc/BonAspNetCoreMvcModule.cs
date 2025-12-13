@@ -1,33 +1,44 @@
-﻿using Bonyan.AspNetCore.Mvc.Localization;
+﻿using System;
+using System.Collections.Generic;
+using Bonyan.AspNetCore.Mvc.Localization;
 using Bonyan.Modularity;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Razor;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Logging;
 
 namespace Bonyan.AspNetCore.Mvc;
 
+/// <summary>
+/// ASP.NET Core MVC module for Bonyan framework.
+/// Configures MVC services, view localization, and routing.
+/// </summary>
 public class BonAspNetCoreMvcModule : BonWebModule
 {
     public BonAspNetCoreMvcModule()
     {
         DependOn<BonAspNetCoreModule>();
     }
-    public override Task OnConfigureAsync(BonConfigurationContext context)
+
+    public override ValueTask OnConfigureAsync(BonConfigurationContext context, CancellationToken cancellationToken = default)
     {
+        ArgumentNullException.ThrowIfNull(context);
+        cancellationToken.ThrowIfCancellationRequested();
         
-        var abpMvcDataAnnotationsLocalizationOptions = context.Services
-            .ExecutePreConfiguredActions(
-                new BonMvcDataAnnotationsLocalizationOptions()
-            );
+        // Execute all pre-configured actions from OnPreConfigureAsync phase
+        var mvcDataAnnotationsLocalizationOptions = context.ExecutePreConfiguredActions(
+            new BonMvcDataAnnotationsLocalizationOptions()
+        );
         
         var builder = context.Services.AddMvc()
             .AddDataAnnotationsLocalization(options =>
             {
                 options.DataAnnotationLocalizerProvider = (type, factory) =>
                 {
-                    var resourceType = abpMvcDataAnnotationsLocalizationOptions
+                    var resourceType = mvcDataAnnotationsLocalizationOptions
                         .AssemblyResources
                         .GetOrDefault(type.Assembly);
 
@@ -50,26 +61,27 @@ public class BonAspNetCoreMvcModule : BonWebModule
 
         context.Services.ExecutePreConfiguredActions(builder);
 
-        Configure<BonEndpointRouterOptions>(options =>
+        context.ConfigureOptions<BonEndpointRouterOptions>(options =>
         {
-            options.EndpointConfigureActions.Add(endpointContext =>
+            options.ConfigureActions.Add(endpoints =>
             {
                 // 1️⃣ Default route first
-                endpointContext.Endpoints.MapControllerRoute(
+                endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}"
                 );
 
                 // 2️⃣ Area route only after default
-                endpointContext.Endpoints.MapControllerRoute(
+                endpoints.MapControllerRoute(
                     name: "areas",
                     pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
                 );
 
-                endpointContext.Endpoints.MapRazorPages();
+                endpoints.MapRazorPages();
             });
         });
-        return base.OnConfigureAsync(context);
+        
+        return base.OnConfigureAsync(context, cancellationToken);
     }
 }
 
@@ -84,11 +96,13 @@ public class ModuleViewLocationExpanderOptions
     public List<string> ModuleViewLocations { get; set; } = new();
 
     /// <summary>
-    /// Common view location patterns that apply to all modules
+    /// Common view location patterns that apply to all modules.
+    /// These are generic patterns that work for any module using the {2} placeholder for area name.
+    /// Module-specific patterns should be added via AddModuleViewLocations or AddStandardModuleViewLocations.
     /// </summary>
     public List<string> CommonViewLocations { get; set; } = new()
     {
-        // Generic module patterns
+        // Generic module patterns (using {2} for area name - works for all modules)
         "/Areas/{2}/Pages/{1}/{0}.cshtml",
         "/Areas/{2}/Pages/{1}/Partials/{0}.cshtml",
         "/Areas/{2}/Pages/{1}/Shared/{0}.cshtml",
@@ -102,30 +116,6 @@ public class ModuleViewLocationExpanderOptions
         "/Areas/{2}/ZoneViews/{0}.cshtml",
         "/Areas/{2}/ZoneViews/Tabs/{0}.cshtml",
         "/Areas/{2}/ZoneViews/Shared/{0}.cshtml",
-        
-        // Cross-module view patterns (for components from other modules)
-        "/Areas/RoleManagement/Pages/Shared/{0}.cshtml",
-        "/Areas/RoleManagement/Views/Shared/{0}.cshtml",
-        "/Areas/RoleManagement/ZoneViews/Shared/{0}.cshtml",
-        "/Areas/UserManagement/Pages/Shared/{0}.cshtml",
-        "/Areas/UserManagement/Views/Shared/{0}.cshtml",
-        "/Areas/UserManagement/ZoneViews/Shared/{0}.cshtml",
-        
-        // Handle "Shared/" prefix in view names - when view name is "Shared/_UserRolesPartial"
-        "/Areas/RoleManagement/Pages/Shared/Shared/{0}.cshtml",
-        "/Areas/RoleManagement/Views/Shared/Shared/{0}.cshtml",
-        "/Areas/RoleManagement/ZoneViews/Shared/Shared/{0}.cshtml",
-        "/Areas/UserManagement/Pages/Shared/Shared/{0}.cshtml",
-        "/Areas/UserManagement/Views/Shared/Shared/{0}.cshtml",
-        "/Areas/UserManagement/ZoneViews/Shared/Shared/{0}.cshtml",
-        
-        // Handle direct view names without "Shared/" prefix
-        "/Areas/RoleManagement/Pages/Shared/{0}.cshtml",
-        "/Areas/RoleManagement/Views/Shared/{0}.cshtml",
-        "/Areas/RoleManagement/ZoneViews/Shared/{0}.cshtml",
-        "/Areas/UserManagement/Pages/Shared/{0}.cshtml",
-        "/Areas/UserManagement/Views/Shared/{0}.cshtml",
-        "/Areas/UserManagement/ZoneViews/Shared/{0}.cshtml",
         
         // Embedded resource patterns (for compiled views)
         "/Areas/{2}/Pages/{1}/{0}.cshtml",
@@ -240,24 +230,18 @@ public class ModuleViewLocationExpander : IViewLocationExpander
         // Add existing view locations
         allLocations.AddRange(viewLocations);
 
-        // Debug logging - always log to console for now
-        Console.WriteLine($"ModuleViewLocationExpander: Called for view '{context.ViewName}'");
-        Console.WriteLine($"ModuleViewLocationExpander: Area: {context.AreaName}");
-        Console.WriteLine($"ModuleViewLocationExpander: Controller: {context.ControllerName}");
-        Console.WriteLine($"ModuleViewLocationExpander: Module locations ({_options.ModuleViewLocations.Count}): {string.Join(", ", _options.ModuleViewLocations)}");
-        Console.WriteLine($"ModuleViewLocationExpander: Common locations ({_options.CommonViewLocations.Count}): {string.Join(", ", _options.CommonViewLocations)}");
-        Console.WriteLine($"ModuleViewLocationExpander: Total locations: {allLocations.Count}");
-        Console.WriteLine($"ModuleViewLocationExpander: First 10 locations: {string.Join(", ", allLocations.Take(10))}");
-
-        // Also try to get logger if available
+        // Use proper logging instead of Console.WriteLine
         var logger = context.ActionContext?.HttpContext?.RequestServices?.GetService<ILogger<ModuleViewLocationExpander>>();
-        if (logger != null)
+        if (logger != null && logger.IsEnabled(LogLevel.Trace))
         {
-            logger.LogDebug("ModuleViewLocationExpander: Module locations: {ModuleLocations}", 
-                string.Join(", ", _options.ModuleViewLocations));
-            logger.LogDebug("ModuleViewLocationExpander: Common locations: {CommonLocations}", 
-                string.Join(", ", _options.CommonViewLocations));
-            logger.LogDebug("ModuleViewLocationExpander: Total locations: {TotalLocations}", 
+            logger.LogTrace(
+                "ModuleViewLocationExpander: Expanding view locations for view '{ViewName}' in area '{AreaName}' controller '{ControllerName}'. " +
+                "Module locations: {ModuleLocationCount}, Common locations: {CommonLocationCount}, Total: {TotalLocationCount}",
+                context.ViewName,
+                context.AreaName ?? "(none)",
+                context.ControllerName ?? "(none)",
+                _options.ModuleViewLocations.Count,
+                _options.CommonViewLocations.Count,
                 allLocations.Count);
         }
 
@@ -297,10 +281,13 @@ public static class ModuleViewLocationExpanderExtensions
             // Default configuration is already set in the options constructor
         });
         
-        // Register the expander as a singleton service
+        // Register the expander as a scoped service (IViewLocationExpander is used per-request)
+        // Also register as singleton for IStartupFilter access
         services.AddSingleton<ModuleViewLocationExpander>();
+        services.AddScoped<IViewLocationExpander>(sp => sp.GetRequiredService<ModuleViewLocationExpander>());
         
         // Register a startup filter to add the expander to the view engine
+        // Note: IStartupFilter works in .NET 6+ but runs during app configuration
         services.AddSingleton<IStartupFilter, ModuleViewLocationExpanderStartupFilter>();
         
         return services;
@@ -378,7 +365,8 @@ public static class ModuleViewLocationExpanderExtensions
 }
 
 /// <summary>
-/// Startup filter to register the module view location expander with the Razor view engine
+/// Startup filter to register the module view location expander with the Razor view engine.
+/// This ensures the expander is added to the view engine before views are resolved.
 /// </summary>
 public class ModuleViewLocationExpanderStartupFilter : IStartupFilter
 {
@@ -386,12 +374,27 @@ public class ModuleViewLocationExpanderStartupFilter : IStartupFilter
     {
         return app =>
         {
-            // Get the expander from the service provider
-            var expander = app.ApplicationServices.GetRequiredService<ModuleViewLocationExpander>();
-            
-            // Get the Razor view engine options and add our expander
-            var viewEngineOptions = app.ApplicationServices.GetRequiredService<Microsoft.Extensions.Options.IOptions<RazorViewEngineOptions>>();
-            viewEngineOptions.Value.ViewLocationExpanders.Add(expander);
+            try
+            {
+                // Get the expander from the service provider
+                var expander = app.ApplicationServices.GetRequiredService<ModuleViewLocationExpander>();
+                
+                // Get the Razor view engine options and add our expander
+                var viewEngineOptions = app.ApplicationServices.GetRequiredService<Microsoft.Extensions.Options.IOptions<RazorViewEngineOptions>>();
+                
+                // Only add if not already added (prevent duplicates)
+                if (!viewEngineOptions.Value.ViewLocationExpanders.Contains(expander))
+                {
+                    viewEngineOptions.Value.ViewLocationExpanders.Add(expander);
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log error but don't fail startup - view location expander is optional
+                var logger = app.ApplicationServices.GetService<ILogger<ModuleViewLocationExpanderStartupFilter>>();
+                logger?.LogWarning(ex, 
+                    "Failed to register ModuleViewLocationExpander. View location expansion may not work correctly.");
+            }
             
             next(app);
         };

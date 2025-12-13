@@ -10,7 +10,7 @@ namespace Bonyan.AutoMapper
 {
     public class BonAutoMapperModule : BonModule
     {
-        public override Task OnConfigureAsync(BonConfigurationContext context)
+        public override ValueTask OnConfigureAsync(BonConfigurationContext context, CancellationToken cancellationToken = default)
         {
             var assembliesToScan = context.DiscoverApplicationAssemblies();
 
@@ -63,7 +63,7 @@ namespace Bonyan.AutoMapper
             context.Services.AddTransient<IMapper>(sp =>
                 sp.GetRequiredService<IConfigurationProvider>().CreateMapper(sp.GetService));
 
-            return base.OnConfigureAsync(context);
+            return base.OnConfigureAsync(context, cancellationToken);
         }
     }
 }

@@ -1,3 +1,5 @@
+<img src="./logo.png" alt="Bonyan Logo" width="200" height="200"/>
+
 # Bonyan Modular Monolithic Library
 
 ## Purpose

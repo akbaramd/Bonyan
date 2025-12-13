@@ -59,7 +59,7 @@ namespace Bonyan.Modularity
         /// <summary>
         /// Retrieves a required service, throwing an exception if not found.
         /// </summary>
-        public T GetRequireService<T>() where T : notnull
+        public T GetRequiredService<T>() where T : notnull
         {
             return Services.GetRequiredService<T>();
         }
