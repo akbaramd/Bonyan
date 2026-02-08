@@ -1,4 +1,4 @@
-
+﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.35027.167
@@ -119,8 +119,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.Mediator", "Framewor
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.Mediator.Tests", "Framework\Tests\Bonyan.Mediator.Tests\Bonyan.Mediator.Tests.csproj", "{188731F8-26A0-4E50-ADBB-BA721345E2BB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.Mediator.Messaging", "Framework\Src\Bonyan.Mediator.Messaging\Bonyan.Mediator.Messaging.csproj", "{488887D9-6879-4B54-B93D-C93242485BDD}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.StateMachine", "Framework\Src\Bonyan.StateMachine\Bonyan.StateMachine.csproj", "{D6E0CB5E-1859-425F-9133-7D788A045E9E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.StateMachine.Tests", "Framework\Tests\Bonyan.StateMachine.Tests\Bonyan.StateMachine.Tests.csproj", "{BC9023D9-EAB9-4A19-803F-94CA6793C34D}"
@@ -190,6 +188,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.Novino.Module.RoleManagement", "Novino\modules\Bonyan.Novino.Module.RoleManagement\Bonyan.Novino.Module.RoleManagement.csproj", "{0E3AC30B-C0D1-4BB1-93B4-28269BB209A1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bonyan.Messaging.Tests", "Framework\Tests\Bonyan.Messaging.Tests\Bonyan.Messaging.Tests.csproj", "{291BE8CE-D157-492E-9EFB-98048E52A3DB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApi.Demo", "WebApi.Demo\WebApi.Demo.csproj", "{A0EA0229-2343-49A5-A9C3-6239A699004F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -373,10 +373,6 @@ Global
 		{188731F8-26A0-4E50-ADBB-BA721345E2BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{188731F8-26A0-4E50-ADBB-BA721345E2BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{188731F8-26A0-4E50-ADBB-BA721345E2BB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{488887D9-6879-4B54-B93D-C93242485BDD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{488887D9-6879-4B54-B93D-C93242485BDD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{488887D9-6879-4B54-B93D-C93242485BDD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{488887D9-6879-4B54-B93D-C93242485BDD}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D6E0CB5E-1859-425F-9133-7D788A045E9E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D6E0CB5E-1859-425F-9133-7D788A045E9E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D6E0CB5E-1859-425F-9133-7D788A045E9E}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -489,6 +485,10 @@ Global
 		{291BE8CE-D157-492E-9EFB-98048E52A3DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{291BE8CE-D157-492E-9EFB-98048E52A3DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{291BE8CE-D157-492E-9EFB-98048E52A3DB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A0EA0229-2343-49A5-A9C3-6239A699004F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A0EA0229-2343-49A5-A9C3-6239A699004F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A0EA0229-2343-49A5-A9C3-6239A699004F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A0EA0229-2343-49A5-A9C3-6239A699004F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -548,7 +548,6 @@ Global
 		{DEA83482-9881-4791-9294-229DF0687957} = {58A58BEF-A085-4BB1-9BBB-3479C2869166}
 		{5C45F9E4-82FD-48E3-8B76-4ED7AD35F2A8} = {31BFDED6-5439-4D9A-ABBA-882C07DE7024}
 		{188731F8-26A0-4E50-ADBB-BA721345E2BB} = {451B13E9-4996-4493-82C0-BCE2AA275E43}
-		{488887D9-6879-4B54-B93D-C93242485BDD} = {31BFDED6-5439-4D9A-ABBA-882C07DE7024}
 		{D6E0CB5E-1859-425F-9133-7D788A045E9E} = {31BFDED6-5439-4D9A-ABBA-882C07DE7024}
 		{BC9023D9-EAB9-4A19-803F-94CA6793C34D} = {451B13E9-4996-4493-82C0-BCE2AA275E43}
 		{95013E37-734E-4084-885B-EECA9AEC738A} = {31BFDED6-5439-4D9A-ABBA-882C07DE7024}
@@ -583,6 +582,7 @@ Global
 		{E241DBB1-02E7-44EB-8E33-B70A3CA6CB23} = {7ACD49E3-AB6E-4D47-B792-7CDFD8387C42}
 		{0E3AC30B-C0D1-4BB1-93B4-28269BB209A1} = {7ACD49E3-AB6E-4D47-B792-7CDFD8387C42}
 		{291BE8CE-D157-492E-9EFB-98048E52A3DB} = {451B13E9-4996-4493-82C0-BCE2AA275E43}
+		{A0EA0229-2343-49A5-A9C3-6239A699004F} = {58A58BEF-A085-4BB1-9BBB-3479C2869166}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CACE9943-7714-471F-BCCD-CC6CA1DA43C5}

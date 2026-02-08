@@ -39,7 +39,7 @@ public abstract class BonModuleEnhanced : BonModule
     /// Initializes module properties from the configuration context.
     /// Called automatically during module configuration.
     /// </summary>
-    internal void InitializeModuleProperties(BonConfigurationContext context)
+    internal void InitializeModuleProperties(BonConfigurationContext context , CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(context);
 

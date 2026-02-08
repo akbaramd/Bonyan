@@ -29,33 +29,24 @@ public class BonUnitOfWorkBonDbContextProvider<TDbContext> : IBonDbContextProvid
     }
 
 
-    public virtual async Task<TDbContext> GetDbContextAsync()
+    public virtual Task<TDbContext> GetDbContextAsync() => GetDbContextAsync(CancellationToken.None);
+
+    public virtual async Task<TDbContext> GetDbContextAsync(CancellationToken cancellationToken)
     {
-        var unitOfWork = BonUnitOfWorkManager.Current; 
+        var unitOfWork = BonUnitOfWorkManager.Current;
         if (unitOfWork == null)
         {
             throw new BonException("A BonDbContext can only be created inside a unit of work!");
         }
-        var targetDbContextType = typeof(TDbContext).FullName;
 
-        var dbContextKey = $"{targetDbContextType}";
+        var dbContextKey = typeof(TDbContext).FullName ?? typeof(TDbContext).Name;
 
-        var databaseApi = unitOfWork.GetOrAddDatabaseApi(
+        var databaseApi = await unitOfWork.GetOrAddDatabaseApiAsync(
             dbContextKey,
-            () => new EfCoreBonDatabaseApi(
-              (  CreateDbContextAsync(unitOfWork).GetAwaiter().GetResult())
-            ));
-        
-       
+            async ct => new EfCoreBonDatabaseApi(await CreateDbContextAsync(unitOfWork, ct)),
+            cancellationToken).ConfigureAwait(false);
 
         return (TDbContext)((EfCoreBonDatabaseApi)databaseApi).DbContext;
-    }
-
-    protected virtual async Task<TDbContext> CreateDbContextAsync(IBonUnitOfWork bonUnitOfWork)
-    {
-            var dbContext = await CreateDbContextAsync(bonUnitOfWork,CancellationToken.None);
-
-            return dbContext;
     }
 
 

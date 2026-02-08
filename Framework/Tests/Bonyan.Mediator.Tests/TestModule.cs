@@ -11,12 +11,12 @@ public class TestModule : BonModule
     {
         DependOn<BonMediatorModule>();
     }
-    public override Task OnConfigureAsync(BonConfigurationContext context)
+    public override ValueTask OnConfigureAsync(BonConfigurationContext context , CancellationToken cancellationToken = default)
     {
 
         context.Services.AddTransient(typeof(IBonMediatorBehavior<>), typeof(SampleEventMediatorBehavior<>));
         context.Services.AddTransient(typeof(IBonMediatorBehavior<,>), typeof(SampleCommandMediatorBehavior<,>));
-        return Task.CompletedTask;
+        return ValueTask.CompletedTask;
     }
 
   

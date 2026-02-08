@@ -1,4 +1,4 @@
-﻿using Bonyan.Core;
+using Bonyan.Core;
 using Bonyan.Exceptions;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -13,7 +13,7 @@ public class BonUnitOfWorkManager : IBonUnitOfWorkManager
 
     private readonly IServiceScopeFactory _serviceScopeFactory;
     private readonly IBonAmbientBonUnitOfWork _bonAmbientBonUnitOfWork;
-    private readonly SemaphoreSlim _semaphore = new SemaphoreSlim(1,1);
+
     public BonUnitOfWorkManager(
         IBonAmbientBonUnitOfWork bonAmbientBonUnitOfWork,
         IServiceScopeFactory serviceScopeFactory)
@@ -26,24 +26,16 @@ public class BonUnitOfWorkManager : IBonUnitOfWorkManager
     {
         Check.NotNull(options, nameof(options));
 
-        _semaphore.Wait();
-        try
+        var currentUow = Current;
+        if (currentUow != null && !requiresNew)
         {
-            var currentUow = Current;
-            if (currentUow != null && !requiresNew)
-            {
-                return new BonChildUnitOfWork(currentUow);
-            }
-
-            var unitOfWork = CreateNewUnitOfWork();
-            unitOfWork.Initialize(options);
-
-            return unitOfWork;
+            return new BonChildUnitOfWork(currentUow);
         }
-        finally
-        {
-            _semaphore.Release();
-        }
+
+        var unitOfWork = CreateNewUnitOfWork();
+        unitOfWork.Initialize(options);
+
+        return unitOfWork;
     }
 
     public IBonUnitOfWork Reserve(string reservationName, bool requiresNew = false)

@@ -1,68 +1,64 @@
-﻿    using Bonyan.DependencyInjection;
-    using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.Extensions.Options;
+using Bonyan.DependencyInjection;
+using Microsoft.Extensions.Options;
 
-    namespace Bonyan.UnitOfWork;
+namespace Bonyan.UnitOfWork;
 
-    public class BonUnitOfWorkInterceptor : BonInterceptor
+/// <summary>
+/// Interceptor that wraps UoW methods in a unit of work. Uses the current scope's manager (no extra scope).
+/// Reserved UoW branch: only proceeds; outer middleware is responsible for CompleteAsync.
+/// </summary>
+public class BonUnitOfWorkInterceptor : BonInterceptor
+{
+    private readonly IBonUnitOfWorkManager _unitOfWorkManager;
+    private readonly IOptions<BonUnitOfWorkDefaultOptions> _defaultOptions;
+    private readonly IUnitOfWorkTransactionBehaviourProvider _transactionBehaviourProvider;
+
+    public BonUnitOfWorkInterceptor(
+        IBonUnitOfWorkManager unitOfWorkManager,
+        IOptions<BonUnitOfWorkDefaultOptions> defaultOptions,
+        IUnitOfWorkTransactionBehaviourProvider transactionBehaviourProvider)
     {
-        private readonly IServiceScopeFactory _serviceScopeFactory;
+        _unitOfWorkManager = unitOfWorkManager ?? throw new ArgumentNullException(nameof(unitOfWorkManager));
+        _defaultOptions = defaultOptions ?? throw new ArgumentNullException(nameof(defaultOptions));
+        _transactionBehaviourProvider = transactionBehaviourProvider ?? throw new ArgumentNullException(nameof(transactionBehaviourProvider));
+    }
 
-        public BonUnitOfWorkInterceptor(IServiceScopeFactory serviceScopeFactory)
+    public override async Task InterceptAsync(IBonMethodInvocation invocation)
+    {
+        if (!BonUnitOfWorkHelper.IsUnitOfWorkMethod(invocation.Method, out var unitOfWorkAttribute))
         {
-            _serviceScopeFactory = serviceScopeFactory;
+            await invocation.ProceedAsync();
+            return;
         }
 
-        public override async Task InterceptAsync(IBonMethodInvocation invocation)
+        var options = CreateOptions(invocation, unitOfWorkAttribute);
+
+        // Outer layer (e.g. middleware) already started a reserved UoW; just run inside it.
+        if (_unitOfWorkManager.TryBeginReserved(BonUnitOfWork.UnitOfWorkReservationName, options))
         {
-            if (!BonUnitOfWorkHelper.IsUnitOfWorkMethod(invocation.Method, out var unitOfWorkAttribute))
-            {
-                await invocation.ProceedAsync();
-                return;
-            }
-
-            using (var scope = _serviceScopeFactory.CreateScope())
-            {
-                var options = CreateOptions(scope.ServiceProvider, invocation, unitOfWorkAttribute);
-
-                var unitOfWorkManager = scope.ServiceProvider.GetRequiredService<IBonUnitOfWorkManager>();
-
-                //Trying to begin a reserved UOW by BonUnitOfWorkMiddleware
-                if (unitOfWorkManager.TryBeginReserved(BonUnitOfWork.UnitOfWorkReservationName, options))
-                {
-                    await invocation.ProceedAsync();
-
-                    if (unitOfWorkManager.Current != null)
-                    {
-                        await unitOfWorkManager.Current.SaveChangesAsync();
-                    }
-
-                    return;
-                }
-
-                using (var uow = unitOfWorkManager.Begin(options))
-                {
-                    await invocation.ProceedAsync();
-                    await uow.CompleteAsync();
-                }
-            }
+            await invocation.ProceedAsync();
+            return;
         }
 
-        private BonUnitOfWorkOptions CreateOptions(IServiceProvider serviceProvider, IBonMethodInvocation invocation, BonUnitOfWorkAttribute? unitOfWorkAttribute)
+        using (var uow = _unitOfWorkManager.Begin(options))
         {
-            var options = new BonUnitOfWorkOptions();
-
-            unitOfWorkAttribute?.SetOptions(options);
-
-            if (unitOfWorkAttribute?.IsTransactional == null)
-            {
-                var defaultOptions = serviceProvider.GetRequiredService<IOptions<BonUnitOfWorkDefaultOptions>>().Value;
-                options.IsTransactional = defaultOptions.CalculateIsTransactional(
-                    autoValue: serviceProvider.GetRequiredService<IUnitOfWorkTransactionBehaviourProvider>().IsTransactional
-                               ?? !invocation.Method.Name.StartsWith("Get", StringComparison.InvariantCultureIgnoreCase)
-                );
-            }
-
-            return options;
+            await invocation.ProceedAsync();
+            await uow.CompleteAsync();
         }
     }
+
+    private BonUnitOfWorkOptions CreateOptions(IBonMethodInvocation invocation, BonUnitOfWorkAttribute? unitOfWorkAttribute)
+    {
+        var options = new BonUnitOfWorkOptions();
+        unitOfWorkAttribute?.SetOptions(options);
+
+        if (unitOfWorkAttribute?.IsTransactional == null)
+        {
+            options.IsTransactional = _defaultOptions.Value.CalculateIsTransactional(
+                autoValue: _transactionBehaviourProvider.IsTransactional
+                    ?? !invocation.Method.Name.StartsWith("Get", StringComparison.InvariantCultureIgnoreCase));
+        }
+
+        return options;
+    }
+}

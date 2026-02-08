@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using Bonyan.Modularity;
 using Bonyan.Modularity.Abstractions;
 using Bonyan.Reflection;
@@ -19,7 +19,7 @@ namespace Bonyan.Tests.Modularity
         public void Constructor_Should_Throw_If_ServiceCollection_Is_Null()
         {
             // Act & Assert
-            Assert.Throws<ArgumentNullException>(() => new BonModularityApplication<TestModule>(null,"servicename"));
+            Assert.Throws<ArgumentNullException>(() => new BonModularityApplication<TestModule>(null, "service-key", "Service Title"));
         }
 
         [Fact]
@@ -29,7 +29,7 @@ namespace Bonyan.Tests.Modularity
             var services = new ServiceCollection();
 
             // Act
-            var application = new BonModularityApplication<TestModule>(services,"service");
+            var application = new BonModularityApplication<TestModule>(services, "service-key", "Service Title");
 
             // Assert
             var serviceProvider = services.BuildServiceProvider();
@@ -58,7 +58,7 @@ namespace Bonyan.Tests.Modularity
             }
             else
             {
-                var moduleInfo = new BonModuleDescriptor(moduleType,moduleInstance,false, "service");
+                var moduleInfo = new BonModuleDescriptor(moduleType, moduleInstance, false, "service-key");
                 modules[moduleType] = moduleInfo;
             }
         }

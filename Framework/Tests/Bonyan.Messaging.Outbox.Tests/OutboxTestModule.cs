@@ -17,17 +17,4 @@ public class OutboxTestModule : BonModule
         DependOn<BonMessagingOutboxModule>();
     }
 
-    public override Task OnConfigureAsync(BonConfigurationContext context)
-    {
-  
-
-
-        return Task.CompletedTask;
-    }
-
-    public override Task OnInitializeAsync(BonInitializedContext context)
-    {
-        // Initialize any test-specific components
-        return Task.CompletedTask;
-    }
 }

@@ -6,7 +6,7 @@ namespace Bonyan.Workers
 {
     public class BonWorkerConfiguration
     {
-        public BonWorkerConfiguration(BonConfigurationContext context, ServiceLifetime workerLifetime = ServiceLifetime.Transient)
+        public BonWorkerConfiguration(BonPostConfigurationContext context, ServiceLifetime workerLifetime = ServiceLifetime.Transient)
         {
             Context = context ?? throw new ArgumentNullException(nameof(context));
             WorkerLifetime = workerLifetime;
@@ -15,7 +15,7 @@ namespace Bonyan.Workers
             Context.Services.AddSingleton(this);
         }
 
-        public BonConfigurationContext Context { get; set; }
+        public BonPostConfigurationContext Context { get; set; }
         public ServiceLifetime WorkerLifetime { get; set; }
 
         private readonly HashSet<Type> _registeredWorkerTypes = new HashSet<Type>();

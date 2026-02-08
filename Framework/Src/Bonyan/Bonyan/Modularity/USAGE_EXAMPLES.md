@@ -216,7 +216,7 @@ public class ServiceModule : BonModuleEnhanced
 [DependsOn(typeof(DatabaseModule))]
 public class CompleteModule : BonModuleEnhanced
 {
-    public override ValueTask OnPreConfigureAsync(BonConfigurationContext context, CancellationToken cancellationToken = default)
+    public override ValueTask OnPreConfigureAsync(BonPreConfigurationContext context, CancellationToken cancellationToken = default)
     {
         Logger?.LogInformation("Pre-configuring {ModuleName}", ModuleInfo?.Name);
         
@@ -270,7 +270,7 @@ public class CompleteModule : BonModuleEnhanced
         return base.OnConfigureAsync(context, cancellationToken);
     }
 
-    public override ValueTask OnPostConfigureAsync(BonConfigurationContext context, CancellationToken cancellationToken = default)
+    public override ValueTask OnPostConfigureAsync(BonPostConfigurationContext context, CancellationToken cancellationToken = default)
     {
         Logger?.LogInformation("Post-configuring {ModuleName}", ModuleInfo?.Name);
         

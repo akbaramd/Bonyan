@@ -14,7 +14,7 @@ public class BonUserManagementEntityFrameworkModule<TUser> : Modularity.Abstract
       typeof(BonEntityFrameworkModule),
     ]);
   }
-  public override Task OnConfigureAsync(BonConfigurationContext context)
+  public override ValueTask OnConfigureAsync(BonConfigurationContext context , CancellationToken cancellationToken = default)
   {
 
     

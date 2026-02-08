@@ -13,7 +13,7 @@ public class BonAspNetCoreViewZoneComponentModule : BonWebModule
         DependOn<BonAspNetCoreModule>();
     }
     
-    public override Task OnConfigureAsync(BonConfigurationContext context)
+    public override ValueTask OnConfigureAsync(BonConfigurationContext context , CancellationToken cancellationToken = default)
     {
         // Register the zone component logger
         context.Services.TryAddSingleton<IZoneComponentLogger, ZoneComponentLogger>();

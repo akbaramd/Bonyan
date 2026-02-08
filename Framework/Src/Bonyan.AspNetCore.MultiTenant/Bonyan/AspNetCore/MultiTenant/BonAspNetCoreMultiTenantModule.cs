@@ -14,7 +14,7 @@ public class BonAspNetCoreMultiTenantModule : BonWebModule
       typeof(BonAspNetCoreModule)
     ]);
   }
-  public override Task OnConfigureAsync(BonConfigurationContext context)
+  public override ValueTask OnConfigureAsync(BonConfigurationContext context , CancellationToken cancellationToken = default)
   {
     context.Services.AddTransient<MultiTenancyMiddleware>();
     context.Services.AddSingleton<ITenantResolveResultAccessor, HttpContextTenantResolveResultAccessor>();
@@ -28,7 +28,7 @@ public class BonAspNetCoreMultiTenantModule : BonWebModule
     return base.OnConfigureAsync(context);
   }
 
-  public override Task OnPreApplicationAsync(BonWebApplicationContext webApplicationContext)
+  public override ValueTask OnPreApplicationAsync(BonWebApplicationContext webApplicationContext,CancellationToken cancellationToken = default)
   {
     return base.OnPreApplicationAsync(webApplicationContext);
   }

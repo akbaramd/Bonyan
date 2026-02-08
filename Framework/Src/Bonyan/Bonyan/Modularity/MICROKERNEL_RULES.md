@@ -77,7 +77,7 @@ public class NotificationModule : BonModule
 public interface INotificationService { }
 public class NotificationModule : BonModule
 {
-    public override Task OnConfigureAsync(BonConfigurationContext context)
+    public override ValueTask OnConfigureAsync(BonConfigurationContext context , CancellationToken cancellationToken = default)
     {
         context.Services.AddScoped<INotificationService, NotificationService>();
     }

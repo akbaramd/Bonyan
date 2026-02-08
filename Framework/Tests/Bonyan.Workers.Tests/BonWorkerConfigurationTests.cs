@@ -8,13 +8,13 @@ namespace Bonyan.Workers.Tests
     public class BonWorkerConfigurationTests
     {
         private readonly IServiceCollection _services;
-        private readonly BonConfigurationContext _context;
+        private readonly BonPostConfigurationContext _context;
 
         public BonWorkerConfigurationTests()
         {
             _services = new ServiceCollection();
             
-            _context = new BonConfigurationContext(_services);
+            _context = new BonPostConfigurationContext(_services);
         }
 
         [Fact]

@@ -1,3 +1,4 @@
+using Bonyan.DependencyInjection;
 using Bonyan.Plugins;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,6 +12,18 @@ namespace Bonyan.Modularity;
 /// </summary>
 public static class BonConfigurationContextFluentExtensions
 {
+    /// <summary>
+    /// Adds a conventional registrar. Call from module's OnConfigureAsync.
+    /// After all modules are loaded, each registrar's AddAssembly is called for each assembly.
+    /// </summary>
+    public static BonConfigurationContext AddConventionalRegistrar(this BonConfigurationContext context, IConventionalRegistrar registrar)
+    {
+        ArgumentNullException.ThrowIfNull(context);
+        ArgumentNullException.ThrowIfNull(registrar);
+        context.Services.AddConventionalRegistrar(registrar);
+        return context;
+    }
+
     /// <summary>
     /// Adds a plugin folder source to the configuration context.
     /// </summary>

@@ -23,7 +23,7 @@ public class BonIdentityManagementWebApiModule<TUser,TRole> : Modularity.Abstrac
         DependOn<BonIdentityManagementApplicationModule<TUser,TRole>>();
     }
 
-    public override Task OnConfigureAsync(BonConfigurationContext context)
+    public override ValueTask OnConfigureAsync(BonConfigurationContext context , CancellationToken cancellationToken = default)
     {
         return base.OnConfigureAsync(context);
     }

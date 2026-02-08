@@ -19,7 +19,7 @@ namespace Bonyan.Workers.Tests
             _services = new ServiceCollection();
             _workerManagerMock = new Mock<IBonWorkerManager>();
             _loggerMock = new Mock<ILogger<BonWorkerHostedService>>();
-            _configuration = new BonWorkerConfiguration(new BonConfigurationContext(_services));
+            _configuration = new BonWorkerConfiguration(new BonPostConfigurationContext(_services));
             _serviceProvider = _services.BuildServiceProvider();
         }
 

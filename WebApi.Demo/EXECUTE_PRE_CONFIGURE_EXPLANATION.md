@@ -121,7 +121,7 @@ public class MyModule : BonModule
         CancellationToken cancellationToken = default)
     {
         // استفاده از helper method در BonModule
-        PreConfigure<BonMvcDataAnnotationsLocalizationOptions>(options =>
+        context.Services.PreConfigure<BonMvcDataAnnotationsLocalizationOptions>(options =>
         {
             options.AddAssemblyResource(
                 typeof(MyResources), 

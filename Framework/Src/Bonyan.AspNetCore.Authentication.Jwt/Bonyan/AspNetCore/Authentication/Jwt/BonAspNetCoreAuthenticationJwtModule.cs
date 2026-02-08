@@ -16,9 +16,9 @@ namespace Bonyan.AspNetCore.Authentication.Jwt
             DependOn<BonAspnetCoreAuthenticationModule>();
         }
 
-        public override Task OnPreConfigureAsync(BonConfigurationContext context)
+        public override ValueTask OnPreConfigureAsync(BonPreConfigurationContext context , CancellationToken cancellationToken = default)
         {
-            PreConfigure<AuthenticationBuilder>(c =>
+            context.Services.PreConfigure<AuthenticationBuilder>(c =>
             {
                 var jwt = new BonAuthenticationJwtOptions();
                 context.Services.ExecutePreConfiguredActions(jwt);
@@ -52,17 +52,17 @@ namespace Bonyan.AspNetCore.Authentication.Jwt
             return base.OnPreConfigureAsync(context);
         }
 
-        public override Task OnPostConfigureAsync(BonConfigurationContext context)
+        public override ValueTask OnPostConfigureAsync(BonPostConfigurationContext context , CancellationToken cancellationToken = default)
         {
             return base.OnPostConfigureAsync(context);
         }
 
-        private void ConfigureAuthentication(BonConfigurationContext context)
+        private void ConfigureAuthentication(BonConfigurationContext context , CancellationToken cancellationToken = default)
         {
             // Additional authentication configuration can be added here if needed
         }
 
-        public override Task OnApplicationAsync(BonWebApplicationContext context)
+        public override ValueTask OnApplicationAsync(BonWebApplicationContext context,CancellationToken cancellationToken = default)
         {
             return base.OnApplicationAsync(context);
         }

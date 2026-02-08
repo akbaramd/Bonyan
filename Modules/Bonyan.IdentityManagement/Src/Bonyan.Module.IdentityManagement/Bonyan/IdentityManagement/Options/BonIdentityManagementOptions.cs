@@ -10,7 +10,7 @@ namespace Bonyan.IdentityManagement.Options
         /// <summary>
         /// Configuration context
         /// </summary>
-        public BonConfigurationContext Context { get; }
+        public BonPostConfigurationContext Context { get; }
 
         /// <summary>
         /// Whether to enable permission-based authorization
@@ -112,7 +112,7 @@ namespace Bonyan.IdentityManagement.Options
         /// </summary>
         public TimeSpan RefreshTokenExpiration { get; set; } = TimeSpan.FromDays(30);
 
-        public BonIdentityManagementOptions(BonConfigurationContext context)
+        public BonIdentityManagementOptions(BonPostConfigurationContext context , CancellationToken cancellationToken = default)
         {
             Context = context;
         }

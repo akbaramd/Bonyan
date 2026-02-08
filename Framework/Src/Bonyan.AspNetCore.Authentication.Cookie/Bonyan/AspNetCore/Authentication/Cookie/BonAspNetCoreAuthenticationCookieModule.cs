@@ -14,9 +14,9 @@ namespace Bonyan.AspNetCore.Authentication.Cookie
             DependOn<BonAspnetCoreAuthenticationModule>();
         }
 
-        public override Task OnPreConfigureAsync(BonConfigurationContext context)
+        public override ValueTask OnPreConfigureAsync(BonPreConfigurationContext context, CancellationToken cancellationToken = default)
         {
-            PreConfigure<AuthenticationBuilder>(c =>
+            context.PreConfigure<AuthenticationBuilder>(c =>
             {
                 var cookieOptions = new BonAuthenticationCookieOptions();
                 context.Services.ExecutePreConfiguredActions(cookieOptions);
@@ -58,9 +58,9 @@ namespace Bonyan.AspNetCore.Authentication.Cookie
                         {
                             options.Events = new CookieAuthenticationEvents
                             {
-                                OnValidatePrincipal = context =>
+                                OnValidatePrincipal = ctx =>
                                 {
-                                    return ValidatePrincipalAsync(context, cookieOptions);
+                                    return ValidatePrincipalAsync(ctx, cookieOptions);
                                 }
                             };
                         }
@@ -68,17 +68,17 @@ namespace Bonyan.AspNetCore.Authentication.Cookie
                 }
             });
 
-            return base.OnPreConfigureAsync(context);
+            return base.OnPreConfigureAsync(context, cancellationToken);
         }
 
-        public override Task OnPostConfigureAsync(BonConfigurationContext context)
+        public override ValueTask OnPostConfigureAsync(BonPostConfigurationContext context, CancellationToken cancellationToken = default)
         {
-            return base.OnPostConfigureAsync(context);
+            return base.OnPostConfigureAsync(context, cancellationToken);
         }
 
-        public override Task OnApplicationAsync(BonWebApplicationContext context)
+        public override ValueTask OnApplicationAsync(BonWebApplicationContext context, CancellationToken cancellationToken = default)
         {
-            return base.OnApplicationAsync(context);
+            return base.OnApplicationAsync(context, cancellationToken);
         }
 
         private async Task ValidatePrincipalAsync(CookieValidatePrincipalContext context, BonAuthenticationCookieOptions cookieOptions)

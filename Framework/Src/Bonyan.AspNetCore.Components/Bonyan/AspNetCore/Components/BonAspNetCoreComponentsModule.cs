@@ -10,7 +10,7 @@ public class BonAspNetCoreComponentsModule : BonWebModule
     }
 
 
-    public override Task OnPreConfigureAsync(BonConfigurationContext context)
+    public override ValueTask OnPreConfigureAsync(BonPreConfigurationContext context , CancellationToken cancellationToken = default)
     {
         return base.OnPreConfigureAsync(context);
     }

@@ -50,8 +50,8 @@ public class BonAspNetCoreModule : BonWebModule
         cancellationToken.ThrowIfCancellationRequested();
 
         context.Services.AddLogging();
-        ConfigureMiddlewares(context);
-        ConfigureCoreServices(context);
+       ConfigureMiddlewares(context);
+       ConfigureCoreServices(context);
         ConfigureExceptionHandlingServices(context);
         ConfigureExceptionHandling(context);
         
@@ -108,7 +108,7 @@ public class BonAspNetCoreModule : BonWebModule
     /// Configures exception handling options for the application.
     /// </summary>
     /// <param name="context">The configuration context for services.</param>
-    private void ConfigureExceptionHandling(BonConfigurationContext context)
+    private void ConfigureExceptionHandling(BonConfigurationContext context , CancellationToken cancellationToken = default)
     {
         context.ConfigureOptions<ExceptionHandlingOptions>(options =>
         {
@@ -120,7 +120,7 @@ public class BonAspNetCoreModule : BonWebModule
     /// Configures exception handling services (mappers, serializers).
     /// </summary>
     /// <param name="context">The configuration context for services.</param>
-    private void ConfigureExceptionHandlingServices(BonConfigurationContext context)
+    private void ConfigureExceptionHandlingServices(BonConfigurationContext context , CancellationToken cancellationToken = default)
     {
         // Register default exception mapper
         context.Services.TryAddSingleton<IExceptionToHttpResultMapper, DefaultExceptionToHttpResultMapper>();
@@ -133,7 +133,7 @@ public class BonAspNetCoreModule : BonWebModule
     /// Configures middleware dependencies for the application.
     /// </summary>
     /// <param name="context">The configuration context for services.</param>
-    private void ConfigureMiddlewares(BonConfigurationContext context)
+    private void ConfigureMiddlewares(BonConfigurationContext context , CancellationToken cancellationToken = default)
     {
         context.Services.AddTransient<BonyanClaimsMapMiddleware>();
         // Note: BonyanUnitOfWorkMiddleware is registered conditionally in OnPostConfigureAsync
@@ -145,7 +145,7 @@ public class BonAspNetCoreModule : BonWebModule
     /// Configures core services required for the ASP.NET Core application.
     /// </summary>
     /// <param name="context">The configuration context for services.</param>
-    private void ConfigureCoreServices(BonConfigurationContext context)
+    private void ConfigureCoreServices(BonConfigurationContext context , CancellationToken cancellationToken = default)
     {
       
         context.Services.AddHttpContextAccessor();

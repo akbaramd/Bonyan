@@ -21,7 +21,7 @@ public class BonIdentityManagementEntityFrameworkCoreModule<TUser, TRole> : BonM
         DependOn<BonUserManagementEntityFrameworkModule<TUser>>();
     }
 
-    public override Task OnConfigureAsync(BonConfigurationContext context)
+    public override ValueTask OnConfigureAsync(BonConfigurationContext context , CancellationToken cancellationToken = default)
     {
        
 

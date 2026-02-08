@@ -12,10 +12,10 @@ namespace Bonyan.Tests
             DependOn<TestModule>();
         }
 
-        public override Task OnConfigureAsync(BonConfigurationContext context)
+        public override ValueTask OnConfigureAsync(BonConfigurationContext context , CancellationToken cancellationToken = default)
         {
             // Custom configuration logic for testing
-            return Task.CompletedTask;
+            return ValueTask.CompletedTask;
         }
     }
 }

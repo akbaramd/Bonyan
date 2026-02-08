@@ -3,6 +3,12 @@ using JetBrains.Annotations;
 
 namespace Bonyan.UnitOfWork;
 
+/// <summary>
+/// Lightweight handle to an existing (parent) unit of work. Delegates all operations to the parent.
+/// Does not own the parent: <see cref="Dispose"/> is a no-op and <see cref="CompleteAsync"/> does not complete the parent.
+/// Used when <see cref="IBonUnitOfWorkManager.Begin"/> or <see cref="IBonUnitOfWorkManager.Reserve"/> is called
+/// while a current UoW already exists and <c>requiresNew</c> is false.
+/// </summary>
 internal class BonChildUnitOfWork : IBonUnitOfWork
 {
     public Guid Id => _parent.Id;
@@ -102,6 +108,14 @@ internal class BonChildUnitOfWork : IBonUnitOfWork
         return _parent.GetOrAddDatabaseApi(key, factory);
     }
 
+    public Task<IBonDatabaseApi> GetOrAddDatabaseApiAsync(
+        string key,
+        Func<CancellationToken, Task<IBonDatabaseApi>> factory,
+        CancellationToken cancellationToken = default)
+    {
+        return _parent.GetOrAddDatabaseApiAsync(key, factory, cancellationToken);
+    }
+
     public IBonTransactionApi? FindTransactionApi(string key)
     {
         return _parent.FindTransactionApi(key);
@@ -117,9 +131,12 @@ internal class BonChildUnitOfWork : IBonUnitOfWork
         return _parent.GetOrAddTransactionApi(key, factory);
     }
 
+    /// <summary>
+    /// No-op: the child does not own the parent; only the scope that created the real UoW disposes it.
+    /// </summary>
     public void Dispose()
     {
-
+        // Child is a handle only; parent is disposed by BonUnitOfWorkManager when the creating scope ends.
     }
 
     public override string ToString()

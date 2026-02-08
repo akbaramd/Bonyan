@@ -12,7 +12,7 @@ namespace Bonyan.EntityFrameworkCore
             DependOn<BonUnitOfWorkModule>();
         }
 
-        public override Task OnConfigureAsync(BonConfigurationContext context)
+        public override ValueTask OnConfigureAsync(BonConfigurationContext context , CancellationToken cancellationToken = default)
         {
             context.Services.AddTransient(typeof(IBonDbContextProvider<>), typeof(BonUnitOfWorkBonDbContextProvider<>));
             return base.OnConfigureAsync(context);

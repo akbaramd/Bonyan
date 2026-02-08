@@ -11,9 +11,9 @@ public class BonWorkersHangfireModule : BonModule
         DependOn<BonWorkersModule>();
     }
 
-    public override Task OnConfigureAsync(BonConfigurationContext context)
+    public override ValueTask OnConfigureAsync(BonConfigurationContext context , CancellationToken cancellationToken = default)
     {
-        PreConfigure<BonWorkerConfiguration>(c =>
+        context.Services.PreConfigure<BonWorkerConfiguration>(c =>
         {
             c.AddHangfire();
         });

@@ -11,7 +11,7 @@ public class BlazimumDemoModule : BonWebModule
         DependOn<BonUiBlazimumModule>();
     }
 
-    public override Task OnConfigureAsync(BonConfigurationContext context)
+    public override ValueTask OnConfigureAsync(BonConfigurationContext context , CancellationToken cancellationToken = default)
     {
         context.Services.AddRazorComponents()
             .AddInteractiveServerComponents();
@@ -19,7 +19,7 @@ public class BlazimumDemoModule : BonWebModule
     }
 
 
-    public override Task OnPostApplicationAsync(BonWebApplicationContext context)
+    public override ValueTask OnPostApplicationAsync(BonWebApplicationContext context,CancellationToken  cancellationToken = default)
     {
         // Configure the HTTP request pipeline.
         if (!context.Application.Environment.IsDevelopment())

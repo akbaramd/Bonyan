@@ -30,6 +30,19 @@ namespace Bonyan.Modularity.Abstractions
         public virtual ValueTask OnPreConfigureAsync(BonPreConfigurationContext context, CancellationToken cancellationToken = default) => ValueTask.CompletedTask;
         public virtual ValueTask OnConfigureAsync(BonConfigurationContext context, CancellationToken cancellationToken = default) => ValueTask.CompletedTask;
         public virtual ValueTask OnPostConfigureAsync(BonPostConfigurationContext context, CancellationToken cancellationToken = default) => ValueTask.CompletedTask;
+
+        /// <summary>
+        /// Gets the list of pre-configure actions for <typeparamref name="TOptions"/>.
+        /// Use from OnConfigureAsync/OnPostConfigureAsync when Services is set (e.g. context.Services was assigned to the module).
+        /// Call <see cref="BonPreConfigureActionList{TOptions}.Configure(TOptions)"/> to apply all pre-configured actions to an instance.
+        /// </summary>
+        /// <typeparam name="TOptions">The options type to get pre-configure actions for.</typeparam>
+        protected BonPreConfigureActionList<TOptions> GetPreConfigure<TOptions>() where TOptions : class
+        {
+            if (Services == null)
+                throw new InvalidOperationException("Services is not set. Ensure the module is configured (e.g. called from OnConfigureAsync or OnPostConfigureAsync).");
+            return Services.GetPreConfigureActions<TOptions>();
+        }
         public virtual ValueTask OnPreInitializeAsync(BonInitializedContext context, CancellationToken cancellationToken = default) => ValueTask.CompletedTask;
         public virtual ValueTask OnInitializeAsync(BonInitializedContext context, CancellationToken cancellationToken = default) => ValueTask.CompletedTask;
         public virtual ValueTask OnPostInitializeAsync(BonInitializedContext context, CancellationToken cancellationToken = default) => ValueTask.CompletedTask;

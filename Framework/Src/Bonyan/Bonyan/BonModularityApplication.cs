@@ -331,6 +331,7 @@ public class BonModularityApplication<TModule> : IBonModularityApplication where
 
     /// <summary>
     /// Registers core services required by the modular application.
+    /// Then runs all conventional registrars (added by modules in OnConfigureAsync) for each assembly.
     /// </summary>
     private void RegisterCoreServices()
     {
@@ -348,6 +349,13 @@ public class BonModularityApplication<TModule> : IBonModularityApplication where
         _serviceCollection.TryAddSingleton<IAssemblyFinder>(_assemblyFinder);
         _serviceCollection.TryAddSingleton<ITypeFinder>(_typeFinder);
         _serviceCollection.TryAddSingleton(_plugInSources);
+
+        // Run conventional registration for each assembly (ABP-style).
+        // AddAssembly runs all registrars (GetCandidateTypes, CanRegister, GetRegistration) and adds to services.
+        foreach (var assembly in _assemblyFinder.Assemblies)
+        {
+            _serviceCollection.AddAssembly(assembly);
+        }
     }
 
     /// <summary>

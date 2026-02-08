@@ -19,7 +19,7 @@ public class BonIdentityManagementDomainModule<TUser,TRole> : Modularity.Abstrac
         ]);
     }
 
-    public override Task OnConfigureAsync(BonConfigurationContext context)
+    public override ValueTask OnConfigureAsync(BonConfigurationContext context , CancellationToken cancellationToken = default)
     {
         context.Services.AddTransient<BonIdentityUserManager<TUser,TRole>>();
         context.Services.AddTransient<IBonIdentityRoleManager<TRole>, BonIdentityRoleManager<TRole>>();

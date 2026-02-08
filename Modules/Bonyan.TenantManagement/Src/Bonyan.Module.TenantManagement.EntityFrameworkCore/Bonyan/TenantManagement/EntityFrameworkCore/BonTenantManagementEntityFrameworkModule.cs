@@ -15,7 +15,7 @@ public class BonTenantManagementEntityFrameworkModule : Modularity.Abstractions.
     DependOn(typeof(BonEntityFrameworkModule),
       typeof(BonAspNetCoreMultiTenantModule));
   }
-  public override Task OnConfigureAsync(BonConfigurationContext context)
+  public override ValueTask OnConfigureAsync(BonConfigurationContext context , CancellationToken cancellationToken = default)
   {
 
     context.AddDbContext<TenantBonDbContext>(c =>

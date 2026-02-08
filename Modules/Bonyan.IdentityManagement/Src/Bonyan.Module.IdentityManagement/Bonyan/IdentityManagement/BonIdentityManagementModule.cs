@@ -29,10 +29,10 @@ public class BonIdentityManagementModule<TUser,TRole> : BonModule where TUser : 
     
     
 
-    public override Task OnConfigureAsync(BonConfigurationContext context)
+    public override ValueTask OnConfigureAsync(BonConfigurationContext context , CancellationToken cancellationToken = default)
     {
         // Register localization resource for this module
-        PreConfigure<BonLocalizationOptions>(options =>
+        context.Services.PreConfigure<BonLocalizationOptions>(options =>
         {
             options.Resources
                 .Add<BonIdentityManagementResource>("en")
@@ -47,7 +47,7 @@ public class BonIdentityManagementModule<TUser,TRole> : BonModule where TUser : 
         // Register dynamic policy provider
         context.Services.AddSingleton<IAuthorizationPolicyProvider, BonPermissionPolicyProvider<TUser,TRole>>();
         
-        PreConfigure<AuthorizationOptions>(c =>
+        context.Services.PreConfigure<AuthorizationOptions>(c =>
         {
             var permissionAccessor = context.Services.GetRequiredService<IBonPermissionManager<TUser,TRole>>();
 
@@ -71,7 +71,7 @@ public class BonIdentityManagementModule<TUser,TRole> : BonModule where TUser : 
         return base.OnConfigureAsync(context);
     }
 
-    public override Task OnPostConfigureAsync(BonConfigurationContext context)
+    public override ValueTask OnPostConfigureAsync(BonPostConfigurationContext context , CancellationToken cancellationToken = default)
     {
         // Execute pre-configured actions for identity management options
         context.Services.ExecutePreConfiguredActions(new BonIdentityManagementOptions(context));

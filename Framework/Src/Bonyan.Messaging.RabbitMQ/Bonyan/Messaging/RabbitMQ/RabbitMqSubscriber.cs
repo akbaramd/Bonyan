@@ -65,7 +65,7 @@ namespace Bonyan.Messaging.RabbitMQ
         }
 
         // Define the async OnMessageReceived method with the correct signature
-        private async Task OnMessageReceived<TMessage>(object model, BasicDeliverEventArgs ea, Func<BonMessageContext<TMessage>, Task> handler)
+        private async ValueTask OnMessageReceived<TMessage>(object model, BasicDeliverEventArgs ea, Func<BonMessageContext<TMessage>, Task> handler)
         {
             try
             {

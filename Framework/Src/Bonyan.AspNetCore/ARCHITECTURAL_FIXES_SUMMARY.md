@@ -163,7 +163,7 @@ var builder = BonyanApplication
    - **Example**:
    ```csharp
    // Before
-   public Task OnApplicationAsync(BonWebApplicationContext context)
+   public ValueTask OnApplicationAsync(BonWebApplicationContext context)
    
    // After
    public ValueTask OnApplicationAsync(BonWebApplicationContext context, CancellationToken cancellationToken = default)

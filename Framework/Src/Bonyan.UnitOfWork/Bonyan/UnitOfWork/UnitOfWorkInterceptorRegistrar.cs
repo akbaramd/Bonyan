@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using Bonyan.DependencyInjection;
 using Bonyan.DynamicProxy;
 
@@ -6,7 +6,7 @@ namespace Bonyan.UnitOfWork;
 
 public static class UnitOfWorkInterceptorRegistrar
 {
-    public static void RegisterIfNeeded(IOnServiceRegistredContext context)
+    public static void RegisterIfNeeded(IOnServiceRegisteredContext context)
     {
         if (ShouldIntercept(context.ImplementationType))
         {

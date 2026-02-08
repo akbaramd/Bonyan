@@ -33,6 +33,7 @@ public abstract class BonyanTestBase<TModule> : IDisposable where TModule : IBon
         // Create the Bonyan application builder directly
         var builder = BonyanApplication.CreateModularBuilder<TModule>(
             serviceName,
+            "Test Application",
             configureServices);
 
         // Configure logging for tests

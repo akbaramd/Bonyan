@@ -1,11 +1,11 @@
-﻿using Bonyan.DependencyInjection;
+using Bonyan.DependencyInjection;
 using Bonyan.DynamicProxy;
 
 namespace Bonyan.Validation;
 
 public static class ValidationInterceptorRegistrar
 {
-    public static void RegisterIfNeeded(IOnServiceRegistredContext context)
+    public static void RegisterIfNeeded(IOnServiceRegisteredContext context)
     {
         if (ShouldIntercept(context.ImplementationType))
         {

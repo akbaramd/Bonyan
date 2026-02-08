@@ -11,22 +11,22 @@ namespace Bonyan.Messaging.RabbitMQ
             DependOn<BonMessagingModule>();
         }
 
-      public override Task OnPreConfigureAsync(BonConfigurationContext context)
+      public override ValueTask OnPreConfigureAsync(BonPreConfigurationContext context , CancellationToken cancellationToken = default)
       {
-          PreConfigure<BonMessagingConfiguration>(c =>
+          context.Services.PreConfigure<BonMessagingConfiguration>(c =>
           {
               c.AddRabbitMq(r => { context.Services.ExecutePreConfiguredActions(r); });
           });
           return base.OnPreConfigureAsync(context);
       }
 
-      public override Task OnConfigureAsync(BonConfigurationContext context)
+      public override ValueTask OnConfigureAsync(BonConfigurationContext context , CancellationToken cancellationToken = default)
         {
            
             return base.OnConfigureAsync(context);
         }
 
-        public override Task OnPostConfigureAsync(BonConfigurationContext context)
+        public override ValueTask OnPostConfigureAsync(BonPostConfigurationContext context , CancellationToken cancellationToken = default)
         {
             
             return base.OnPostConfigureAsync(context);

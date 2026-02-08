@@ -6,7 +6,7 @@ namespace Bonyan.VirtualFileSystem;
 
 public class BonVirtualFileSystemModule : BonModule
 {
-    public override Task OnConfigureAsync(BonConfigurationContext context)
+    public override ValueTask OnConfigureAsync(BonConfigurationContext context , CancellationToken cancellationToken = default)
     {
         context.Services.AddSingleton<VirtualFileProvider>();
         context.Services.AddSingleton<IVirtualFileProvider,VirtualFileProvider>();

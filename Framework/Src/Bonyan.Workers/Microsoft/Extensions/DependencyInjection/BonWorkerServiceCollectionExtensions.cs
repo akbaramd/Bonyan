@@ -5,8 +5,8 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static class BonWorkerServiceCollectionExtensions
     {
-        public static BonConfigurationContext AddWorkers(
-            this BonConfigurationContext configurationContext,
+        public static BonPostConfigurationContext AddWorkers(
+            this BonPostConfigurationContext configurationContext,
             Action<BonWorkerConfiguration> configureOptions)
         {
             var options = new BonWorkerConfiguration(configurationContext);

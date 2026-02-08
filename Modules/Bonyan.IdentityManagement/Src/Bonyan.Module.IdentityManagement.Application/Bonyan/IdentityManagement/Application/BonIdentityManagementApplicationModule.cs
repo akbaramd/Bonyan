@@ -18,12 +18,12 @@ public class BonIdentityManagementApplicationModule<TUser,TRole> : Modularity.Ab
         DependOn<BonWorkersModule>();
     }
 
-    public override Task OnPreConfigureAsync(BonConfigurationContext context)
+    public override ValueTask OnPreConfigureAsync(BonPreConfigurationContext context , CancellationToken cancellationToken = default)
     {
         return base.OnPreConfigureAsync(context);
     }
 
-    public override Task OnConfigureAsync(BonConfigurationContext context)
+    public override ValueTask OnConfigureAsync(BonConfigurationContext context , CancellationToken cancellationToken = default)
     {
         
        
@@ -31,8 +31,4 @@ public class BonIdentityManagementApplicationModule<TUser,TRole> : Modularity.Ab
         return base.OnConfigureAsync(context);
     }
 
-    public override async Task OnPostInitializeAsync(BonInitializedContext context)
-    {
-        await base.OnPostInitializeAsync(context);
-    }
 }

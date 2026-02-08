@@ -18,7 +18,7 @@ public class BonUserManagementApplicationModule<TUser> : BonModule where TUser :
     DependOn<BonLayerApplicationModule>();
     DependOn<BonUserManagementDomainModule<TUser>>();
   }
-  public override Task OnConfigureAsync(BonConfigurationContext context)
+  public override ValueTask OnConfigureAsync(BonConfigurationContext context , CancellationToken cancellationToken = default)
   {
 
     context.Services.Configure<BonAutoMapperOptions>(c =>

@@ -19,17 +19,17 @@ public class OutboxRabbitMQModule : BonModule
         DependOn<BonMessagingOutboxModule>();
     }
 
-    public override Task OnConfigureAsync(BonConfigurationContext context)
+    public override ValueTask OnConfigureAsync(BonConfigurationContext context , CancellationToken cancellationToken = default)
     {
     
 
 
-        return Task.CompletedTask;
+        return ValueTask.CompletedTask;
     }
 
-    public override Task OnInitializeAsync(BonInitializedContext context)
+    public override ValueTask OnInitializeAsync(BonInitializedContext context , CancellationToken cancellationToken = default)
     {
         // Initialize any test-specific components
-        return Task.CompletedTask;
+        return ValueTask.CompletedTask;
     }
 }

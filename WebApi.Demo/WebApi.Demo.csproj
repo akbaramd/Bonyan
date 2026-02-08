@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Framework\Src\Bonyan\Bonyan.csproj" />
     <ProjectReference Include="..\Framework\Src\Bonyan.AspNetCore\Bonyan.AspNetCore.csproj" />
     <ProjectReference Include="..\Framework\Src\Bonyan.AspNetCore.Mvc\Bonyan.AspNetCore.Mvc.csproj" />
   </ItemGroup>

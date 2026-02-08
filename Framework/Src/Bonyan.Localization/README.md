@@ -31,7 +31,7 @@ This module depends on `Bonyan.Localization` and should be added to your ASP.NET
 
 ```csharp
 // In your module configuration
-public override Task OnConfigureAsync(BonConfigurationContext context)
+public override ValueTask OnConfigureAsync(BonConfigurationContext context , CancellationToken cancellationToken = default)
 {
     context.Services.Configure<BonLocalizationOptions>(options =>
     {

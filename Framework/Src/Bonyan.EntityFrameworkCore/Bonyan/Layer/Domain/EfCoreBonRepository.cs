@@ -1,4 +1,4 @@
-﻿using Bonyan.EntityFrameworkCore;
+using Bonyan.EntityFrameworkCore;
 using Bonyan.Layer.Domain.Entities;
 using Bonyan.Layer.Domain.Entity;
 using Microsoft.EntityFrameworkCore;
@@ -30,14 +30,9 @@ namespace Bonyan.Layer.Domain
         public async Task UpdateAsync(TEntity entity, bool autoSave = false)
         {
             var dbContext = await GetDbContextAsync();
+            dbContext.Update(entity);
 
-            if (dbContext.Set<TEntity>().Local.All(e => e != entity))
-            {
-                dbContext.Set<TEntity>().Attach(entity);
-                dbContext.Update(entity);
-            }
-
-            if (autoSave)
+            if (autoSave && dbContext.ChangeTracker.HasChanges())
             {
                 await dbContext.SaveChangesAsync();
             }

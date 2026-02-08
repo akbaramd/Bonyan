@@ -159,13 +159,13 @@ public class MessagingTestModule : BonModule
         DependOn<Bonyan.Messaging.BonMessagingModule>();
     }
 
-    public override Task OnConfigureAsync(BonConfigurationContext context)
+    public override ValueTask OnConfigureAsync(BonConfigurationContext context , CancellationToken cancellationToken = default)
     {
         // Register logging
         context.Services.AddLogging(configure => configure.AddConsole());
 
        
 
-        return Task.CompletedTask;
+        return ValueTask.CompletedTask;
     }
 }

@@ -10,9 +10,9 @@ public class BonUiBlazimumModule : BonWebModule
         DependOn<BonAspNetCoreComponentsModule>();
     }
 
-    public override Task OnConfigureAsync(BonConfigurationContext context)
+    public override ValueTask OnConfigureAsync(BonConfigurationContext context , CancellationToken cancellationToken = default)
     {
-        Configure<BonBlazorOptions>(c =>
+        context.Services.Configure<BonBlazorOptions>(c =>
         {
             c.AddAssembly<BonUiBlazimumModule>();
         });

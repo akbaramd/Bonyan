@@ -18,7 +18,7 @@ namespace Bonyan.Messaging.OutBox
             DependOn<BonMessagingModule>();
         }
 
-        public override Task OnConfigureAsync(BonConfigurationContext context)
+        public override ValueTask OnConfigureAsync(BonConfigurationContext context , CancellationToken cancellationToken = default)
         {
             // Register outbox services
             context.Services.AddSingleton<IOutboxStore, InMemoryOutboxStore>();

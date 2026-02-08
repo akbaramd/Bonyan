@@ -21,7 +21,7 @@ namespace Bonyan.Layer.Application
 
         public override ValueTask OnConfigureAsync(BonConfigurationContext context, CancellationToken cancellationToken = default)
         {
-            context.AddApplication();
+            
             return base.OnConfigureAsync(context, cancellationToken);
         }
     }

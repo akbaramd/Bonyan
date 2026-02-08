@@ -14,7 +14,9 @@ public class BonLocalizationModule : BonModule
         DependOn<BonLocalizationAbstractionsModule>();
         DependOn<BonVirtualFileSystemModule>();
     }
-    public override Task OnConfigureAsync(BonConfigurationContext context)
+    
+    
+    public override ValueTask OnConfigureAsync(BonConfigurationContext context , CancellationToken cancellationToken = default)
     {
         BonStringLocalizerFactory.Replace(context.Services);
 
@@ -30,12 +32,12 @@ public class BonLocalizationModule : BonModule
         context.Services.AddTransient<LocalizableStringSerializer>();
         context.Services.AddTransient<ILocalizableStringSerializer,LocalizableStringSerializer>();
 
-        Configure<BonVirtualFileSystemOptions>(options =>
+        context.Services.Configure<BonVirtualFileSystemOptions>(options =>
         {
             options.FileSets.AddEmbedded<BonLocalizationModule>("Bonayn", "Bonayn");
         });
         
-        Configure<BonLocalizationOptions>(options =>
+        context.Services.Configure<BonLocalizationOptions>(options =>
         {
             options
                 .Resources

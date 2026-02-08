@@ -6,13 +6,13 @@ namespace Bonyan.Workers;
 
 public class BonWorkersModule : BonModule
 {
-    public override Task OnConfigureAsync(BonConfigurationContext context)
+    public override ValueTask OnConfigureAsync(BonConfigurationContext context , CancellationToken cancellationToken = default)
     {
         return base.OnConfigureAsync(context);
     }
 
 
-    public override Task OnPostConfigureAsync(BonConfigurationContext context)
+    public override ValueTask OnPostConfigureAsync(BonPostConfigurationContext context , CancellationToken cancellationToken = default)
     {
         context.AddWorkers(c =>
         {

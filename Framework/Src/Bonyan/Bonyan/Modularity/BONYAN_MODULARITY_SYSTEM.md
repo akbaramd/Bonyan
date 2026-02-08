@@ -132,7 +132,7 @@ Each module receives `IServiceCollection` during configuration for its own regis
 ```csharp
 public class CoreModule : BonModule
 {
-    public override Task OnConfigureAsync(BonConfigurationContext context)
+    public override ValueTask OnConfigureAsync(BonConfigurationContext context , CancellationToken cancellationToken = default)
     {
         context.Services.AddSingleton<ICoreService, CoreService>();
         return Task.CompletedTask;
@@ -143,7 +143,7 @@ public class FeatureModule : BonModule
 {
     public FeatureModule() => DependOn<CoreModule>();
     
-    public override Task OnConfigureAsync(BonConfigurationContext context)
+    public override ValueTask OnConfigureAsync(BonConfigurationContext context , CancellationToken cancellationToken = default)
     {
         context.Services.AddScoped<IFeatureService, FeatureService>();
         return Task.CompletedTask;

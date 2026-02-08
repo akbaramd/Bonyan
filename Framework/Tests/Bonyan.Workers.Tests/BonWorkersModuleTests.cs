@@ -8,13 +8,13 @@ namespace Bonyan.Workers.Tests
     public class BonWorkersModuleTests
     {
         private readonly IServiceCollection _services;
-        private readonly BonConfigurationContext _configurationContext;
+        private readonly BonPostConfigurationContext _configurationContext;
         private readonly Mock<BonWorkersModule> _moduleMock;
 
         public BonWorkersModuleTests()
         {
             _services = new ServiceCollection();
-            _configurationContext = new BonConfigurationContext(_services);
+            _configurationContext = new BonPostConfigurationContext(_services);
             _moduleMock = new Mock<BonWorkersModule> { CallBase = true };
         }
 

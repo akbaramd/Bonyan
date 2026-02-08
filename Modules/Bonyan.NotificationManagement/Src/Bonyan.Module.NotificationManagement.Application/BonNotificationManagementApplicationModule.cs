@@ -1,3 +1,4 @@
+using System.Threading;
 using System.Threading.Tasks;
 using Bonyan.Modularity;
 using Bonyan.Modularity.Abstractions;
@@ -23,7 +24,7 @@ public class BonNotificationManagementApplicationModule : BonModule
     }
 
 
-    public override Task OnPreConfigureAsync(BonConfigurationContext context)
+    public override ValueTask OnPreConfigureAsync(BonPreConfigurationContext context , CancellationToken cancellationToken = default)
     {
         context.Services.AddTransient<INotificationSender,NotificationSender>();
         context.Services.AddSingleton<NotificationProviderResolver>();

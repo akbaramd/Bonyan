@@ -3,7 +3,7 @@
 using Bonyan.Novino.Web;
 using Bonyan.Plugins;
 
-var builder = BonyanApplication.CreateModularBuilder<BonNovinoWebModule>("Novino.Web", v =>
+var builder = BonyanApplication.CreateModularBuilder<BonNovinoWebModule>("Novino.Web", "Novino Web", v =>
 {
     v.PlugInSources.AddFolder("./Plugins");
 });

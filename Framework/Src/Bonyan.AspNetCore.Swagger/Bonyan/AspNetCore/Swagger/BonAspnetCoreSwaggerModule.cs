@@ -11,7 +11,8 @@ namespace Bonyan.AspNetCore.Swagger
         }
 
 
-        public override Task OnPostConfigureAsync(BonConfigurationContext context)
+        
+        public override ValueTask OnPostConfigureAsync(BonPostConfigurationContext context , CancellationToken cancellationToken = default)
         {
             var swaggerGenPreOptions = context.Services.GetPreConfigureActions<SwaggerGenOptions>();
             context.Services.AddSwaggerGen(options =>
@@ -21,7 +22,7 @@ namespace Bonyan.AspNetCore.Swagger
             return base.OnPostConfigureAsync(context);
         }
 
-        public override Task OnApplicationAsync(BonWebApplicationContext context)
+        public override ValueTask OnApplicationAsync(BonWebApplicationContext context , CancellationToken cancellationToken = default)
         {
             if (context.Application.Environment.IsDevelopment())
             {

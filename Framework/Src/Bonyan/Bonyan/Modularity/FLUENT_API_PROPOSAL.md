@@ -161,7 +161,7 @@ public class ModuleConfigurationBuilder<TOptions> : IModuleConfigurationBuilder<
     private readonly List<Func<TOptions, bool>> _validators = new();
     private string? _namedOptions;
     
-    public ModuleConfigurationBuilder(BonConfigurationContext context)
+    public ModuleConfigurationBuilder(BonConfigurationContext context , CancellationToken cancellationToken = default)
     {
         _context = context;
         _options = new TOptions();

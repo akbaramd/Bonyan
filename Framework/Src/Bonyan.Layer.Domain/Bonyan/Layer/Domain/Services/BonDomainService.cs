@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging.Abstractions;
 
 namespace Bonyan.Layer.Domain.Services;
 
-public abstract class BonDomainService : BonLayServiceProviderConfigurator, IBonDomainService ,IBonUnitOfWorkEnabled
+public abstract class BonDomainService : BonLazyServiceProviderConfigurator, IBonDomainService ,IBonUnitOfWorkEnabled
 {
     
     

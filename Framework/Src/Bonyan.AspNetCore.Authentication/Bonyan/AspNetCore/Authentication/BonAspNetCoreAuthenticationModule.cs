@@ -17,7 +17,7 @@ namespace Bonyan.AspNetCore.Authentication
         }
 
         
-        public override Task OnPostConfigureAsync(BonConfigurationContext context)
+        public override ValueTask OnPostConfigureAsync(BonPostConfigurationContext context , CancellationToken cancellationToken = default)
         {
             
             var configure = context.Services.GetPreConfigureActions<AuthorizationOptions>();
@@ -32,7 +32,7 @@ namespace Bonyan.AspNetCore.Authentication
             return base.OnPostConfigureAsync(context);
         }
 
-        private void ConfigureAuthentication(BonConfigurationContext context)
+        private void ConfigureAuthentication(BonPostConfigurationContext context , CancellationToken cancellationToken = default)
         {
             var options = GetPreConfigure<AuthenticationOptions>();
             var bonPreConfigureAction = GetPreConfigure<AuthenticationBuilder>();
@@ -42,7 +42,7 @@ namespace Bonyan.AspNetCore.Authentication
             
         }
 
-        public override Task OnApplicationAsync(BonWebApplicationContext context)
+        public override ValueTask OnApplicationAsync(BonWebApplicationContext context,CancellationToken  cancellationToken = default)
         {
             context.Application.UseAuthentication();
             context.Application.UseAuthorization();

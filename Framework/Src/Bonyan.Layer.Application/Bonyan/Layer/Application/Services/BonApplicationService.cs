@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Bonyan.DependencyInjection;
 using Bonyan.Mediators;
 using Bonyan.MultiTenant;
@@ -9,7 +9,7 @@ using Microsoft.Extensions.Logging.Abstractions;
 
 namespace Bonyan.Layer.Application.Services;
 
-public class BonApplicationService :  BonLayServiceProviderConfigurator, IBonApplicationService,IBonUnitOfWorkEnabled
+public class BonApplicationService :  BonLazyServiceProviderConfigurator, IBonApplicationService,IBonUnitOfWorkEnabled
 {
     public IBonCurrentUser BonCurrentUser => LazyServiceProvider.LazyGetRequiredService<IBonCurrentUser>();
     public IBonCurrentTenant BonCurrentTenant => LazyServiceProvider.LazyGetRequiredService<IBonCurrentTenant>();

@@ -18,7 +18,7 @@ public class BonNotificationManagementEntityFrameworkCoreModule : BonModule
         ]);
     }
 
-    public override Task OnConfigureAsync(BonConfigurationContext context)
+    public override ValueTask OnConfigureAsync(BonConfigurationContext context , CancellationToken cancellationToken = default)
     {
         context.AddDbContext<BonNotificationManagementDbContext>();
 

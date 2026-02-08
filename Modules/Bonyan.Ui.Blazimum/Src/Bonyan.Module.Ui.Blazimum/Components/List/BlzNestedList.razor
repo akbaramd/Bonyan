@@ -57,7 +57,7 @@
         }
     }
 
-    private async Task OnItemClick(ListItemModel item)
+    private async ValueTask OnItemClick(ListItemModel item)
     {
         await ToggleExpandCollapse(item);
         await ItemClick.InvokeAsync(item); // Invoke the callback, passing the clicked item

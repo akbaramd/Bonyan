@@ -18,7 +18,7 @@ public class BonTenantManagementApplicationModule : Modularity.Abstractions.BonM
       typeof(BonTenantManagementDomainModule)
     ]);
   }
-  public override Task OnConfigureAsync(BonConfigurationContext context)
+  public override ValueTask OnConfigureAsync(BonConfigurationContext context , CancellationToken cancellationToken = default)
   {
     context.Services.AddTransient<IBonTenantBonApplicationService, BonTenantBonApplicationService>();
 

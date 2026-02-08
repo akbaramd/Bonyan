@@ -6,7 +6,7 @@ public static class ServiceCollectionRegistrationActionExtensions
 {
     // OnRegistered
 
-    public static void OnRegistered(this IServiceCollection services, Action<IOnServiceRegistredContext> registrationAction)
+    public static void OnRegistered(this IServiceCollection services, Action<IOnServiceRegisteredContext> registrationAction)
     {
         GetOrCreateRegistrationActionList(services).Add(registrationAction);
     }

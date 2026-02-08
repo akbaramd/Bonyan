@@ -12,7 +12,7 @@ namespace Bonyan.Messaging
             DependOn<BonMediatorModule>();
         }
 
-        public override Task OnConfigureAsync(BonConfigurationContext context)
+        public override ValueTask OnConfigureAsync(BonConfigurationContext context , CancellationToken cancellationToken = default)
         {
             context.AddMessaging( c =>
             {

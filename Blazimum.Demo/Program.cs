@@ -1,7 +1,7 @@
 using Blazimum.Demo;
 using Bonyan.Plugins;
 
-var builder = BonyanApplication.CreateModularBuilder<BlazimumDemoModule>("demo-app", c =>
+var builder = BonyanApplication.CreateModularBuilder<BlazimumDemoModule>("demo-app", "Blazimum Demo", c =>
 {
     c.PlugInSources.AddFolder("./Plugins");
 },args: args);
