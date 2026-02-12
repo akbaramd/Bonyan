@@ -1,19 +1,24 @@
-﻿using Autofac;
+using System;
+using System.IO;
+using System.Text.Json;
+using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Bonyan.Core;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Bonyan.Autofac;
+namespace Volo.Abp.Autofac;
 
 /// <summary>
-/// A factory for creating a <see cref="T:Autofac.ContainerBuilder" /> and an <see cref="T:System.IServiceProvider" />.
+/// A factory for creating a <see cref="T:ContainerBuilder" /> and an <see cref="T:System.IServiceProvider" />.
 /// </summary>
-public class BonAutofacServiceProviderFactory : IServiceProviderFactory<ContainerBuilder>
+public class AbpAutofacServiceProviderFactory : IServiceProviderFactory<ContainerBuilder>
 {
+    private const string AgentLogPath = @"c:\Users\ahmadi.UR-NEZAM\RiderProjects\Bonyan\.cursor\debug.log";
+
     private readonly ContainerBuilder _builder;
     private IServiceCollection _services = default!;
 
-    public BonAutofacServiceProviderFactory(ContainerBuilder builder)
+    public AbpAutofacServiceProviderFactory(ContainerBuilder builder)
     {
         _builder = builder;
     }
@@ -26,15 +31,111 @@ public class BonAutofacServiceProviderFactory : IServiceProviderFactory<Containe
     public ContainerBuilder CreateBuilder(IServiceCollection services)
     {
         _services = services;
+
+#region agent log
+        try
+        {
+            try
+            {
+                Console.Error.WriteLine($"[agent-log] AbpAutofacServiceProviderFactory.CreateBuilder reached | asm={typeof(AbpAutofacServiceProviderFactory).Assembly.Location} | servicesCount={services.Count}");
+            }
+            catch
+            {
+                // ignore
+            }
+
+            var dir = Path.GetDirectoryName(AgentLogPath);
+            if (!string.IsNullOrWhiteSpace(dir))
+            {
+                Directory.CreateDirectory(dir);
+            }
+
+            File.AppendAllText(
+                AgentLogPath,
+                JsonSerializer.Serialize(new
+                {
+                    id = $"log_{DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()}_{Guid.NewGuid():N}",
+                    timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),
+                    runId = "pre-fix",
+                    hypothesisId = "H4",
+                    location = "BonAutofacServiceProviderFactory.cs:CreateBuilder",
+                    message = "CreateBuilder called",
+                    data = new
+                    {
+                        servicesCount = services.Count,
+                        asm = typeof(AbpAutofacServiceProviderFactory).Assembly.Location
+                    }
+                }) + Environment.NewLine);
+        }
+        catch (Exception ex)
+        {
+            try
+            {
+                Console.Error.WriteLine($"[agent-log-write-failed] BonAutofacServiceProviderFactory.cs:CreateBuilder :: {ex.GetType().FullName} :: {ex.Message}");
+            }
+            catch
+            {
+                // ignore
+            }
+        }
+#endregion
+
         _builder.Populate(services);
+
         return _builder;
     }
 
     public IServiceProvider CreateServiceProvider(ContainerBuilder containerBuilder)
     {
         Check.NotNull(containerBuilder, nameof(containerBuilder));
-        var container = containerBuilder.Build();
-        _services.AddObjectAccessor<IContainer>(container);
-        return new AutofacServiceProvider(container);
+
+#region agent log
+        try
+        {
+            try
+            {
+                Console.Error.WriteLine($"[agent-log] AbpAutofacServiceProviderFactory.CreateServiceProvider reached | asm={typeof(AbpAutofacServiceProviderFactory).Assembly.Location}");
+            }
+            catch
+            {
+                // ignore
+            }
+
+            var dir = Path.GetDirectoryName(AgentLogPath);
+            if (!string.IsNullOrWhiteSpace(dir))
+            {
+                Directory.CreateDirectory(dir);
+            }
+
+            File.AppendAllText(
+                AgentLogPath,
+                JsonSerializer.Serialize(new
+                {
+                    id = $"log_{DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()}_{Guid.NewGuid():N}",
+                    timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),
+                    runId = "pre-fix",
+                    hypothesisId = "H4",
+                    location = "BonAutofacServiceProviderFactory.cs:CreateServiceProvider",
+                    message = "CreateServiceProvider called (about to Build container)",
+                    data = new
+                    {
+                        asm = typeof(AbpAutofacServiceProviderFactory).Assembly.Location
+                    }
+                }) + Environment.NewLine);
+        }
+        catch (Exception ex)
+        {
+            try
+            {
+                Console.Error.WriteLine($"[agent-log-write-failed] BonAutofacServiceProviderFactory.cs:CreateServiceProvider :: {ex.GetType().FullName} :: {ex.Message}");
+            }
+            catch
+            {
+                // ignore
+            }
+        }
+#endregion
+
+        return new AutofacServiceProvider(containerBuilder.Build());
     }
 }

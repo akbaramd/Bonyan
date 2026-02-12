@@ -4,11 +4,18 @@ using BonyanTemplate.Domain.Books;
 
 namespace BonyanTemplate.Application.Books.Dtos;
 
+/// <summary>
+/// Data transfer object for <see cref="Domain.Books.Book"/>.
+/// </summary>
 public class BookDto : IBonAggregateRootDto<BookId>
 {
-    public BookId Id { get; set; }
+    /// <summary>Aggregate id.</summary>
+    public BookId Id { get; set; } = null!;
 
-    public string Title { get; set; }
-    public AuthorId AuthorId { get; set; }
+    /// <summary>Book title.</summary>
+    public string Title { get; set; } = string.Empty;
+
+    /// <summary>Author id.</summary>
+    public AuthorId AuthorId { get; set; } = null!;
 }
 

@@ -1,58 +1,50 @@
+using Bonyan.EntityFrameworkCore;
 using Bonyan.IdentityManagement.Domain.Roles;
-using Bonyan.IdentityManagement.Domain.Roles.Repostories;
-using Bonyan.IdentityManagement.Domain.Roles.DomainServices;
+using Bonyan.IdentityManagement.Domain.Roles.Repositories;
+using Bonyan.IdentityManagement.Domain.Roles.ValueObjects;
 using Bonyan.IdentityManagement.Domain.Users;
 using Bonyan.IdentityManagement.Domain.Users.Repositories;
+using Bonyan.IdentityManagement.Domain.Users.UserMeta;
 using Bonyan.IdentityManagement.EntityFrameworkCore.Repositories;
+using Bonyan.Layer.Domain.Repository.Abstractions;
 using Bonyan.Modularity;
 using Bonyan.Modularity.Abstractions;
-using Bonyan.UserManagement.Domain.Users;
 using Bonyan.UserManagement.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Bonyan.IdentityManagement.EntityFrameworkCore;
 
-public class BonIdentityManagementEntityFrameworkCoreModule<TUser, TRole> : BonModule 
-    where TUser : BonIdentityUser<TUser, TRole> 
-    where TRole :  BonIdentityRole<TRole>
+/// <summary>
+/// EF Core module for identity management (non-generic). Registers repositories for
+/// <see cref="BonIdentityUser"/>, <see cref="BonIdentityRole"/>, and user meta.
+/// </summary>
+public class BonIdentityManagementEntityFrameworkCoreModule : BonModule
 {
     public BonIdentityManagementEntityFrameworkCoreModule()
     {
-        DependOn<BonUserManagementEntityFrameworkModule<TUser>>();
+        DependOn<BonEntityFrameworkModule>();
+        DependOn<BonUserManagementEntityFrameworkModule<Bonyan.IdentityManagement.Domain.Users.BonIdentityUser>>();
     }
 
-    public override ValueTask OnConfigureAsync(BonConfigurationContext context , CancellationToken cancellationToken = default)
+    public override ValueTask OnConfigureAsync(BonConfigurationContext context, CancellationToken cancellationToken = default)
     {
-       
+        context.Services.AddTransient<IBonIdentityRoleRepository, BonIdentityEfCoreRoleRepository>();
+        context.Services.AddTransient<IBonIdentityRoleReadOnlyRepository, BonIdentityEfCoreRoleRepository>();
+        context.Services.AddTransient<IBonReadOnlyRepository<BonIdentityRole, BonRoleId>>(sp => sp.GetRequiredService<IBonIdentityRoleReadOnlyRepository>());
 
-        context.Services
-            .AddTransient<IBonIdentityRoleRepository<TRole>, BonIdentityEfCoreRoleRepository<TUser, TRole>>();
-        context.Services
-            .AddTransient<IBonIdentityRoleReadOnlyRepository<TRole>, BonIdentityEfCoreRoleRepository<TUser, TRole>>();
+        context.Services.AddTransient<IBonIdentityUserClaimsRepository, BonEfCoreIdentityUserClaimsRepository>();
+        context.Services.AddTransient<IBonIdentityUserClaimsReadOnlyRepository, BonEfCoreIdentityUserClaimsReadOnlyRepository>();
 
-        context.Services
-            .AddTransient<IBonIdentityUserClaimsRepository<TUser, TRole>, BonEfCoreIdentityUserClaimsRepository<TUser, TRole>>();
-        context.Services
-            .AddTransient<IBonIdentityUserClaimsReadOnlyRepository<TUser, TRole>, BonEfCoreIdentityUserClaimsReadOnlyRepository<TUser, TRole>>();
+        context.Services.AddTransient<IBonIdentityRoleClaimsRepository, BonEfCoreIdentityRoleClaimsRepository>();
+        context.Services.AddTransient<IBonIdentityRoleClaimsReadOnlyRepository, BonEfCoreIdentityRoleClaimsReadOnlyRepository>();
 
-        context.Services
-            .AddTransient<IBonIdentityRoleClaimsRepository<TRole>, BonEfCoreIdentityRoleClaimsRepository<TUser, TRole>>();
-        context.Services
-            .AddTransient<IBonIdentityRoleClaimsReadOnlyRepository<TRole>, BonEfCoreIdentityRoleClaimsReadOnlyRepository<TUser, TRole>>();
-            
+        context.Services.AddTransient<IBonIdentityUserRepository, BonEfCoreIdentityUserRepository>();
+        context.Services.AddTransient<IBonIdentityUserReadOnlyRepository, BonEfCoreIdentityUserReadOnlyRepository>();
 
-        context.Services
-            .AddTransient<IBonIdentityUserRepository<TUser, TRole>, BonEfCoreIdentityUserRepository<TUser, TRole>>();
-        context.Services
-            .AddTransient<IBonIdentityUserReadOnlyRepository<TUser, TRole>, BonEfCoreIdentityUserReadOnlyRepository<TUser, TRole>>();
+        context.Services.AddTransient<IBonIdentityUserRolesRepository, BonEfCoreIdentityUserRolesRepository>();
 
-        context.Services
-            .AddTransient<IBonIdentityUserRolesRepository<TUser, TRole>, BonEfCoreIdentityUserRolesRepository<TUser, TRole>>();
+        context.Services.AddTransient<IBonUserMetaRepository, BonEfCoreUserMetaRepository>();
 
-        // Register generic role manager
-        context.Services
-            .AddTransient(typeof(IBonIdentityRoleManager<>), typeof(BonIdentityRoleManager<>));
-
-        return base.OnConfigureAsync(context);
+        return base.OnConfigureAsync(context, cancellationToken);
     }
 }

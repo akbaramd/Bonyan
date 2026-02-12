@@ -1,12 +1,19 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <RootNamespace>BonyanTemplate.Infrastructure</RootNamespace>
+        <AssemblyName>BonyanTemplate.Infrastructure</AssemblyName>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <NoWarn>$(NoWarn);1591</NoWarn>
+        <AnalysisLevel>latest-recommended</AnalysisLevel>
+        <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="8.0.1" />
         <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.8"/>
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.8">
             <PrivateAssets>all</PrivateAssets>
@@ -16,7 +23,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\..\Framework\Src\Bonyan.AspNetCore.MultiTenant\Bonyan.AspNetCore.MultiTenant.csproj"/>
-        <ProjectReference Include="..\..\Framework\Src\Bonyan.EntityFrameworkCore.Sqlite\Bonyan.EntityFrameworkCore.Sqlite.csproj"/>
+        <ProjectReference Include="..\..\Framework\Src\Bonyan.EntityFrameworkCore.SqlServer\Bonyan.EntityFrameworkCore.SqlServer.csproj"/>
         <ProjectReference Include="..\..\Framework\Src\Bonyan.EntityFrameworkCore\Bonyan.EntityFrameworkCore.csproj"/>
         <ProjectReference Include="..\..\Modules\Bonyan.IdentityManagement\Src\Bonyan.Module.IdentityManagement.EntityFrameworkCore\Bonyan.Module.IdentityManagement.EntityFrameworkCore.csproj" />
         <ProjectReference Include="..\..\Modules\Bonyan.TenantManagement\Src\Bonyan.Module.TenantManagement.EntityFrameworkCore\Bonyan.Module.TenantManagement.EntityFrameworkCore.csproj" />

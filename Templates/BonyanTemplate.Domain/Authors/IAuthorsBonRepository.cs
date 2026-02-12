@@ -1,7 +1,10 @@
-﻿using Bonyan.Layer.Domain.Repository.Abstractions;
+using Bonyan.Layer.Domain.Repository.Abstractions;
 
 namespace BonyanTemplate.Domain.Authors;
 
-public interface IAuthorsBonRepository : IBonRepository<Authors, AuthorId>
+/// <summary>
+/// Repository for <see cref="Author"/> aggregate root.
+/// </summary>
+public interface IAuthorsBonRepository : IBonRepository<Author, AuthorId>
 {
 }

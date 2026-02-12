@@ -1,6 +1,7 @@
 using Bonyan.AutoMapper;
-using Bonyan.IdentityManagement.Domain.Roles;
-using Bonyan.IdentityManagement.Domain.Users;
+using Bonyan.IdentityManagement.Application.Roles;
+using Bonyan.IdentityManagement.Application.UserMeta;
+using Bonyan.IdentityManagement.Application.Users;
 using Bonyan.Modularity;
 using Bonyan.Modularity.Abstractions;
 using Bonyan.UserManagement.Application;
@@ -9,26 +10,31 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Bonyan.IdentityManagement.Application;
 
-public class BonIdentityManagementApplicationModule<TUser,TRole> : Modularity.Abstractions.BonModule where TUser : BonIdentityUser<TUser,TRole> where TRole : BonIdentityRole<TRole>
+/// <summary>
+/// Application module for identity (non-generic). Registers <see cref="IRoleAppService"/>,
+/// <see cref="IIdentityUserAppService"/>, <see cref="IUserMetaService"/>, and AutoMapper profiles.
+/// </summary>
+public class BonIdentityManagementApplicationModule : BonModule
 {
     public BonIdentityManagementApplicationModule()
     {
-        DependOn<BonUserManagementApplicationModule<TUser>>();
-        DependOn<BonIdentityManagementModule<TUser,TRole>>();
+        DependOn<BonUserManagementApplicationModule<Bonyan.IdentityManagement.Domain.Users.BonIdentityUser>>();
+        DependOn<BonIdentityManagementModule>();
         DependOn<BonWorkersModule>();
     }
 
-    public override ValueTask OnPreConfigureAsync(BonPreConfigurationContext context , CancellationToken cancellationToken = default)
+    public override ValueTask OnConfigureAsync(BonConfigurationContext context, CancellationToken cancellationToken = default)
     {
-        return base.OnPreConfigureAsync(context);
-    }
+        context.Services.Configure<BonAutoMapperOptions>(c =>
+            c.AddProfile<RoleAppServiceMappingProfile>());
 
-    public override ValueTask OnConfigureAsync(BonConfigurationContext context , CancellationToken cancellationToken = default)
-    {
-        
-       
-        
-        return base.OnConfigureAsync(context);
-    }
+        context.Services.AddTransient<RoleAppService>();
+        context.Services.AddTransient<IRoleAppService, RoleAppService>();
+        context.Services.AddTransient<IdentityUserAppService>();
+        context.Services.AddTransient<IIdentityUserAppService, IdentityUserAppService>();
+        context.Services.AddTransient<UserMetaService>();
+        context.Services.AddTransient<IUserMetaService, UserMetaService>();
 
+        return base.OnConfigureAsync(context, cancellationToken);
+    }
 }

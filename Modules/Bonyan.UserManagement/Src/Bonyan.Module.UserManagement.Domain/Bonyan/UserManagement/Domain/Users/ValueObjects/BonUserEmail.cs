@@ -1,4 +1,4 @@
-﻿using System.Text.RegularExpressions;
+using System.Text.RegularExpressions;
 using Bonyan.Layer.Domain.ValueObjects;
 
 namespace Bonyan.UserManagement.Domain.Users.ValueObjects
@@ -48,9 +48,12 @@ namespace Bonyan.UserManagement.Domain.Users.ValueObjects
 
         public override string ToString() => Address;
 
+        /// <summary>
+        /// Marks the email as not verified.
+        /// </summary>
         public void Unverify()
         {
-            IsVerified = true;
+            IsVerified = false;
         }
     }
 }

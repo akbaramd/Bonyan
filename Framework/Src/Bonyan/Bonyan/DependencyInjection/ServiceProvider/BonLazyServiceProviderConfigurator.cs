@@ -1,3 +1,7 @@
+using System;
+using System.IO;
+using System.Text.Json;
+
 namespace Bonyan.DependencyInjection;
 
 /// <summary>
@@ -5,8 +9,68 @@ namespace Bonyan.DependencyInjection;
 /// </summary>
 public class BonLazyServiceProviderConfigurator : IBonLazyServiceProviderConfigurator
 {
-    /// <inheritdoc />
-    public IBonLazyServiceProvider LazyServiceProvider { get; set; } = default!;
+    private const string AgentLogPath = @"c:\Users\ahmadi.UR-NEZAM\RiderProjects\Bonyan\.cursor\debug.log";
+
+    /// <summary>
+    /// Injected by the container as <see cref="Lazy{T}"/> to avoid circular dependency (e.g. when resolving <see cref="IBonLazyServiceProvider"/> during construction).
+    /// </summary>
+    private IBonLazyServiceProvider _lazyServiceProvider = default!;
+
+    public IBonLazyServiceProvider LazyServiceProvider
+    {
+        get => _lazyServiceProvider;
+        set
+        {
+#region agent log
+            try
+            {
+                try
+                {
+                    Console.Error.WriteLine(
+                        $"[agent-log] BonLazyServiceProviderConfigurator.LazyServiceProvider set reached | asm={typeof(BonLazyServiceProviderConfigurator).Assembly.Location} | assignedType={value?.GetType().FullName}");
+                }
+                catch
+                {
+                    // ignore
+                }
+
+                var dir = Path.GetDirectoryName(AgentLogPath);
+                if (!string.IsNullOrWhiteSpace(dir))
+                {
+                    Directory.CreateDirectory(dir);
+                }
+                File.AppendAllText(
+                    AgentLogPath,
+                    JsonSerializer.Serialize(new
+                    {
+                        id = $"log_{DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()}_{Guid.NewGuid():N}",
+                        timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),
+                        runId = "pre-fix",
+                        hypothesisId = "H2",
+                        location = "BonLazyServiceProviderConfigurator.cs:LazyServiceProvider:set",
+                        message = "Property injection assigned LazyServiceProvider",
+                        data = new
+                        {
+                            assignedType = value?.GetType().FullName
+                        }
+                    }) + Environment.NewLine);
+            }
+            catch (Exception ex)
+            {
+                try
+                {
+                    Console.Error.WriteLine($"[agent-log-write-failed] BonLazyServiceProviderConfigurator.cs:LazyServiceProvider:set :: {ex.GetType().FullName} :: {ex.Message}");
+                }
+                catch
+                {
+                    // ignore
+                }
+            }
+#endregion
+            _lazyServiceProvider = value;
+        }
+    }
+
 
     /// <inheritdoc />
     public object? GetService(Type serviceType) => LazyServiceProvider.GetService(serviceType);

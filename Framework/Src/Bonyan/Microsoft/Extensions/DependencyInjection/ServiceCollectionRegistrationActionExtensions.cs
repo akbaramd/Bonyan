@@ -38,6 +38,30 @@ public static class ServiceCollectionRegistrationActionExtensions
         return GetOrCreateRegistrationActionList(services).IsClassInterceptorsDisabled;
     }
 
+    // OnActivated
+
+    public static void OnActivated<T>(this IServiceCollection services, Action<IOnServiceActivatedContext> action)
+    {
+        GetOrCreateActivatedActionList(services).Add<T>(action);
+    }
+
+    public static BonServiceActivatedActionList GetActivatedActionList(this IServiceCollection services)
+    {
+        return GetOrCreateActivatedActionList(services);
+    }
+
+    private static BonServiceActivatedActionList GetOrCreateActivatedActionList(IServiceCollection services)
+    {
+        var actionList = services.GetSingletonInstanceOrNull<IBonObjectAccessor<BonServiceActivatedActionList>>()?.Value;
+        if (actionList == null)
+        {
+            actionList = new BonServiceActivatedActionList();
+            services.AddObjectAccessor(actionList);
+        }
+
+        return actionList;
+    }
+
     // OnExposing
 
     public static void OnExposing(this IServiceCollection services, Action<IOnServiceExposingContext> exposeAction)

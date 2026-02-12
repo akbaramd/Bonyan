@@ -2,26 +2,24 @@ using Bonyan.IdentityManagement.Domain;
 using Bonyan.Modularity;
 using Bonyan.Modularity.Abstractions;
 using Bonyan.TenantManagement.Domain;
-using BonyanTemplate.Domain.Users;
 
+namespace BonyanTemplate.Domain;
 
-namespace BonyanTemplate.Domain
+/// <summary>
+/// Domain layer module for the Bonyan Template. Registers domain services and dependencies.
+/// </summary>
+public class BonyanTemplateDomainModule : BonModule
 {
-    public class BonyanTemplateDomainModule : BonModule
+    /// <inheritdoc />
+    public BonyanTemplateDomainModule()
     {
-        public BonyanTemplateDomainModule()
-        {
-            DependOn<BonTenantManagementDomainModule>();
-            DependOn<BonIdentityManagementDomainModule<User,Role>>();
-        }
+        DependOn<BonTenantManagementDomainModule>();
+        DependOn<BonIdentityManagementDomainModule>();
+    }
 
-        public override Task OnConfigureAsync(BonConfigurationContext context)
-        {
-           
-            
-            
-
-            return base.OnConfigureAsync(context);
-        }
+    /// <inheritdoc />
+    public override ValueTask OnConfigureAsync(BonConfigurationContext context, CancellationToken cancellationToken = default)
+    {
+        return base.OnConfigureAsync(context, cancellationToken);
     }
 }

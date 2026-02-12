@@ -1,4 +1,3 @@
-using Bonyan.IdentityManagement.Domain.Roles;
 using Bonyan.IdentityManagement.Domain.Users.ValueObjects;
 using Bonyan.Layer.Domain.Entities;
 using Bonyan.UserManagement.Domain.Users.ValueObjects;
@@ -6,39 +5,18 @@ using Bonyan.UserManagement.Domain.Users.ValueObjects;
 namespace Bonyan.IdentityManagement.Domain.Users;
 
 /// <summary>
-/// Represents a claim associated with a user in the identity system.
+/// ادعای کاربر — نوع نهایی بدون جنریک.
 /// </summary>
-public class BonIdentityUserClaims<TUser,TRole> : BonEntity<BonUserClaimId>
-    where TUser : BonIdentityUser<TUser,TRole> where TRole : BonIdentityRole<TRole>
+public class BonIdentityUserClaims : BonEntity<BonUserClaimId>
 {
-    /// <summary>
-    /// Gets the ID of the user associated with this claim.
-    /// </summary>
-    public BonUserId UserId { get; private set; }
-
-    /// <summary>
-    /// Gets the type of the claim (e.g., "role", "permission", "email").
-    /// </summary>
-    public string ClaimType { get; private set; }
-
-    /// <summary>
-    /// Gets the value of the claim.
-    /// </summary>
-    public string ClaimValue { get; private set; }
-
-    /// <summary>
-    /// Gets the issuer of the claim (optional).
-    /// </summary>
+    public BonUserId UserId { get; private set; } = null!;
+    public string ClaimType { get; private set; } = string.Empty;
+    public string ClaimValue { get; private set; } = string.Empty;
     public string? Issuer { get; private set; }
-
     public string? ClaimValueType { get; set; }
 
-    // Protected constructor for EF Core
     protected BonIdentityUserClaims() { }
 
-    /// <summary>
-    /// Constructs a new user claim.
-    /// </summary>
     public BonIdentityUserClaims(BonUserClaimId id, BonUserId userId, string claimType, string claimValue, string? claimValueType, string? issuer = null)
     {
         Id = id ?? throw new ArgumentNullException(nameof(id));
@@ -49,27 +27,7 @@ public class BonIdentityUserClaims<TUser,TRole> : BonEntity<BonUserClaimId>
         Issuer = issuer;
     }
 
-    /// <summary>
-    /// Updates the claim value.
-    /// </summary>
-    public void UpdateClaimValue(string newValue)
-    {
-        ClaimValue = newValue ?? throw new ArgumentNullException(nameof(newValue));
-    }
-
-    /// <summary>
-    /// Updates the claim type.
-    /// </summary>
-    public void UpdateClaimType(string newType)
-    {
-        ClaimType = newType ?? throw new ArgumentNullException(nameof(newType));
-    }
-
-    /// <summary>
-    /// Updates the issuer.
-    /// </summary>
-    public void UpdateIssuer(string? newIssuer)
-    {
-        Issuer = newIssuer;
-    }
-} 
+    public void UpdateClaimValue(string newValue) => ClaimValue = newValue ?? throw new ArgumentNullException(nameof(newValue));
+    public void UpdateClaimType(string newType) => ClaimType = newType ?? throw new ArgumentNullException(nameof(newType));
+    public void UpdateIssuer(string? newIssuer) => Issuer = newIssuer;
+}

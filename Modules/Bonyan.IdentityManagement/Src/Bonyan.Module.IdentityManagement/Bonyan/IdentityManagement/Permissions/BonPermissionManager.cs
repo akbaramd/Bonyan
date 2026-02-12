@@ -1,8 +1,6 @@
 using System.Collections.Concurrent;
-using Bonyan.IdentityManagement.Domain.Roles;
 using Bonyan.IdentityManagement.Domain.Roles.DomainServices;
 using Bonyan.IdentityManagement.Domain.Roles.ValueObjects;
-using Bonyan.IdentityManagement.Domain.Users;
 using Bonyan.IdentityManagement.Domain.Users.DomainServices;
 using Bonyan.IdentityManagement.Domain.Users.ValueObjects;
 using Bonyan.UserManagement.Domain.Users.ValueObjects;
@@ -12,14 +10,12 @@ using Microsoft.Extensions.Logging;
 namespace Bonyan.IdentityManagement.Permissions;
 
 /// <summary>
-/// Implementation of permission manager
+/// Implementation of permission manager (non-generic).
 /// </summary>
-public class BonPermissionManager<TUser, TRole> : IBonPermissionManager<TUser, TRole>
-    where TUser : BonIdentityUser<TUser, TRole>
-    where TRole : BonIdentityRole<TRole>
+public class BonPermissionManager : IBonPermissionManager
 {
     private readonly IServiceProvider _serviceProvider;
-    private readonly ILogger<BonPermissionManager<TUser, TRole>> _logger;
+    private readonly ILogger<BonPermissionManager> _logger;
     private readonly ConcurrentDictionary<string, PermissionDefinition> _permissions = new();
     private readonly ConcurrentDictionary<string, PermissionGroupDefinition> _groups = new();
     private readonly object _initializationLock = new();
@@ -27,7 +23,7 @@ public class BonPermissionManager<TUser, TRole> : IBonPermissionManager<TUser, T
 
     public BonPermissionManager(
         IServiceProvider serviceProvider,
-        ILogger<BonPermissionManager<TUser, TRole>> logger)
+        ILogger<BonPermissionManager> logger)
     {
         _serviceProvider = serviceProvider;
         _logger = logger;
@@ -142,7 +138,7 @@ public class BonPermissionManager<TUser, TRole> : IBonPermissionManager<TUser, T
 
         try
         {
-            var userManager = _serviceProvider.GetRequiredService<IBonIdentityUserManager<TUser, TRole>>();
+            var userManager = _serviceProvider.GetRequiredService<IBonIdentityUserManager>();
             var userResult = await userManager.FindByIdAsync(userId);
             
             if (!userResult.IsSuccess)
@@ -166,7 +162,7 @@ public class BonPermissionManager<TUser, TRole> : IBonPermissionManager<TUser, T
     {
         try
         {
-            var userManager = _serviceProvider.GetRequiredService<IBonIdentityUserManager<TUser, TRole>>();
+            var userManager = _serviceProvider.GetRequiredService<IBonIdentityUserManager>();
             var userResult = await userManager.FindByIdAsync(userId);
             
             if (!userResult.IsSuccess)
@@ -197,7 +193,7 @@ public class BonPermissionManager<TUser, TRole> : IBonPermissionManager<TUser, T
 
         try
         {
-            var roleManager = _serviceProvider.GetRequiredService<IBonIdentityRoleManager<TRole>>();
+            var roleManager = _serviceProvider.GetRequiredService<IBonIdentityRoleManager>();
             var roleResult = await roleManager.FindRoleByIdAsync(roleId.Value);
             
             if (!roleResult.IsSuccess)
@@ -221,7 +217,7 @@ public class BonPermissionManager<TUser, TRole> : IBonPermissionManager<TUser, T
     {
         try
         {
-            var roleManager = _serviceProvider.GetRequiredService<IBonIdentityRoleManager<TRole>>();
+            var roleManager = _serviceProvider.GetRequiredService<IBonIdentityRoleManager>();
             var roleResult = await roleManager.FindRoleByIdAsync(roleId.Value);
             
             if (!roleResult.IsSuccess)
@@ -253,7 +249,7 @@ public class BonPermissionManager<TUser, TRole> : IBonPermissionManager<TUser, T
     {
         try
         {
-            var userManager = _serviceProvider.GetRequiredService<IBonIdentityUserManager<TUser, TRole>>();
+            var userManager = _serviceProvider.GetRequiredService<IBonIdentityUserManager>();
             var userResult = await userManager.FindByIdAsync(userId);
             
             if (!userResult.IsSuccess)
@@ -282,7 +278,7 @@ public class BonPermissionManager<TUser, TRole> : IBonPermissionManager<TUser, T
     {
         try
         {
-            var userManager = _serviceProvider.GetRequiredService<IBonIdentityUserManager<TUser, TRole>>();
+            var userManager = _serviceProvider.GetRequiredService<IBonIdentityUserManager>();
             var userResult = await userManager.FindByIdAsync(userId);
             
             if (!userResult.IsSuccess)
@@ -298,7 +294,7 @@ public class BonPermissionManager<TUser, TRole> : IBonPermissionManager<TUser, T
                 return Enumerable.Empty<string>();
             }
 
-            var roleManager = _serviceProvider.GetRequiredService<IBonIdentityRoleManager<TRole>>();
+            var roleManager = _serviceProvider.GetRequiredService<IBonIdentityRoleManager>();
             var allPermissions = new List<string>();
 
             foreach (var role in rolesResult.Value)
@@ -323,7 +319,7 @@ public class BonPermissionManager<TUser, TRole> : IBonPermissionManager<TUser, T
     {
         try
         {
-            var roleManager = _serviceProvider.GetRequiredService<IBonIdentityRoleManager<TRole>>();
+            var roleManager = _serviceProvider.GetRequiredService<IBonIdentityRoleManager>();
             var roleResult = await roleManager.FindRoleByIdAsync(roleId.Value);
             
             if (!roleResult.IsSuccess)

@@ -342,6 +342,7 @@ public class BonModularityApplication<TModule> : IBonModularityApplication where
 
         // Register core services (removed duplicates - fixes issue #16)
         _serviceCollection.TryAddSingleton(_moduleLoader);
+        _serviceCollection.TryAddSingleton<IModuleContainer>(this);
         _serviceCollection.TryAddSingleton<IBonModuleContainer>(this);
         _serviceCollection.TryAddSingleton<IBonModuleConfigurator>(this);
         _serviceCollection.TryAddSingleton<IBonModuleInitializer>(this);
@@ -350,12 +351,7 @@ public class BonModularityApplication<TModule> : IBonModularityApplication where
         _serviceCollection.TryAddSingleton<ITypeFinder>(_typeFinder);
         _serviceCollection.TryAddSingleton(_plugInSources);
 
-        // Run conventional registration for each assembly (ABP-style).
-        // AddAssembly runs all registrars (GetCandidateTypes, CanRegister, GetRegistration) and adds to services.
-        foreach (var assembly in _assemblyFinder.Assemblies)
-        {
-            _serviceCollection.AddAssembly(assembly);
-        }
+        _serviceCollection.AddAssembly(typeof(IBonModularityApplication));
     }
 
     /// <summary>

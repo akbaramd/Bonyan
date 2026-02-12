@@ -1,18 +1,21 @@
-﻿using Bonyan.IdentityManagement.Domain.Roles;
+using Bonyan.IdentityManagement.Domain.Roles;
 using Bonyan.IdentityManagement.Domain.Users;
+using Bonyan.IdentityManagement.Domain.Users.UserMeta;
 using Bonyan.UserManagement.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Bonyan.IdentityManagement.EntityFrameworkCore;
 
-public interface IBonIdentityManagementDbContext<TUser,TRole> : IBonUserManagementDbContext<TUser>
-    where TUser : BonIdentityUser<TUser,TRole> where TRole : BonIdentityRole<TRole>
+/// <summary>
+/// DbContext for identity management (non-generic). Uses <see cref="BonIdentityUser"/> and <see cref="BonIdentityRole"/>.
+/// </summary>
+public interface IBonIdentityManagementDbContext : IBonUserManagementDbContext<BonIdentityUser>
 {
-    public DbSet<TRole> Roles { get; set; }
-    public DbSet<BonIdentityUserToken<TUser,TRole>> UserTokens { get; set; }
-    public DbSet<BonIdentityUserRoles<TUser,TRole>> UserRoles { get; set; }
-    public DbSet<BonIdentityUserClaims<TUser,TRole>> UserClaims { get; set; }
-    public DbSet<BonIdentityRoleClaims<TRole>> RoleClaims { get; set; }
+    DbSet<BonIdentityRole> Roles { get; set; }
+    DbSet<BonIdentityUserToken> UserTokens { get; set; }
+    DbSet<BonIdentityUserRoles> UserRoles { get; set; }
+    DbSet<BonIdentityUserClaims> UserClaims { get; set; }
+    DbSet<BonIdentityRoleClaims> RoleClaims { get; set; }
+    DbSet<BonIdentityRoleMeta> RoleMetas { get; set; }
+    DbSet<BonUserMeta> UserMetas { get; set; }
 }
-
-

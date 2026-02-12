@@ -1,0 +1,15 @@
+@model IEnumerable<Bonyan.Ui.BonWeb.Mvc.Contracts.BonWebAssetDefinition>
+@if (Model != null)
+{
+@foreach (var asset in Model)
+{
+    @if (asset.Type == Bonyan.Ui.BonWeb.Mvc.Contracts.BonWebAssetType.Css)
+    {
+        <link rel="stylesheet" href="@asset.Source" />
+    }
+    else if (asset.Type == Bonyan.Ui.BonWeb.Mvc.Contracts.BonWebAssetType.Script)
+    {
+        <script src="@asset.Source"></script>
+    }
+}
+}

@@ -41,10 +41,9 @@ public class BonUnitOfWorkBonDbContextProvider<TDbContext> : IBonDbContextProvid
 
         var dbContextKey = typeof(TDbContext).FullName ?? typeof(TDbContext).Name;
 
-        var databaseApi = await unitOfWork.GetOrAddDatabaseApiAsync(
+        var databaseApi =  unitOfWork.GetOrAddDatabaseApi(
             dbContextKey,
-            async ct => new EfCoreBonDatabaseApi(await CreateDbContextAsync(unitOfWork, ct)),
-            cancellationToken).ConfigureAwait(false);
+            () => new EfCoreBonDatabaseApi(CreateDbContextAsync(unitOfWork, CancellationToken.None).GetAwaiter().GetResult()));
 
         return (TDbContext)((EfCoreBonDatabaseApi)databaseApi).DbContext;
     }

@@ -10,7 +10,6 @@ namespace Bonyan.Layer.Domain
         where TEntity : class, IBonEntity
         where TDbContext :  IEfDbContext
     {
-   
 
         public async Task<TEntity> AddAsync(TEntity entity, bool autoSave = false)
         {
@@ -110,7 +109,7 @@ namespace Bonyan.Layer.Domain
         where TDbContext :  IEfDbContext
         where TKey : notnull
     {
-    
+
         public async Task DeleteByIdAsync(TKey id, bool autoSave = false)
         {
             var dbContext = await GetDbContextAsync();

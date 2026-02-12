@@ -1,10 +1,10 @@
-﻿using Bonyan.Modularity;
-using JetBrains.Annotations;
+using Bonyan.Modularity;
 
 namespace Bonyan.Reflection;
 
-public interface IBonModuleContainer
+/// <summary>
+/// Bonyan module container; extends <see cref="IModuleContainer"/> for use in DI and Autofac.
+/// </summary>
+public interface IBonModuleContainer : IModuleContainer
 {
-    [NotNull]
-    IReadOnlyList<BonModuleDescriptor> Modules { get; }
 }

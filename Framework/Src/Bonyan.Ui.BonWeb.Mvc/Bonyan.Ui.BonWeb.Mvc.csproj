@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>Bonyan.Ui.BonWeb.Mvc</RootNamespace>
+    <PackageId>Bonyan.Ui.BonWeb.Mvc</PackageId>
+    <OutputType>Library</OutputType>
+    <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
+  </PropertyGroup>
+  <Import Project="..\..\..\framework-package.props"/>
+  <ItemGroup>
+    <ProjectReference Include="..\Bonyan.Ui.BonWeb.Mvc.Contracts\Bonyan.Ui.BonWeb.Mvc.Contracts.csproj" />
+    <ProjectReference Include="..\Bonyan.AspNetCore.Mvc\Bonyan.AspNetCore.Mvc.csproj" />
+  </ItemGroup>
+</Project>

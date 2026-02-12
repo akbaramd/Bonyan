@@ -1,14 +1,19 @@
-using Bonyan.IdentityManagement.Domain.Roles;
+using Bonyan.IdentityManagement.Domain.Users;
 using Bonyan.Layer.Domain.Repository.Abstractions;
 
 namespace Bonyan.IdentityManagement.Domain.Users.Repositories;
 
-public interface IBonIdentityUserClaimsRepository<TUser,TRole> : IBonRepository<BonIdentityUserClaims<TUser,TRole>>
-    where TUser : BonIdentityUser<TUser,TRole> where TRole : BonIdentityRole<TRole>
+/// <summary>
+/// Repository for user claims (non-generic).
+/// </summary>
+public interface IBonIdentityUserClaimsRepository 
+    : IBonRepository<BonIdentityUserClaims>, IBonIdentityUserClaimsReadOnlyRepository
 {
 }
 
-public interface IBonIdentityUserClaimsReadOnlyRepository<TUser,TRole> : IBonReadOnlyRepository<BonIdentityUserClaims<TUser,TRole>>
-    where TUser : BonIdentityUser<TUser,TRole> where TRole : BonIdentityRole<TRole>
+/// <summary>
+/// Read-only repository for user claims.
+/// </summary>
+public interface IBonIdentityUserClaimsReadOnlyRepository : IBonReadOnlyRepository<BonIdentityUserClaims>
 {
-} 
+}

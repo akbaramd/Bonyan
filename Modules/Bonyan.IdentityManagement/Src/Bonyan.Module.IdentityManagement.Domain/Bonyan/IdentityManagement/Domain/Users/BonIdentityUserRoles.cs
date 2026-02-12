@@ -1,30 +1,24 @@
-﻿using Bonyan.IdentityManagement.Domain.Roles;
 using Bonyan.IdentityManagement.Domain.Roles.ValueObjects;
 using Bonyan.Layer.Domain.Entities;
 using Bonyan.UserManagement.Domain.Users.ValueObjects;
 
-namespace Bonyan.IdentityManagement.Domain.Users
+namespace Bonyan.IdentityManagement.Domain.Users;
+
+/// <summary>
+/// User–Role link entity (part of User aggregate). References Role only by BonRoleId (other aggregate).
+/// </summary>
+public class BonIdentityUserRoles : BonEntity
 {
-    public class BonIdentityUserRoles<TUser,TRole> : BonEntity
-        where TUser : BonIdentityUser<TUser,TRole> where TRole : BonIdentityRole<TRole>
+    public BonUserId UserId { get; private set; } = null!;
+    public BonRoleId RoleId { get; private set; } = null!;
+
+    protected BonIdentityUserRoles() { }
+
+    public BonIdentityUserRoles(BonUserId userId, BonRoleId roleId)
     {
-        public BonUserId UserId { get; private set; }
-        public BonRoleId RoleId { get; private set; }
-
-        // Navigation property back to role
-        public TRole Role { get; private set; } = default!;
-
-        protected BonIdentityUserRoles() { } // For EF Core use
-
-        public BonIdentityUserRoles(BonUserId userId, BonRoleId roleId)
-        {
-            UserId = userId;
-            RoleId = roleId;
-        }
-
-        public override object GetKey()
-        {
-            return new { UserId, RoleId };
-        }
+        UserId = userId ?? throw new ArgumentNullException(nameof(userId));
+        RoleId = roleId ?? throw new ArgumentNullException(nameof(roleId));
     }
+
+    public override object GetKey() => new { UserId, RoleId };
 }

@@ -1,4 +1,4 @@
-﻿using Autofac;
+using Autofac;
 using Bonyan.Workers;
 using Bonyan.Workers.Hangfire;
 using Hangfire;
@@ -17,8 +17,9 @@ namespace Microsoft.Extensions.DependencyInjection
             configure.Context.Services.AddHangfire(config =>
             {
                 config.UseInMemoryStorage();
-                var x = configure.Context.Services.GetObjectOrNull<IContainer>();
-                config.UseAutofacActivator(x);
+                var lifetimeScope = configure.Context.Services.GetObjectOrNull<IContainer>();
+                if (lifetimeScope != null)
+                    config.UseAutofacActivator(lifetimeScope);
                 pre.Configure(config);
             });
 

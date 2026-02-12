@@ -5,7 +5,6 @@ namespace Bonyan.TenantManagement.EntityFrameworkCore;
 
 public class BonEfCoreTenantRepository : EfCoreBonRepository<BonTenant, BonTenantId, IBonTenantDbContext>, IBonTenantRepository
 {
- 
 
     public Task<BonTenant?> FindByKeyAsync(string key, CancellationToken? cancellationToken = null)
     {

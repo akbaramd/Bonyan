@@ -1,8 +1,9 @@
-﻿using Bonyan.IdentityManagement.Domain.Roles;
+using Bonyan.IdentityManagement.Domain.Roles;
 using Bonyan.IdentityManagement.Domain.Roles.ValueObjects;
 using Bonyan.IdentityManagement.Domain.Users.DomainEvents;
-using Bonyan.IdentityManagement.Domain.Users.DomainServices;
+using Bonyan.IdentityManagement.Domain.Users.UserMeta;
 using Bonyan.IdentityManagement.Domain.Users.ValueObjects;
+using Bonyan.IdentityManagement.Domain;
 using Bonyan.UserManagement.Domain.Users;
 using Bonyan.UserManagement.Domain.Users.Enumerations;
 using Bonyan.UserManagement.Domain.Users.ValueObjects;
@@ -10,376 +11,239 @@ using Bonyan.UserManagement.Domain.Users.ValueObjects;
 namespace Bonyan.IdentityManagement.Domain.Users;
 
 /// <summary>
-/// Represents an identity user in the domain.
-/// Implements DDD principles and encapsulates behaviors for roles, tokens, and password management.
+/// User aggregate root. Extends BonUser with password, tokens, roles, claims and meta.
+/// Entities in this aggregate: Tokens (hashed), UserRoles, UserClaims, UserMeta.
+/// UserTokens = security tokens (refresh, etc.); UserMeta = extensible key-value metadata (different usage).
 /// </summary>
-public class BonIdentityUser<TUser,TRole> : BonUser where TUser : BonIdentityUser<TUser,TRole> where TRole : BonIdentityRole<TRole>
+public class BonIdentityUser : BonUser
 {
-    private readonly List<BonIdentityUserToken<TUser,TRole>> _tokens = new List<BonIdentityUserToken<TUser,TRole>>();
-    private readonly List<BonIdentityUserRoles<TUser,TRole>> _roles = new List<BonIdentityUserRoles<TUser,TRole>>();
-    private readonly List<BonIdentityUserClaims<TUser,TRole>> _claims = new List<BonIdentityUserClaims<TUser,TRole>>();
+    private readonly List<BonIdentityUserToken> _tokens = new();
+    private readonly List<BonIdentityUserRoles> _roles = new();
+    private readonly List<BonIdentityUserClaims> _claims = new();
+    private readonly List<BonUserMeta> _metas = new();
 
-    // Properties
-    public BonUserPassword Password { get; private set; }
+    public BonUserPassword Password { get; private set; } = null!;
     public bool CanBeDeleted { get; private set; } = true;
     public DateTime? BannedUntil { get; private set; }
     public int FailedLoginAttemptCount { get; private set; }
     public DateTime? AccountLockedUntil { get; private set; }
-    public UserProfile Profile { get; private set; }
 
-    public IReadOnlyCollection<BonIdentityUserToken<TUser,TRole>> Tokens => _tokens;
-    public IReadOnlyCollection<BonIdentityUserRoles<TUser,TRole>> UserRoles => _roles;
-    public IReadOnlyCollection<BonIdentityUserClaims<TUser,TRole>> UserClaims => _claims;
+    public IReadOnlyCollection<BonIdentityUserToken> Tokens => _tokens;
+    public IReadOnlyCollection<BonIdentityUserRoles> UserRoles => _roles;
+    public IReadOnlyCollection<BonIdentityUserClaims> UserClaims => _claims;
+    public IReadOnlyCollection<BonUserMeta> Metas => _metas;
 
-    // Parameterless constructor for EF Core
     protected BonIdentityUser() { }
 
-    /// <summary>
-    /// Constructs a new identity user with required fields.
-    /// </summary>
-    public BonIdentityUser(BonUserId id, string userName, UserProfile profile) : base(id, userName)
+    public BonIdentityUser(BonUserId id, string userName, UserProfile profile)
+        : base(id, userName, profile)
     {
-        Profile = profile ?? throw new ArgumentNullException(nameof(profile));
     }
 
-    /// <summary>
-    /// Constructs a new identity user with a password.
-    /// </summary>
     public BonIdentityUser(BonUserId id, string userName, string password, UserProfile profile)
-        : this(id, userName, profile)
+        : base(id, userName, profile)
     {
         SetPassword(password);
     }
 
-    /// <summary>
-    /// Constructs a new identity user with additional fields.
-    /// </summary>
     public BonIdentityUser(BonUserId id, string userName, string password, BonUserEmail email, BonUserPhoneNumber phoneNumber, UserProfile profile)
-        : this(id, userName, password, profile)
+        : base(id, userName, profile, email, phoneNumber)
     {
-        SetEmail(email);
-        SetPhoneNumber(phoneNumber);
+        SetPassword(password);
     }
 
-    // Behavior
-
-    /// <summary>
-    /// Updates the password and triggers a domain event.
-    /// </summary>
     public void SetPassword(string newPassword)
     {
         if (string.IsNullOrWhiteSpace(newPassword))
             throw new ArgumentException("Password cannot be empty.", nameof(newPassword));
-
         Password = new BonUserPassword(newPassword);
         AddDomainEvent(new BonIdentityUserPasswordChangedDomainEvent(this));
     }
 
-    /// <summary>
-    /// Verifies the given password against the stored password.
-    /// </summary>
-    public bool VerifyPassword(string password)
-    {
-        return Password.Verify(password);
-    }
+    public bool VerifyPassword(string password) => Password.Verify(password);
 
     /// <summary>
-    /// Sets or updates a token for the user.
+    /// Sets the token for this user. Caller must pass the already-hashed value so it is never stored in plain form.
     /// </summary>
-    public void SetToken(string tokenType, string newValue, DateTime? expiration = null)
+    public void SetToken(string tokenType, string hashedValue, DateTime? expiration = null)
     {
-        if (string.IsNullOrWhiteSpace(tokenType))
-            throw new ArgumentException("Token type cannot be empty.", nameof(tokenType));
-        if (string.IsNullOrWhiteSpace(newValue))
-            throw new ArgumentException("Token value cannot be empty.", nameof(newValue));
+        if (string.IsNullOrWhiteSpace(tokenType)) throw new ArgumentException("Token type cannot be empty.", nameof(tokenType));
+        if (string.IsNullOrWhiteSpace(hashedValue)) throw new ArgumentException("Token hashed value cannot be empty.", nameof(hashedValue));
 
         var token = _tokens.FirstOrDefault(t => t.Type == tokenType);
-
         if (token != null)
         {
-            token.UpdateValue(newValue, expiration);
+            token.UpdateValue(hashedValue, expiration);
             AddDomainEvent(new BonIdentityUserTokenUpdatedDomainEvent(this, token));
         }
         else
         {
-            token = new BonIdentityUserToken<TUser,TRole>(Id, tokenType, newValue, expiration);
+            token = new BonIdentityUserToken(Id, tokenType, hashedValue, expiration);
             _tokens.Add(token);
             AddDomainEvent(new BonIdentityUserTokenAddedDomainEvent(this, token));
         }
     }
 
-    /// <summary>
-    /// Removes a token by its type.
-    /// </summary>
     public void RemoveToken(string tokenType)
     {
         var token = _tokens.FirstOrDefault(t => t.Type == tokenType);
-        if (token == null)
-            throw new InvalidOperationException($"No token of type {tokenType} exists for this user.");
-
+        if (token == null) throw new InvalidOperationException($"No token of type {tokenType} exists for this user.");
         _tokens.Remove(token);
         AddDomainEvent(new BonIdentityUserTokenRemovedDomainEvent(this, token));
     }
 
-    /// <summary>
-    /// Checks if a specific token has expired.
-    /// </summary>
     public bool IsTokenExpired(string tokenType)
     {
         var token = _tokens.FirstOrDefault(t => t.Type == tokenType);
-        if (token == null)
-            throw new InvalidOperationException($"No token of type {tokenType} exists for this user.");
-
+        if (token == null) throw new InvalidOperationException($"No token of type {tokenType} exists for this user.");
         return token.IsExpired();
     }
 
-    /// <summary>
-    /// Assigns a role to the user.
-    /// </summary>
     public void AssignRole(BonRoleId roleId)
     {
         if (_roles.Any(r => r.RoleId == roleId))
             throw new InvalidOperationException($"User already has the role with ID {roleId.Value}.");
-
-        var role = new BonIdentityUserRoles<TUser,TRole>(Id, roleId);
-        _roles.Add(role);
-        AddDomainEvent(new BonIdentityUserRoleAddedDomainEvent(this, roleId));
+        _roles.Add(new BonIdentityUserRoles(Id, roleId));
+        AddDomainEvent(new BonIdentityUserRoleAddedDomainEvent(Id, roleId));
     }
 
-    /// <summary>
-    /// Removes a role from the user.
-    /// </summary>
     public void RemoveRole(BonRoleId roleId)
     {
         var role = _roles.FirstOrDefault(r => r.RoleId == roleId);
-        if (role == null)
-            throw new InvalidOperationException($"User does not have the role with ID {roleId.Value}.");
-
+        if (role == null) throw new InvalidOperationException($"User does not have the role with ID {roleId.Value}.");
         _roles.Remove(role);
-        AddDomainEvent(new BonIdentityUserRoleRemovedDomainEvent(this, roleId));
+        AddDomainEvent(new BonIdentityUserRoleRemovedDomainEvent(Id, roleId));
     }
 
-    /// <summary>
-    /// Adds a claim to the user with auto-generated claim ID.
-    /// </summary>
     public void AddClaim(string claimType, string claimValue, string? issuer = null)
     {
-        if (string.IsNullOrEmpty(claimType))
-            throw new ArgumentException("Claim type cannot be null or empty.", nameof(claimType));
-        if (string.IsNullOrEmpty(claimValue))
-            throw new ArgumentException("Claim value cannot be null or empty.", nameof(claimValue));
-
-        var existingClaim = _claims.FirstOrDefault(c => c.ClaimType == claimType && c.ClaimValue == claimValue);
-        if (existingClaim == null)
-        {
-            var claimId = BonUserClaimId.NewId();
-            var claim = new BonIdentityUserClaims<TUser,TRole>(claimId, Id, claimType, claimValue, null, issuer);
-            _claims.Add(claim);
-        }
+        if (string.IsNullOrEmpty(claimType)) throw new ArgumentException("Claim type cannot be null or empty.", nameof(claimType));
+        if (string.IsNullOrEmpty(claimValue)) throw new ArgumentException("Claim value cannot be null or empty.", nameof(claimValue));
+        if (_claims.All(c => c.ClaimType != claimType || c.ClaimValue != claimValue))
+            _claims.Add(new BonIdentityUserClaims(BonUserClaimId.NewId(), Id, claimType, claimValue, null, issuer));
     }
 
-    /// <summary>
-    /// Adds a claim to the user with specified claim ID.
-    /// </summary>
     public void AddClaim(BonUserClaimId claimId, string claimType, string claimValue, string? issuer = null)
     {
-        if (claimId == null)
-            throw new ArgumentNullException(nameof(claimId));
-        if (string.IsNullOrEmpty(claimType))
-            throw new ArgumentException("Claim type cannot be null or empty.", nameof(claimType));
-        if (string.IsNullOrEmpty(claimValue))
-            throw new ArgumentException("Claim value cannot be null or empty.", nameof(claimValue));
-
-        var existingClaim = _claims.FirstOrDefault(c => c.ClaimType == claimType && c.ClaimValue == claimValue);
-        if (existingClaim == null)
-        {
-            var claim = new BonIdentityUserClaims<TUser,TRole>(claimId, Id, claimType, claimValue, null, issuer);
-            _claims.Add(claim);
-        }
+        if (claimId == null) throw new ArgumentNullException(nameof(claimId));
+        if (string.IsNullOrEmpty(claimType)) throw new ArgumentException("Claim type cannot be null or empty.", nameof(claimType));
+        if (string.IsNullOrEmpty(claimValue)) throw new ArgumentException("Claim value cannot be null or empty.", nameof(claimValue));
+        if (_claims.All(c => c.ClaimType != claimType || c.ClaimValue != claimValue))
+            _claims.Add(new BonIdentityUserClaims(claimId, Id, claimType, claimValue, null, issuer));
     }
 
-    /// <summary>
-    /// Removes a claim from the user.
-    /// </summary>
     public void RemoveClaim(string claimType, string claimValue)
     {
-        if (string.IsNullOrEmpty(claimType))
-            throw new ArgumentException("Claim type cannot be null or empty.", nameof(claimType));
-        if (string.IsNullOrEmpty(claimValue))
-            throw new ArgumentException("Claim value cannot be null or empty.", nameof(claimValue));
-
+        if (string.IsNullOrEmpty(claimType)) throw new ArgumentException("Claim type cannot be null or empty.", nameof(claimType));
+        if (string.IsNullOrEmpty(claimValue)) throw new ArgumentException("Claim value cannot be null or empty.", nameof(claimValue));
         var userClaim = _claims.FirstOrDefault(c => c.ClaimType == claimType && c.ClaimValue == claimValue);
-        if (userClaim != null)
-        {
-            _claims.Remove(userClaim);
-        }
+        if (userClaim != null) _claims.Remove(userClaim);
     }
 
-    /// <summary>
-    /// Removes all claims of a specific type from the user.
-    /// </summary>
     public void RemoveClaimsByType(string claimType)
     {
-        if (string.IsNullOrEmpty(claimType))
-            throw new ArgumentException("Claim type cannot be null or empty.", nameof(claimType));
-
-        var claimsToRemove = _claims.Where(c => c.ClaimType == claimType).ToList();
-        foreach (var claim in claimsToRemove)
-        {
+        if (string.IsNullOrEmpty(claimType)) throw new ArgumentException("Claim type cannot be null or empty.", nameof(claimType));
+        foreach (var claim in _claims.Where(c => c.ClaimType == claimType).ToList())
             _claims.Remove(claim);
-        }
     }
 
-    /// <summary>
-    /// Checks if the user has a specific claim.
-    /// </summary>
     public bool HasClaim(string claimType, string claimValue)
     {
-        if (string.IsNullOrEmpty(claimType))
-            throw new ArgumentException("Claim type cannot be null or empty.", nameof(claimType));
-        if (string.IsNullOrEmpty(claimValue))
-            throw new ArgumentException("Claim value cannot be null or empty.", nameof(claimValue));
-
+        if (string.IsNullOrEmpty(claimType)) throw new ArgumentException("Claim type cannot be null or empty.", nameof(claimType));
+        if (string.IsNullOrEmpty(claimValue)) throw new ArgumentException("Claim value cannot be null or empty.", nameof(claimValue));
         return _claims.Any(c => c.ClaimType == claimType && c.ClaimValue == claimValue);
     }
 
-    /// <summary>
-    /// Gets all claims of a specific type.
-    /// </summary>
-    public IEnumerable<BonIdentityUserClaims<TUser,TRole>> GetClaimsByType(string claimType)
+    public IEnumerable<BonIdentityUserClaims> GetClaimsByType(string claimType)
     {
-        if (string.IsNullOrEmpty(claimType))
-            throw new ArgumentException("Claim type cannot be null or empty.", nameof(claimType));
-
+        if (string.IsNullOrEmpty(claimType)) throw new ArgumentException("Claim type cannot be null or empty.", nameof(claimType));
         return _claims.Where(c => c.ClaimType == claimType);
     }
 
-    /// <summary>
-    /// Marks the user as non-deletable.
-    /// </summary>
-    public void MarkAsNonDeletable()
+    /// <summary>Adds a permission to the user (stored as a claim with type <see cref="BonIdentityClaimTypes.Permission"/>).</summary>
+    public void AddPermission(string permissionName, string? issuer = null) =>
+        AddClaim(BonIdentityClaimTypes.Permission, permissionName ?? throw new ArgumentNullException(nameof(permissionName)), issuer);
+
+    /// <summary>Removes a permission claim from the user.</summary>
+    public void RemovePermission(string permissionName) =>
+        RemoveClaim(BonIdentityClaimTypes.Permission, permissionName ?? throw new ArgumentNullException(nameof(permissionName)));
+
+    /// <summary>Returns true if the user has the given permission (claim type Permission).</summary>
+    public bool HasPermission(string permissionName) =>
+        HasClaim(BonIdentityClaimTypes.Permission, permissionName ?? throw new ArgumentNullException(nameof(permissionName)));
+
+    public void SetMeta(string metaKey, string metaValue)
     {
-        CanBeDeleted = false;
+        if (string.IsNullOrWhiteSpace(metaKey)) throw new ArgumentException("Meta key cannot be null or empty.", nameof(metaKey));
+        var meta = _metas.FirstOrDefault(m => m.MetaKey == metaKey);
+        if (meta != null)
+            meta.UpdateValue(metaValue);
+        else
+            _metas.Add(new BonUserMeta(Id, metaKey, metaValue));
     }
 
-    /// <summary>
-    /// Marks the user as deletable.
-    /// </summary>
-    public void MarkAsDeletable()
+    public void RemoveMeta(string metaKey)
     {
-        CanBeDeleted = true;
+        if (string.IsNullOrWhiteSpace(metaKey)) throw new ArgumentException("Meta key cannot be null or empty.", nameof(metaKey));
+        var meta = _metas.FirstOrDefault(m => m.MetaKey == metaKey);
+        if (meta != null) _metas.Remove(meta);
     }
 
-    /// <summary>
-    /// Increments the failed login attempt count and locks the account if necessary.
-    /// </summary>
+    public string? GetMetaValue(string metaKey) =>
+        _metas.FirstOrDefault(m => m.MetaKey == metaKey)?.MetaValue;
+
+    public void MarkAsNonDeletable() => CanBeDeleted = false;
+    public void MarkAsDeletable() => CanBeDeleted = true;
+
     public void IncrementFailedLoginAttemptCount()
     {
         FailedLoginAttemptCount++;
-
         if (FailedLoginAttemptCount >= 3)
         {
-            var lockDuration = TimeSpan.FromMinutes(Math.Pow(2, FailedLoginAttemptCount - 3)); // 1, 2, 4, 8, ... minutes
+            var lockDuration = TimeSpan.FromMinutes(Math.Pow(2, FailedLoginAttemptCount - 3));
             LockAccountUntil(DateTime.Now.Add(lockDuration));
         }
     }
 
-    /// <summary>
-    /// Resets the failed login attempt count and unlocks the account.
-    /// </summary>
     public void ResetFailedLoginAttemptCount()
     {
         FailedLoginAttemptCount = 0;
         AccountLockedUntil = null;
     }
 
-    /// <summary>
-    /// Locks the account until a specified date.
-    /// </summary>
     public void LockAccountUntil(DateTime until)
     {
-        if (until <= DateTime.Now)
-            throw new ArgumentException("Lock date must be in the future.", nameof(until));
-
+        if (until <= DateTime.Now) throw new ArgumentException("Lock date must be in the future.", nameof(until));
         AccountLockedUntil = until;
         ChangeStatus(UserStatus.Locked);
     }
 
-    /// <summary>
-    /// Checks if the account is currently locked.
-    /// </summary>
-    public bool IsAccountLocked()
-    {
-        return AccountLockedUntil.HasValue && AccountLockedUntil.Value > DateTime.Now;
-    }
+    public bool IsAccountLocked() => AccountLockedUntil.HasValue && AccountLockedUntil.Value > DateTime.Now;
 
-    /// <summary>
-    /// Method to update the profile
-    /// </summary>
-    public void UpdateProfile(UserProfile newProfile)
-    {
-        Profile = newProfile ?? throw new ArgumentNullException(nameof(newProfile));
-    }
+    public void UpdateProfile(UserProfile newProfile) =>
+        UpdatePersonalProfile(newProfile ?? throw new ArgumentNullException(nameof(newProfile)));
 
-    /// <summary>
-    /// Unlocks the account by resetting the lock status and lockout date.
-    /// </summary>
     public void UnlockAccount()
     {
         AccountLockedUntil = null;
-        ChangeStatus(UserStatus.Active); // Assuming UserStatus.Active is the status for an unlocked account
+        ChangeStatus(UserStatus.Active);
     }
 
-    // User Management Methods
-
-    /// <summary>
-    /// Locks the user with an optional reason.
-    /// </summary>
     public void Lock(string? inputReason)
     {
-        if (Status == UserStatus.Locked)
-        {
-            throw new InvalidOperationException("User is already locked.");
-        }
-
-        // Change status to locked
+        if (Status == UserStatus.Locked) throw new InvalidOperationException("User is already locked.");
         ChangeStatus(UserStatus.Locked);
-        
-        // Store lock reason as a claim if provided
-        if (!string.IsNullOrEmpty(inputReason))
-        {
-            AddClaim("LockReason", inputReason);
-        }
-        
-        // Store lock timestamp
+        if (!string.IsNullOrEmpty(inputReason)) AddClaim("LockReason", inputReason);
         AddClaim("LockedAt", DateTime.UtcNow.ToString("O"));
     }
 
-    /// <summary>
-    /// Unlocks the user and removes lock-related claims.
-    /// </summary>
     public void Unlock()
     {
-        if (Status != UserStatus.Locked)
-        {
-            throw new InvalidOperationException("User is not locked.");
-        }
-
-        // Change status to active
+        if (Status != UserStatus.Locked) throw new InvalidOperationException("User is not locked.");
         ChangeStatus(UserStatus.Active);
-        
-        // Remove lock-related claims
         RemoveClaimsByType("LockReason");
         RemoveClaimsByType("LockedAt");
     }
 
-    /// <summary>
-    /// Sets a flag to force password change on next login.
-    /// </summary>
-    public void SetForceChangePassword()
-    {
-        // Add a claim to force password change on next login
-        AddClaim("ForcePasswordChange", "true");
-    }
-
+    public void SetForceChangePassword() => AddClaim("ForcePasswordChange", "true");
 }

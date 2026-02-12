@@ -1,22 +1,18 @@
-using Bonyan.IdentityManagement.Domain.Roles;
-using Bonyan.IdentityManagement.Domain.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
 
 namespace Bonyan.IdentityManagement.Permissions;
 
 /// <summary>
-/// Dynamic policy provider that creates authorization policies for permissions
+/// Dynamic policy provider that creates authorization policies for permissions (non-generic).
 /// </summary>
-public class BonPermissionPolicyProvider<TUser, TRole> : IAuthorizationPolicyProvider
-    where TUser : BonIdentityUser<TUser, TRole>
-    where TRole : BonIdentityRole<TRole>
+public class BonPermissionPolicyProvider : IAuthorizationPolicyProvider
 {
-    private readonly IBonPermissionManager<TUser, TRole> _permissionManager;
+    private readonly IBonPermissionManager _permissionManager;
     private readonly DefaultAuthorizationPolicyProvider _fallbackPolicyProvider;
 
     public BonPermissionPolicyProvider(
-        IBonPermissionManager<TUser, TRole> permissionManager,
+        IBonPermissionManager permissionManager,
         IOptions<AuthorizationOptions> options)
     {
         _permissionManager = permissionManager;

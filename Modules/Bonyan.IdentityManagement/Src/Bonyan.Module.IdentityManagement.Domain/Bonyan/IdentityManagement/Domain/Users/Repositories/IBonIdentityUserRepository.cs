@@ -1,15 +1,18 @@
-﻿using Bonyan.IdentityManagement.Domain.Roles;
+using Bonyan.IdentityManagement.Domain.Users;
 using Bonyan.Layer.Domain.Repository.Abstractions;
 
 namespace Bonyan.IdentityManagement.Domain.Users.Repositories;
 
-public interface IBonIdentityUserRepository<TUser,TRole> : IBonRepository<TUser> where TUser : BonIdentityUser<TUser,TRole> where TRole : BonIdentityRole<TRole>
+/// <summary>
+/// Repository for the final identity user aggregate (non-generic).
+/// </summary>
+public interface IBonIdentityUserRepository : IBonRepository<BonIdentityUser>
 {
 }
 
-public interface IBonIdentityUserReadOnlyRepository<TUser,TRole>: IBonReadOnlyRepository<TUser> 
-    where TUser : BonIdentityUser<TUser,TRole> where TRole : BonIdentityRole<TRole>
+/// <summary>
+/// Read-only repository for identity users.
+/// </summary>
+public interface IBonIdentityUserReadOnlyRepository : IBonReadOnlyRepository<BonIdentityUser>
 {
 }
-
-

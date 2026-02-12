@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>Bonyan.Ui.BonWeb.Mvc.Contracts</RootNamespace>
+    <PackageId>Bonyan.Ui.BonWeb.Mvc.Contracts</PackageId>
+    <OutputType>Library</OutputType>
+  </PropertyGroup>
+  <Import Project="..\..\..\framework-package.props"/>
+</Project>

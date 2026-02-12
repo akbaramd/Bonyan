@@ -1,37 +1,34 @@
-using System.Text;
 using Bonyan.AspNetCore.Authentication;
+using Bonyan.IdentityManagement.ClaimProvider;
 using Bonyan.IdentityManagement.Domain;
-using Bonyan.IdentityManagement.Domain.Roles;
 using Bonyan.IdentityManagement.Domain.Users;
 using Bonyan.IdentityManagement.Options;
 using Bonyan.IdentityManagement.Permissions;
 using Bonyan.Localization;
 using Bonyan.Modularity;
 using Bonyan.Modularity.Abstractions;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
-
 
 namespace Bonyan.IdentityManagement;
 
-public class BonIdentityManagementModule<TUser,TRole> : BonModule where TUser : BonIdentityUser<TUser,TRole> where TRole : BonIdentityRole<TRole>
+/// <summary>
+/// Core identity management module. Configure via <see cref="BonIdentityManagementOptions"/> in PostConfigure.
+/// Other modules can add claims by implementing <see cref="IBonIdentityClaimProvider"/> and registering in DI;
+/// they receive <see cref="BonIdentityClaimProviderContext"/> (no domain entity). Permissions: implement
+/// <see cref="IBonPermissionDefinitionProvider"/> and register in DI.
+/// </summary>
+public class BonIdentityManagementModule : BonModule
 {
     public BonIdentityManagementModule()
     {
         DependOn<BonAspnetCoreAuthenticationModule>();
-        DependOn<BonIdentityManagementDomainModule<TUser,TRole>>();
+        DependOn<BonIdentityManagementDomainModule>();
         DependOn<BonLocalizationModule>();
     }
-    
-    
 
-    public override ValueTask OnConfigureAsync(BonConfigurationContext context , CancellationToken cancellationToken = default)
+    public override ValueTask OnConfigureAsync(BonConfigurationContext context, CancellationToken cancellationToken = default)
     {
-        // Register localization resource for this module
         context.Services.PreConfigure<BonLocalizationOptions>(options =>
         {
             options.Resources
@@ -39,47 +36,34 @@ public class BonIdentityManagementModule<TUser,TRole> : BonModule where TUser : 
                 .AddVirtualJson("/Localization/IdentityManagement");
         });
 
-        context.Services.AddSingleton<IBonPermissionManager<TUser,TRole>, BonPermissionManager<TUser,TRole>>();
-
-        // Register permission definition providers
+        context.Services.AddSingleton<IBonPermissionManager, BonPermissionManager>();
         context.Services.AddTransient<IBonPermissionDefinitionProvider, BonIdentityManagementPermissionDefinitionProvider>();
-        
-        // Register dynamic policy provider
-        context.Services.AddSingleton<IAuthorizationPolicyProvider, BonPermissionPolicyProvider<TUser,TRole>>();
-        
+        context.Services.AddSingleton<IAuthorizationPolicyProvider, BonPermissionPolicyProvider>();
+
         context.Services.PreConfigure<AuthorizationOptions>(c =>
         {
-            var permissionAccessor = context.Services.GetRequiredService<IBonPermissionManager<TUser,TRole>>();
-
+            var permissionAccessor = context.Services.GetRequiredService<IBonPermissionManager>();
             foreach (var permission in permissionAccessor.GetAllPermissions())
-            {
-                // Create a policy with the required permissions
                 c.AddPolicy(permission.Name, policy =>
                     policy.Requirements.Add(new BonPermissionRequirement(permission.Name)));
-            }
         });
 
+        context.Services.AddSingleton<IAuthorizationHandler, BonIdentityPermissionHandler>();
 
-  
-        // Register permission-based authorization handler
-        context.Services.AddSingleton<IAuthorizationHandler, BonIdentityPermissionHandler<TUser,TRole>>();
-        
-        // Register the ClaimProviderManager
-        context.Services.AddTransient<IBonIdentityClaimProvider<TUser,TRole>, DefaultClaimProvider<TUser,TRole>>();
-        context.Services.AddTransient<IBonIdentityClaimProviderManager<TUser,TRole>, ClaimProviderManager<TUser,TRole>>();
-        
-        return base.OnConfigureAsync(context);
+        context.Services.AddTransient<IBonIdentityClaimProvider, DefaultClaimProvider>();
+        context.Services.AddTransient<IBonIdentityClaimProviderManager, ClaimProviderManager>();
+
+        context.Services.AddSingleton<IUserTokenHasher, Sha256UserTokenHasher>();
+
+        return base.OnConfigureAsync(context, cancellationToken);
     }
 
-    public override ValueTask OnPostConfigureAsync(BonPostConfigurationContext context , CancellationToken cancellationToken = default)
+    public override ValueTask OnPostConfigureAsync(BonPostConfigurationContext context, CancellationToken cancellationToken = default)
     {
-        // Execute pre-configured actions for identity management options
         context.Services.ExecutePreConfiguredActions(new BonIdentityManagementOptions(context));
-        
-        return base.OnPostConfigureAsync(context);
+        return base.OnPostConfigureAsync(context, cancellationToken);
     }
 }
 
-// Marker resource class for localization
 [LocalizationResourceName("IdentityManagement")]
 public class BonIdentityManagementResource { }

@@ -88,6 +88,21 @@ public abstract class ConventionalRegistrarBase : IConventionalRegistrar
     {
         if (interfaceType == null || !interfaceType.IsInterface)
             return false;
+
+        // Never expose DI infrastructure interfaces via convention-based "self + interfaces" registration.
+        // Otherwise types implementing IServiceProvider (directly or indirectly) can accidentally override
+        // the container's IServiceProvider and cause circular dependencies (e.g. BonApplicationService).
+        if (interfaceType == typeof(IServiceProvider) ||
+            interfaceType == typeof(IServiceScopeFactory) ||
+            interfaceType.FullName == "Microsoft.Extensions.DependencyInjection.IServiceProviderIsService" ||
+            interfaceType.FullName == "Microsoft.Extensions.DependencyInjection.IServiceProviderIsKeyedService" ||
+            interfaceType.FullName == "Microsoft.Extensions.DependencyInjection.IKeyedServiceProvider" ||
+            interfaceType.FullName == "Microsoft.Extensions.DependencyInjection.ISupportRequiredService" ||
+            interfaceType.FullName == "Microsoft.Extensions.DependencyInjection.IServiceScope")
+        {
+            return false;
+        }
+
         var name = interfaceType.Name;
         if (name == nameof(IDisposable) || name == nameof(IAsyncDisposable))
             return false;
@@ -96,7 +111,8 @@ public abstract class ConventionalRegistrarBase : IConventionalRegistrar
         return true;
     }
 
-    /// <summary>Whether to replace existing registration for the same service type.</summary>
+    /// <summary>Whether to replace existing registration
+    ///  for the same service type.</summary>
     protected virtual bool GetReplaceExisting(Type type, BonServiceAttribute? attribute)
     {
         return attribute?.ReplaceExisting ?? false;

@@ -1,17 +1,30 @@
-﻿using Bonyan.IdentityManagement.Domain.Roles;
 using Bonyan.IdentityManagement.Domain.Roles.ValueObjects;
 using Bonyan.Layer.Domain.Events;
+using Bonyan.UserManagement.Domain.Users.ValueObjects;
 
 namespace Bonyan.IdentityManagement.Domain.Users.DomainEvents;
 
+/// <summary>
+/// Raised when a role is removed from a user. Carries user and role identity for handlers.
+/// </summary>
 public class BonIdentityUserRoleRemovedDomainEvent : BonDomainEventBase
 {
-    public readonly object User;
-    public readonly BonRoleId RoleId;
+    /// <summary>
+    /// Id of the user from whom the role was removed.
+    /// </summary>
+    public BonUserId UserId { get; }
 
-    public BonIdentityUserRoleRemovedDomainEvent(object user, BonRoleId role)
+    /// <summary>
+    /// Id of the role that was removed.
+    /// </summary>
+    public BonRoleId RoleId { get; }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="BonIdentityUserRoleRemovedDomainEvent"/> class.
+    /// </summary>
+    public BonIdentityUserRoleRemovedDomainEvent(BonUserId userId, BonRoleId roleId)
     {
-        User = user ?? throw new ArgumentNullException(nameof(user));
-        RoleId = role ?? throw new ArgumentNullException(nameof(role));
+        UserId = userId ?? throw new ArgumentNullException(nameof(userId));
+        RoleId = roleId ?? throw new ArgumentNullException(nameof(roleId));
     }
 }

@@ -1,17 +1,12 @@
-using Bonyan.IdentityManagement.Domain.Roles;
-using Bonyan.IdentityManagement.Domain.Users;
-using Bonyan.IdentityManagement.Domain.Users.ValueObjects;
 using Bonyan.IdentityManagement.Domain.Roles.ValueObjects;
 using Bonyan.UserManagement.Domain.Users.ValueObjects;
 
 namespace Bonyan.IdentityManagement.Permissions;
 
 /// <summary>
-/// Interface for managing permissions in the system
+/// Interface for managing permissions in the system (non-generic).
 /// </summary>
-public interface IBonPermissionManager<TUser, TRole>
-    where TUser : BonIdentityUser<TUser, TRole>
-    where TRole : BonIdentityRole<TRole>
+public interface IBonPermissionManager
 {
     /// <summary>
     /// Initializes all permissions from registered providers

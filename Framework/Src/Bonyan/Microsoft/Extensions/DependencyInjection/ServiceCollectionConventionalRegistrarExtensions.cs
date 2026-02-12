@@ -29,7 +29,9 @@ public static class ServiceCollectionConventionalRegistrarExtensions
 
     /// <summary>
     /// Gets or creates the list of conventional registrars. If created, adds defaults:
-    /// <see cref="BonAttributeConventionalRegistrar"/> ([BonService]) and <see cref="BonConventionRegistrar"/> (*Service, *Repository, etc.).
+    /// <see cref="BonAttributeConventionalRegistrar"/> ([BonService]) only.
+    /// If you want naming-convention registration (e.g. *Service, *Repository), explicitly add <see cref="BonConventionRegistrar"/>
+    /// via <see cref="AddConventionalRegistrar"/>.
     /// </summary>
     public static ConventionalRegistrarList GetOrCreateConventionalRegistrarList(this IServiceCollection services)
     {
@@ -38,7 +40,6 @@ public static class ServiceCollectionConventionalRegistrarExtensions
         {
             list = new ConventionalRegistrarList();
             list.Add(new BonAttributeConventionalRegistrar());
-            list.Add(new BonConventionRegistrar());
             services.AddObjectAccessor(list);
         }
         return list;

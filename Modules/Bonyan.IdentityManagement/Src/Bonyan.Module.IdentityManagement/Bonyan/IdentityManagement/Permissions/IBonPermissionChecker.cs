@@ -1,19 +1,13 @@
-using System.Security.Claims;
-using Bonyan.IdentityManagement.Domain.Roles;
-using Bonyan.IdentityManagement.Domain.Users;
-using Bonyan.IdentityManagement.Domain.Users.ValueObjects;
-using Bonyan.User;
 using Bonyan.UserManagement.Domain.Users.ValueObjects;
+using Bonyan.User;
 using Microsoft.AspNetCore.Http;
 
 namespace Bonyan.IdentityManagement.Permissions;
 
 /// <summary>
-/// Interface for checking permissions in application services
+/// Interface for checking permissions in application services (non-generic).
 /// </summary>
-public interface IBonPermissionChecker<TUser, TRole>
-    where TUser : BonIdentityUser<TUser, TRole>
-    where TRole : BonIdentityRole<TRole>
+public interface IBonPermissionChecker
 {
     /// <summary>
     /// Checks if the current user has a specific permission
@@ -75,18 +69,16 @@ public interface IBonPermissionChecker<TUser, TRole>
 }
 
 /// <summary>
-/// Implementation of permission checker
+/// Implementation of permission checker (non-generic).
 /// </summary>
-public class BonPermissionChecker<TUser, TRole> : IBonPermissionChecker<TUser, TRole>
-    where TUser : BonIdentityUser<TUser, TRole>
-    where TRole : BonIdentityRole<TRole>
+public class BonPermissionChecker : IBonPermissionChecker
 {
-    private readonly IBonPermissionManager<TUser, TRole> _permissionManager;
+    private readonly IBonPermissionManager _permissionManager;
     private readonly IBonCurrentUser _bonCurrentUser;
     private readonly IHttpContextAccessor _httpContextAccessor;
 
     public BonPermissionChecker(
-        IBonPermissionManager<TUser, TRole> permissionManager,
+        IBonPermissionManager permissionManager,
         IHttpContextAccessor httpContextAccessor, IBonCurrentUser bonCurrentUser)
     {
         _permissionManager = permissionManager;

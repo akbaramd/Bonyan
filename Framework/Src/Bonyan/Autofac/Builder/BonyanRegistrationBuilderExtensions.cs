@@ -1,75 +1,91 @@
+using System.Reflection;
+using Autofac.Builder;
 using Autofac.Core;
 using Autofac.Extras.DynamicProxy;
 using Bonyan.Autofac;
 using Bonyan.Castle.DynamicProxy;
 using Bonyan.DependencyInjection;
-using Bonyan.Reflection;
+using Bonyan.Modularity;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace Autofac.Builder;
-
-public static class BonyanRegistrationBuilderExtensions
+public static class AbpRegistrationBuilderExtensions
 {
-    public static IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> ConfigureBonyanConventions<TLimit, TActivatorData, TRegistrationStyle>(
+    public static IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> ConfigureAbpConventions<TLimit, TActivatorData, TRegistrationStyle>(
             this IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> registrationBuilder,
-            IBonModuleContainer bonModuleContainer,
-            BonServiceRegistrationActionList registrationActionList)
+            ServiceDescriptor serviceDescriptor,
+            IModuleContainer moduleContainer,
+            BonServiceRegistrationActionList registrationActionList,
+            BonServiceActivatedActionList activatedActionList)
+        where TActivatorData : ReflectionActivatorData
     {
-        var serviceType = registrationBuilder.RegistrationData.Services
-            .OfType<IServiceWithType>()
-            .FirstOrDefault()?.ServiceType;
+        registrationBuilder = registrationBuilder.InvokeActivatedActions(activatedActionList, serviceDescriptor);
+
+        var serviceType = registrationBuilder.RegistrationData.Services.OfType<IServiceWithType>().FirstOrDefault()?.ServiceType;
         if (serviceType == null)
         {
             return registrationBuilder;
         }
 
-        Type? implementationType = GetImplementationType(registrationBuilder);
+        var implementationType = registrationBuilder.ActivatorData.ImplementationType;
+        if (implementationType == null)
+        {
+            return registrationBuilder;
+        }
 
-        registrationBuilder = registrationBuilder.EnablePropertyInjection(bonModuleContainer, implementationType);
-        registrationBuilder = registrationBuilder.InvokeRegistrationActions(registrationActionList, serviceType, implementationType);
+        registrationBuilder = registrationBuilder.EnablePropertyInjection(moduleContainer, implementationType);
+        registrationBuilder = registrationBuilder.InvokeRegistrationActions(registrationActionList, serviceType, implementationType, serviceDescriptor.ServiceKey);
 
         return registrationBuilder;
     }
 
-    private static Type? GetImplementationType<TLimit, TActivatorData, TRegistrationStyle>(
-        IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> registrationBuilder)
+    private static IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> InvokeActivatedActions<TLimit, TActivatorData, TRegistrationStyle>(
+        this IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> registrationBuilder,
+        BonServiceActivatedActionList activatedActionList,
+        ServiceDescriptor serviceDescriptor)
+        where TActivatorData : ReflectionActivatorData
     {
-        var activatorData = registrationBuilder.ActivatorData;
+        var actions = activatedActionList.GetActions(serviceDescriptor);
+        if (actions.Any())
+        {
+            registrationBuilder.OnActivated(context =>
+            {
+                var serviceActivatedContext = new OnServiceActivatedContext(context.Instance!);
+                foreach (var action in actions)
+                {
+                    action.Invoke(serviceActivatedContext);
+                }
+            });
+        }
 
-        if (activatorData is ReflectionActivatorData reflectionActivatorData)
-        {
-            return reflectionActivatorData.ImplementationType;
-        }
-        else if (activatorData is SimpleActivatorData simpleActivatorData)
-        {
-            return simpleActivatorData.Activator.LimitType;
-        }
-        else
-        {
-            // Cannot get implementation type
-            return null;
-        }
+        return registrationBuilder;
     }
 
     private static IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> InvokeRegistrationActions<TLimit, TActivatorData, TRegistrationStyle>(
         this IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> registrationBuilder,
         BonServiceRegistrationActionList registrationActionList,
         Type serviceType,
-        Type? implementationType)
+        Type implementationType,
+        object? serviceKey = null)
+        where TActivatorData : ReflectionActivatorData
     {
-        var serviceRegisteredArgs = new OnServiceRegisteredContext(serviceType, implementationType);
+        var serviceRegistredArgs = new OnServiceRegisteredContext(serviceType, implementationType, serviceKey);
 
         foreach (var registrationAction in registrationActionList)
         {
-            registrationAction.Invoke(serviceRegisteredArgs);
+            registrationAction.Invoke(serviceRegistredArgs);
         }
 
-        if (serviceRegisteredArgs.Interceptors.Any())
+        if (serviceRegistredArgs.Interceptors.Any())
         {
-            registrationBuilder = registrationBuilder.AddInterceptors(
-                registrationActionList,
-                serviceType,
-                serviceRegisteredArgs.Interceptors
-            );
+            var disableAbpFeaturesAttribute = serviceRegistredArgs.ImplementationType.GetCustomAttribute<DisableBonFeaturesAttribute>(true);
+            if (disableAbpFeaturesAttribute == null || !disableAbpFeaturesAttribute.DisableInterceptors)
+            {
+                registrationBuilder = registrationBuilder.AddInterceptors(
+                    registrationActionList,
+                    serviceType,
+                    serviceRegistredArgs.Interceptors
+                );
+            }
         }
 
         return registrationBuilder;
@@ -77,16 +93,12 @@ public static class BonyanRegistrationBuilderExtensions
 
     private static IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> EnablePropertyInjection<TLimit, TActivatorData, TRegistrationStyle>(
             this IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> registrationBuilder,
-            IBonModuleContainer bonModuleContainer,
-            Type? implementationType)
+            IModuleContainer moduleContainer,
+            Type implementationType)
+        where TActivatorData : ReflectionActivatorData
     {
-        if (implementationType == null)
-        {
-            return registrationBuilder;
-        }
-
-        // Enable Property Injection only for types in an assembly containing a BonyanModule and without a DisablePropertyInjection attribute.
-        if (bonModuleContainer.Modules.Any(m => m.AllAssemblies.Contains(implementationType.Assembly)) &&
+        // Enable Property Injection only for types in an assembly containing an AbpModule and without a DisablePropertyInjection attribute on class or properties.
+        if (moduleContainer.Modules.Any(m => m.AllAssemblies.Contains(implementationType.Assembly)) &&
             implementationType.GetCustomAttributes(typeof(DisablePropertyInjectionAttribute), true).IsNullOrEmpty())
         {
             registrationBuilder = registrationBuilder.PropertiesAutowired(new BonyanPropertySelector(false));
@@ -98,9 +110,10 @@ public static class BonyanRegistrationBuilderExtensions
     private static IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle>
         AddInterceptors<TLimit, TActivatorData, TRegistrationStyle>(
             this IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> registrationBuilder,
-            BonServiceRegistrationActionList bonServiceRegistrationActionList,
+            BonServiceRegistrationActionList serviceRegistrationActionList,
             Type serviceType,
             IEnumerable<Type> interceptors)
+        where TActivatorData : ReflectionActivatorData
     {
         if (serviceType.IsInterface)
         {
@@ -108,21 +121,13 @@ public static class BonyanRegistrationBuilderExtensions
         }
         else
         {
-            if (bonServiceRegistrationActionList.IsClassInterceptorsDisabled)
+            if (serviceRegistrationActionList.IsClassInterceptorsDisabled ||
+                serviceRegistrationActionList.DisabledClassInterceptorsSelectors.Any(selector => selector.Predicate(serviceType)))
             {
                 return registrationBuilder;
             }
 
-            if (registrationBuilder is IRegistrationBuilder<TLimit, ConcreteReflectionActivatorData, TRegistrationStyle> concreteBuilder)
-            {
-                concreteBuilder.EnableClassInterceptors();
-                // Cannot assign back to registrationBuilder due to type constraints
-            }
-            else
-            {
-                // Cannot enable class interceptors on non-concrete types
-                return registrationBuilder;
-            }
+            (registrationBuilder as IRegistrationBuilder<TLimit, ConcreteReflectionActivatorData, TRegistrationStyle>)?.EnableClassInterceptors();
         }
 
         foreach (var interceptor in interceptors)

@@ -13,6 +13,9 @@ public interface IOnServiceRegisteredContext
     /// <summary>Implementation type.</summary>
     Type ImplementationType { get; }
 
+    /// <summary>Optional service key (e.g. for keyed services).</summary>
+    object? ServiceKey { get; }
+
     /// <summary>List of interceptors to apply to this service.</summary>
     ITypeList<IBonInterceptor> Interceptors { get; }
 }

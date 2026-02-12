@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <PackageId>Bonyan.Module.IdentityManagement.BonWeb.Mvc</PackageId>
+    <RootNamespace>Bonyan.IdentityManagement.BonWeb.Mvc</RootNamespace>
+    <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
+  </PropertyGroup>
+  <Import Project="..\..\..\..\module-package.props"/>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Framework\Src\Bonyan.Ui.BonWeb.Mvc\Bonyan.Ui.BonWeb.Mvc.csproj" />
+    <ProjectReference Include="..\Bonyan.Module.IdentityManagement.Application\Bonyan.Module.IdentityManagement.Application.csproj" />
+    <ProjectReference Include="..\Bonyan.Module.IdentityManagement\Bonyan.Module.IdentityManagement.csproj" />
+  </ItemGroup>
+</Project>

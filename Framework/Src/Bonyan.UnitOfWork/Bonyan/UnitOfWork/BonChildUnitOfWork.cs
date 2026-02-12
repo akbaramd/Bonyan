@@ -108,13 +108,7 @@ internal class BonChildUnitOfWork : IBonUnitOfWork
         return _parent.GetOrAddDatabaseApi(key, factory);
     }
 
-    public Task<IBonDatabaseApi> GetOrAddDatabaseApiAsync(
-        string key,
-        Func<CancellationToken, Task<IBonDatabaseApi>> factory,
-        CancellationToken cancellationToken = default)
-    {
-        return _parent.GetOrAddDatabaseApiAsync(key, factory, cancellationToken);
-    }
+  
 
     public IBonTransactionApi? FindTransactionApi(string key)
     {

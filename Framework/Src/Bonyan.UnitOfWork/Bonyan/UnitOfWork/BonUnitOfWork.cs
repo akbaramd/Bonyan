@@ -1,4 +1,3 @@
-using System.Collections.Concurrent;
 using System.Collections.Immutable;
 using Bonyan.Core;
 using Bonyan.Exceptions;
@@ -7,10 +6,6 @@ using Microsoft.Extensions.Options;
 
 namespace Bonyan.UnitOfWork;
 
-/// <summary>
-/// Default unit of work implementation. Holds database/transaction APIs, options, events, and completion state.
-/// Must be initialized via <see cref="Initialize"/> (or used as a reserved UoW via <see cref="Reserve"/>) before use.
-/// </summary>
 public class BonUnitOfWork : IBonUnitOfWork
 {
     /// <summary>
@@ -48,8 +43,6 @@ public class BonUnitOfWork : IBonUnitOfWork
     public Dictionary<string, object> Items { get; }
 
     private readonly Dictionary<string, IBonDatabaseApi> _databaseApis;
-    private readonly ConcurrentDictionary<string, Lazy<Task<IBonDatabaseApi>>> _databaseApisAsyncCache;
-    private readonly object _databaseApisLock = new();
     private readonly Dictionary<string, IBonTransactionApi> _transactionApis;
     private readonly BonUnitOfWorkDefaultOptions _defaultOptions;
 
@@ -67,7 +60,6 @@ public class BonUnitOfWork : IBonUnitOfWork
         _defaultOptions = options.Value;
 
         _databaseApis = new Dictionary<string, IBonDatabaseApi>();
-        _databaseApisAsyncCache = new ConcurrentDictionary<string, Lazy<Task<IBonDatabaseApi>>>();
         _transactionApis = new Dictionary<string, IBonTransactionApi>();
 
         Items = new Dictionary<string, object>();
@@ -211,29 +203,7 @@ public class BonUnitOfWork : IBonUnitOfWork
         return _databaseApis.GetOrAdd(key, factory);
     }
 
-    public virtual async Task<IBonDatabaseApi> GetOrAddDatabaseApiAsync(
-        string key,
-        Func<CancellationToken, Task<IBonDatabaseApi>> factory,
-        CancellationToken cancellationToken = default)
-    {
-        Check.NotNullOrWhiteSpace(key, nameof(key));
-        Check.NotNull(factory, nameof(factory));
-
-        var lazy = _databaseApisAsyncCache.GetOrAdd(key, _ =>
-            new Lazy<Task<IBonDatabaseApi>>(() => factory(cancellationToken), isThreadSafe: true));
-
-        var api = await lazy.Value.ConfigureAwait(false);
-
-        lock (_databaseApisLock)
-        {
-            if (!_databaseApis.ContainsKey(key))
-            {
-                _databaseApis.Add(key, api);
-            }
-        }
-
-        return api;
-    }
+   
 
     public virtual IBonTransactionApi? FindTransactionApi(string key)
     {
@@ -305,7 +275,7 @@ public class BonUnitOfWork : IBonUnitOfWork
         }
     }
 
-    protected virtual async ValueTask OnCompletedAsync()
+    protected virtual async Task OnCompletedAsync()
     {
         foreach (var handler in CompletedHandlers)
         {
@@ -332,18 +302,6 @@ public class BonUnitOfWork : IBonUnitOfWork
 
         IsDisposed = true;
 
-        if (!IsCompleted)
-        {
-            try
-            {
-                RollbackAllSync();
-            }
-            catch
-            {
-                // Swallow rollback errors in Dispose; do not throw.
-            }
-        }
-
         DisposeTransactions();
 
         if (!IsCompleted || _exception != null)
@@ -352,34 +310,6 @@ public class BonUnitOfWork : IBonUnitOfWork
         }
 
         OnDisposed();
-    }
-
-    /// <summary>
-    /// Synchronous rollback path for Dispose; ensures transactions are explicitly rolled back before disposal.
-    /// </summary>
-    private void RollbackAllSync()
-    {
-        if (_isRolledback)
-        {
-            return;
-        }
-
-        _isRolledback = true;
-
-        foreach (var transactionApi in GetAllActiveTransactionApis())
-        {
-            if (transactionApi is ISupportsRollback supportsRollback)
-            {
-                try
-                {
-                    supportsRollback.RollbackAsync(CancellationToken.None).GetAwaiter().GetResult();
-                }
-                catch
-                {
-                    // Swallow per-api rollback errors.
-                }
-            }
-        }
     }
 
     private void DisposeTransactions()

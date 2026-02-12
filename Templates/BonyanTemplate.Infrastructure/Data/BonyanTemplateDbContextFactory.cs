@@ -9,9 +9,11 @@ public class BonyanTemplateDbContextFactory : IDesignTimeDbContextFactory<Bonyan
     {
         var optionsBuilder = new DbContextOptionsBuilder<BonyanTemplateDbContext>();
 
-        optionsBuilder.UseSqlite($"Data Source=../BonyanTemplate.WebApi/BonyanTemplate.db");
+        // Design-time and local development: use local SQL Server (LocalDB).
+        // At runtime the app uses the same connection from the module.
+        var connectionString = "Server=(localdb)\\mssqllocaldb;Database=BonyanTemplate;Trusted_Connection=True;TrustServerCertificate=True;";
+        optionsBuilder.UseSqlServer(connectionString);
 
-        var context =  new BonyanTemplateDbContext(optionsBuilder.Options);
-        return context;
+        return new BonyanTemplateDbContext(optionsBuilder.Options);
     }
 }

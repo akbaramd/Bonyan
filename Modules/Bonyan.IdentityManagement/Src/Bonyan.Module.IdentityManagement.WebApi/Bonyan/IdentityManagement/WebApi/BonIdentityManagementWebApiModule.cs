@@ -15,12 +15,12 @@ using Bonyan.UserManagement.Domain.Users.ValueObjects;
 
 namespace Bonyan.IdentityManagement.WebApi;
 
-public class BonIdentityManagementWebApiModule<TUser,TRole> : Modularity.Abstractions.BonModule where TUser : BonIdentityUser<TUser,TRole> where TRole : BonIdentityRole<TRole>
+public class BonIdentityManagementWebApiModule: Modularity.Abstractions.BonModule 
 {
     public BonIdentityManagementWebApiModule()
     {
         DependOn<BonAspNetCoreMvcModule>();
-        DependOn<BonIdentityManagementApplicationModule<TUser,TRole>>();
+        DependOn<BonIdentityManagementApplicationModule>();
     }
 
     public override ValueTask OnConfigureAsync(BonConfigurationContext context , CancellationToken cancellationToken = default)

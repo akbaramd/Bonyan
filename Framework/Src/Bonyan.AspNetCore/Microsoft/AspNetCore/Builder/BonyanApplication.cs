@@ -1,6 +1,7 @@
 ﻿using Bonyan.AspNetCore;
 using Bonyan.Modularity;
 using Bonyan.Modularity.Abstractions;
+using Microsoft.Hosting;
 
 namespace Microsoft.AspNetCore.Builder;
 
@@ -31,7 +32,7 @@ public static class BonyanApplication
         ArgumentException.ThrowIfNullOrWhiteSpace(serviceTitle, nameof(serviceTitle));
 
         var applicationBuilder = WebApplication.CreateBuilder(args);
-        
+        applicationBuilder.Host.UseBonAutofac();
         // Configure Autofac if available (pluggable DI container)
         // TODO: Make this configurable via strategy pattern to support other containers
         // NOTE: ConfigureHostBuilder in .NET 6+ doesn't support IHostBuilder extensions directly

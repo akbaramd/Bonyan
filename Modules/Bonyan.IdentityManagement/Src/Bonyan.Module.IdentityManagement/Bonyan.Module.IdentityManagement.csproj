@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
@@ -18,5 +18,4 @@
     <ProjectReference Include="..\..\..\..\Framework\Src\Bonyan\Bonyan.csproj" />
     <ProjectReference Include="..\Bonyan.Module.IdentityManagement.Domain\Bonyan.Module.IdentityManagement.Domain.csproj" />
   </ItemGroup>
-  <Import Project="..\..\..\..\module-package.props" />
 </Project>

@@ -1,5 +1,4 @@
-﻿using Bonyan.EntityFrameworkCore;
-using Bonyan.IdentityManagement.Domain.Roles;
+using Bonyan.EntityFrameworkCore;
 using Bonyan.IdentityManagement.Domain.Users;
 using Bonyan.IdentityManagement.Domain.Users.Repositories;
 using Bonyan.Layer.Domain;
@@ -9,36 +8,26 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Bonyan.IdentityManagement.EntityFrameworkCore.Repositories;
 
-public class BonEfCoreIdentityUserRepository<TUser, TRole> : EfCoreBonRepository<TUser, BonUserId, IBonIdentityManagementDbContext<TUser, TRole>>, IBonIdentityUserRepository<TUser, TRole> 
-    where TUser : BonIdentityUser<TUser, TRole> 
-    where TRole : BonIdentityRole<TRole>
+public class BonEfCoreIdentityUserRepository : EfCoreBonRepository<BonIdentityUser, BonUserId, IBonIdentityManagementDbContext>, IBonIdentityUserRepository
 {
-    
-    public new IBonDbContextProvider<IBonIdentityManagementDbContext<TUser, TRole>> BonDbContextProvider => LazyServiceProvider.LazyGetRequiredService<IBonDbContextProvider<IBonIdentityManagementDbContext<TUser, TRole>>>();
-    protected override IQueryable<TUser> PrepareQuery(DbSet<TUser> dbSet)
-    {
-        return base.PrepareQuery(dbSet)
-            .Include(x=>x.Tokens)
-            .Include(x=>x.UserRoles)
-            .ThenInclude(x=>x.Role)
-            .Include(x=>x.UserClaims);
-    }
+    public new IBonDbContextProvider<IBonIdentityManagementDbContext> BonDbContextProvider =>
+        LazyServiceProvider.LazyGetRequiredService<IBonDbContextProvider<IBonIdentityManagementDbContext>>();
+
+    protected override IQueryable<BonIdentityUser> PrepareQuery(DbSet<BonIdentityUser> dbSet) =>
+        base.PrepareQuery(dbSet)
+            .Include(x => x.Tokens)
+            .Include(x => x.UserRoles)
+            .Include(x => x.UserClaims);
 }
 
-public class BonEfCoreIdentityUserReadOnlyRepository<TUser, TRole> : EfCoreReadonlyRepository<TUser, BonUserId, IBonIdentityManagementDbContext<TUser, TRole>>, IBonIdentityUserReadOnlyRepository<TUser, TRole> 
-    where TUser : BonIdentityUser<TUser, TRole> 
-    where TRole : BonIdentityRole<TRole>
+public class BonEfCoreIdentityUserReadOnlyRepository : EfCoreReadonlyRepository<BonIdentityUser, BonUserId, IBonIdentityManagementDbContext>, IBonIdentityUserReadOnlyRepository
 {
-    public new IBonDbContextProvider<IBonIdentityManagementDbContext<TUser, TRole>> BonDbContextProvider => LazyServiceProvider.LazyGetRequiredService<IBonDbContextProvider<IBonIdentityManagementDbContext<TUser, TRole>>>();
-    protected override IQueryable<TUser> PrepareQuery(DbSet<TUser> dbSet)
-    {
-        return base.PrepareQuery(dbSet)
-            .Include(x=>x.Tokens)
-            .Include(x=>x.UserRoles)
-            .ThenInclude(x=>x.Role)
-            .Include(x=>x.UserClaims);
-        
-    }
+    public new IBonDbContextProvider<IBonIdentityManagementDbContext> BonDbContextProvider =>
+        LazyServiceProvider.LazyGetRequiredService<IBonDbContextProvider<IBonIdentityManagementDbContext>>();
+
+    protected override IQueryable<BonIdentityUser> PrepareQuery(DbSet<BonIdentityUser> dbSet) =>
+        base.PrepareQuery(dbSet)
+            .Include(x => x.Tokens)
+            .Include(x => x.UserRoles)
+            .Include(x => x.UserClaims);
 }
-
-

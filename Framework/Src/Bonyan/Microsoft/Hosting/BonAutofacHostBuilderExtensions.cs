@@ -2,6 +2,7 @@ using Autofac;
 using Bonyan.Autofac;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Volo.Abp.Autofac;
 
 namespace Microsoft.Hosting;
 
@@ -15,6 +16,6 @@ public static class BonAutofacHostBuilderExtensions
       {
         services.AddObjectAccessor(containerBuilder);
       })
-      .UseServiceProviderFactory(new BonAutofacServiceProviderFactory(containerBuilder));
+      .UseServiceProviderFactory(new AbpAutofacServiceProviderFactory(containerBuilder));
   }
 }

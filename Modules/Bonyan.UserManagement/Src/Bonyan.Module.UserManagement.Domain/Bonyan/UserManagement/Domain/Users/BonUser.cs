@@ -1,147 +1,188 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using Bonyan.Layer.Domain.Aggregate;
 using Bonyan.UserManagement.Domain.Users.DomainEvents;
 using Bonyan.UserManagement.Domain.Users.Enumerations;
 using Bonyan.UserManagement.Domain.Users.ValueObjects;
 
-namespace Bonyan.UserManagement.Domain.Users
+namespace Bonyan.UserManagement.Domain.Users;
+
+/// <summary>
+/// موجودیت کاربر در دامنه — صرفاً پروفایل و اطلاعات تماس. بدون رمز عبور، توکن یا هر مفهوم احراز هویت.
+/// User aggregate: profile, contact info, status. No password, tokens, or any authentication concept.
+/// </summary>
+public class BonUser : BonFullAggregateRoot<BonUserId>, IBonUser
 {
+    /// <summary>نام کاربری یکتا (شناسه نمایشی برای کاربر)</summary>
+    public string UserName { get; private set; } = string.Empty;
+
+    /// <summary>رایانامه (اختیاری)</summary>
+    public BonUserEmail? Email { get; private set; }
+
+    /// <summary>شماره تلفن (اختیاری)</summary>
+    public BonUserPhoneNumber? PhoneNumber { get; private set; }
+
+    /// <summary>وضعیت کاربر در سیستم (فعال، تعلیق، غیرفعال و ...)</summary>
+    public UserStatus Status { get; private set; }
+
+    /// <summary>پروفایل شخصی (نام، نام خانوادگی، کد ملی، تاریخ تولد)</summary>
+    public UserProfile? Profile { get; private set; }
+
+    /// <summary>جنسیت (اختیاری)</summary>
+    public Gender? Gender { get; private set; }
+
+    /// <summary>فرهنگ/زبان ترجیحی (مثلاً fa-IR)</summary>
+    public PreferredCulture? PreferredCulture { get; private set; }
+
+    /// <summary>منطقه زمانی (مثلاً Asia/Tehran)</summary>
+    public string? TimeZoneId { get; private set; }
+
+    /// <summary>آدرس تصویر پروفایل (اختیاری)</summary>
+    public string? AvatarUrl { get; private set; }
+
+    [ConcurrencyCheck]
+    public Guid Version { get; private set; }
+
+    protected BonUser() { }
+
     /// <summary>
-    /// Represents a user entity in the domain with properties and methods
-    /// for managing a user's profile, contact information, verification status, and overall status.
+    /// ایجاد کاربر با حداقل اطلاعات (شناسه و نام کاربری).
     /// </summary>
-    public class BonUser : BonFullAggregateRoot<BonUserId>, IBonUser
+    public BonUser(BonUserId id, string userName)
     {
-        /// <summary>
-        /// Gets or sets the user's unique username.
-        /// </summary>
-        public string UserName { get; private set; }
+        Id = id ?? throw new ArgumentNullException(nameof(id));
+        UserName = userName ?? throw new ArgumentNullException(nameof(userName));
+        Status = UserStatus.Active;
+        AddDomainEvent(new BonUserCreatedDomainEvent(this));
+    }
 
-        /// <summary>
-        /// Gets or sets the user's email address.
-        /// Can be null if the user has not provided an email.
-        /// </summary>
-        public BonUserEmail? Email { get; private set; }
+    /// <summary>
+    /// ایجاد کاربر با اطلاعات تماس (بدون هیچ مفهوم احراز هویت).
+    /// </summary>
+    public BonUser(BonUserId id, string userName, BonUserEmail? email, BonUserPhoneNumber? phoneNumber)
+        : this(id, userName)
+    {
+        Email = email;
+        PhoneNumber = phoneNumber;
+        AddDomainEvent(new BonUserProfileUpdatedDomainEvent(this));
+    }
 
-        /// <summary>
-        /// Gets or sets the user's phone number.
-        /// Can be null if the user has not provided a phone number.
-        /// </summary>
-        public BonUserPhoneNumber? PhoneNumber { get; private set; }
+    /// <summary>
+    /// ایجاد کاربر با پروفایل و اطلاعات تماس.
+    /// </summary>
+    public BonUser(BonUserId id, string userName, UserProfile profile, BonUserEmail? email = null, BonUserPhoneNumber? phoneNumber = null)
+        : this(id, userName, email, phoneNumber)
+    {
+        Profile = profile ?? throw new ArgumentNullException(nameof(profile));
+    }
 
-        /// <summary>
-        /// Gets the current status of the user.
-        /// </summary>
-        public UserStatus Status { get; private set; }
+    // ——— رفتارهای پروفایل و اطلاعات تماس ———
 
-        [ConcurrencyCheck]
-        public Guid Version { get; private set; }
+    /// <summary>
+    /// به‌روزرسانی نام کاربری، رایانامه و شماره تلفن.
+    /// </summary>
+    public void UpdateProfile(string userName, BonUserEmail? email, BonUserPhoneNumber? phoneNumber)
+    {
+        UserName = userName ?? throw new ArgumentNullException(nameof(userName));
+        Email = email;
+        PhoneNumber = phoneNumber;
+        UpdateModifiedDate();
+        AddDomainEvent(new BonUserProfileUpdatedDomainEvent(this));
+    }
 
-        // Parameterless constructor for EF Core
-        protected BonUser() { }
+    /// <summary>
+    /// به‌روزرسانی پروفایل شخصی (نام، نام خانوادگی، کد ملی، تاریخ تولد).
+    /// </summary>
+    public void UpdatePersonalProfile(UserProfile profile)
+    {
+        Profile = profile ?? throw new ArgumentNullException(nameof(profile));
+        UpdateModifiedDate();
+        AddDomainEvent(new BonUserProfileUpdatedDomainEvent(this));
+    }
 
-        /// <summary>
-        /// Initializes a new user with a username only.
-        /// </summary>
-        /// <param name="id">The unique identifier of the user.</param>
-        /// <param name="userName">The unique username of the user.</param>
-        public BonUser(BonUserId id, string userName)
+    /// <summary>
+    /// تنظیم جنسیت (اختیاری).
+    /// </summary>
+    public void SetGender(Gender? gender)
+    {
+        Gender = gender;
+        UpdateModifiedDate();
+    }
+
+    /// <summary>
+    /// تنظیم فرهنگ/زبان ترجیحی.
+    /// </summary>
+    public void SetPreferredCulture(PreferredCulture? culture)
+    {
+        PreferredCulture = culture;
+        UpdateModifiedDate();
+    }
+
+    /// <summary>
+    /// تنظیم منطقه زمانی (مثلاً Asia/Tehran).
+    /// </summary>
+    public void SetTimeZone(string? timeZoneId)
+    {
+        TimeZoneId = timeZoneId;
+        UpdateModifiedDate();
+    }
+
+    /// <summary>
+    /// تنظیم آدرس تصویر پروفایل.
+    /// </summary>
+    public void SetAvatarUrl(string? avatarUrl)
+    {
+        AvatarUrl = avatarUrl;
+        UpdateModifiedDate();
+    }
+
+    public void SetPhoneNumber(BonUserPhoneNumber? bonUserPhoneNumber)
+    {
+        PhoneNumber = bonUserPhoneNumber;
+        UpdateModifiedDate();
+        AddDomainEvent(new BonUserProfileUpdatedDomainEvent(this));
+    }
+
+    public void SetEmail(BonUserEmail? bonUserEmail)
+    {
+        Email = bonUserEmail;
+        UpdateModifiedDate();
+        AddDomainEvent(new BonUserProfileUpdatedDomainEvent(this));
+    }
+
+    /// <summary>
+    /// تأیید رایانامه (علامت‌گذاری به‌عنوان تأییدشده).
+    /// </summary>
+    public void VerifyEmail()
+    {
+        if (Email != null && !Email.IsVerified)
         {
-            Id = id;
-            UserName = userName;
-            Status = UserStatus.Active; // Default status
-            AddDomainEvent(new BonUserCreatedDomainEvent(this));
+            Email.Verify();
+            AddDomainEvent(new BonUserEmailVerifiedDomainEvent(this));
         }
+    }
 
-
-        /// <summary>
-        /// Initializes a new user with complete details including email and phone number.
-        /// </summary>
-        /// <param name="id">The unique identifier of the user.</param>
-        /// <param name="userName">The unique username of the user.</param>
-        /// <param name="password">The initial password of the user.</param>
-        /// <param name="email">The initial email address of the user.</param>
-        /// <param name="phoneNumber">The initial phone number of the user.</param>
-        public BonUser(BonUserId id, string userName, BonUserEmail? email, BonUserPhoneNumber? phoneNumber)
-            : this(id, userName)
+    /// <summary>
+    /// تأیید شماره تلفن.
+    /// </summary>
+    public void VerifyPhoneNumber()
+    {
+        if (PhoneNumber != null && !PhoneNumber.IsVerified)
         {
-            Email = email;
-            PhoneNumber = phoneNumber;
-            AddDomainEvent(new BonUserProfileUpdatedDomainEvent(this));
+            PhoneNumber.Verify();
+            AddDomainEvent(new BonUserPhoneNumberVerifiedDomainEvent(this));
         }
+    }
 
-       
-
-        /// <summary>
-        /// Updates the user's profile information such as username, email, and phone number.
-        /// </summary>
-        /// <param name="userName">The new username.</param>
-        /// <param name="email">The new email address.</param>
-        /// <param name="phoneNumber">The new phone number.</param>
-        public void UpdateProfile(string userName, BonUserEmail? email, BonUserPhoneNumber? phoneNumber)
+    /// <summary>
+    /// تغییر وضعیت کاربر (فعال، تعلیق، غیرفعال و ...).
+    /// </summary>
+    public void ChangeStatus(UserStatus newStatus)
+    {
+        if (Status != newStatus)
         {
-            UserName = userName;
-            Email = email;
-            PhoneNumber = phoneNumber;
-            AddDomainEvent(new BonUserProfileUpdatedDomainEvent(this));
-        }
-
-        /// <summary>
-        /// Adds or updates the phone number.
-        /// </summary>
-        /// <param name="bonUserPhoneNumber">The phone number to set.</param>
-        public void SetPhoneNumber(BonUserPhoneNumber bonUserPhoneNumber)
-        {
-            PhoneNumber = bonUserPhoneNumber;
-            AddDomainEvent(new BonUserProfileUpdatedDomainEvent(this));
-        }
-
-        /// <summary>
-        /// Adds or updates the bonUserEmail address.
-        /// </summary>
-        /// <param name="bonUserEmail">The bonUserEmail to set.</param>
-        public void SetEmail(BonUserEmail bonUserEmail)
-        {
-            Email = bonUserEmail;
-            AddDomainEvent(new BonUserProfileUpdatedDomainEvent(this));
-        }
-
-      
-        /// <summary>
-        /// Marks the user's email as verified.
-        /// </summary>
-        public void VerifyEmail()
-        {
-            if (Email != null && !Email.IsVerified)
-            {
-                Email.Verify();
-                AddDomainEvent(new BonUserEmailVerifiedDomainEvent(this));
-            }
-        }
-
-        /// <summary>
-        /// Marks the user's phone number as verified.
-        /// </summary>
-        public void VerifyPhoneNumber()
-        {
-            if (PhoneNumber != null && !PhoneNumber.IsVerified)
-            {
-                PhoneNumber.Verify();
-                AddDomainEvent(new BonUserPhoneNumberVerifiedDomainEvent(this));
-            }
-        }
-
-        /// <summary>
-        /// Changes the status of the user to a new status and triggers a domain event if the status changes.
-        /// </summary>
-        /// <param name="newStatus">The new status to set for the user.</param>
-        public void ChangeStatus(UserStatus newStatus)
-        {
-            if (Status != newStatus)
-            {
-                Status = newStatus;
-                AddDomainEvent(new BonUserStatusChangedDomainEvent(this, newStatus));
-            }
+            Status = newStatus;
+            UpdateModifiedDate();
+            AddDomainEvent(new BonUserStatusChangedDomainEvent(this, newStatus));
         }
     }
 }

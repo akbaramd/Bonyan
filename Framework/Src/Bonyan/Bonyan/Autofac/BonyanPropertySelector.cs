@@ -1,5 +1,6 @@
 using System.Reflection;
 using Autofac.Core;
+using Bonyan.DependencyInjection;
 
 namespace Bonyan.Autofac;
 
@@ -15,5 +16,4 @@ public class BonyanPropertySelector : DefaultPropertySelector
     return propertyInfo.GetCustomAttributes(typeof(DisablePropertyInjectionAttribute), true).IsNullOrEmpty() &&
            base.InjectProperty(propertyInfo, instance);
   }
-
 }

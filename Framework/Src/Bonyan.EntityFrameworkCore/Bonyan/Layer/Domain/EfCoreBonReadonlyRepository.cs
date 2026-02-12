@@ -17,7 +17,6 @@ namespace Bonyan.Layer.Domain
         where TEntity : class, IBonEntity
         where TDbContext : IEfDbContext
     {
-  
 
         public IBonLazyServiceProvider LazyServiceProvider { get; set; } = default!;
         public IBonDbContextProvider<TDbContext> BonDbContextProvider => LazyServiceProvider.LazyGetRequiredService<IBonDbContextProvider<TDbContext>>();
@@ -42,9 +41,6 @@ namespace Bonyan.Layer.Domain
         }
 
         public async Task<TDbContext> GetDbContextAsync() => await BonDbContextProvider.GetDbContextAsync();
-
-
-    
 
         public async Task<IEnumerable<TEntity>> FindAsync(Expression<Func<TEntity, bool>> predicate)
         {
@@ -153,7 +149,6 @@ namespace Bonyan.Layer.Domain
         where TDbContext :IEfDbContext
         where TKey : notnull
     {
-    
 
         public async Task<TEntity?> GetByIdAsync(TKey id)
         {

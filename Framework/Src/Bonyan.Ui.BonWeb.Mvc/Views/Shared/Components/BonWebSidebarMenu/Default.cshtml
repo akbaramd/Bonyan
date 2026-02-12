@@ -1,0 +1,36 @@
+@model IEnumerable<Bonyan.Ui.BonWeb.Mvc.Contracts.BonWebMenuItem>
+@if (Model != null)
+{
+<nav class="nav flex-column">
+    @foreach (var item in Model.OrderBy(x => x.Order))
+    {
+        var visibleChildren = item.Children?.Where(c => c.IsVisible(ViewContext.HttpContext.User)).OrderBy(c => c.Order).ToList() ?? new List<Bonyan.Ui.BonWeb.Mvc.Contracts.BonWebMenuItem>();
+        @if (visibleChildren.Any())
+        {
+            <div class="nav-item py-1">
+                <span class="nav-link text-white-50 small text-uppercase">@item.Title</span>
+                @foreach (var child in visibleChildren)
+                {
+                    <a class="nav-link" href="@child.Url">
+                        @if (!string.IsNullOrEmpty(child.Icon))
+                        {
+                            <i class="bi @child.Icon me-2"></i>
+                        }
+                        @child.Title
+                    </a>
+                }
+            </div>
+        }
+        else
+        {
+            <a class="nav-link" href="@item.Url">
+                @if (!string.IsNullOrEmpty(item.Icon))
+                {
+                    <i class="bi @item.Icon me-2"></i>
+                }
+                @item.Title
+            </a>
+        }
+    }
+</nav>
+}

@@ -4,7 +4,14 @@
         <TargetFramework>net8.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
+        <RootNamespace>BonyanTemplate.WebApi</RootNamespace>
+        <AssemblyName>BonyanTemplate.WebApi</AssemblyName>
         <UserSecretsId>aspnet-BonyanTemplate.WebApi-CE7F879C-7CAD-46D9-A8DD-43B79A37F24D</UserSecretsId>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <NoWarn>$(NoWarn);1591</NoWarn>
+        <AnalysisLevel>latest-recommended</AnalysisLevel>
+        <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+        <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     </PropertyGroup>
 
 

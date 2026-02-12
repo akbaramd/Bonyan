@@ -1,10 +1,11 @@
-﻿using Bonyan.IdentityManagement.Domain.Roles;
+using Bonyan.IdentityManagement.Domain.Users;
 using Bonyan.Layer.Domain.Repository.Abstractions;
 
 namespace Bonyan.IdentityManagement.Domain.Users.Repositories;
 
-public interface IBonIdentityUserRolesRepository<TUser,TRole> : IBonRepository<BonIdentityUserRoles<TUser,TRole>>
-    where TUser : BonIdentityUser<TUser,TRole> where TRole : BonIdentityRole<TRole>
+/// <summary>
+/// Repository for user-roles (non-generic).
+/// </summary>
+public interface IBonIdentityUserRolesRepository : IBonRepository<BonIdentityUserRoles>
 {
 }
-

@@ -1,6 +1,13 @@
-@BonyanTemplate.WebApi_HostAddress = http://localhost:5265
+@BonyanTemplate.WebApi_HostAddress = https://localhost:7167
+@BonyanTemplate.WebApi_HostAddressHttp = http://localhost:5265
 
-GET {{BonyanTemplate.WebApi_HostAddress}}/weatherforecast/
+### Health check - readiness
+GET {{BonyanTemplate.WebApi_HostAddress}}/health/ready
 Accept: application/json
 
-###
+### Health check - liveness
+GET {{BonyanTemplate.WebApi_HostAddress}}/health/live
+Accept: application/json
+
+### Swagger UI (open in browser)
+# https://localhost:7167/swagger

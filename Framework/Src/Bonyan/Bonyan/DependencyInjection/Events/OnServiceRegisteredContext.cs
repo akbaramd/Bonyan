@@ -16,12 +16,16 @@ public class OnServiceRegisteredContext : IOnServiceRegisteredContext
     public virtual Type ImplementationType { get; }
 
     /// <inheritdoc />
+    public virtual object? ServiceKey { get; }
+
+    /// <inheritdoc />
     public virtual ITypeList<IBonInterceptor> Interceptors { get; }
 
-    public OnServiceRegisteredContext(Type serviceType, [NotNull] Type implementationType)
+    public OnServiceRegisteredContext(Type serviceType, [NotNull] Type implementationType, object? serviceKey = null)
     {
         ServiceType = Check.NotNull(serviceType, nameof(serviceType));
         ImplementationType = Check.NotNull(implementationType, nameof(implementationType));
+        ServiceKey = serviceKey;
         Interceptors = new TypeList<IBonInterceptor>();
     }
 }

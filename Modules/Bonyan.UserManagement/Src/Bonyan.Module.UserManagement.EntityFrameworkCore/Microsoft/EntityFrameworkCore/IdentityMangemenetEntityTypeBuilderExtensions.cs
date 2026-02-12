@@ -1,4 +1,5 @@
-﻿using Bonyan.UserManagement.Domain.Users;
+using Bonyan.UserManagement.Domain.Users;
+using Bonyan.UserManagement.Domain.Users.ValueObjects;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Microsoft.EntityFrameworkCore;
@@ -6,33 +7,32 @@ namespace Microsoft.EntityFrameworkCore;
 public static class BonUserManagementEntityTypeBuilderExtensions
 {
     /// <summary>
-    /// Configures the entity mappings for user management by convention.
+    /// پیکربندی نگاشت موجودیت کاربر (فقط دامنه کاربر؛ بدون احراز هویت).
     /// </summary>
-    /// <typeparam name="TUser">The user entity type.</typeparam>
-    /// <param name="modelBuilder">The model builder.</param>
-    /// <returns>The configured model builder.</returns>
-    public static ModelBuilder ConfigureUserManagement<TUser>(this ModelBuilder modelBuilder,Action<EntityTypeBuilder<TUser>> action)
+    public static ModelBuilder ConfigureUserManagement<TUser>(this ModelBuilder modelBuilder, Action<EntityTypeBuilder<TUser>>? action = null)
         where TUser : class, IBonUser
     {
         var entity = modelBuilder.Entity<TUser>();
 
-        // Configure table name
         entity.ToTable("Users");
-
-        // Apply default conventions
         entity.ConfigureByConvention();
 
-        // Configure owned properties for value objects
         ConfigureEmail(entity);
         ConfigurePhoneNumber(entity);
-
-        // Configure properties
-        // ConfigureStatus(entity);
+        ConfigureProfile(entity);
+        ConfigurePreferredCulture(entity);
         ConfigureConcurrencyToken(entity);
-
-        // Configure indexes
         ConfigureIndexes(entity);
-        action(entity);
+
+        entity.Property(nameof(IBonUser.TimeZoneId))
+            .HasMaxLength(128)
+            .IsRequired(false);
+        entity.Property(nameof(IBonUser.AvatarUrl))
+            .HasMaxLength(2048)
+            .IsRequired(false);
+        // Gender (BonEnumeration) is configured by ConfigureByConvention
+
+        action?.Invoke(entity);
         return modelBuilder;
     }
 
@@ -62,8 +62,27 @@ public static class BonUserManagementEntityTypeBuilderExtensions
         });
     }
 
+    private static void ConfigureProfile<TUser>(EntityTypeBuilder<TUser> entity)
+        where TUser : class, IBonUser
+    {
+        entity.OwnsOne(user => user.Profile, profile =>
+        {
+            profile.Property(p => p.FirstName).HasColumnName("FirstName").HasMaxLength(100).IsRequired(false);
+            profile.Property(p => p.LastName).HasColumnName("LastName").HasMaxLength(100).IsRequired(false);
+            profile.Property(p => p.DisplayName).HasColumnName("DisplayName").HasMaxLength(256).IsRequired(false);
+            profile.Property(p => p.DateOfBirth).HasColumnName("DateOfBirth").IsRequired(false);
+            profile.Property(p => p.NationalCode).HasColumnName("NationalCode").HasMaxLength(50).IsRequired(false);
+        });
+    }
 
-
+    private static void ConfigurePreferredCulture<TUser>(EntityTypeBuilder<TUser> entity)
+        where TUser : class, IBonUser
+    {
+        entity.OwnsOne(user => user.PreferredCulture, culture =>
+        {
+            culture.Property(c => c.CultureName).HasColumnName("PreferredCulture").HasMaxLength(32).IsRequired(false);
+        });
+    }
 
 
     /// <summary>
