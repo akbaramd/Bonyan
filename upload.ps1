@@ -17,7 +17,8 @@ function Pack-AndPush-Project {
         [string]$ProjectPath,
         [string]$ProjectType,
         [string]$ProjectFile = $null,  # Optional: specific .csproj (e.g. Bonyan.Template.csproj)
-        [bool]$Push = $true
+        [bool]$Push = $true,
+        [bool]$NoBuild = $false       # Use existing build output (for Framework/Modules)
     )
 
     $nugetApiKey = $env:NugetKey
@@ -31,14 +32,9 @@ function Pack-AndPush-Project {
     try {
         Set-Location -Path $ProjectPath
 
-        # Clean Release output
-        $releaseFolder = Join-Path -Path $ProjectPath -ChildPath 'bin\Release'
-        if (Test-Path -Path $releaseFolder -PathType Container) {
-            Remove-Item -Path $releaseFolder -Recurse -Force -ErrorAction SilentlyContinue
-        }
-
         # Pack the project (produces .nupkg)
         $packArgs = @('-c', 'Release')
+        if ($NoBuild) { $packArgs += '--no-build' }
         if ($ProjectFile) { $packArgs = @($ProjectFile) + $packArgs }
         Write-Host "Packing ${ProjectType}: $ProjectPath" -ForegroundColor Cyan
         $packResult = & dotnet pack @packArgs 2>&1
@@ -94,7 +90,7 @@ function Publish-FrameworkProjects {
     }
 
     foreach ($projectPath in $projects) {
-        Pack-AndPush-Project -ProjectPath $projectPath -ProjectType "Framework" -Push $Push
+        Pack-AndPush-Project -ProjectPath $projectPath -ProjectType "Framework" -Push $Push -NoBuild $true
     }
 
     Set-Location -Path $initialDir
@@ -126,7 +122,7 @@ function Publish-ModuleProjects {
         }
 
         foreach ($projectPath in $projects) {
-            Pack-AndPush-Project -ProjectPath $projectPath -ProjectType "Module" -Push $Push
+            Pack-AndPush-Project -ProjectPath $projectPath -ProjectType "Module" -Push $Push -NoBuild $true
         }
     }
 
@@ -148,7 +144,7 @@ function Publish-Template {
         return $false
     }
 
-    return Pack-AndPush-Project -ProjectPath $TemplatesPath -ProjectFile 'Bonyan.Template.csproj' -ProjectType "Template" -Push $Push
+    return Pack-AndPush-Project -ProjectPath $TemplatesPath -ProjectFile 'Bonyan.Template.csproj' -ProjectType "Template" -Push $Push -NoBuild $false
 }
 
 # Main
@@ -161,13 +157,21 @@ function Main {
         exit 1
     }
 
-    # Restore (excludes Templates - they need packages published first)
+    # Restore and build (excludes Templates - they need packages published first)
     Write-Host "Restoring solution (Framework + Modules)..." -ForegroundColor Cyan
     $slnfPath = Join-Path $rootDir "Bonyan.Upload.slnf"
     if (Test-Path $slnfPath) {
         dotnet restore $slnfPath
     } else {
         dotnet restore $rootDir\Bonyan.sln
+    }
+
+    Write-Host "Building solution (Framework + Modules)..." -ForegroundColor Cyan
+    $buildTarget = if (Test-Path $slnfPath) { $slnfPath } else { Join-Path $rootDir "Bonyan.sln" }
+    dotnet build $buildTarget -c Release --no-restore
+    if ($LASTEXITCODE -ne 0) {
+        Write-Host "Build failed. Aborting." -ForegroundColor Red
+        exit 1
     }
 
     $frameworkPath = Join-Path $rootDir "Framework\Src"
