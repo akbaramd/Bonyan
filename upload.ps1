@@ -153,7 +153,7 @@ function Publish-Template {
 
 # Main
 function Main {
-    $rootDir = Split-Path -Parent $MyInvocation.MyCommand.Path
+    $rootDir = if ($PSScriptRoot) { $PSScriptRoot } else { (Get-Location).Path }
     $push = -not $PackOnly
 
     if ($push -and -not $env:NugetKey) {
