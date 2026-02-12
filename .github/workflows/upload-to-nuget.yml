@@ -19,8 +19,8 @@ jobs:
         with:
           dotnet-version: '8.x' # Adjust according to your target .NET version
 
-      - name: Restore dependencies (excludes Templates - they need packages not yet on NuGet)
-        run: dotnet restore --ignore-failed-sources
+      - name: Restore dependencies (excludes Templates - they reference packages not yet on NuGet)
+        run: dotnet restore Bonyan.Upload.slnf
 
       - name: Run upload script
         run: ./upload.ps1

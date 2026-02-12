@@ -161,9 +161,14 @@ function Main {
         exit 1
     }
 
-    # Restore solution
-    Write-Host "Restoring solution..." -ForegroundColor Cyan
-    dotnet restore $rootDir\Bonyan.sln
+    # Restore (excludes Templates - they need packages published first)
+    Write-Host "Restoring solution (Framework + Modules)..." -ForegroundColor Cyan
+    $slnfPath = Join-Path $rootDir "Bonyan.Upload.slnf"
+    if (Test-Path $slnfPath) {
+        dotnet restore $slnfPath
+    } else {
+        dotnet restore $rootDir\Bonyan.sln
+    }
 
     $frameworkPath = Join-Path $rootDir "Framework\Src"
     $modulesPath = Join-Path $rootDir "Modules"
