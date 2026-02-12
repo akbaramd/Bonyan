@@ -1,0 +1,55 @@
+@model Bonyan.IdentityManagement.BonWeb.Mvc.Models.Manage.ManageTabRolesViewModel
+@inject Microsoft.Extensions.Localization.IStringLocalizer<Bonyan.IdentityManagement.BonWeb.Mvc.IdentityManagementResource> L
+@if (!string.IsNullOrEmpty(Model.Error))
+{
+    <div class="alert alert-danger">@Model.Error</div>
+    return;
+}
+<form method="post" asp-action="AssignRoles" class="mb-3">
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="userId" value="@Model.UserId" />
+    <div class="row g-2 align-items-end">
+        <div class="col-md-6">
+            <label class="form-label small">@L["Users:AssignRoles"]</label>
+            <select name="roleIds" class="form-select form-select-sm" multiple>
+                @foreach (var r in Model.AllRoles)
+                {
+                    var isSelected = Model.UserRoles.Any(ur => ur.Id?.Value == r.Id?.Value);
+                    if (isSelected)
+                    {
+                        <option value="@r.Id?.Value" selected>@r.Title</option>
+                    }
+                    else
+                    {
+                        <option value="@r.Id?.Value">@r.Title</option>
+                    }
+                }
+            </select>
+        </div>
+        <div class="col-auto">
+            <button type="submit" class="btn btn-primary btn-sm">@L["Users:SaveRoles"]</button>
+        </div>
+    </div>
+</form>
+<h6 class="mt-3">@L["Users:CurrentRoles"]</h6>
+@if (Model.UserRoles != null && Model.UserRoles.Any())
+{
+    <ul class="list-group list-group-flush">
+        @foreach (var ur in Model.UserRoles)
+        {
+            <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                <span>@ur.Title <small class="text-muted">(@ur.Id?.Value)</small></span>
+                <form method="post" asp-action="RemoveRole" class="d-inline" onsubmit="return confirm('@L["Users:ConfirmUnassign"]');">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="userId" value="@Model.UserId" />
+                    <input type="hidden" name="roleId" value="@ur.Id?.Value" />
+                    <button type="submit" class="btn btn-sm btn-outline-danger">@L["Users:Unassign"]</button>
+                </form>
+            </li>
+        }
+    </ul>
+}
+else
+{
+    <p class="text-muted mb-0">@L["Users:NoRolesAssigned"]</p>
+}

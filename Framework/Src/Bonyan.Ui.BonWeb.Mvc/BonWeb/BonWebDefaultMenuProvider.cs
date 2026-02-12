@@ -1,5 +1,6 @@
 using System.Security.Claims;
 using Bonyan.Ui.BonWeb.Mvc.Contracts;
+using Microsoft.Extensions.Localization;
 
 namespace Bonyan.Ui.BonWeb.Mvc;
 
@@ -8,6 +9,13 @@ namespace Bonyan.Ui.BonWeb.Mvc;
 /// </summary>
 public class BonWebDefaultMenuProvider : IBonWebMenuProvider
 {
+    private readonly IStringLocalizer<BonWebMenuResource> _localizer;
+
+    public BonWebDefaultMenuProvider(IStringLocalizer<BonWebMenuResource> localizer)
+    {
+        _localizer = localizer;
+    }
+
     public string ProviderId => "BonWeb.Default";
     public int Priority => 0;
 
@@ -17,7 +25,7 @@ public class BonWebDefaultMenuProvider : IBonWebMenuProvider
     {
         var items = new List<BonWebMenuItem>
         {
-            new BonWebMenuItem("Dashboard", "/", "bi-house", 0) { RequiresAuthentication = true }
+            new BonWebMenuItem(_localizer["Menu:Dashboard"].Value, "/", "bi-house", 0) { RequiresAuthentication = true }
         };
         return Task.FromResult<IEnumerable<BonWebMenuItem>>(items);
     }

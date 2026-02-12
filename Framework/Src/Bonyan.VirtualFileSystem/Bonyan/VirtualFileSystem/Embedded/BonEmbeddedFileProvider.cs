@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using Bonyan.Core;
 using JetBrains.Annotations;
 using Microsoft.Extensions.FileProviders;
@@ -41,7 +41,8 @@ public class BonEmbeddedFileProvider : DictionaryBasedFileProvider
                 continue;
             }
 
-            var fullPath = ConvertToRelativePath(resourcePath).EnsureStartsWith('/');
+            // Store paths without leading slash so GetDirectoryContents("/Localization/...") and "Localization/..." both resolve
+            var fullPath = ConvertToRelativePath(resourcePath).TrimStart('/');
 
             if (fullPath.Contains("/"))
             {
@@ -129,7 +130,31 @@ public class BonEmbeddedFileProvider : DictionaryBasedFileProvider
 
     protected override string NormalizePath(string subpath)
     {
-        return VirtualFilePathHelper.NormalizePath(subpath);
+        var result = VirtualFilePathHelper.NormalizePath(subpath);
+        // Stored paths have no leading slash; normalize for lookup.
+        return string.IsNullOrEmpty(result) ? result : result.TrimStart('/');
+    }
+
+    public override IDirectoryContents GetDirectoryContents(string subpath)
+    {
+        var normalized = NormalizePath(subpath);
+        var directory = GetFileInfo(subpath);
+        if (!directory.IsDirectory)
+            return NotFoundDirectoryContents.Singleton;
+
+        var directoryPath = normalized.EnsureEndsWith('/');
+        var fileList = new List<IFileInfo>();
+        foreach (var fileInfo in Files.Values)
+        {
+            var fullPath = fileInfo.GetVirtualOrPhysicalPathOrNull();
+            if (fullPath == null || !fullPath.StartsWith(directoryPath, StringComparison.OrdinalIgnoreCase))
+                continue;
+            var relativePath = fullPath.Substring(directoryPath.Length);
+            if (relativePath.Contains("/"))
+                continue;
+            fileList.Add(fileInfo);
+        }
+        return new EnumerableDirectoryContents(fileList);
     }
 
     private Dictionary<string, IFileInfo> CreateFiles()

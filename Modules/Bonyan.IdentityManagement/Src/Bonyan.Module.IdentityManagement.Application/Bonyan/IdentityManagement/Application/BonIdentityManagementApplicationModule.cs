@@ -34,6 +34,8 @@ public class BonIdentityManagementApplicationModule : BonModule
         context.Services.AddTransient<IIdentityUserAppService, IdentityUserAppService>();
         context.Services.AddTransient<UserMetaService>();
         context.Services.AddTransient<IUserMetaService, UserMetaService>();
+        context.Services.AddTransient<IdentityUserListAppService>();
+        context.Services.AddTransient<IIdentityUserListAppService, IdentityUserListAppService>();
 
         return base.OnConfigureAsync(context, cancellationToken);
     }

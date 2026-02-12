@@ -1,6 +1,7 @@
 using Bonyan.IdentityManagement.Application.Base;
 using Bonyan.IdentityManagement.Application.Users.Dtos;
 using Bonyan.IdentityManagement.Domain.Roles.ValueObjects;
+using Bonyan.IdentityManagement.Domain.Users;
 using Bonyan.Layer.Application.Services;
 using Bonyan.UserManagement.Domain.Users.ValueObjects;
 using Microsoft.Extensions.Logging;
@@ -123,5 +124,105 @@ public class IdentityUserAppService : IdentityUserAppServiceBase, IIdentityUserA
 
         var dtos = rolesResult.Value?.Select(r => Mapper.Map<UserRoleDto>(r)).ToList() ?? new List<UserRoleDto>();
         return ServiceResult<IReadOnlyList<UserRoleDto>>.Success(dtos);
+    }
+
+    public async Task<ServiceResult<UserListDto?>> GetUserManageInfoAsync(BonUserId userId)
+    {
+        var (user, fail) = await GetUserOrFailAsync(userId);
+        if (fail != null)
+            return ServiceResult<UserListDto?>.Failure(fail.ErrorMessage ?? "User not found.", fail.ErrorCode ?? "NotFound");
+        var dto = MapToUserListDto(user!);
+        return ServiceResult<UserListDto?>.Success(dto);
+    }
+
+    public async Task<ServiceResult<IReadOnlyList<UserClaimDto>>> GetUserClaimsAsync(BonUserId userId)
+    {
+        var (user, fail) = await GetUserOrFailAsync(userId);
+        if (fail != null)
+            return ServiceResult<IReadOnlyList<UserClaimDto>>.Failure(fail.ErrorMessage ?? "User not found.", fail.ErrorCode ?? "NotFound");
+        var claimsResult = await UserManager.GetAllClaimsAsync(user!);
+        if (claimsResult.IsFailure)
+            return ServiceResult<IReadOnlyList<UserClaimDto>>.Failure(claimsResult.ErrorMessage ?? "Failed to get claims.", "GetClaimsFailed");
+        var dtos = claimsResult.Value?.Select(c => new UserClaimDto { ClaimType = c.ClaimType, ClaimValue = c.ClaimValue, Issuer = c.Issuer }).ToList() ?? new List<UserClaimDto>();
+        return ServiceResult<IReadOnlyList<UserClaimDto>>.Success(dtos);
+    }
+
+    public async Task<ServiceResult> AddUserClaimAsync(BonUserId userId, string claimType, string claimValue, string? issuer = null)
+    {
+        var (user, fail) = await GetUserOrFailAsync(userId);
+        if (fail != null) return fail;
+        var domainResult = await UserManager.AddClaimAsync(user!, claimType, claimValue, issuer);
+        if (domainResult.IsFailure)
+            return ServiceResult.Failure(domainResult.ErrorMessage ?? "Failed to add claim.", "AddClaimFailed");
+        try
+        {
+            await UnitOfWorkManager.Current?.SaveChangesAsync();
+            return ServiceResult.Success();
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Error saving claim for user {UserId}.", userId);
+            return ServiceResult.Failure(ex.Message, "SaveFailed");
+        }
+    }
+
+    public async Task<ServiceResult> RemoveUserClaimAsync(BonUserId userId, string claimType, string claimValue)
+    {
+        var (user, fail) = await GetUserOrFailAsync(userId);
+        if (fail != null) return fail;
+        var domainResult = await UserManager.RemoveClaimAsync(user!, claimType, claimValue);
+        if (domainResult.IsFailure)
+            return ServiceResult.Failure(domainResult.ErrorMessage ?? "Failed to remove claim.", "RemoveClaimFailed");
+        try
+        {
+            await UnitOfWorkManager.Current?.SaveChangesAsync();
+            return ServiceResult.Success();
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Error saving after remove claim for user {UserId}.", userId);
+            return ServiceResult.Failure(ex.Message, "SaveFailed");
+        }
+    }
+
+    public async Task<ServiceResult<IReadOnlyList<UserTokenDto>>> GetUserTokensAsync(BonUserId userId)
+    {
+        var (user, fail) = await GetUserOrFailAsync(userId);
+        if (fail != null)
+            return ServiceResult<IReadOnlyList<UserTokenDto>>.Failure(fail.ErrorMessage ?? "User not found.", fail.ErrorCode ?? "NotFound");
+        var dtos = user!.Tokens.Select(t => new UserTokenDto { Type = t.Type, Expiration = t.Expiration, CreatedAt = t.CreatedAt }).ToList();
+        return ServiceResult<IReadOnlyList<UserTokenDto>>.Success(dtos);
+    }
+
+    public async Task<ServiceResult> RemoveUserTokenAsync(BonUserId userId, string tokenType)
+    {
+        var (user, fail) = await GetUserOrFailAsync(userId);
+        if (fail != null) return fail;
+        var domainResult = await UserManager.RemoveTokenAsync(user!, tokenType);
+        if (domainResult.IsFailure)
+            return ServiceResult.Failure(domainResult.ErrorMessage ?? "Failed to remove token.", "RemoveTokenFailed");
+        try
+        {
+            await UnitOfWorkManager.Current?.SaveChangesAsync();
+            return ServiceResult.Success();
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Error saving after remove token for user {UserId}.", userId);
+            return ServiceResult.Failure(ex.Message, "SaveFailed");
+        }
+    }
+
+    private static UserListDto MapToUserListDto(BonIdentityUser user)
+    {
+        return new UserListDto
+        {
+            Id = user.Id,
+            UserName = user.UserName ?? string.Empty,
+            Email = user.Email?.Address,
+            PhoneNumber = user.PhoneNumber?.Number,
+            Status = user.Status.ToString(),
+            IsLocked = user.AccountLockedUntil.HasValue && user.AccountLockedUntil.Value > DateTime.UtcNow
+        };
     }
 }

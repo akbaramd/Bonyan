@@ -7,14 +7,14 @@ public class BonPaginatedResult<T>
     public int Take { get; }
     public int Page { get; }
     public int TotalCount { get; }
-    public int TotalPages => (int)Math.Ceiling((double)TotalCount / Take);
+    public int TotalPages => Take <= 0 ? 0 : (int)Math.Ceiling((double)TotalCount / Take);
 
     public BonPaginatedResult(IEnumerable<T> results, int skip, int take, int totalCount)
     {
         Results = results;
         Skip = skip;
-        Take = take;
-        Page = (skip / take) + 1;
+        Take = take <= 0 ? 0 : take;
+        Page = Take <= 0 ? 1 : (Skip / Take) + 1;
         TotalCount = totalCount;
     }
 }

@@ -29,12 +29,9 @@ public class BonIdentityManagementModule : BonModule
 
     public override ValueTask OnConfigureAsync(BonConfigurationContext context, CancellationToken cancellationToken = default)
     {
-        context.Services.PreConfigure<BonLocalizationOptions>(options =>
-        {
-            options.Resources
-                .Add<BonIdentityManagementResource>("en")
-                .AddVirtualJson("/Localization/IdentityManagement");
-        });
+        // IdentityManagement localization is registered by BonIdentityManagementBonWebMvcModule with
+        // type IdentityManagementResource and path /Localization/Resources/IdentityManagement so that
+        // IStringLocalizer<IdentityManagementResource> in views resolves to the Bon localizer and JSON.
 
         context.Services.AddSingleton<IBonPermissionManager, BonPermissionManager>();
         context.Services.AddTransient<IBonPermissionDefinitionProvider, BonIdentityManagementPermissionDefinitionProvider>();
@@ -64,6 +61,3 @@ public class BonIdentityManagementModule : BonModule
         return base.OnPostConfigureAsync(context, cancellationToken);
     }
 }
-
-[LocalizationResourceName("IdentityManagement")]
-public class BonIdentityManagementResource { }

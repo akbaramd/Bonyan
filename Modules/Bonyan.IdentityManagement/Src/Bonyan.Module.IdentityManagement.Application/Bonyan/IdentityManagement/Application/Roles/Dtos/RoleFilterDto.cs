@@ -7,5 +7,10 @@ namespace Bonyan.IdentityManagement.Application.Roles.Dtos;
 /// </summary>
 public class RoleFilterDto : BonPaginateDto
 {
+    public RoleFilterDto()
+    {
+        Take = 10;
+        Skip = 0;
+    }
     public string? Search { get; set; }
 }

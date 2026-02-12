@@ -9,7 +9,7 @@ namespace Bonyan.DependencyInjection;
 /// </summary>
 public class BonLazyServiceProviderConfigurator : IBonLazyServiceProviderConfigurator
 {
-    private const string AgentLogPath = @"c:\Users\ahmadi.UR-NEZAM\RiderProjects\Bonyan\.cursor\debug.log";
+    private const string AgentLogPath = @"D:\Projects\Bonyan2\.cursor\debug.log";
 
     /// <summary>
     /// Injected by the container as <see cref="Lazy{T}"/> to avoid circular dependency (e.g. when resolving <see cref="IBonLazyServiceProvider"/> during construction).

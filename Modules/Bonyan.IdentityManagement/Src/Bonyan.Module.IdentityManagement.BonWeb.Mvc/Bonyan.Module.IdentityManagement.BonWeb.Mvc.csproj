@@ -9,8 +9,17 @@
   </PropertyGroup>
   <Import Project="..\..\..\..\module-package.props"/>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Framework\Src\Bonyan.Localization\Bonyan.Localization.csproj" />
     <ProjectReference Include="..\..\..\..\Framework\Src\Bonyan.Ui.BonWeb.Mvc\Bonyan.Ui.BonWeb.Mvc.csproj" />
+    <ProjectReference Include="..\..\..\..\Framework\Src\Bonyan.VirtualFileSystem\Bonyan.VirtualFileSystem.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Localization\Resources\IdentityManagement\*.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Framework\Src\Bonyan.Ui.BonWeb.Mvc.Contracts\Bonyan.Ui.BonWeb.Mvc.Contracts.csproj" />
     <ProjectReference Include="..\Bonyan.Module.IdentityManagement.Application\Bonyan.Module.IdentityManagement.Application.csproj" />
+    <ProjectReference Include="..\Bonyan.Module.IdentityManagement.Domain\Bonyan.Module.IdentityManagement.Domain.csproj" />
     <ProjectReference Include="..\Bonyan.Module.IdentityManagement\Bonyan.Module.IdentityManagement.csproj" />
   </ItemGroup>
 </Project>

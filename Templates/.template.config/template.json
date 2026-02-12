@@ -1,0 +1,73 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "Akbar Ahmadi Saray",
+  "classifications": [ "Web", "MVC", "API", "Bonyan", "DDD", "Clean Architecture" ],
+  "identity": "Bonyan.Template",
+  "name": "Bonyan Application Template",
+  "shortName": "bonyan",
+  "sourceName": "BonyanTemplate",
+  "tags": {
+    "language": "C#",
+    "type": "project"
+  },
+  "description": "Bonyan layered template with Domain, Application, Infrastructure and host (MVC or Web API).",
+  "preferNameDirectory": true,
+  "symbols": {
+    "Host": {
+      "type": "parameter",
+      "datatype": "choice",
+      "displayName": "Host Type",
+      "description": "The host type: MVC (Razor views) or API (Web API only).",
+      "choices": [
+        {
+          "choice": "Mvc",
+          "description": "ASP.NET Core MVC with Razor views"
+        },
+        {
+          "choice": "Api",
+          "description": "ASP.NET Core Web API only"
+        }
+      ],
+      "defaultValue": "Mvc"
+    },
+    "IncludeMvc": {
+      "type": "computed",
+      "value": "Host == \"Mvc\""
+    },
+    "IncludeApi": {
+      "type": "computed",
+      "value": "Host == \"Api\""
+    }
+  },
+  "sources": [
+    {
+      "source": "./",
+      "exclude": [
+        ".template.config/**",
+        "**/.git/**",
+        "**/bin/**",
+        "**/obj/**",
+        "**/.vs/**",
+        "**/*.user",
+        "**/*.lock.json"
+      ],
+      "modifiers": [
+        {
+          "condition": "(Host == \"Api\")",
+          "exclude": [ "**/BonyanTemplate.Mvc/**" ]
+        },
+        {
+          "condition": "(Host == \"Mvc\")",
+          "exclude": [ "**/BonyanTemplate.WebApi/**" ]
+        }
+      ]
+    }
+  ],
+  "postActions": [
+    {
+      "description": "Restore NuGet packages",
+      "actionId": "210D431B-A78B-4D2F-762E-1BD1B85216AE",
+      "continueOnError": true
+    }
+  ]
+}

@@ -77,9 +77,13 @@ public class RoleAppService : AbstractIdentityCrudAppService<BonIdentityRole, Bo
         if (findResult.IsFailure || findResult.Value == null)
             return ServiceResult.Failure("Role not found.", "NotFound");
 
+        var role = findResult.Value;
+        if (!role.CanBeDeleted)
+            return ServiceResult.Failure("This role cannot be deleted because it is marked as non-deletable.", "CannotDelete");
+
         try
         {
-            var domainResult = await RoleManager.DeleteRoleAsync(findResult.Value);
+            var domainResult = await RoleManager.DeleteRoleAsync(role);
             if (domainResult.IsFailure)
                 return ServiceResult.Failure(domainResult.ErrorMessage ?? "Failed to delete role.", "DeleteFailed");
             await UnitOfWorkManager.Current?.SaveChangesAsync();

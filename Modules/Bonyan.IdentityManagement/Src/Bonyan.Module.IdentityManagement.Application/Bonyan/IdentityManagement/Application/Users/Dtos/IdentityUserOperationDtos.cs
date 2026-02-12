@@ -57,3 +57,23 @@ public class UserRoleDto
     public BonRoleId Id { get; set; } = null!;
     public string Title { get; set; } = string.Empty;
 }
+
+/// <summary>
+/// Claim DTO for user claims list (manage page).
+/// </summary>
+public class UserClaimDto
+{
+    public string ClaimType { get; set; } = string.Empty;
+    public string ClaimValue { get; set; } = string.Empty;
+    public string? Issuer { get; set; }
+}
+
+/// <summary>
+/// Token DTO for user tokens list (no value for security). Manage page.
+/// </summary>
+public class UserTokenDto
+{
+    public string Type { get; set; } = string.Empty;
+    public DateTime? Expiration { get; set; }
+    public DateTime CreatedAt { get; set; }
+}

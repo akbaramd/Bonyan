@@ -1,0 +1,14 @@
+@inject Microsoft.Extensions.Localization.IStringLocalizer<Bonyan.IdentityManagement.BonWeb.Mvc.IdentityManagementResource> L
+@inject Microsoft.Extensions.Localization.IStringLocalizer<Bonyan.Ui.BonWeb.Mvc.BonWebMenuResource> MenuL
+@{
+    ViewData["Title"] = L["Account:AccessDenied"];
+}
+
+<div class="card shadow-sm border-0">
+    <div class="card-body p-4 p-md-5">
+        <div class="fw-semibold mb-3">@MenuL["Layout:BonWeb"]</div>
+        <h1 class="h4 mb-1">@L["Account:AccessDenied"]</h1>
+        <p class="text-body-secondary mb-4">@L["Account:AccessDeniedInfo"]</p>
+        <a class="btn btn-primary" asp-area="IdentityManagement" asp-controller="Account" asp-action="Login">@L["Account:BackToLogin"]</a>
+    </div>
+</div>

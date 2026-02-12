@@ -1,0 +1,38 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "Akbar Ahmadi Saray",
+  "classifications": [ "Web", "MVC", "Bonyan", "DDD", "Clean Architecture" ],
+  "identity": "Bonyan.Template.Mvc",
+  "name": "Bonyan MVC Application",
+  "shortName": "bonyan-mvc",
+  "sourceName": "BonyanTemplate",
+  "tags": {
+    "language": "C#",
+    "type": "project"
+  },
+  "description": "Bonyan layered template with Domain, Application, Infrastructure and ASP.NET Core MVC host.",
+  "preferNameDirectory": true,
+  "sources": [
+    {
+      "source": "../",
+      "exclude": [
+        "**/BonyanTemplate.WebApi/**",
+        ".template.config/**",
+        "**/.git/**",
+        "**/bin/**",
+        "**/obj/**",
+        "**/.vs/**",
+        "**/*.user",
+        "**/*.lock.json",
+        "**/BonyanTemplate.Mvc/.template.config/**"
+      ]
+    }
+  ],
+  "postActions": [
+    {
+      "description": "Restore NuGet packages",
+      "actionId": "210D431B-A78B-4D2F-762E-1BD1B85216AE",
+      "continueOnError": true
+    }
+  ]
+}

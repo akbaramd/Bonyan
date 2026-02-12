@@ -1,4 +1,5 @@
-﻿using Bonyan.Exceptions;
+using System.Linq;
+using Bonyan.Exceptions;
 using Bonyan.Internal;
 using Bonyan.VirtualFileSystem;
 using Microsoft.Extensions.DependencyInjection;
@@ -32,7 +33,18 @@ public abstract class VirtualFileLocalizationResourceContributorBase : ILocaliza
 
     public virtual LocalizedString? GetOrNull(string cultureName, string name)
     {
-        return GetDictionaries().GetOrDefault(cultureName)?.GetOrNull(name);
+        var dictionaries = GetDictionaries();
+        var dict = dictionaries.GetOrDefault(cultureName);
+        var value = dict?.GetOrNull(name);
+        // #region agent log
+        try
+        {
+            var line = System.Text.Json.JsonSerializer.Serialize(new { hypothesisId = "H3_H5", location = "GetOrNull", message = "dict count and culture", data = new { resourceName = _resource?.ResourceName, virtualPath = _virtualPath, cultureName, name, dictCount = dictionaries.Count, dictKeys = dictionaries.Keys.ToList(), hasDictForCulture = dict != null, valueFound = value != null }, timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() }) + "\n";
+            System.IO.File.AppendAllText(@"d:\Projects\Bonyan2\.cursor\debug.log", line);
+        }
+        catch { }
+        // #endregion
+        return value;
     }
 
     public virtual void Fill(string cultureName, Dictionary<string, LocalizedString> dictionary)
@@ -87,8 +99,29 @@ public abstract class VirtualFileLocalizationResourceContributorBase : ILocaliza
     private Dictionary<string, ILocalizationDictionary> CreateDictionaries()
     {
         var dictionaries = new Dictionary<string, ILocalizationDictionary>();
+        // Try path without leading slash first (embedded provider stores paths without slash); then path with slash.
+        var pathWithoutSlash = _virtualPath.TrimStart('/');
+        var contents = pathWithoutSlash != _virtualPath
+            ? _virtualFileProvider.GetDirectoryContents(pathWithoutSlash)
+            : _virtualFileProvider.GetDirectoryContents(_virtualPath);
+        var primaryCount = contents.Exists ? contents.Count(f => !f.IsDirectory && CanParseFile(f)) : 0;
+        var usedAltPath = false;
+        if (primaryCount == 0 && pathWithoutSlash != _virtualPath)
+        {
+            contents = _virtualFileProvider.GetDirectoryContents(_virtualPath);
+            usedAltPath = true;
+        }
+        var altCount = contents.Exists ? contents.Count(f => !f.IsDirectory && CanParseFile(f)) : 0;
+        // #region agent log
+        try
+        {
+            var line = System.Text.Json.JsonSerializer.Serialize(new { hypothesisId = "H1_H2_H4", location = "CreateDictionaries", message = "virtual path and file counts", data = new { resourceName = _resource?.ResourceName, virtualPath = _virtualPath, triedPathWithoutSlashFirst = pathWithoutSlash != _virtualPath, contentsExists = contents.Exists, primaryCount, usedAltPath, altCount }, timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() }) + "\n";
+            System.IO.File.AppendAllText(@"d:\Projects\Bonyan2\.cursor\debug.log", line);
+        }
+        catch { }
+        // #endregion
 
-        foreach (var file in _virtualFileProvider.GetDirectoryContents(_virtualPath))
+        foreach (var file in contents)
         {
             if (file.IsDirectory || !CanParseFile(file))
             {
@@ -101,7 +134,7 @@ public abstract class VirtualFileLocalizationResourceContributorBase : ILocaliza
             {
                 continue;
             }
-            
+
             if (dictionaries.ContainsKey(dictionary.CultureName))
             {
                 throw new BonException($"{file.GetVirtualOrPhysicalPathOrNull()} dictionary has a culture name '{dictionary.CultureName}' which is already defined! Localization resource: {_resource.ResourceName}");
@@ -110,6 +143,14 @@ public abstract class VirtualFileLocalizationResourceContributorBase : ILocaliza
             dictionaries[dictionary.CultureName] = dictionary;
         }
 
+        // #region agent log
+        try
+        {
+            var line = System.Text.Json.JsonSerializer.Serialize(new { hypothesisId = "H1_H2_H4", location = "CreateDictionaries_result", message = "final dict count", data = new { resourceName = _resource?.ResourceName, virtualPath = _virtualPath, finalDictCount = dictionaries.Count, cultureKeys = dictionaries.Keys.ToList() }, timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() }) + "\n";
+            System.IO.File.AppendAllText(@"d:\Projects\Bonyan2\.cursor\debug.log", line);
+        }
+        catch { }
+        // #endregion
         return dictionaries;
     }
 

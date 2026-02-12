@@ -1,0 +1,366 @@
+@using Microsoft.AspNetCore.Mvc.Rendering
+@using System.Globalization
+@inject Microsoft.Extensions.Localization.IStringLocalizer<Bonyan.Ui.BonWeb.Mvc.BonWebMenuResource> L
+@inject Microsoft.Extensions.Options.IOptions<Bonyan.Ui.BonWeb.Mvc.BonWebApplicationInfo> AppInfo
+@{
+    var culture = CultureInfo.CurrentUICulture;
+    var isRtl = culture.TextInfo.IsRightToLeft;
+    var lang = culture.TwoLetterISOLanguageName;
+    var dir = isRtl ? "rtl" : "ltr";
+    var appName = !string.IsNullOrWhiteSpace(AppInfo?.Value?.Name) ? AppInfo.Value.Name : L["Layout:BonWeb"].Value;
+}
+<!DOCTYPE html>
+<html lang="@lang" dir="@dir">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - @appName</title>
+    @await Component.InvokeAsync("BonWebAssets", new { location = "BonWeb.Head" })
+    <style>
+        :root {
+            --bonweb-sidebar-bg: linear-gradient(180deg, #0f172a 0%, #0c1222 50%, #080d18 100%);
+            --bonweb-sidebar-bg-solid: #0f172a;
+            --bonweb-sidebar-surface: #1e293b;
+            --bonweb-sidebar-text: rgba(248, 250, 252, 0.92);
+            --bonweb-sidebar-text-muted: rgba(248, 250, 252, 0.6);
+            --bonweb-sidebar-hover: rgba(248, 250, 252, 0.08);
+            --bonweb-sidebar-active: rgba(16, 185, 129, 0.2);
+            --bonweb-sidebar-active-border: #10b981;
+            --bonweb-emerald: #10b981;
+            --bonweb-emerald-dark: #059669;
+            --bonweb-main-bg: #f8fafc;
+            --bonweb-main-text: #0f172a;
+            --bonweb-navbar-bg: #ffffff;
+            --bonweb-navbar-text: #0f172a;
+        }
+        [data-theme="dark"] {
+            --bonweb-main-bg: #0f172a;
+            --bonweb-main-text: #f1f5f9;
+            --bonweb-navbar-bg: #1e293b;
+            --bonweb-navbar-text: #f8fafc;
+        }
+        body {
+            font-family: @(isRtl ? "'Vazirmatn', sans-serif" : "'Poppins', sans-serif");
+            background: var(--bonweb-main-bg);
+            color: var(--bonweb-main-text);
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+        .bonweb-sidebar {
+            min-height: 100vh;
+            background: var(--bonweb-sidebar-bg);
+            background-color: var(--bonweb-sidebar-bg-solid);
+            width: 280px;
+            border-inline-end: 1px solid rgba(255, 255, 255, 0.06);
+            flex-shrink: 0;
+        }
+        .bonweb-sidebar .bonweb-sidebar-header {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 1rem 1.25rem;
+        }
+        .bonweb-sidebar .bonweb-sidebar-body {
+            overflow-y: auto;
+            padding: 0.5rem 0 1.5rem;
+        }
+        .bonweb-sidebar .bonweb-sidebar-body::-webkit-scrollbar { width: 6px; }
+        .bonweb-sidebar .bonweb-sidebar-body::-webkit-scrollbar-track { background: transparent; }
+        .bonweb-sidebar .bonweb-sidebar-body::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 3px; }
+        .bonweb-sidebar .nav-link {
+            color: var(--bonweb-sidebar-text);
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            margin: 0.125rem 0.5rem;
+            border-inline-start: 3px solid transparent;
+            transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+        }
+        .bonweb-sidebar .nav-link:hover {
+            color: #fff;
+            background: var(--bonweb-sidebar-hover);
+        }
+        .bonweb-sidebar .nav-link.active {
+            color: #fff;
+            background: var(--bonweb-sidebar-active);
+            border-inline-start-color: var(--bonweb-sidebar-active-border);
+        }
+        .bonweb-sidebar .nav-link.active:hover {
+            background: rgba(16, 185, 129, 0.28);
+        }
+        .bonweb-sidebar .nav-link.nav-link--muted {
+            color: var(--bonweb-sidebar-text-muted);
+            font-size: 0.875rem;
+        }
+        .bonweb-sidebar .group-label {
+            color: var(--bonweb-sidebar-text-muted);
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            padding: 1rem 1rem 0.35rem;
+            font-weight: 600;
+        }
+        .bonweb-layout {
+            display: flex;
+            min-height: 100vh;
+        }
+        .bonweb-content-col {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+        }
+        .bonweb-appbar {
+            position: sticky;w
+            top: 0;
+            z-index: 1030;
+            background: var(--bonweb-navbar-bg);
+            border-bottom: 1px solid rgba(0,0,0,0.06);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+            transition: background 0.2s ease, border-color 0.2s ease;
+        }
+        [data-theme="dark"] .bonweb-appbar {
+            border-bottom-color: rgba(255,255,255,0.06);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+        .bonweb-appbar-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            padding: 0.625rem 1rem 0.625rem 1.25rem;
+            min-height: 52px;
+        }
+        .bonweb-appbar-start {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            min-width: 0;
+        }
+        .bonweb-appbar-end {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+        .bonweb-appbar .bonweb-appbar-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--bonweb-navbar-text);
+            margin: 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .bonweb-appbar .bonweb-appbar-breadcrumb {
+            display: none;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.25rem;
+            font-size: 0.875rem;
+            color: var(--bonweb-navbar-text);
+        }
+        .bonweb-appbar .bonweb-appbar-breadcrumb a {
+            color: var(--bonweb-navbar-text);
+            text-decoration: none;
+            opacity: 0.85;
+        }
+        .bonweb-appbar .bonweb-appbar-breadcrumb a:hover { opacity: 1; }
+        .bonweb-appbar .bonweb-appbar-breadcrumb .breadcrumb-sep {
+            opacity: 0.5;
+            user-select: none;
+        }
+        .bonweb-appbar .bonweb-appbar-breadcrumb .breadcrumb-current {
+            font-weight: 600;
+            opacity: 1;
+        }
+        .bonweb-appbar .bonweb-btn-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border: none;
+            background: transparent;
+            color: var(--bonweb-navbar-text);
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: background 0.15s ease, color 0.15s ease;
+        }
+        .bonweb-appbar .bonweb-btn-icon:hover {
+            background: rgba(128,128,128,0.12);
+            color: var(--bonweb-navbar-text);
+        }
+        .bonweb-appbar .bonweb-btn-icon .bi { font-size: 1.25rem; }
+        .bonweb-appbar .bonweb-btn-icon.dropdown-toggle::after { display: none; }
+        .bonweb-appbar .btn-primary { background-color: var(--bonweb-emerald); border-color: var(--bonweb-emerald); }
+        .bonweb-appbar .btn-primary:hover { background-color: var(--bonweb-emerald-dark); border-color: var(--bonweb-emerald-dark); }
+        .bonweb-main {
+            flex: 1;
+            background: var(--bonweb-main-bg);
+            min-height: 0;
+            padding: 1.25rem 1.5rem;
+            transition: background 0.2s ease;
+        }
+        .bonweb-main .text-body { color: var(--bonweb-main-text) !important; }
+        @@media (min-width: 992px) {
+            .bonweb-appbar .bonweb-appbar-title { display: none; }
+            .bonweb-appbar .bonweb-appbar-breadcrumb { display: flex; }
+        }
+        .bonweb-sidebar-backdrop {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.4);
+            z-index: 1040;
+        }
+        .bonweb-sidebar-backdrop.show { display: block; }
+        @@media (max-width: 991.98px) {
+            .bonweb-sidebar {
+                position: fixed;
+                top: 0;
+                bottom: 0;
+                inset-inline-start: 0;
+                z-index: 1050;
+                transition: transform 0.25s ease;
+            }
+            [dir="ltr"] .bonweb-sidebar {
+                transform: translateX(-100%);
+                box-shadow: 4px 0 24px rgba(0,0,0,0.2);
+            }
+            [dir="rtl"] .bonweb-sidebar {
+                transform: translateX(100%);
+                box-shadow: -4px 0 24px rgba(0,0,0,0.2);
+            }
+            .bonweb-sidebar.show { transform: translateX(0); }
+        }
+        @@media (min-width: 992px) {
+            .main-dashboard-content { min-width: 0; }
+        }
+    </style>
+</head>
+@{ var pageTitle = ViewData["Title"]?.ToString() ?? ""; }
+<body class="bg-body">
+    <div class="bonweb-sidebar-backdrop" id="bonweb-sidebar-backdrop" aria-hidden="true"></div>
+    <div class="bonweb-layout">
+        <aside class="bonweb-sidebar" id="sidebar" aria-label="@appName">
+            <div class="bonweb-sidebar-header d-flex align-items-center justify-content-between">
+                <h2 class="h6 mb-0 text-white text-uppercase fw-semibold small">@appName</h2>
+                <button type="button" class="btn-close btn-close-white d-lg-none" id="bonweb-sidebar-close" aria-label="Close"></button>
+            </div>
+            <div class="bonweb-sidebar-body">
+               
+                @await Component.InvokeAsync("BonWebSidebarMenu")
+            </div>
+        </aside>
+
+        <div class="bonweb-content-col">
+            <header class="bonweb-appbar">
+                <div class="bonweb-appbar-inner">
+                    <div class="bonweb-appbar-start">
+                        <button type="button" class="bonweb-btn-icon d-lg-none" id="bonweb-sidebar-toggle" aria-controls="sidebar" aria-label="@L["Layout:Menu"]" title="@L["Layout:Menu"]">
+                            <i class="bi bi-list" aria-hidden="true"></i>
+                        </button>
+                        <h1 class="bonweb-appbar-title">@(string.IsNullOrEmpty(pageTitle) ? appName : pageTitle)</h1>
+                        <nav class="bonweb-appbar-breadcrumb" aria-label="Breadcrumb">
+                            <a href="/">@L["Menu:Home"]</a>
+                            <span class="breadcrumb-sep" aria-hidden="true">/</span>
+                            <span class="breadcrumb-current">@(string.IsNullOrEmpty(pageTitle) ? appName : pageTitle)</span>
+                        </nav>
+                    </div>
+                    <div class="bonweb-appbar-end">
+                        <button type="button" class="bonweb-btn-icon" id="bonweb-theme-toggle" aria-label="@L["Layout:DarkMode"]" title="@L["Layout:DarkMode"]">
+                            <i class="bi bi-moon-stars" id="bonweb-theme-icon" aria-hidden="true"></i>
+                        </button>
+                        <div class="dropdown">
+                            <button class="bonweb-btn-icon dropdown-toggle d-flex align-items-center justify-content-center" type="button" id="bonweb-lang-dropdown" data-bs-toggle="dropdown" aria-expanded="false" aria-label="@L["Layout:Language"]" title="@L["Layout:Language"]">
+                                <i class="bi bi-globe2" aria-hidden="true"></i>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="bonweb-lang-dropdown">
+                                <li>
+                                    <a class="dropdown-item d-flex align-items-center gap-2 @(culture.TwoLetterISOLanguageName == "en" ? "active" : "")" href="@Url.Action("SetCulture", "BonWebCulture", new { culture = "en-US", returnUrl = Context.Request.Path + Context.Request.QueryString })">
+                                        <span aria-hidden="true">🇺🇸</span>
+                                        @L["Layout:English"]
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item d-flex align-items-center gap-2 @(culture.TwoLetterISOLanguageName == "fa" ? "active" : "")" href="@Url.Action("SetCulture", "BonWebCulture", new { culture = "fa-IR", returnUrl = Context.Request.Path + Context.Request.QueryString })">
+                                        <span aria-hidden="true">🇮🇷</span>
+                                        @L["Layout:Persian"]
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        @if (User.Identity?.IsAuthenticated == true)
+                        {
+                            <div class="dropdown">
+                                <button class="bonweb-btn-icon dropdown-toggle d-flex align-items-center gap-1 px-2" type="button" id="bonweb-user-dropdown" data-bs-toggle="dropdown" aria-expanded="false" aria-label="@L["Layout:Profile"]">
+                                    <i class="bi bi-person-circle" aria-hidden="true"></i>
+                                    <span class="d-none d-md-inline text-nowrap text-truncate" style="max-width: 120px;">@User.Identity.Name</span>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="bonweb-user-dropdown">
+                                    <li><a class="dropdown-item d-flex align-items-center gap-2" href="#"><i class="bi bi-person"></i> @L["Layout:Profile"]</a></li>
+                                    <li><a class="dropdown-item d-flex align-items-center gap-2" href="#"><i class="bi bi-gear"></i> @L["Layout:Settings"]</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li>
+                                        <form asp-area="IdentityManagement" asp-controller="Account" asp-action="Logout" method="post" class="d-inline">
+                                            <button type="submit" class="dropdown-item d-flex align-items-center gap-2"><i class="bi bi-box-arrow-right"></i> @L["Layout:Logout"]</button>
+                                        </form>
+                                    </li>
+                                </ul>
+                            </div>
+                        }
+                        else
+                        {
+                            <a asp-area="IdentityManagement" asp-controller="Account" asp-action="Login" class="btn btn-primary btn-sm d-flex align-items-center gap-1" title="@L["Layout:Login"]">
+                                <i class="bi bi-box-arrow-in-right" aria-hidden="true"></i>
+                                <span class="d-none d-sm-inline">@L["Layout:Login"]</span>
+                            </a>
+                        }
+                    </div>
+                </div>
+            </header>
+
+            <main class="bonweb-main">
+                @RenderBody()
+            </main>
+        </div>
+    </div>
+
+    @await Component.InvokeAsync("BonWebAssets", new { location = "BonWeb.Footer" })
+    <script>
+        (function() {
+            var stored = localStorage.getItem('bonweb-theme');
+            var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+            var isDark = stored === 'dark' || (!stored && prefersDark);
+            function apply(dark) {
+                document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+                document.body.setAttribute('data-theme', dark ? 'dark' : 'light');
+                var icon = document.getElementById('bonweb-theme-icon');
+                if (icon) {
+                    icon.className = dark ? 'bi bi-sun' : 'bi bi-moon-stars';
+                }
+                localStorage.setItem('bonweb-theme', dark ? 'dark' : 'light');
+            }
+            apply(isDark);
+            document.getElementById('bonweb-theme-toggle')?.addEventListener('click', function() {
+                isDark = !isDark;
+                apply(isDark);
+            });
+        })();
+        (function() {
+            var sidebar = document.getElementById('sidebar');
+            var backdrop = document.getElementById('bonweb-sidebar-backdrop');
+            var toggle = document.getElementById('bonweb-sidebar-toggle');
+            var closeBtn = document.getElementById('bonweb-sidebar-close');
+            function openSidebar() {
+                if (sidebar) sidebar.classList.add('show');
+                if (backdrop) { backdrop.classList.add('show'); backdrop.setAttribute('aria-hidden', 'false'); }
+            }
+            function closeSidebar() {
+                if (sidebar) sidebar.classList.remove('show');
+                if (backdrop) { backdrop.classList.remove('show'); backdrop.setAttribute('aria-hidden', 'true'); }
+            }
+            toggle?.addEventListener('click', openSidebar);
+            closeBtn?.addEventListener('click', closeSidebar);
+            backdrop?.addEventListener('click', closeSidebar);
+        })();
+    </script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

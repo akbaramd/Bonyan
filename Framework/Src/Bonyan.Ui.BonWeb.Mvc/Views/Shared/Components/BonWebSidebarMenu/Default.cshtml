@@ -1,35 +1,87 @@
-@model IEnumerable<Bonyan.Ui.BonWeb.Mvc.Contracts.BonWebMenuItem>
+@* Sidebar menu: groups and items with active state. Uses Title and GroupName (provider sets localized GroupName). *@
+@model IEnumerable<Bonyan.Ui.BonWeb.Mvc.Contracts.BonWebMenuGroup>
+@using Bonyan.Ui.BonWeb.Mvc.Contracts
+@{
+    var currentPath = (ViewContext.HttpContext.Request.Path.Value ?? "").TrimEnd('/');
+    if (string.IsNullOrEmpty(currentPath)) { currentPath = "/"; }
+    string Normalize(string? url) => (url ?? "").TrimEnd('/').Length > 0 ? (url ?? "").TrimEnd('/') : "/";
+    bool IsActive(string? url)
+    {
+        var u = Normalize(url);
+        if (u == "/") return currentPath == "/" || string.IsNullOrEmpty(currentPath);
+        return currentPath.Equals(u, StringComparison.OrdinalIgnoreCase) || currentPath.StartsWith(u + "/", StringComparison.OrdinalIgnoreCase);
+    }
+}
 @if (Model != null)
 {
-<nav class="nav flex-column">
-    @foreach (var item in Model.OrderBy(x => x.Order))
+<nav class="nav flex-column px-2">
+    @foreach (var group in Model)
     {
-        var visibleChildren = item.Children?.Where(c => c.IsVisible(ViewContext.HttpContext.User)).OrderBy(c => c.Order).ToList() ?? new List<Bonyan.Ui.BonWeb.Mvc.Contracts.BonWebMenuItem>();
-        @if (visibleChildren.Any())
+        var visibleItems = group.Items?.Where(i => i.IsVisible(ViewContext.HttpContext.User)).OrderBy(i => i.Order).ToList() ?? new List<BonWebMenuItem>();
+        if (visibleItems.Count == 0) { continue; }
+
+        @if (!string.IsNullOrEmpty(group.GroupName))
         {
-            <div class="nav-item py-1">
-                <span class="nav-link text-white-50 small text-uppercase">@item.Title</span>
-                @foreach (var child in visibleChildren)
-                {
-                    <a class="nav-link" href="@child.Url">
-                        @if (!string.IsNullOrEmpty(child.Icon))
-                        {
-                            <i class="bi @child.Icon me-2"></i>
-                        }
-                        @child.Title
-                    </a>
-                }
-            </div>
+            <div class="group-label">@group.GroupName</div>
         }
-        else
+
+        @foreach (var item in visibleItems)
         {
-            <a class="nav-link" href="@item.Url">
-                @if (!string.IsNullOrEmpty(item.Icon))
-                {
-                    <i class="bi @item.Icon me-2"></i>
-                }
-                @item.Title
-            </a>
+            var title = item.Title;
+            var visibleChildren = item.Children?.Where(c => c.IsVisible(ViewContext.HttpContext.User)).OrderBy(c => c.Order).ToList() ?? new List<BonWebMenuItem>();
+            @if (visibleChildren.Any())
+            {
+                <div class="nav-item">
+                    <div class="nav-link nav-link--muted py-2 d-flex align-items-center">
+                        @if (!string.IsNullOrEmpty(item.Icon)) { <i class="bi @item.Icon me-2"></i> }
+                        @title
+                    </div>
+                    <div class="nav flex-column ms-1">
+                        @foreach (var child in visibleChildren)
+                        {
+                            var subChildren = child.Children?.Where(c => c.IsVisible(ViewContext.HttpContext.User)).OrderBy(c => c.Order).ToList() ?? new List<BonWebMenuItem>();
+                            @if (subChildren.Any())
+                            {
+                                var childTitle = child.Title;
+                                <div class="nav-item mb-1">
+                                    <div class="nav-link nav-link--muted py-1 d-flex align-items-center">
+                                        @if (!string.IsNullOrEmpty(child.Icon)) { <i class="bi @child.Icon me-2"></i> }
+                                        @childTitle
+                                    </div>
+                                    <div class="nav flex-column ms-1">
+                                        @foreach (var sub in subChildren)
+                                        {
+                                            var subTitle = sub.Title;
+                                            var active = IsActive(sub.Url);
+                                            <a class="nav-link py-2 d-flex align-items-center @(active ? "active" : "")" href="@sub.Url">
+                                                @if (!string.IsNullOrEmpty(sub.Icon)) { <i class="bi @sub.Icon me-2"></i> }
+                                                @subTitle
+                                            </a>
+                                        }
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                var childTitle2 = child.Title;
+                                var active = IsActive(child.Url);
+                                <a class="nav-link py-2 d-flex align-items-center @(active ? "active" : "")" href="@child.Url">
+                                    @if (!string.IsNullOrEmpty(child.Icon)) { <i class="bi @child.Icon me-2"></i> }
+                                    @childTitle2
+                                </a>
+                            }
+                        }
+                    </div>
+                </div>
+            }
+            else
+            {
+                var active = IsActive(item.Url);
+                <a class="nav-link py-2 d-flex align-items-center @(active ? "active" : "")" href="@item.Url">
+                    @if (!string.IsNullOrEmpty(item.Icon)) { <i class="bi @item.Icon me-2"></i> }
+                    @title
+                </a>
+            }
         }
     }
 </nav>

@@ -1,0 +1,6 @@
+<Project>
+  <PropertyGroup>
+    <!-- Use latest published Bonyan version on NuGet.org. Update after publishing new versions. -->
+    <BonyanPackageVersion>1.6.1</BonyanPackageVersion>
+  </PropertyGroup>
+</Project>

@@ -1,12 +1,85 @@
+@model Bonyan.Layer.Domain.Repository.Abstractions.BonPaginatedResult<Bonyan.IdentityManagement.Application.Users.Dtos.UserListDto>
+@inject Microsoft.Extensions.Localization.IStringLocalizer<Bonyan.IdentityManagement.BonWeb.Mvc.IdentityManagementResource> L
 @{
-    ViewData["Title"] = "Users";
+    ViewData["Title"] = L["Users:Title"];
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var filter = ViewBag.Filter as Bonyan.IdentityManagement.Application.Users.Dtos.UserFilterDto ?? new Bonyan.IdentityManagement.Application.Users.Dtos.UserFilterDto();
 }
-<div class="card">
-    <div class="card-header">
-        <h5 class="card-title mb-0">Users</h5>
+<div class="card shadow-sm">
+    <div class="card-header d-flex flex-wrap align-items-center justify-content-between gap-2">
+        <h5 class="card-title mb-0">@L["Users:Title"]</h5>
     </div>
     <div class="card-body">
-        <p class="text-muted">User management - integrate with UserManagement application service for user list.</p>
+        <form method="get" asp-action="Index" class="mb-3">
+            <div class="row g-2">
+                <div class="col-md-4">
+                    <input type="text" name="Search" value="@filter.Search" class="form-control form-control-sm" placeholder="@L["Users:SearchPlaceholder"]" />
+                </div>
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-primary btn-sm">@L["Users:Search"]</button>
+                </div>
+            </div>
+        </form>
+        @if (Model != null && Model.Results != null && Model.Results.Any())
+        {
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>@L["Users:UserName"]</th>
+                            <th>@L["Users:Email"]</th>
+                            <th>@L["Users:Status"]</th>
+                            <th>@L["Users:IsLocked"]</th>
+                            <th class="text-end">@L["Users:Actions"]</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var user in Model.Results)
+                        {
+                            <tr>
+                                <td>@user.UserName</td>
+                                <td>@(user.Email ?? "—")</td>
+                                <td><span class="badge bg-secondary">@user.Status</span></td>
+                                <td>@(user.IsLocked ? L["Roles:Yes"] : L["Roles:No"])</td>
+                                <td class="text-end">
+                                    <a asp-action="Manage" asp-route-id="@user.Id.Value" class="btn btn-sm btn-outline-primary">@L["Users:Manage"]</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            @if (Model.TotalPages > 1)
+            {
+                <nav class="d-flex justify-content-between align-items-center flex-wrap gap-2 mt-3">
+                    <small class="text-muted">@L["Users:Showing"] @((Model.Skip) + 1) – @(Math.Min(Model.Skip + Model.Take, Model.TotalCount)) @L["Users:Of"] @Model.TotalCount</small>
+                    <ul class="pagination pagination-sm mb-0">
+                        @if (Model.Page > 1)
+                        {
+                            <li class="page-item">
+                                <a class="page-link" href="?Search=@filter.Search&Skip=@(Model.Skip - Model.Take)&Take=@Model.Take">@L["Users:Previous"]</a>
+                            </li>
+                        }
+                        @for (var p = Math.Max(1, Model.Page - 2); p <= Math.Min(Model.TotalPages, Model.Page + 2); p++)
+                        {
+                            var skip = (p - 1) * Model.Take;
+                            <li class="page-item @(p == Model.Page ? "active" : "")">
+                                <a class="page-link" href="?Search=@filter.Search&Skip=@skip&Take=@Model.Take">@p</a>
+                            </li>
+                        }
+                        @if (Model.Page < Model.TotalPages)
+                        {
+                            <li class="page-item">
+                                <a class="page-link" href="?Search=@filter.Search&Skip=@(Model.Skip + Model.Take)&Take=@Model.Take">@L["Users:Next"]</a>
+                            </li>
+                        }
+                    </ul>
+                </nav>
+            }
+        }
+        else
+        {
+            <p class="text-muted mb-0">@L["Users:NoUsersFound"]</p>
+        }
     </div>
 </div>

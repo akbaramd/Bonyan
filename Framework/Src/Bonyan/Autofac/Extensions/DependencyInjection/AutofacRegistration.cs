@@ -47,7 +47,7 @@ namespace Autofac.Extensions.DependencyInjection;
 /// </summary>
 public static class AutofacRegistration
 {
-    private const string AgentLogPath = @"c:\Users\ahmadi.UR-NEZAM\RiderProjects\Bonyan\.cursor\debug.log";
+    private const string AgentLogPath = @"D:\Projects\Bonyan2\.cursor\debug.log";
 
     private static void AgentLog(string location, string message, object data, string hypothesisId)
     {

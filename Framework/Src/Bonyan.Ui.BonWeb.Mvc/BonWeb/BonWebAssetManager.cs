@@ -16,14 +16,14 @@ public class BonWebAssetManager : IBonWebAssetManager
             _providers.Add(provider);
     }
 
-    public async Task<IEnumerable<BonWebAssetDefinition>> GetAssetsAsync(string location, ClaimsPrincipal? user = null)
+    public async Task<IEnumerable<BonWebAssetDefinition>> GetAssetsAsync(string location, ClaimsPrincipal? user = null, BonWebAssetContext? context = null)
     {
         var assets = new List<BonWebAssetDefinition>();
         foreach (var provider in _providers.OrderByDescending(p => p.Priority))
         {
             if (!provider.SupportedLocations.Contains(location, StringComparer.OrdinalIgnoreCase))
                 continue;
-            var providerAssets = await provider.GetAssetsAsync(location, user);
+            var providerAssets = await provider.GetAssetsAsync(location, user, context);
             assets.AddRange(providerAssets);
         }
         return assets.OrderBy(a => a.Priority).ToList();

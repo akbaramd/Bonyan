@@ -12,13 +12,14 @@
         <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
     </PropertyGroup>
 
+    <Import Project="..\template-package.props" />
     <ItemGroup>
-        <ProjectReference Include="..\..\Framework\Src\Bonyan.Workers.Hangfire\Bonyan.Workers.Hangfire.csproj" />
-        <ProjectReference Include="..\..\Framework\Src\Bonyan.Worker.Abstraction\Bonyan.Worker.Abstraction.csproj" />
-        <ProjectReference Include="..\..\Framework\Src\Bonyan.AspNetCore\Bonyan.AspNetCore.csproj"/>
-        <ProjectReference Include="..\..\Framework\Src\Bonyan.AutoMapper\Bonyan.AutoMapper.csproj"/>
-        <ProjectReference Include="..\..\Modules\Bonyan.IdentityManagement\Src\Bonyan.Module.IdentityManagement.Application\Bonyan.Module.IdentityManagement.Application.csproj" />
-        <ProjectReference Include="..\..\Modules\Bonyan.TenantManagement\Src\Bonyan.Module.TenantManagement.Application\Bonyan.Module.TenantManagement.Application.csproj" />
+        <PackageReference Include="Bonyan.Workers.Hangfire" Version="$(BonyanPackageVersion)" />
+        <PackageReference Include="Bonyan.Worker.Abstraction" Version="$(BonyanPackageVersion)" />
+        <PackageReference Include="Bonyan.AspNetCore" Version="$(BonyanPackageVersion)" />
+        <PackageReference Include="Bonyan.AutoMapper" Version="$(BonyanPackageVersion)" />
+        <PackageReference Include="Bonyan.Module.IdentityManagement.Application" Version="$(BonyanPackageVersion)" />
+        <PackageReference Include="Bonyan.Module.TenantManagement.Application" Version="$(BonyanPackageVersion)" />
         <ProjectReference Include="..\BonyanTemplate.Domain\BonyanTemplate.Domain.csproj"/>
     </ItemGroup>
 

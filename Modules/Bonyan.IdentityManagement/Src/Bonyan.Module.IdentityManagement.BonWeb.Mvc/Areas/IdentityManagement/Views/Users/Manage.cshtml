@@ -1,0 +1,148 @@
+@model Bonyan.IdentityManagement.Application.Users.Dtos.UserListDto
+@inject Microsoft.Extensions.Localization.IStringLocalizer<Bonyan.IdentityManagement.BonWeb.Mvc.IdentityManagementResource> L
+@{
+    ViewData["Title"] = L["Users:ManageUser"];
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var userId = (Guid)ViewBag.UserId;
+    var userInfo = Model ?? ViewBag.UserInfo as Bonyan.IdentityManagement.Application.Users.Dtos.UserListDto;
+}
+<div class="card shadow-sm border-0">
+    <div class="card-header d-flex flex-wrap align-items-center justify-content-between gap-2 py-3">
+        <h5 class="card-title mb-0 fw-semibold">@L["Users:ManageUser"]</h5>
+        <a asp-action="Index" class="btn btn-sm btn-outline-secondary">@L["Users:BackToList"]</a>
+    </div>
+    <div class="card-body">
+        <div id="manage-alert-container"></div>
+
+        @if (userInfo != null)
+        {
+            <div class="row g-3 mb-4">
+                <div class="col-md-6 col-lg-3">
+                    <label class="form-label small text-muted">@L["Users:UserId"]</label>
+                    <p class="mb-0 fw-medium"><code class="small">@userInfo.Id?.Value</code></p>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <label class="form-label small text-muted">@L["Users:UserName"]</label>
+                    <p class="mb-0 fw-medium">@userInfo.UserName</p>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <label class="form-label small text-muted">@L["Users:Email"]</label>
+                    <p class="mb-0">@(userInfo.Email ?? "—")</p>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <label class="form-label small text-muted">@L["Users:Status"]</label>
+                    <p class="mb-0">
+                        <span class="badge @(userInfo.IsLocked ? "bg-danger" : "bg-secondary")">@userInfo.Status</span>
+                        @if (userInfo.IsLocked)
+                        {
+                            <span class="small text-muted">(@L["Users:IsLocked"])</span>
+                        }
+                    </p>
+                </div>
+            </div>
+        }
+
+        <ul class="nav nav-tabs mb-3" id="manageUserTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="tab-roles" data-bs-toggle="tab" data-bs-target="#pane-roles" type="button" role="tab" data-tab-url="@Url.Action("GetTabRoles", "Users", new { area = "IdentityManagement", id = userId })">@L["Users:TabRoles"]</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="tab-tokens" data-bs-toggle="tab" data-bs-target="#pane-tokens" type="button" role="tab" data-tab-url="@Url.Action("GetTabTokens", "Users", new { area = "IdentityManagement", id = userId })">@L["Users:TabTokens"]</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="tab-claims" data-bs-toggle="tab" data-bs-target="#pane-claims" type="button" role="tab" data-tab-url="@Url.Action("GetTabClaims", "Users", new { area = "IdentityManagement", id = userId })">@L["Users:TabClaims"]</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="tab-metas" data-bs-toggle="tab" data-bs-target="#pane-metas" type="button" role="tab" data-tab-url="@Url.Action("GetTabMetas", "Users", new { area = "IdentityManagement", id = userId })">@L["Users:TabMetas"]</button>
+            </li>
+        </ul>
+
+        <div class="tab-content" id="manageUserTabContent">
+            <div class="tab-pane fade show active" id="pane-roles" role="tabpanel">
+                <div class="tab-pane-load" data-loaded="false">
+                    <div class="text-center py-4 text-muted"><span class="spinner-border spinner-border-sm me-2"></span>@L["Users:Loading"]</div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="pane-tokens" role="tabpanel">
+                <div class="tab-pane-load" data-loaded="false">
+                    <div class="text-center py-4 text-muted"><span class="spinner-border spinner-border-sm me-2"></span>@L["Users:Loading"]</div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="pane-claims" role="tabpanel">
+                <div class="tab-pane-load" data-loaded="false">
+                    <div class="text-center py-4 text-muted"><span class="spinner-border spinner-border-sm me-2"></span>@L["Users:Loading"]</div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="pane-metas" role="tabpanel">
+                <div class="tab-pane-load" data-loaded="false">
+                    <div class="text-center py-4 text-muted"><span class="spinner-border spinner-border-sm me-2"></span>@L["Users:Loading"]</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+(function() {
+    var successMsg = @(TempData["Success"] != null ? Json.Serialize(TempData["Success"].ToString()) : "null");
+    var errorMsg = @(TempData["Error"] != null ? Json.Serialize(TempData["Error"].ToString()) : "null");
+    function showToast(msg, isError) {
+        var el = document.getElementById('manage-alert-container');
+        if (!el) return;
+        el.innerHTML = '<div class="alert alert-' + (isError ? 'danger' : 'success') + ' alert-dismissible fade show">' + msg + '<button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>';
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+        if (successMsg) showToast(successMsg, false);
+        if (errorMsg) showToast(errorMsg, true);
+    });
+
+    document.getElementById('manageUserTabs')?.addEventListener('shown.bs.tab', function(e) {
+        var target = e.target;
+        if (!target || target.getAttribute('role') !== 'tab') return;
+        var paneId = target.getAttribute('data-bs-target');
+        if (!paneId) return;
+        var pane = document.querySelector(paneId);
+        if (!pane) return;
+        var loadContainer = pane.querySelector('.tab-pane-load');
+        if (!loadContainer || loadContainer.getAttribute('data-loaded') === 'true') return;
+        var url = target.getAttribute('data-tab-url');
+        if (!url) return;
+        fetch(url, { headers: { 'Accept': 'text/html', 'X-Requested-With': 'XMLHttpRequest' } })
+            .then(function(r) { return r.text(); })
+            .then(function(html) {
+                loadContainer.setAttribute('data-loaded', 'true');
+                loadContainer.innerHTML = html;
+                initRolesSelect2(loadContainer);
+            })
+            .catch(function() {
+                loadContainer.innerHTML = '<div class="alert alert-danger">@L["Users:LoadError"]</div>';
+            });
+    });
+    function initRolesSelect2(container) {
+        if (!container) return;
+        var sel = container.querySelector('select[name="roleIds"]');
+        if (sel && typeof $ !== 'undefined' && $.fn.select2) $(sel).select2({ width: '100%', placeholder: '@L["Users:SelectRoles"]' });
+    }
+    var firstTab = document.querySelector('#manageUserTabs button[data-bs-toggle="tab"]');
+    if (firstTab && firstTab.classList.contains('active')) {
+        var url = firstTab.getAttribute('data-tab-url');
+        if (url) {
+            var pane = document.querySelector('#pane-roles .tab-pane-load');
+            if (pane && pane.getAttribute('data-loaded') === 'false') {
+                fetch(url, { headers: { 'Accept': 'text/html', 'X-Requested-With': 'XMLHttpRequest' } })
+                    .then(function(r) { return r.text(); })
+                    .then(function(html) {
+                        pane.setAttribute('data-loaded', 'true');
+                        pane.innerHTML = html;
+                        initRolesSelect2(pane);
+                    })
+                    .catch(function() {
+                        pane.innerHTML = '<div class="alert alert-danger">@L["Users:LoadError"]</div>';
+                    });
+            }
+        }
+    }
+})();
+</script>
+}

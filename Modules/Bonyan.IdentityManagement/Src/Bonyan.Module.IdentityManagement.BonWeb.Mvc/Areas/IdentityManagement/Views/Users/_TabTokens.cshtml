@@ -1,0 +1,45 @@
+@model Bonyan.IdentityManagement.BonWeb.Mvc.Models.Manage.ManageTabTokensViewModel
+@inject Microsoft.Extensions.Localization.IStringLocalizer<Bonyan.IdentityManagement.BonWeb.Mvc.IdentityManagementResource> L
+@if (!string.IsNullOrEmpty(Model.Error))
+{
+    <div class="alert alert-danger">@Model.Error</div>
+    return;
+}
+<p class="text-muted small">@L["Users:TabTokensHelp"]</p>
+@if (Model.Tokens != null && Model.Tokens.Any())
+{
+    <div class="table-responsive">
+        <table class="table table-sm table-hover">
+            <thead class="table-light">
+                <tr>
+                    <th>@L["Users:TokenType"]</th>
+                    <th>@L["Users:TokenCreated"]</th>
+                    <th>@L["Users:TokenExpiration"]</th>
+                    <th class="text-end">@L["Users:Actions"]</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var t in Model.Tokens)
+                {
+                    <tr>
+                        <td><code class="small">@t.Type</code></td>
+                        <td>@t.CreatedAt.ToString("g")</td>
+                        <td>@(t.Expiration?.ToString("g") ?? "—")</td>
+                        <td class="text-end">
+                            <form method="post" asp-action="RemoveToken" class="d-inline" onsubmit="return confirm('@L["Users:ConfirmRemoveToken"]');">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="userId" value="@Model.UserId" />
+                                <input type="hidden" name="tokenType" value="@t.Type" />
+                                <button type="submit" class="btn btn-sm btn-outline-danger">@L["Roles:Delete"]</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <p class="text-muted mb-0">@L["Users:NoTokens"]</p>
+}

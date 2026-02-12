@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Bonyan.AspNetCore.Mvc.Localization;
 using Bonyan.Modularity;
@@ -94,6 +94,17 @@ public class ModuleViewLocationExpanderOptions
     /// Collection of view locations registered by modules
     /// </summary>
     public List<string> ModuleViewLocations { get; set; } = new();
+
+    /// <summary>
+    /// Global (non-area) view locations that are always searched so shared partials
+    /// from RCLs (e.g. Views/Shared) are found even when the request is in an area.
+    /// </summary>
+    public List<string> GlobalViewLocations { get; set; } = new()
+    {
+        "Views/{1}/{0}.cshtml",
+        "Views/Shared/{0}.cshtml",
+        "Pages/Shared/{0}.cshtml"
+    };
 
     /// <summary>
     /// Common view location patterns that apply to all modules.
@@ -218,8 +229,13 @@ public class ModuleViewLocationExpander : IViewLocationExpander
 
     public IEnumerable<string> ExpandViewLocations(ViewLocationExpanderContext context, IEnumerable<string> viewLocations)
     {
-        // Combine module-specific locations, common locations, and existing locations
+        // Combine: global (non-area) first so RCL shared partials are found when in an area,
+        // then module-specific, common, and existing (area) locations
         var allLocations = new List<string>();
+        
+        // Always include global view locations so Views/Shared partials from RCLs are found
+        // even when the current request is in an area (area-only formats would otherwise omit them)
+        allLocations.AddRange(_options.GlobalViewLocations);
         
         // Add module-specific view locations
         allLocations.AddRange(_options.ModuleViewLocations);
@@ -227,7 +243,7 @@ public class ModuleViewLocationExpander : IViewLocationExpander
         // Add common view locations
         allLocations.AddRange(_options.CommonViewLocations);
         
-        // Add existing view locations
+        // Add existing view locations (from view engine; may be area-only when context has area)
         allLocations.AddRange(viewLocations);
 
         // Use proper logging instead of Console.WriteLine

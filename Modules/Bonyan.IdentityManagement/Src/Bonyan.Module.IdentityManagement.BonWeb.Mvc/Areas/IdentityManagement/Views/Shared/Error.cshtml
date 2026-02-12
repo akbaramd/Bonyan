@@ -1,0 +1,16 @@
+@model string
+@inject Microsoft.Extensions.Localization.IStringLocalizer<Bonyan.Ui.BonWeb.Mvc.BonWebMenuResource> L
+@{
+    ViewData["Title"] = L["Layout:Error"];
+    var message = Model ?? "An error occurred while processing your request.";
+}
+<div class="alert alert-danger" role="alert">
+    <h4 class="alert-heading">@L["Layout:Error"]</h4>
+    <p>@message</p>
+    <hr />
+    <p class="mb-0">
+        <a asp-area="IdentityManagement" asp-controller="Roles" asp-action="Index" class="alert-link">@L["Layout:BackToRoles"]</a>
+        &nbsp;|&nbsp;
+        <a href="~/" class="alert-link">@L["Layout:ReturnHome"]</a>
+    </p>
+</div>

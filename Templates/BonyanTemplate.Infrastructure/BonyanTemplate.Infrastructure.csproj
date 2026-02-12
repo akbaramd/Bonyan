@@ -21,12 +21,13 @@
         </PackageReference>
     </ItemGroup>
 
+    <Import Project="..\template-package.props" />
     <ItemGroup>
-        <ProjectReference Include="..\..\Framework\Src\Bonyan.AspNetCore.MultiTenant\Bonyan.AspNetCore.MultiTenant.csproj"/>
-        <ProjectReference Include="..\..\Framework\Src\Bonyan.EntityFrameworkCore.SqlServer\Bonyan.EntityFrameworkCore.SqlServer.csproj"/>
-        <ProjectReference Include="..\..\Framework\Src\Bonyan.EntityFrameworkCore\Bonyan.EntityFrameworkCore.csproj"/>
-        <ProjectReference Include="..\..\Modules\Bonyan.IdentityManagement\Src\Bonyan.Module.IdentityManagement.EntityFrameworkCore\Bonyan.Module.IdentityManagement.EntityFrameworkCore.csproj" />
-        <ProjectReference Include="..\..\Modules\Bonyan.TenantManagement\Src\Bonyan.Module.TenantManagement.EntityFrameworkCore\Bonyan.Module.TenantManagement.EntityFrameworkCore.csproj" />
+        <PackageReference Include="Bonyan.AspNetCore.MultiTenant" Version="$(BonyanPackageVersion)" />
+        <PackageReference Include="Bonyan.EntityFrameworkCore.SqlServer" Version="$(BonyanPackageVersion)" />
+        <PackageReference Include="Bonyan.EntityFrameworkCore" Version="$(BonyanPackageVersion)" />
+        <PackageReference Include="Bonyan.Module.IdentityManagement.EntityFrameworkCore" Version="$(BonyanPackageVersion)" />
+        <PackageReference Include="Bonyan.Module.TenantManagement.EntityFrameworkCore" Version="$(BonyanPackageVersion)" />
         <ProjectReference Include="..\BonyanTemplate.Application\BonyanTemplate.Application.csproj" />
         <ProjectReference Include="..\BonyanTemplate.Domain\BonyanTemplate.Domain.csproj"/>
     </ItemGroup>

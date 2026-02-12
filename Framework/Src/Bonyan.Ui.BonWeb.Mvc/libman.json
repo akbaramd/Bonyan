@@ -1,0 +1,41 @@
+{
+  "version": "1.0",
+  "defaultProvider": "cdnjs",
+  "libraries": [
+    {
+      "library": "twitter-bootstrap@5.3.2",
+      "destination": "wwwroot/lib/bootstrap/",
+      "files": ["css/bootstrap.min.css", "css/bootstrap.rtl.min.css", "js/bootstrap.bundle.min.js"]
+    },
+    {
+      "library": "jquery@3.7.1",
+      "destination": "wwwroot/lib/jquery/",
+      "files": ["jquery.min.js"]
+    },
+    {
+      "library": "jquery-validate@1.19.5",
+      "destination": "wwwroot/lib/jquery-validate/",
+      "files": ["jquery.validate.min.js"]
+    },
+    {
+      "library": "jquery-validation-unobtrusive@4.0.0",
+      "destination": "wwwroot/lib/jquery-validation-unobtrusive/",
+      "files": ["jquery.validate.unobtrusive.min.js"]
+    },
+    {
+      "library": "bootstrap-icons@1.11.1",
+      "destination": "wwwroot/lib/bootstrap-icons/",
+      "files": ["font/bootstrap-icons.min.css", "font/fonts/bootstrap-icons.woff", "font/fonts/bootstrap-icons.woff2"]
+    },
+    {
+      "library": "select2@4.0.13",
+      "destination": "wwwroot/lib/select2/",
+      "files": ["js/select2.min.js", "css/select2.min.css"]
+    },
+    {
+      "library": "sweetalert2@11.10.0",
+      "destination": "wwwroot/lib/sweetalert2/",
+      "files": ["sweetalert2.all.min.js"]
+    }
+  ]
+}

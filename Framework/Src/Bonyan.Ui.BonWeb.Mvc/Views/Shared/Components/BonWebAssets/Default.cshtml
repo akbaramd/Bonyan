@@ -1,15 +1,16 @@
 @model IEnumerable<Bonyan.Ui.BonWeb.Mvc.Contracts.BonWebAssetDefinition>
 @if (Model != null)
 {
-@foreach (var asset in Model)
-{
-    @if (asset.Type == Bonyan.Ui.BonWeb.Mvc.Contracts.BonWebAssetType.Css)
+    foreach (var asset in Model)
     {
-        <link rel="stylesheet" href="@asset.Source" />
+        var href = asset.Source?.StartsWith("~/") == true ? Url.Content(asset.Source) : asset.Source;
+        if (asset.Type == Bonyan.Ui.BonWeb.Mvc.Contracts.BonWebAssetType.Css)
+        {
+            <link rel="stylesheet" href="@href" />
+        }
+        else if (asset.Type == Bonyan.Ui.BonWeb.Mvc.Contracts.BonWebAssetType.Script)
+        {
+            <script src="@href"></script>
+        }
     }
-    else if (asset.Type == Bonyan.Ui.BonWeb.Mvc.Contracts.BonWebAssetType.Script)
-    {
-        <script src="@asset.Source"></script>
-    }
-}
 }

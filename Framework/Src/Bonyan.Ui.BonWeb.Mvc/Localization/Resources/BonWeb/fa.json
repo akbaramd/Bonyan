@@ -1,0 +1,24 @@
+{
+  "culture": "fa",
+  "texts": {
+    "Menu:Dashboard": "داشبورد",
+    "Menu:Home": "خانه",
+    "Menu:System": "سیستم",
+    "Menu:Identity": "هویت",
+    "Menu:Users": "کاربران",
+    "Menu:Roles": "نقش‌ها",
+    "Layout:Login": "ورود",
+    "Layout:Logout": "خروج",
+    "Layout:BonWeb": "بنیان وب",
+    "Layout:Error": "خطا",
+    "Layout:BackToRoles": "بازگشت به نقش‌ها",
+    "Layout:ReturnHome": "بازگشت به خانه",
+    "Layout:Language": "زبان",
+    "Layout:English": "انگلیسی",
+    "Layout:Persian": "فارسی",
+    "Layout:Menu": "منو",
+    "Layout:Navigation": "مسیریابی",
+    "Layout:Profile": "پروفایل",
+    "Layout:Settings": "تنظیمات"
+  }
+}

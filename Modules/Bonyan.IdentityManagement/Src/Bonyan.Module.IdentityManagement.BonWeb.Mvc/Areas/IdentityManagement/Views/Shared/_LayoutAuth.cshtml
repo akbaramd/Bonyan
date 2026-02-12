@@ -1,0 +1,130 @@
+@using System.Globalization
+@inject Microsoft.Extensions.Localization.IStringLocalizer<Bonyan.Ui.BonWeb.Mvc.BonWebMenuResource> MenuL
+@{
+    var culture = CultureInfo.CurrentUICulture;
+    var lang = culture.TwoLetterISOLanguageName;
+    var dir = culture.TextInfo.IsRightToLeft ? "rtl" : "ltr";
+    var returnUrl = Context.Request.Path + Context.Request.QueryString;
+}
+<!DOCTYPE html>
+<html lang="@lang" dir="@dir">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - @MenuL["Layout:BonWeb"]</title>
+    @await Component.InvokeAsync("BonWebAssets", new { location = "BonWeb.Head" })
+    <style>
+        :root {
+            --app-radius: 0.75rem;
+            --auth-emerald: #059669;
+            --auth-emerald-dark: #047857;
+            --auth-emerald-light: #d1fae5;
+            --auth-emerald-fade: rgba(16, 185, 129, 0.12);
+        }
+        body.auth-page {
+            min-height: 100vh;
+            background: linear-gradient(165deg, var(--auth-emerald-light) 0%, #f0fdf4 25%, #fff 60%, #f8fafc 100%);
+            background-attachment: fixed;
+        }
+        body.auth-page::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(ellipse 70% 45% at 50% -15%, var(--auth-emerald-fade) 0%, transparent 55%);
+            pointer-events: none;
+        }
+        .auth-page .card {
+            border-radius: var(--app-radius);
+            border: 0;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 4px 12px rgba(0, 0, 0, 0.04);
+        }
+        .auth-page .form-control {
+            border-radius: 0.5rem;
+        }
+        .auth-page .form-control:focus {
+            border-color: var(--auth-emerald);
+            box-shadow: 0 0 0 0.2rem rgba(5, 150, 105, 0.18);
+        }
+        .auth-page .btn-primary {
+            background-color: var(--auth-emerald);
+            border-color: var(--auth-emerald);
+            border-radius: 0.5rem;
+        }
+        .auth-page .btn-primary:hover {
+            background-color: var(--auth-emerald-dark);
+            border-color: var(--auth-emerald-dark);
+        }
+        .auth-page .auth-link {
+            color: var(--auth-emerald);
+        }
+        .auth-page .auth-link:hover {
+            color: var(--auth-emerald-dark);
+        }
+        .auth-page .auth-lang-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1030;
+            background: rgba(255, 255, 255, 0.95);
+            border-bottom: 1px solid rgba(5, 150, 105, 0.15);
+            padding: 0.5rem 0;
+        }
+        .auth-page .auth-lang-bar .dropdown-toggle {
+            border-color: rgba(5, 150, 105, 0.3);
+            color: var(--auth-emerald-dark);
+        }
+        .auth-page .auth-lang-bar .dropdown-toggle:hover {
+            background: var(--auth-emerald-light);
+            border-color: var(--auth-emerald);
+        }
+        .auth-page .auth-lang-bar .dropdown-item.active {
+            background: var(--auth-emerald-light);
+            color: var(--auth-emerald-dark);
+        }
+    </style>
+</head>
+<body class="auth-page">
+    <div class="auth-lang-bar">
+        <div class="container d-flex justify-content-end">
+            <div class="dropdown">
+                <button class="btn btn-sm dropdown-toggle d-flex align-items-center gap-1" type="button" id="auth-lang-dropdown" data-bs-toggle="dropdown" aria-expanded="false" title="@MenuL["Layout:Language"]">
+                @if (culture.TwoLetterISOLanguageName == "fa")
+                {
+                    <span aria-hidden="true">🇮🇷</span>
+                    <span>@MenuL["Layout:Persian"]</span>
+                }
+                else
+                {
+                    <span aria-hidden="true">🇺🇸</span>
+                    <span>@MenuL["Layout:English"]</span>
+                }
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="auth-lang-dropdown">
+                    <li>
+                        <a class="dropdown-item d-flex align-items-center gap-2 @(culture.TwoLetterISOLanguageName == "en" ? "active" : "")" href="@Url.Action("SetCulture", "BonWebCulture", new { area = "", culture = "en-US", returnUrl })">
+                            <span aria-hidden="true">🇺🇸</span>
+                            @MenuL["Layout:English"]
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item d-flex align-items-center gap-2 @(culture.TwoLetterISOLanguageName == "fa" ? "active" : "")" href="@Url.Action("SetCulture", "BonWebCulture", new { area = "", culture = "fa-IR", returnUrl })">
+                            <span aria-hidden="true">🇮🇷</span>
+                            @MenuL["Layout:Persian"]
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <main class="container position-relative">
+        <div class="row min-vh-100 align-items-center justify-content-center py-4 py-md-5 pt-5">
+            <div class="col-12 col-sm-10 col-md-7 col-lg-5 col-xl-4">
+                @RenderBody()
+            </div>
+        </div>
+    </main>
+    @await Component.InvokeAsync("BonWebAssets", new { location = "BonWeb.Footer" })
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

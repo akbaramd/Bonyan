@@ -1,15 +1,23 @@
 using System.Security.Claims;
+using Bonyan.IdentityManagement.BonWeb.Mvc.Models.Account;
 using Bonyan.IdentityManagement.ClaimProvider;
 using Bonyan.IdentityManagement.Domain.Users;
 using Bonyan.IdentityManagement.Domain.Users.DomainServices;
+using Bonyan.UserManagement.Domain.Users.Enumerations;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Localization;
 
-namespace BonyanTemplate.Mvc.Controllers;
+namespace Bonyan.IdentityManagement.BonWeb.Mvc.Controllers.IdentityManagement;
 
+[Area("IdentityManagement")]
 [AllowAnonymous]
+[Route("IdentityManagement/[controller]")]
 public class AccountController : Controller
 {
     public const string PasswordResetTokenType = "PasswordReset";
@@ -18,18 +26,22 @@ public class AccountController : Controller
     private readonly IBonIdentityUserManager _userManager;
     private readonly IBonIdentityClaimProviderManager _claimProviderManager;
     private readonly IWebHostEnvironment _env;
+    private readonly IStringLocalizer<IdentityManagementResource> _localizer;
 
     public AccountController(
         IBonIdentityUserManager userManager,
         IBonIdentityClaimProviderManager claimProviderManager,
-        IWebHostEnvironment env)
+        IWebHostEnvironment env,
+        IStringLocalizer<IdentityManagementResource> localizer)
     {
         _userManager = userManager;
         _claimProviderManager = claimProviderManager;
         _env = env;
+        _localizer = localizer;
     }
 
     [HttpGet]
+    [Route("[action]")]
     public IActionResult Login(string? returnUrl = null)
     {
         ViewData["ReturnUrl"] = returnUrl ?? Url.Content("~/");
@@ -38,30 +50,50 @@ public class AccountController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
+    [EnableRateLimiting("AuthEndpoints")]
+    [Route("[action]")]
     public async Task<IActionResult> Login(LoginInputModel model, string? returnUrl = null, CancellationToken cancellationToken = default)
     {
         returnUrl ??= Url.Content("~/");
         ViewData["ReturnUrl"] = returnUrl;
 
-        if (string.IsNullOrWhiteSpace(model.UserName) || string.IsNullOrWhiteSpace(model.Password))
-        {
-            ModelState.AddModelError(string.Empty, "User name and password are required.");
+        if (!ModelState.IsValid)
             return View(model);
-        }
 
-        var findResult = await _userManager.FindByUserNameAsync(model.UserName);
+        var findResult = await _userManager.FindByUserNameAsync(model.UserName!);
         if (!findResult.IsSuccess || findResult.Value == null)
         {
-            ModelState.AddModelError(string.Empty, "Invalid user name or password.");
+            ModelState.AddModelError(string.Empty, _localizer["Validation:InvalidUserNameOrPassword"].Value);
             return View(model);
         }
 
         var user = findResult.Value;
-        if (!user.VerifyPassword(model.Password))
+
+        if (user.IsAccountLocked())
         {
-            ModelState.AddModelError(string.Empty, "Invalid user name or password.");
+            var lockoutEnd = user.AccountLockedUntil!.Value;
+            var remainingMins = Math.Max(1, (int)Math.Ceiling((lockoutEnd - DateTime.Now).TotalMinutes));
+            var message = string.Format(_localizer["Validation:AccountLocked"].Value, remainingMins);
+            ModelState.AddModelError(string.Empty, message);
             return View(model);
         }
+
+        if (!user.VerifyPassword(model.Password!))
+        {
+            user.IncrementFailedLoginAttemptCount();
+            await _userManager.UpdateAsync(user);
+            ModelState.AddModelError(string.Empty, _localizer["Validation:InvalidUserNameOrPassword"].Value);
+            return View(model);
+        }
+
+        if (user.IsDeleted || user.Status != UserStatus.Active)
+        {
+            ModelState.AddModelError(string.Empty, _localizer["Validation:AccountInactive"].Value);
+            return View(model);
+        }
+
+        user.ResetFailedLoginAttemptCount();
+        await _userManager.UpdateAsync(user);
 
         var claims = await _claimProviderManager.GetClaimsAsync(user);
         var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
@@ -77,6 +109,7 @@ public class AccountController : Controller
     }
 
     [HttpGet]
+    [Route("[action]")]
     public IActionResult ForgotPassword()
     {
         return View(new ForgotPasswordInputModel());
@@ -84,28 +117,26 @@ public class AccountController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
+    [EnableRateLimiting("AuthEndpoints")]
+    [Route("[action]")]
     public async Task<IActionResult> ForgotPassword(ForgotPasswordInputModel model, CancellationToken cancellationToken = default)
     {
-        if (string.IsNullOrWhiteSpace(model.UserNameOrEmail))
-        {
-            ModelState.AddModelError(string.Empty, "Please enter your user name or email.");
+        if (!ModelState.IsValid)
             return View(model);
-        }
 
         BonIdentityUser? user = null;
-        var byUser = await _userManager.FindByUserNameAsync(model.UserNameOrEmail);
+        var byUser = await _userManager.FindByUserNameAsync(model.UserNameOrEmail!);
         if (byUser.IsSuccess && byUser.Value != null)
             user = byUser.Value;
         if (user == null)
         {
-            var byEmail = await _userManager.FindByEmailAsync(model.UserNameOrEmail);
+            var byEmail = await _userManager.FindByEmailAsync(model.UserNameOrEmail!);
             if (byEmail.IsSuccess && byEmail.Value != null)
                 user = byEmail.Value;
         }
 
         if (user == null)
         {
-            // Don't reveal that the user doesn't exist
             return RedirectToAction(nameof(ForgotPasswordConfirmation));
         }
 
@@ -114,20 +145,21 @@ public class AccountController : Controller
         var setResult = await _userManager.SetTokenAsync(user, PasswordResetTokenType, token, expiration);
         if (!setResult.IsSuccess)
         {
-            ModelState.AddModelError(string.Empty, "Could not generate reset link. Please try again.");
+            ModelState.AddModelError(string.Empty, _localizer["Validation:CouldNotGenerateResetLink"].Value);
             return View(model);
         }
 
         var resetLink = Url.Action(
             nameof(ResetPassword),
             "Account",
-            new { token },
+            new { area = "IdentityManagement", token },
             Request.Scheme);
 
         return RedirectToAction(nameof(ForgotPasswordConfirmation), new { resetLink = _env.IsDevelopment() ? resetLink : null });
     }
 
     [HttpGet]
+    [Route("[action]")]
     public IActionResult ForgotPasswordConfirmation([FromQuery] string? resetLink = null)
     {
         ViewData["ResetLink"] = resetLink;
@@ -135,6 +167,7 @@ public class AccountController : Controller
     }
 
     [HttpGet]
+    [Route("[action]")]
     public IActionResult ResetPassword(string? token = null)
     {
         if (string.IsNullOrEmpty(token))
@@ -144,6 +177,7 @@ public class AccountController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
+    [Route("[action]")]
     public async Task<IActionResult> ResetPassword(ResetPasswordInputModel model, CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrEmpty(model.Token))
@@ -151,30 +185,21 @@ public class AccountController : Controller
             return RedirectToAction(nameof(Login));
         }
 
-        if (string.IsNullOrWhiteSpace(model.NewPassword) || model.NewPassword.Length < 6)
-        {
-            ModelState.AddModelError(nameof(model.NewPassword), "Password must be at least 6 characters.");
+        if (!ModelState.IsValid)
             return View(model);
-        }
-
-        if (model.NewPassword != model.ConfirmPassword)
-        {
-            ModelState.AddModelError(nameof(model.ConfirmPassword), "Passwords do not match.");
-            return View(model);
-        }
 
         var findResult = await _userManager.FindByTokenAsync(PasswordResetTokenType, model.Token);
         if (!findResult.IsSuccess || findResult.Value == null)
         {
-            ModelState.AddModelError(string.Empty, "Invalid or expired reset link. Please request a new one.");
+            ModelState.AddModelError(string.Empty, _localizer["Validation:InvalidOrExpiredResetLink"].Value);
             return View(model);
         }
 
         var user = findResult.Value;
-        var resetResult = await _userManager.ResetPasswordAsync(user, model.NewPassword);
+        var resetResult = await _userManager.ResetPasswordAsync(user, model.NewPassword!);
         if (!resetResult.IsSuccess)
         {
-            ModelState.AddModelError(string.Empty, resetResult.ErrorMessage ?? "Could not reset password.");
+            ModelState.AddModelError(string.Empty, resetResult.ErrorMessage ?? _localizer["Validation:CouldNotResetPassword"].Value);
             return View(model);
         }
 
@@ -183,6 +208,7 @@ public class AccountController : Controller
     }
 
     [HttpGet]
+    [Route("[action]")]
     public IActionResult ResetPasswordConfirmation()
     {
         return View();
@@ -191,6 +217,7 @@ public class AccountController : Controller
     [HttpPost]
     [ValidateAntiForgeryToken]
     [Authorize]
+    [Route("[action]")]
     public async Task<IActionResult> Logout(string? returnUrl = null, CancellationToken cancellationToken = default)
     {
         await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
@@ -198,29 +225,10 @@ public class AccountController : Controller
     }
 
     [HttpGet]
+    [Route("[action]")]
     public IActionResult AccessDenied(string? returnUrl = null)
     {
         ViewData["ReturnUrl"] = returnUrl;
         return View();
     }
-}
-
-public class LoginInputModel
-{
-    public string? UserName { get; set; }
-    public string? Password { get; set; }
-    public bool RememberMe { get; set; }
-    public string? ReturnUrl { get; set; }
-}
-
-public class ForgotPasswordInputModel
-{
-    public string? UserNameOrEmail { get; set; }
-}
-
-public class ResetPasswordInputModel
-{
-    public string? Token { get; set; }
-    public string? NewPassword { get; set; }
-    public string? ConfirmPassword { get; set; }
 }

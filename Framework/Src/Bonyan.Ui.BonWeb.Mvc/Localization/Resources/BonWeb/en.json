@@ -1,0 +1,24 @@
+{
+  "culture": "en",
+  "texts": {
+    "Menu:Dashboard": "Dashboard",
+    "Menu:Home": "Home",
+    "Menu:System": "System",
+    "Menu:Identity": "Identity",
+    "Menu:Users": "Users",
+    "Menu:Roles": "Roles",
+    "Layout:Login": "Login",
+    "Layout:Logout": "Logout",
+    "Layout:BonWeb": "BonWeb",
+    "Layout:Error": "Error",
+    "Layout:BackToRoles": "Back to Roles",
+    "Layout:ReturnHome": "Return to Home",
+    "Layout:Language": "Language",
+    "Layout:English": "English",
+    "Layout:Persian": "Persian",
+    "Layout:Menu": "Menu",
+    "Layout:Navigation": "Navigation",
+    "Layout:Profile": "Profile",
+    "Layout:Settings": "Settings"
+  }
+}

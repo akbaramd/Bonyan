@@ -7,6 +7,7 @@ using Bonyan.UnitOfWork;
 using Bonyan.UserManagement.Domain.Users.Enumerations;
 using Bonyan.UserManagement.Domain.Users.ValueObjects;
 using BonyanTemplate.Infrastructure.Data;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -38,15 +39,25 @@ public class BonyanTemplateIdentityDataSeeder : IHostedService
 
     public async Task StartAsync(CancellationToken cancellationToken)
     {
-        using var scope = _serviceProvider.CreateScope();
-        try
+        var migrationsSucceeded = false;
+        using (var scope = _serviceProvider.CreateScope())
         {
-            var dbContext = scope.ServiceProvider.GetRequiredService<BonyanTemplateDbContext>();
-            await dbContext.Database.MigrateAsync(cancellationToken);
+            try
+            {
+                var dbContext = scope.ServiceProvider.GetRequiredService<BonyanTemplateDbContext>();
+                await dbContext.Database.MigrateAsync(cancellationToken);
+                migrationsSucceeded = true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning(ex, "Migrations could not be applied. Identity seed will be skipped. Ensure migrations exist and run: dotnet ef database update (or Update-Database from Package Manager Console).");
+            }
         }
-        catch (Exception ex)
+
+        if (!migrationsSucceeded)
         {
-            _logger.LogWarning(ex, "Migrations may not be applied yet. Seed will run if database is available.");
+            _logger.LogInformation("Skipping identity seed because migrations were not applied.");
+            return;
         }
 
         using (var scope2 = _serviceProvider.CreateScope())
@@ -100,14 +111,18 @@ public class BonyanTemplateIdentityDataSeeder : IHostedService
 
                 await uow.CompleteAsync();
             }
+            catch (SqlException ex) when (ex.Number == 208 || ex.Message.Contains("Invalid object name", StringComparison.OrdinalIgnoreCase))
+            {
+                await uow.RollbackAsync();
+                _logger.LogWarning(ex, "Identity tables (e.g. Roles) are missing. Run migrations from the project that contains BonyanTemplateDbContext: dotnet ef database update --project BonyanTemplate.Infrastructure --startup-project <your-host-project>. Then restart the application.");
+                return;
+            }
             catch (Exception e)
             {
                 await uow.RollbackAsync();
-                Console.WriteLine(e);
+                _logger.LogError(e, "Identity seed failed.");
                 throw;
             }
-
-
         }
     }
 

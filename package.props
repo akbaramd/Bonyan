@@ -3,7 +3,7 @@
   <PropertyGroup>
     <OutputType>Library</OutputType>
     <IsPackable>true</IsPackable>
-    <Version>1.6.1</Version>
+    <Version>1.6.2-beta1</Version>
     <Authors>Akbar Ahmadi Saray</Authors>
     <Company>akbar-ahmadi.ir</Company>
     <PackageProjectUrl>https://akbaramd.github.io/Novin</PackageProjectUrl>
@@ -13,16 +13,13 @@
     <PackageReadmeFile>README.md</PackageReadmeFile> <!-- Path to the README file -->
     <PackageTags>Bonyan, Framework, .NET</PackageTags>
     <Description>
-      Bonyan Modularity Framework v1.6.0 - A microkernel architecture framework for building modular .NET applications.
+      Bonyan Modularity Framework v1.6.2-beta1 - A microkernel architecture framework for building modular .NET applications.
       
-      Version 1.6.0 Changes:
-      • Breaking: Introduced phase-specific configuration contexts (BonPreConfigurationContext, BonConfigurationContext, BonPostConfigurationContext) for stricter architectural control
-      • Breaking: Removed [DependsOn] attribute support - all modules must use constructor-based dependency declaration (DependOn&lt;TModule&gt;())
-      • Enhanced: Recursive module discovery starting from root entry point with improved dependency graph visualization
-      • Fixed: LoggerFactory disposal issues, IBonUnitOfWorkManager resolution, and module lifecycle management
-      • Improved: Better separation of concerns between presentation/infrastructure and domain layers
-      
-      See RELEASE_NOTES.md for complete migration guide and detailed changelog.
+      Version 1.6.2-beta1 Changes:
+      • Added: Localization support for Identity Management module (fa, en)
+      • Added: SweetAlert2 for better user experience
+      • Added: Select2 for better user experience
+      • Added: Bootstrap Icons for better user experience (fa, en)
     </Description>
     
   </PropertyGroup>

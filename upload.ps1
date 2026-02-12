@@ -1,150 +1,201 @@
-# Function to publish the Dotnet project and push to NuGet
-function Publish-DotnetProject {
-    param (
-        [string]$projectPath,
-        [string]$publishType
-    )
-    # Retrieve NuGet API key from the environment variable
-    $nugetApiKey = $env:NugetKey 
+# Bonyan Upload Script
+# Builds, packs NuGet packages (Framework, Modules, Template) and pushes to NuGet.org
+# Requires: $env:NugetKey - NuGet API key for authentication
 
-    if (-not $nugetApiKey) {
-        Write-Host "NuGet API Key not found. Please set the NugetKey environment variable." -ForegroundColor Red
-        return
+param(
+    [switch]$PackOnly,   # Only pack, do not push
+    [switch]$FrameworkOnly,
+    [switch]$ModulesOnly,
+    [switch]$TemplateOnly
+)
+
+$NugetSource = 'https://api.nuget.org/v3/index.json'
+
+# Pack a .NET project and optionally push to NuGet
+function Pack-AndPush-Project {
+    param (
+        [string]$ProjectPath,
+        [string]$ProjectType,
+        [string]$ProjectFile = $null,  # Optional: specific .csproj (e.g. Bonyan.Template.csproj)
+        [bool]$Push = $true
+    )
+
+    $nugetApiKey = $env:NugetKey
+    if ($Push -and -not $nugetApiKey) {
+        Write-Host "NuGet API Key not found. Set the NugetKey environment variable to push packages." -ForegroundColor Red
+        return $false
     }
 
-    # Save the current directory
     $initialDirectory = Get-Location
 
-    # Change to the project directory
-    Set-Location -Path $projectPath
+    try {
+        Set-Location -Path $ProjectPath
 
-    # Clean up the Release folder if it exists
-    $releaseFolder = Join-Path -Path $projectPath -ChildPath 'bin\Release'
-    if (Test-Path -Path $releaseFolder -PathType Container) {
-        Remove-Item -Path $releaseFolder -Recurse -Force -ErrorAction SilentlyContinue
-    }
-
-    # Publish the project
-    dotnet publish -c Release | Out-Null
-
-    # Find the .nupkg file in the bin\Release folder
-    Set-Location -Path $releaseFolder
-    $nupkgFile = Get-ChildItem -Filter *.nupkg
-
-    if ($nupkgFile) {
-        # Prepare NuGet push command using the secret stored in the environment
-        $nugetSource = 'https://api.nuget.org/v3/index.json'
-        $nugetPushCommand = "dotnet nuget push `"$($nupkgFile.FullName)`" -s $nugetSource -k $nugetApiKey"
-
-        # Log and execute the push command
-        $logFile = Join-Path -Path $projectPath -ChildPath 'nuget_publish_log.txt'
-        Add-Content -Path $logFile -Value "Executing NuGet push command for $($nupkgFile.FullName) at $(Get-Date)"
-        Add-Content -Path $logFile -Value $nugetPushCommand
-
-        try {
-            Invoke-Expression -Command $nugetPushCommand
-
-            Write-Host "Successfully uploaded $($nupkgFile.Name) to NuGet." -ForegroundColor Green
-            Add-Content -Path $logFile -Value "Successfully uploaded $($nupkgFile.Name) to NuGet at $(Get-Date)."
-        } catch {
-            Write-Host "Error uploading $($nupkgFile.Name) to NuGet. $_" -ForegroundColor Red
-            Add-Content -Path $logFile -Value "Error uploading $($nupkgFile.Name) to NuGet at $(Get-Date): $_"
+        # Clean Release output
+        $releaseFolder = Join-Path -Path $ProjectPath -ChildPath 'bin\Release'
+        if (Test-Path -Path $releaseFolder -PathType Container) {
+            Remove-Item -Path $releaseFolder -Recurse -Force -ErrorAction SilentlyContinue
         }
-    } else {
-        Write-Host "No .nupkg file found in $($releaseFolder)." -ForegroundColor Yellow
-    }
 
-    # Return to the initial directory
-    Set-Location -Path $initialDirectory
-}
-
-# Function to publish projects in a directory (used for Framework only)
-function Publish-ProjectsInFramework {
-    param (
-        [string]$directoryPath
-    )
-
-    Write-Host "Start publishing projects in Framework directory: $($directoryPath)." -ForegroundColor Yellow
-    Set-Location -Path $directoryPath
-    $subdirectories = Get-ChildItem -Directory
-
-    foreach ($subdir in $subdirectories) {
-        $subdirPath = $subdir.FullName
-
-        # Check if there's a .csproj file in the directory
-        $dotnetProject = Get-ChildItem -Path $subdirPath -Filter *.csproj
-        if ($dotnetProject) {
-            Publish-DotnetProject -projectPath $subdirPath -publishType "Framework"
-        } else {
-            Write-Host "No Dotnet project found in $($subdir.Name)." -ForegroundColor Yellow
+        # Pack the project (produces .nupkg)
+        $packArgs = @('-c', 'Release')
+        if ($ProjectFile) { $packArgs = @($ProjectFile) + $packArgs }
+        Write-Host "Packing ${ProjectType}: $ProjectPath" -ForegroundColor Cyan
+        $packResult = & dotnet pack @packArgs 2>&1
+        if ($LASTEXITCODE -ne 0) {
+            Write-Host "Pack failed for $ProjectPath" -ForegroundColor Red
+            Write-Host $packResult
+            return $false
         }
-    }
-}
 
-# Function to iterate over the Modules directory and publish projects in the src folders
-function Publish-ModulesProjects {
-    param (
-        [string]$modulesDirectory
-    )
+        # Find .nupkg (may be in bin\Release or bin\Release\netX.X)
+        $nupkgFiles = Get-ChildItem -Path $ProjectPath -Filter *.nupkg -Recurse -ErrorAction SilentlyContinue |
+            Where-Object { $_.FullName -like "*\bin\Release*" }
 
-    Write-Host "Start publishing projects in Modules directory: $($modulesDirectory)." -ForegroundColor Yellow
-    Set-Location -Path $modulesDirectory
+        if (-not $nupkgFiles) {
+            Write-Host "No .nupkg found in $ProjectPath\bin\Release" -ForegroundColor Yellow
+            return $false
+        }
 
-    $moduleDirectories = Get-ChildItem -Directory
-
-    foreach ($moduleDir in $moduleDirectories) {
-        $moduleSrcPath = Join-Path -Path $moduleDir.FullName -ChildPath 'src'
-
-        if (Test-Path $moduleSrcPath) {
-            Write-Host "Processing module: $($moduleDir.Name)" -ForegroundColor Cyan
-
-            # Iterate over projects in the src folder
-            $projectDirectories = Get-ChildItem -Path $moduleSrcPath -Directory
-            foreach ($projectDir in $projectDirectories) {
-                $projectDirPath = $projectDir.FullName
-
-                # Check if there's a .csproj file in the directory
-                $dotnetProject = Get-ChildItem -Path $projectDirPath -Filter *.csproj
-                if ($dotnetProject) {
-                    Publish-DotnetProject -projectPath $projectDirPath -publishType "Module"
-                } else {
-                    Write-Host "No Dotnet project found in $($projectDir.Name)." -ForegroundColor Yellow
+        foreach ($nupkgFile in $nupkgFiles) {
+            if ($Push) {
+                Write-Host "Pushing $($nupkgFile.Name) to NuGet..." -ForegroundColor Cyan
+                try {
+                    dotnet nuget push $nupkgFile.FullName -s $NugetSource -k $nugetApiKey --skip-duplicate
+                    Write-Host "Successfully pushed $($nupkgFile.Name)" -ForegroundColor Green
+                } catch {
+                    Write-Host "Error pushing $($nupkgFile.Name): $_" -ForegroundColor Red
+                    return $false
                 }
+            } else {
+                Write-Host "Packed $($nupkgFile.Name) (push skipped)" -ForegroundColor Green
             }
-        } else {
-            Write-Host "No src folder found in module $($moduleDir.Name)." -ForegroundColor Yellow
+        }
+        return $true
+    } finally {
+        Set-Location -Path $initialDirectory
+    }
+}
+
+# Pack and push all Framework projects
+function Publish-FrameworkProjects {
+    param (
+        [string]$FrameworkPath,
+        [bool]$Push = $true
+    )
+
+    Write-Host "`n=== Packing Framework projects: $FrameworkPath ===" -ForegroundColor Yellow
+    $initialDir = Get-Location
+    Set-Location -Path $FrameworkPath
+
+    $projects = Get-ChildItem -Directory | ForEach-Object {
+        $csproj = Get-ChildItem -Path $_.FullName -Filter *.csproj -ErrorAction SilentlyContinue
+        if ($csproj) { $csproj.DirectoryName }
+    }
+
+    foreach ($projectPath in $projects) {
+        Pack-AndPush-Project -ProjectPath $projectPath -ProjectType "Framework" -Push $Push
+    }
+
+    Set-Location -Path $initialDir
+}
+
+# Pack and push all Module projects
+function Publish-ModuleProjects {
+    param (
+        [string]$ModulesPath,
+        [bool]$Push = $true
+    )
+
+    Write-Host "`n=== Packing Module projects: $ModulesPath ===" -ForegroundColor Yellow
+    $initialDir = Get-Location
+    Set-Location -Path $ModulesPath
+
+    $moduleDirs = Get-ChildItem -Directory
+    foreach ($moduleDir in $moduleDirs) {
+        $srcPath = Join-Path -Path $moduleDir.FullName -ChildPath 'src'
+        if (-not (Test-Path $srcPath)) {
+            Write-Host "No src folder in $($moduleDir.Name)" -ForegroundColor Yellow
+            continue
+        }
+
+        Write-Host "Processing module: $($moduleDir.Name)" -ForegroundColor Cyan
+        $projects = Get-ChildItem -Path $srcPath -Directory | ForEach-Object {
+            $csproj = Get-ChildItem -Path $_.FullName -Filter *.csproj -ErrorAction SilentlyContinue
+            if ($csproj) { $csproj.DirectoryName }
+        }
+
+        foreach ($projectPath in $projects) {
+            Pack-AndPush-Project -ProjectPath $projectPath -ProjectType "Module" -Push $Push
         }
     }
+
+    Set-Location -Path $initialDir
 }
 
-# Main script logic
+# Pack and push the Bonyan dotnet new template
+function Publish-Template {
+    param (
+        [string]$TemplatesPath,
+        [bool]$Push = $true
+    )
+
+    Write-Host "`n=== Packing Bonyan Template ===" -ForegroundColor Yellow
+
+    $templateCsproj = Join-Path -Path $TemplatesPath -ChildPath 'Bonyan.Template.csproj'
+    if (-not (Test-Path $templateCsproj)) {
+        Write-Host "Bonyan.Template.csproj not found at $TemplatesPath" -ForegroundColor Red
+        return $false
+    }
+
+    return Pack-AndPush-Project -ProjectPath $TemplatesPath -ProjectFile 'Bonyan.Template.csproj' -ProjectType "Template" -Push $Push
+}
+
+# Main
 function Main {
-    # Save the initial directory
-    $startingDirectory = Get-Location
+    $rootDir = Split-Path -Parent $MyInvocation.MyCommand.Path
+    $push = -not $PackOnly
 
-    # Run tests
-#     dotnet test
-    Set-Location -Path $startingDirectory
-
-    # Publish projects in the Framework directory
-    $frameworkDirectory = ".\Framework\Src"
-    if (Test-Path $frameworkDirectory) {
-        Publish-ProjectsInFramework -directoryPath $frameworkDirectory
-    } else {
-        Write-Host "Framework directory not found." -ForegroundColor Yellow
-    }
-    Set-Location -Path $startingDirectory
-    # Publish projects in the Modules directory
-    $modulesDirectory = ".\Modules"
-    if (Test-Path $modulesDirectory) {
-        Publish-ModulesProjects -modulesDirectory $modulesDirectory
-    } else {
-        Write-Host "Modules directory not found." -ForegroundColor Yellow
+    if ($push -and -not $env:NugetKey) {
+        Write-Host "Set NugetKey environment variable to push packages, or use -PackOnly to only pack." -ForegroundColor Red
+        exit 1
     }
 
-    # Return to the starting directory
-    Set-Location -Path $startingDirectory
+    # Restore solution
+    Write-Host "Restoring solution..." -ForegroundColor Cyan
+    dotnet restore $rootDir\Bonyan.sln
+
+    $frameworkPath = Join-Path $rootDir "Framework\Src"
+    $modulesPath = Join-Path $rootDir "Modules"
+    $templatesPath = Join-Path $rootDir "Templates"
+
+    $runAll = -not $FrameworkOnly -and -not $ModulesOnly -and -not $TemplateOnly
+
+    if ($runAll -or $FrameworkOnly) {
+        if (Test-Path $frameworkPath) {
+            Publish-FrameworkProjects -FrameworkPath $frameworkPath -Push $push
+        } else {
+            Write-Host "Framework path not found: $frameworkPath" -ForegroundColor Yellow
+        }
+    }
+
+    if ($runAll -or $ModulesOnly) {
+        if (Test-Path $modulesPath) {
+            Publish-ModuleProjects -ModulesPath $modulesPath -Push $push
+        } else {
+            Write-Host "Modules path not found: $modulesPath" -ForegroundColor Yellow
+        }
+    }
+
+    if ($runAll -or $TemplateOnly) {
+        if (Test-Path $templatesPath) {
+            Publish-Template -TemplatesPath $templatesPath -Push $push
+        } else {
+            Write-Host "Templates path not found: $templatesPath" -ForegroundColor Yellow
+        }
+    }
+
+    Write-Host "`nDone." -ForegroundColor Green
 }
 
-# Start the script
 Main
